@@ -38350,5 +38350,104 @@
         "WartezeitTage": 212
       }
     ]
+  },
+  "1046": {
+    "ID": "1046",
+    "Benutzername": "AndreMambaRS",
+    "ProfilURL": "https://www.elroq-forum.de/user/3716-andremambars/",
+    "Modell": "Skoda Elroq RS",
+    "Modellgruppe": "Elroq RS",
+    "Bestelldatum": "20. April 2026",
+    "BestelldatumTS": 1776636000000,
+    "Status": "offen",
+    "LoggedAt": 1786699513358,
+    "ResolvedAt": null,
+    "ActualDate": null,
+    "ActualWaitDays": null,
+    "DeviationDays": null,
+    "PredictedDate": 1791151200000,
+    "PredictedRangeLowDate": 1789941600000,
+    "PredictedRangeHighDate": 1792620000000,
+    "PredictedMedianDays": 168,
+    "PredictedRangeLowDays": 154,
+    "PredictedRangeHighDays": 185,
+    "ReferenceCount": 20,
+    "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
+    "ReferenceEraFrom": 1755036000000,
+    "ReferenceEraTo": 1773356400000,
+    "References": [
+      {
+        "Benutzername": "Valifrigg",
+        "ProfilURL": "https://www.elroq-forum.de/user/3198-valifrigg/",
+        "Land": "Deutschland",
+        "WartezeitTage": 240
+      },
+      {
+        "Benutzername": "Bigro",
+        "ProfilURL": "https://www.elroq-forum.de/user/2572-bigro/",
+        "Land": "Deutschland",
+        "WartezeitTage": 153
+      },
+      {
+        "Benutzername": "f.beutlin0",
+        "ProfilURL": "https://www.elroq-forum.de/user/2455-f-beutlin0/",
+        "Land": "Deutschland",
+        "WartezeitTage": 156
+      },
+      {
+        "Benutzername": "49393Elroq",
+        "ProfilURL": "https://www.elroq-forum.de/user/2414-49393elroq/",
+        "Land": "Deutschland",
+        "WartezeitTage": 162
+      },
+      {
+        "Benutzername": "HenrikP",
+        "ProfilURL": "https://www.elroq-forum.de/user/2967-henrikp/",
+        "Land": "Deutschland",
+        "WartezeitTage": 176
+      },
+      {
+        "Benutzername": "MM-9411",
+        "ProfilURL": "https://www.elroq-forum.de/user/2459-mm-9411/",
+        "Land": "Deutschland",
+        "WartezeitTage": 179
+      },
+      {
+        "Benutzername": "skoddy",
+        "ProfilURL": "https://www.elroq-forum.de/user/2183-skoddy/",
+        "Land": "Deutschland",
+        "WartezeitTage": 188
+      },
+      {
+        "Benutzername": "Brisa",
+        "ProfilURL": "https://www.elroq-forum.de/user/2256-brisa/",
+        "Land": "Deutschland",
+        "WartezeitTage": 163
+      },
+      {
+        "Benutzername": "Ludwig",
+        "ProfilURL": "https://www.elroq-forum.de/user/3230-ludwig/",
+        "Land": "Deutschland",
+        "WartezeitTage": 237
+      },
+      {
+        "Benutzername": "Moin",
+        "ProfilURL": "https://www.elroq-forum.de/user/2059-moin/",
+        "Land": "Deutschland",
+        "WartezeitTage": 173
+      },
+      {
+        "Benutzername": "Heiko",
+        "ProfilURL": "https://www.elroq-forum.de/user/2197-heiko/",
+        "Land": "Deutschland",
+        "WartezeitTage": 173
+      },
+      {
+        "Benutzername": "g.harry",
+        "ProfilURL": "https://www.elroq-forum.de/user/1868-g-harry/",
+        "Land": "Deutschland",
+        "WartezeitTage": 158
+      }
+    ]
   }
 }
