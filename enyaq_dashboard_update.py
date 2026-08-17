@@ -527,23 +527,81 @@ def save_log(log):
     LOG_PATH.write_text(json.dumps(log, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
+def _apply_prediction(entry, p, prefix=""):
+    """
+    Schreibt eine Prognose in einen Log-Eintrag. Mit prefix="" landet sie in
+    den "Predicted*"-Feldern (aktueller Stand, wird bei offenen Bestellungen
+    jeden Lauf neu berechnet). Mit prefix="Original" landet sie in den
+    "OriginalPredicted*"-Feldern (einmalig beim ersten Erfassen eingefroren,
+    danach nie wieder veraendert — Basis fuer die Genauigkeits-Messung und
+    die "Prognose-Historie"-Anzeige bei ausgelieferten Bestellungen).
+    """
+    if p:
+        entry[f"{prefix}PredictedDate"] = p["date_median"]
+        entry[f"{prefix}PredictedRangeLowDate"] = p["date_early"]
+        entry[f"{prefix}PredictedRangeHighDate"] = p["date_late"]
+        entry[f"{prefix}PredictedP10Date"] = p.get("date_p10")
+        entry[f"{prefix}PredictedP90Date"] = p.get("date_p90")
+        entry[f"{prefix}PredictedP2_5Date"] = p.get("date_p2_5")
+        entry[f"{prefix}PredictedP97_5Date"] = p.get("date_p97_5")
+        entry[f"{prefix}PredictedMedianDays"] = p["median"]
+        entry[f"{prefix}PredictedRangeLowDays"] = p["p25"]
+        entry[f"{prefix}PredictedRangeHighDays"] = p["p75"]
+        entry[f"{prefix}PredictedP10Days"] = p.get("p10")
+        entry[f"{prefix}PredictedP90Days"] = p.get("p90")
+        entry[f"{prefix}PredictedP2_5Days"] = p.get("p2_5")
+        entry[f"{prefix}PredictedP97_5Days"] = p.get("p97_5")
+        entry[f"{prefix}ReferenceCount"] = p["count"]
+        entry[f"{prefix}ReferenceQualityLabel"] = p["tier_label"]
+        entry[f"{prefix}ReferenceEraFrom"] = p["era_from"]
+        entry[f"{prefix}ReferenceEraTo"] = p["era_to"]
+        entry[f"{prefix}References"] = p["refs"]
+        entry[f"{prefix}CountryScoped"] = p.get("country_scoped", True)
+    else:
+        entry[f"{prefix}PredictedDate"] = None
+        entry[f"{prefix}PredictedMedianDays"] = None
+        entry[f"{prefix}ReferenceCount"] = 0
+        entry[f"{prefix}References"] = []
+        entry[f"{prefix}CountryScoped"] = None
+
+
+_PREDICTION_FIELD_KEYS = (
+    "PredictedDate", "PredictedRangeLowDate", "PredictedRangeHighDate",
+    "PredictedP10Date", "PredictedP90Date", "PredictedP2_5Date", "PredictedP97_5Date",
+    "PredictedMedianDays", "PredictedRangeLowDays", "PredictedRangeHighDays",
+    "PredictedP10Days", "PredictedP90Days", "PredictedP2_5Days", "PredictedP97_5Days",
+    "ReferenceCount", "ReferenceQualityLabel", "ReferenceEraFrom",
+    "ReferenceEraTo", "References", "CountryScoped",
+)
+
+
 def update_prediction_log(log, delivered, open_orders, now_ts):
     """
     Aktualisiert das Prognose-Log:
-      - neue offene Bestellungen bekommen eine (fixe) Erstprognose
+      - neue offene Bestellungen bekommen eine Erstprognose, die zusaetzlich
+        als "Original*"-Version dauerhaft eingefroren wird
+      - ALLE noch offenen Bestellungen bekommen bei jedem Lauf eine frisch
+        berechnete Prognose ("Predicted*"), die mit wachsendem Datenbestand
+        praeziser wird — die eingefrorene "Original*"-Prognose bleibt davon
+        unberuehrt
       - offene Bestellungen, die inzwischen ausgeliefert wurden, werden mit
-        dem tatsaechlichen Ergebnis und der Abweichung aufgeloest
+        dem tatsaechlichen Ergebnis aufgeloest; die Abweichung wird gegen die
+        eingefrorene ORIGINAL-Prognose gemessen, nicht gegen die zuletzt
+        berechnete — sonst waere die Genauigkeits-Messung nicht mehr fair
       - offene Bestellungen, die verschwunden sind (z.B. storniert), werden
         entsprechend markiert
-      - offene (!) Eintraege, die noch mit der alten, laenderblinden Methode
-        berechnet wurden, werden einmalig neu berechnet (siehe
-        _migrate_stale_predictions unten)
-    Gibt (neu_geloggt, neu_aufgeloest, migriert) zurueck.
+      - Log-Eintraege von VOR diesem Update (denen die "Original*"-Felder
+        noch fehlen) werden einmalig migriert, siehe
+        _migrate_add_original_snapshot unten
+    Gibt (neu_geloggt, neu_aufgeloest, neu_berechnet, original_migriert) zurueck.
     """
     delivered_by_id = {r["ID"]: r for r in delivered}
     open_by_id = {r["ID"]: r for r in open_orders}
 
     new_logged = resolved_now = 0
+
+    # Einmalige Migration: alten Eintraegen die "Original*"-Felder nachtragen.
+    original_migrated = _migrate_add_original_snapshot(log)
 
     # Bereits offene Log-Eintraege pruefen: ausgeliefert oder verschwunden?
     for lid, entry in log.items():
@@ -555,152 +613,110 @@ def update_prediction_log(log, delivered, open_orders, now_ts):
             entry["ResolvedAt"] = now_ts
             entry["ActualDate"] = d.get("Lieferdatum", "")
             entry["ActualWaitDays"] = d["WartezeitTage"]
-            if entry.get("PredictedMedianDays") is not None:
-                entry["DeviationDays"] = d["WartezeitTage"] - entry["PredictedMedianDays"]
+            baseline = entry.get("OriginalPredictedMedianDays")
+            if baseline is not None:
+                entry["DeviationDays"] = d["WartezeitTage"] - baseline
             resolved_now += 1
         elif lid not in open_by_id:
             entry["Status"] = "entfernt"
             entry["ResolvedAt"] = now_ts
 
-    migrated = _migrate_stale_predictions(log, delivered, open_by_id, now_ts)
-
-    # Neue offene Bestellungen erfassen (Prognose wird danach nicht mehr veraendert).
+    # Fuer ALLE noch offenen Bestellungen die Prognose neu berechnen (neue wie
+    # bereits bekannte) — je mehr ausgelieferte Bestellungen vorliegen, desto
+    # praeziser wird die Schaetzung. Neue Bestellungen bekommen zusaetzlich
+    # eine eingefrorene "Original*"-Kopie ihrer allerersten Prognose.
+    recalculated = 0
     for oid, order in open_by_id.items():
-        if oid in log:
-            continue
+        is_new = oid not in log
+        if is_new:
+            log[oid] = {
+                "ID": oid,
+                "Benutzername": order.get("Benutzername", ""),
+                "ProfilURL": order.get("ProfilURL", ""),
+                "Modell": order.get("Modell", ""),
+                "Modellgruppe": order.get("Modellgruppe", ""),
+                "Bestelldatum": order.get("Bestelldatum", ""),
+                "BestelldatumTS": order.get("BestelldatumTS"),
+                "Status": "offen",
+                "LoggedAt": now_ts,
+                "ResolvedAt": None,
+                "ActualDate": None,
+                "ActualWaitDays": None,
+                "DeviationDays": None,
+            }
+            new_logged += 1
+        entry = log[oid]
+
         p = predict_delivery(order, delivered)
-        entry = {
-            "ID": oid,
-            "Benutzername": order.get("Benutzername", ""),
-            "ProfilURL": order.get("ProfilURL", ""),
-            "Modell": order.get("Modell", ""),
-            "Modellgruppe": order.get("Modellgruppe", ""),
-            "Bestelldatum": order.get("Bestelldatum", ""),
-            "BestelldatumTS": order.get("BestelldatumTS"),
-            "Status": "offen",
-            "LoggedAt": now_ts,
-            "ResolvedAt": None,
-            "ActualDate": None,
-            "ActualWaitDays": None,
-            "DeviationDays": None,
-        }
-        if p:
-            entry.update({
-                "PredictedDate": p["date_median"],
-                "PredictedRangeLowDate": p["date_early"],
-                "PredictedRangeHighDate": p["date_late"],
-                "PredictedP10Date": p.get("date_p10"),
-                "PredictedP90Date": p.get("date_p90"),
-                "PredictedP2_5Date": p.get("date_p2_5"),
-                "PredictedP97_5Date": p.get("date_p97_5"),
-                "PredictedMedianDays": p["median"],
-                "PredictedRangeLowDays": p["p25"],
-                "PredictedRangeHighDays": p["p75"],
-                "PredictedP10Days": p.get("p10"),
-                "PredictedP90Days": p.get("p90"),
-                "PredictedP2_5Days": p.get("p2_5"),
-                "PredictedP97_5Days": p.get("p97_5"),
-                "ReferenceCount": p["count"],
-                "ReferenceQualityLabel": p["tier_label"],
-                "ReferenceEraFrom": p["era_from"],
-                "ReferenceEraTo": p["era_to"],
-                "References": p["refs"],
-                "CountryScoped": p.get("country_scoped", True),
-            })
+        _apply_prediction(entry, p, prefix="")
+        if is_new:
+            _apply_prediction(entry, p, prefix="Original")
         else:
-            entry.update({
-                "PredictedDate": None, "PredictedMedianDays": None,
-                "ReferenceCount": 0, "References": [],
-            })
-        log[oid] = entry
-        new_logged += 1
+            recalculated += 1
 
-    return new_logged, resolved_now, migrated
+    return new_logged, resolved_now, recalculated, original_migrated
 
 
-def _migrate_stale_predictions(log, delivered, open_by_id, now_ts):
+def _migrate_add_original_snapshot(log):
     """
-    Einmalige Migration fuer Log-Eintraege von vor dem Laender-Fix (Land wird
-    seitdem zuerst hart gefiltert statt nur mitgewichtet, siehe
-    predict_delivery/_similarity weiter oben). Solche Alteintraege sind am
-    fehlenden "CountryScoped"-Feld erkennbar.
+    Einmalige Migration fuer Log-Eintraege von VOR diesem Update: ihnen fehlt
+    die eingefrorene "Original*"-Prognose, weil es die Unterscheidung
+    zwischen "aktueller" und "urspruenglicher" Prognose vorher nicht gab.
 
-    Nur NOCH OFFENE Eintraege werden neu berechnet — dafuer werden die vollen
-    Konfigurationsdaten (Farbe, Innenausstattung, Pakete, ...) benoetigt, die
-    im schlanken Log-Eintrag selbst nicht gespeichert sind, sondern nur im
-    aktuell von der Forumsseite gelesenen 'open_by_id'. Ist eine Bestellung
-    dort nicht mehr zu finden (weil z.B. inzwischen ausgeliefert — das wird
-    im Schritt direkt davor bereits behandelt — oder entfernt), bleibt der
-    Eintrag unveraendert und wird beim naechsten Lauf erneut versucht.
-
-    Bereits AUFGELOESTE Eintraege (Status "eingetroffen") werden nie
-    angefasst: sie protokollieren, was zum damaligen Zeitpunkt tatsaechlich
-    vorhergesagt wurde. Das nachtraeglich zu 'korrigieren' wuerde die
-    Genauigkeits-Auswertung verfaelschen, statt sie ehrlicher zu machen.
+    Bis zu diesem Update wurde eine Prognose nach der Ersterfassung nie mehr
+    veraendert — der zu diesem Zeitpunkt gespeicherte "Predicted*"-Wert
+    entspricht also exakt der damaligen Erstprognose und kann 1:1 als
+    "Original*"-Wert uebernommen werden, bevor die naechste Neuberechnung die
+    "Predicted*"-Felder ueberschreibt.
     """
     migrated = 0
-    for oid, entry in log.items():
-        if entry.get("Status") != "offen" or "PredictedP10Days" in entry:
+    for entry in log.values():
+        if "OriginalPredictedMedianDays" in entry:
             continue
-        order = open_by_id.get(oid)
-        if not order:
-            continue
-
-        p = predict_delivery(order, delivered)
-        entry["PredictionUpdatedAt"] = now_ts
-        if p:
-            entry.update({
-                "PredictedDate": p["date_median"],
-                "PredictedRangeLowDate": p["date_early"],
-                "PredictedRangeHighDate": p["date_late"],
-                "PredictedP10Date": p.get("date_p10"),
-                "PredictedP90Date": p.get("date_p90"),
-                "PredictedP2_5Date": p.get("date_p2_5"),
-                "PredictedP97_5Date": p.get("date_p97_5"),
-                "PredictedMedianDays": p["median"],
-                "PredictedRangeLowDays": p["p25"],
-                "PredictedRangeHighDays": p["p75"],
-                "PredictedP10Days": p.get("p10"),
-                "PredictedP90Days": p.get("p90"),
-                "PredictedP2_5Days": p.get("p2_5"),
-                "PredictedP97_5Days": p.get("p97_5"),
-                "ReferenceCount": p["count"],
-                "ReferenceQualityLabel": p["tier_label"],
-                "ReferenceEraFrom": p["era_from"],
-                "ReferenceEraTo": p["era_to"],
-                "References": p["refs"],
-                "CountryScoped": p.get("country_scoped", True),
-            })
-        else:
-            entry["CountryScoped"] = None
+        for key in _PREDICTION_FIELD_KEYS:
+            entry[f"Original{key}"] = entry.get(key)
         migrated += 1
     return migrated
 
 
 def merge_log_into_records(log, delivered, open_orders):
-    """Reichert die Ausgabe-Datensaetze mit den geloggten Prognosefeldern an."""
-    keys = (
-        "PredictedDate", "PredictedRangeLowDate", "PredictedRangeHighDate",
-        "PredictedP10Date", "PredictedP90Date", "PredictedP2_5Date", "PredictedP97_5Date",
-        "PredictedMedianDays", "PredictedRangeLowDays", "PredictedRangeHighDays",
-        "PredictedP10Days", "PredictedP90Days", "PredictedP2_5Days", "PredictedP97_5Days",
-        "ReferenceCount", "ReferenceQualityLabel", "ReferenceEraFrom",
-        "ReferenceEraTo", "References", "LoggedAt", "CountryScoped",
-    )
+    """
+    Reichert die Ausgabe-Datensaetze mit den geloggten Prognosefeldern an.
+
+    Bei noch offenen Bestellungen zeigt das Dashboard die AKTUELLE, bei jedem
+    Lauf neu berechnete Prognose ("Predicted*") — die wird mit wachsendem
+    Datenbestand praeziser. Bei bereits ausgelieferten Bestellungen zeigt es
+    stattdessen die URSPRUENGLICHE, beim ersten Erfassen eingefrorene
+    Prognose ("Original*"), denn nur gegen die laesst sich die tatsaechliche
+    Wartezeit fair messen (Prognose-Historie + Genauigkeits-Auswertung im
+    Dashboard). Die Feldnamen im Ausgabe-Datensatz bleiben in beiden Faellen
+    gleich ("PredictedDate" usw.), damit das Frontend nicht unterscheiden
+    muss, woher der Wert kommt.
+    """
     for r in open_orders:
         entry = log.get(r["ID"])
-        if entry:
-            for k in keys:
-                if k in entry:
-                    r[k] = entry[k]
+        if not entry:
+            continue
+        for k in _PREDICTION_FIELD_KEYS:
+            if k in entry:
+                r[k] = entry[k]
+        if "LoggedAt" in entry:
+            r["LoggedAt"] = entry["LoggedAt"]
 
-    resolved_keys = keys + ("DeviationDays", "ResolvedAt", "ActualDate", "ActualWaitDays")
+    resolved_extra = ("DeviationDays", "ResolvedAt", "ActualDate", "ActualWaitDays")
     for r in delivered:
         entry = log.get(r["ID"])
-        if entry and entry.get("Status") == "eingetroffen":
-            for k in resolved_keys:
-                if k in entry:
-                    r[k] = entry[k]
+        if not entry or entry.get("Status") != "eingetroffen":
+            continue
+        for k in _PREDICTION_FIELD_KEYS:
+            orig_key = f"Original{k}"
+            if orig_key in entry:
+                r[k] = entry[orig_key]
+        if "LoggedAt" in entry:
+            r["LoggedAt"] = entry["LoggedAt"]
+        for k in resolved_extra:
+            if k in entry:
+                r[k] = entry[k]
 
 
 # --------------------------------------------------------------------------
@@ -855,7 +871,8 @@ def main():
     # inzwischen ausgelieferte werden mit dem tatsaechlichen Ergebnis aufgeloest.
     now_ts = int(datetime.now().timestamp() * 1000)
     log = load_log()
-    new_logged, resolved_now, migrated = update_prediction_log(log, delivered, open_orders, now_ts)
+    new_logged, resolved_now, recalculated, original_migrated = update_prediction_log(
+        log, delivered, open_orders, now_ts)
     save_log(log)
     merge_log_into_records(log, delivered, open_orders)
 
@@ -864,9 +881,9 @@ def main():
     print(f"\nPrognose-Log ({LOG_PATH.name}):")
     print(f"  Neu erfasste offene Bestellungen: {new_logged}")
     print(f"  Neu aufgeloest (jetzt ausgeliefert): {resolved_now}")
-    if migrated:
-        print(f"  Neu berechnet wegen Laender-Fix (waren offen, betrafen alle Laender "
-              f"statt nur das jeweilige): {migrated}")
+    print(f"  Neu berechnete Prognosen (weiterhin offen): {recalculated}")
+    if original_migrated:
+        print(f"  Einmalig migriert (Original-Prognose nachgetragen): {original_migrated}")
     if resolved_all:
         mae = sum(abs(e["DeviationDays"]) for e in resolved_all) / len(resolved_all)
         within2w = sum(1 for e in resolved_all if abs(e["DeviationDays"]) <= 14) / len(resolved_all)
