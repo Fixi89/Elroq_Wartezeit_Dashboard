@@ -1634,11 +1634,13 @@
     return result;
   }
 
-  // The dashboard-generator (Python) logs a prediction the first time it sees
-  // an open order and never changes it afterwards — that fixed value is what
-  // later gets checked against the real delivery date. Whenever that logged
-  // prediction is available it is shown in place of a freshly computed one,
-  // so what the person sees today matches what will be validated tomorrow.
+  // The dashboard-generator (Python) logs and recalculates predictions for open
+  // orders at every run, using the growing pool of delivered orders: more data
+  // means better accuracy over time. The original first-logged prediction stays
+  // frozen (OriginalPredicted*) for accuracy-checking once delivered; the
+  // current prediction (Predicted*) shown here updates daily. For delivered
+  // orders, we show the original frozen prediction instead, matched against the
+  // actual delivery date.
   function predictionFor(order){
     if (order.PredictedDate){
       return {
@@ -1877,7 +1879,7 @@
     }).join('');
 
     const loggedNote = p.logged
-      ? `Diese Prognose wurde am ${fmtDate(p.loggedAt)} festgehalten und bleibt bis zur Auslieferung unverändert — so lässt sich später prüfen, wie genau sie war.`
+      ? `Diese Prognose wird täglich neu berechnet, je mehr Fahrzeuge ausgeliefert werden, desto genauer wird die Schätzung. Das Datum wurde zuletzt am ${fmtDate(p.loggedAt)} aktualisiert.`
       : `Live berechnet (für diese Bestellung liegt noch kein geloggter Wert vor).`;
 
     return `
