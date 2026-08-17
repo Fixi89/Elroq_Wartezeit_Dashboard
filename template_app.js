@@ -1,0 +1,2333 @@
+(function(){
+  const ALL_ORDERS = JSON.parse(document.getElementById('dashboard-data').textContent);
+
+  // Delivered orders are the statistical basis for every chart and filter.
+  // Open orders are only used for the personal lookup — their "waiting time"
+  // is still running and would distort the averages.
+  const DATA = ALL_ORDERS.filter(r => r.Ausgeliefert !== false);
+  const OPEN_ORDERS = ALL_ORDERS.filter(r => r.Ausgeliefert === false);
+
+  // ---- Filter definitions ----
+  // 'Modell' is rendered as a two-level tree (drivetrain group -> variant),
+  // but the filter state stays a flat set of full model names.
+  const MULTI_FIELDS = [
+    { key: 'Land', label: 'Land' },
+    { key: 'Modell', label: 'Modell' },
+    { key: 'Ausstattungslinie', label: 'Ausstattungslinie' },
+    { key: 'Farbe', label: 'Farbe' },
+    { key: 'Innenausstattung_DesignSelection', label: 'Innenausstattung (Design Selection)' },
+    { key: 'Felgenname', label: 'Felgenname' },
+  ];
+
+  // Inline flags keep the file self-contained (no external image requests).
+  const FLAGS = {
+    'Deutschland': '<svg viewBox="0 0 5 3"><rect width="5" height="1" y="0" fill="#000"/><rect width="5" height="1" y="1" fill="#D00"/><rect width="5" height="1" y="2" fill="#FFCE00"/></svg>',
+    'Österreich': '<svg viewBox="0 0 5 3"><rect width="5" height="1" y="0" fill="#ED2939"/><rect width="5" height="1" y="1" fill="#fff"/><rect width="5" height="1" y="2" fill="#ED2939"/></svg>',
+    'Schweiz': '<svg viewBox="0 0 5 3"><rect width="5" height="3" fill="#D52B1E"/><rect x="2.15" y="0.6" width="0.7" height="1.8" fill="#fff"/><rect x="1.35" y="1.15" width="2.3" height="0.7" fill="#fff"/></svg>',
+    'Belgien': '<svg viewBox="0 0 5 3"><rect width="1.67" height="3" x="0" fill="#000"/><rect width="1.67" height="3" x="1.67" fill="#FAE042"/><rect width="1.67" height="3" x="3.33" fill="#ED2939"/></svg>',
+    'Italien': '<svg viewBox="0 0 5 3"><rect width="1.67" height="3" x="0" fill="#009246"/><rect width="1.67" height="3" x="1.67" fill="#fff"/><rect width="1.67" height="3" x="3.33" fill="#CE2B37"/></svg>',
+    'Niederlande': '<svg viewBox="0 0 5 3"><rect width="5" height="1" y="0" fill="#AE1C28"/><rect width="5" height="1" y="1" fill="#fff"/><rect width="5" height="1" y="2" fill="#21468B"/></svg>',
+    'Dänemark': '<svg viewBox="0 0 5 3"><rect width="5" height="3" fill="#C60C30"/><rect x="1.8" width="0.6" height="3" fill="#fff"/><rect y="1.2" width="5" height="0.6" fill="#fff"/></svg>',
+  };
+
+  function flagFor(land){
+    const svg = FLAGS[land];
+    return svg ? `<span class="flag" role="img" aria-label="${land}">${svg}</span>` : '';
+  }
+
+  function landCell(land){
+    if (!land) return '–';
+    const f = flagFor(land);
+    return f ? `<span class="flag-cell">${f}${land}</span>` : land;
+  }
+  const BOOL_FIELDS = [
+    { key: 'Paket_Smart', label: 'Paket Smart' },
+    { key: 'Paket_Clever', label: 'Paket Clever' },
+    { key: 'Paket_Advanced', label: 'Paket Advanced' },
+    { key: 'Paket_Maxx', label: 'Paket Maxx' },
+    { key: 'Paket_Plus', label: 'Paket Plus' },
+    { key: 'Paket_Sport', label: 'Paket Sport' },
+    { key: 'Paket_Winter', label: 'Paket Winter' },
+    { key: 'Paket_Transport', label: 'Paket Transport' },
+    { key: 'Paket_Drive', label: 'Paket Drive' },
+    { key: 'Paket_Jubilaeum130Jahre', label: 'Jubiläumspaket 130 Jahre' },
+    { key: 'Anhaengerkupplung_AHK', label: 'Anhängerkupplung (AHK)' },
+    { key: 'Waermepumpe', label: 'Wärmepumpe' },
+    { key: 'DCC_AdaptivesFahrwerk', label: 'DCC / Adaptives Fahrwerk' },
+    { key: 'Dachkontrastlackierung', label: 'Dachkontrastlackierung' },
+    { key: 'Gepaecknetztrennwand', label: 'Gepäcknetztrennwand' },
+    { key: 'Ganzjahresreifen', label: 'Ganzjahresreifen' },
+    { key: 'MatrixLED', label: 'Matrix-LED' },
+    { key: 'Garantieverlaengerung', label: 'Garantieverlängerung' },
+    { key: 'Vollausstattung_Selbstangabe', label: 'Vollausstattung (Selbstangabe)' },
+  ];
+
+  const BADGE_LABELS = {
+    Paket_Smart:'Smart', Paket_Clever:'Clever', Paket_Advanced:'Advanced', Paket_Maxx:'Maxx',
+    Paket_Plus:'Plus', Paket_Sport:'Sport', Paket_Winter:'Winter', Paket_Transport:'Transport',
+    Paket_Drive:'Drive', Paket_Jubilaeum130Jahre:'Jubiläum 130J', Anhaengerkupplung_AHK:'AHK',
+    Waermepumpe:'WP', DCC_AdaptivesFahrwerk:'DCC', Dachkontrastlackierung:'Dachkontrast',
+    Gepaecknetztrennwand:'Netztrennwand', Ganzjahresreifen:'Ganzjahresreifen', MatrixLED:'Matrix-LED',
+    Garantieverlaengerung:'Garantieverl.', Vollausstattung_Selbstangabe:'Vollausstattung'
+  };
+
+  // Ausstattungspakete (bundled trim packages) vs. Einzeloptionen (individual
+  // add-ons) get a slightly different badge tint so the two are visually
+  // distinguishable at a glance, without adding a third clashing hue.
+  const PAKET_KEYS = new Set([
+    'Paket_Smart','Paket_Clever','Paket_Advanced','Paket_Maxx','Paket_Plus','Paket_Sport',
+    'Paket_Winter','Paket_Transport','Paket_Drive','Paket_Jubilaeum130Jahre',
+  ]);
+
+  function badgeHtml(key){
+    const cls = PAKET_KEYS.has(key) ? 'badge on paket' : 'badge on option';
+    return `<span class="${cls}">${BADGE_LABELS[key]}</span>`;
+  }
+
+  function felgenLabel(r){
+    return [r.Felgengroesse_Zoll ? r.Felgengroesse_Zoll + '"' : '', r.Felgenname].filter(Boolean).join(' ') || '–';
+  }
+
+  // Empty values are shown (and filtered) as an explicit "unknown" entry.
+  const UNKNOWN = '— unbekannt —';
+  function normalizedValue(r, key){
+    const v = r[key];
+    return (v === '' || v === null || v === undefined) ? UNKNOWN : v;
+  }
+
+  function escapeHtml(s){
+    return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[c]));
+  }
+
+  const DAY_MS = 86400000;
+  const dateFmt = new Intl.DateTimeFormat('de-DE', { day:'2-digit', month:'short', year:'numeric' });
+  function fmtDate(ts){ return dateFmt.format(new Date(ts)); }
+
+  // state: multi fields -> Set of selected values (empty set = all)
+  // bool fields -> 'alle' | 'Ja' | 'Nein'
+  const state = {};
+  MULTI_FIELDS.forEach(f => state[f.key] = new Set());
+  BOOL_FIELDS.forEach(f => state[f.key] = 'alle');
+
+  const allDates = DATA.map(r => r.BestelldatumTS).filter(v => v !== null && v !== undefined);
+  const DATE_MIN = Math.min(...allDates);
+  const DATE_MAX = Math.max(...allDates);
+  state.dateRange = [DATE_MIN, DATE_MAX];
+
+  function distinctValues(key){
+    const counts = {};
+    DATA.forEach(r => {
+      const v = normalizedValue(r, key);
+      counts[v] = (counts[v]||0) + 1;
+    });
+    return Object.entries(counts).sort((a,b)=> b[1]-a[1]);
+  }
+
+  // ---- Build filter UI ----
+  const filterGroupsEl = document.getElementById('filterGroups');
+
+  // Registry of count <span> elements, keyed by field then value, so filter
+  // changes can update the displayed counts in place instead of rebuilding
+  // the whole filter list (which would lose scroll position / focus).
+  const COUNT_ELS = { __modelGroup__: {} };
+  MULTI_FIELDS.forEach(f => { COUNT_ELS[f.key] = {}; });
+  const CLEAR_BTNS = {};
+
+  function buildModelTree(container){
+    // Group -> variants, both sorted by frequency.
+    const groups = {};
+    DATA.forEach(r => {
+      const g = r.Modellgruppe || 'Sonstige';
+      (groups[g] = groups[g] || {})[r.Modell] = (groups[g][r.Modell] || 0) + 1;
+    });
+    const groupOrder = Object.entries(groups)
+      .map(([g, variants]) => [g, variants, Object.values(variants).reduce((a, b) => a + b, 0)])
+      .sort((a, b) => b[2] - a[2]);
+
+    const labelRow = document.createElement('div');
+    labelRow.className = 'field-label-row';
+    const label = document.createElement('span');
+    label.className = 'field-label';
+    label.textContent = 'Modell (nach Antrieb gruppiert)';
+    const clearBtn = document.createElement('button');
+    clearBtn.type = 'button';
+    clearBtn.className = 'field-clear';
+    clearBtn.textContent = 'Leeren';
+    clearBtn.hidden = true;
+    clearBtn.addEventListener('click', () => {
+      state.Modell.clear();
+      document.querySelectorAll('.model-variants input[type=checkbox]').forEach(cb => cb.checked = false);
+      syncModelGroupBoxes();
+      render();
+    });
+    labelRow.appendChild(label);
+    labelRow.appendChild(clearBtn);
+    container.appendChild(labelRow);
+    CLEAR_BTNS.Modell = clearBtn;
+
+    groupOrder.forEach(([groupName, variants, total]) => {
+      const variantNames = Object.entries(variants).sort((a, b) => b[1] - a[1]);
+
+      const wrap = document.createElement('div');
+      wrap.className = 'model-group';
+
+      const head = document.createElement('label');
+      head.className = 'model-group-head';
+
+      const gcb = document.createElement('input');
+      gcb.type = 'checkbox';
+      gcb.dataset.group = groupName;
+
+      const gname = document.createElement('span');
+      gname.textContent = groupName;
+
+      const gcount = document.createElement('span');
+      gcount.className = 'count';
+      gcount.textContent = total;
+      COUNT_ELS.__modelGroup__[groupName] = gcount;
+
+      head.appendChild(gcb);
+      head.appendChild(gname);
+
+      // Only offer the expander where there is more than one variant.
+      const variantsBox = document.createElement('div');
+      variantsBox.className = 'model-variants';
+
+      if (variantNames.length > 1){
+        const toggle = document.createElement('button');
+        toggle.type = 'button';
+        toggle.className = 'model-group-toggle';
+        toggle.textContent = `${variantNames.length} Varianten ▾`;
+        toggle.setAttribute('aria-expanded', 'false');
+        toggle.addEventListener('click', e => {
+          e.preventDefault();
+          e.stopPropagation();
+          const open = variantsBox.classList.toggle('open');
+          toggle.textContent = `${variantNames.length} Varianten ${open ? '▴' : '▾'}`;
+          toggle.setAttribute('aria-expanded', String(open));
+        });
+        head.appendChild(toggle);
+      }
+
+      head.appendChild(gcount);
+      wrap.appendChild(head);
+
+      variantNames.forEach(([name, count]) => {
+        const id = 'chk_Modell_' + name.replace(/[^a-zA-Z0-9]/g, '');
+        const lbl = document.createElement('label');
+        const cb = document.createElement('input');
+        cb.type = 'checkbox';
+        cb.id = id;
+        cb.dataset.field = 'Modell';
+        cb.dataset.value = name;
+        cb.dataset.group = groupName;
+        cb.addEventListener('change', () => {
+          if (cb.checked) state.Modell.add(name);
+          else state.Modell.delete(name);
+          syncModelGroupBoxes();
+          render();
+        });
+        const txt = document.createElement('span');
+        txt.textContent = name.replace(/^Skoda\s+/, '');
+        const cnt = document.createElement('span');
+        cnt.className = 'count';
+        cnt.textContent = count;
+        COUNT_ELS.Modell[name] = cnt;
+        lbl.appendChild(cb);
+        lbl.appendChild(txt);
+        lbl.appendChild(cnt);
+        variantsBox.appendChild(lbl);
+      });
+
+      // Ticking the group is a shortcut for ticking every variant inside it.
+      gcb.addEventListener('change', () => {
+        variantNames.forEach(([name]) => {
+          if (gcb.checked) state.Modell.add(name);
+          else state.Modell.delete(name);
+          const el = document.getElementById('chk_Modell_' + name.replace(/[^a-zA-Z0-9]/g, ''));
+          if (el) el.checked = gcb.checked;
+        });
+        syncModelGroupBoxes();
+        render();
+      });
+
+      wrap.appendChild(variantsBox);
+      container.appendChild(wrap);
+    });
+  }
+
+  function syncModelGroupBoxes(){
+    document.querySelectorAll('.model-group-head input[data-group]').forEach(gcb => {
+      const group = gcb.dataset.group;
+      const kids = [...document.querySelectorAll(`.model-variants input[data-group="${group}"]`)];
+      const checked = kids.filter(k => k.checked).length;
+      gcb.checked = checked > 0 && checked === kids.length;
+      gcb.indeterminate = checked > 0 && checked < kids.length;
+    });
+  }
+
+  function buildMultiGroup(){
+    const details = document.createElement('details');
+    details.className = 'filter-group';
+    details.open = true;
+    const summary = document.createElement('summary');
+    summary.textContent = 'Land, Modell, Farbe & Felgen';
+    details.appendChild(summary);
+    const body = document.createElement('div');
+    body.className = 'filter-group-body';
+
+    MULTI_FIELDS.forEach(f => {
+      const wrap = document.createElement('div');
+
+      if (f.key === 'Modell'){
+        buildModelTree(wrap);
+        body.appendChild(wrap);
+        return;
+      }
+
+      const labelRow = document.createElement('div');
+      labelRow.className = 'field-label-row';
+      const label = document.createElement('span');
+      label.className = 'field-label';
+      label.textContent = f.label;
+      const clearBtn = document.createElement('button');
+      clearBtn.type = 'button';
+      clearBtn.className = 'field-clear';
+      clearBtn.textContent = 'Leeren';
+      clearBtn.hidden = true;
+      clearBtn.addEventListener('click', () => {
+        state[f.key].clear();
+        checkWrap.querySelectorAll('input[type=checkbox]').forEach(cb => cb.checked = false);
+        render();
+      });
+      labelRow.appendChild(label);
+      labelRow.appendChild(clearBtn);
+      wrap.appendChild(labelRow);
+      CLEAR_BTNS[f.key] = clearBtn;
+
+      const checkWrap = document.createElement('div');
+      checkWrap.className = 'multi-check';
+      const values = distinctValues(f.key);
+      values.forEach(([val, count]) => {
+        const id = 'chk_' + f.key + '_' + val.replace(/[^a-zA-Z0-9]/g,'');
+        const lbl = document.createElement('label');
+        const cb = document.createElement('input');
+        cb.type = 'checkbox';
+        cb.id = id;
+        cb.dataset.field = f.key;
+        cb.dataset.value = val;
+        cb.addEventListener('change', () => {
+          if (cb.checked) state[f.key].add(val);
+          else state[f.key].delete(val);
+          render();
+        });
+        const txt = document.createElement('span');
+        // Country rows carry a small flag so they are recognisable at a glance.
+        if (f.key === 'Land' && FLAGS[val]){
+          txt.className = 'flag-cell';
+          txt.innerHTML = flagFor(val) + '<span>' + val + '</span>';
+        } else {
+          txt.textContent = val;
+        }
+        const cnt = document.createElement('span');
+        cnt.className = 'count';
+        cnt.textContent = count;
+        COUNT_ELS[f.key][val] = cnt;
+        lbl.appendChild(cb);
+        lbl.appendChild(txt);
+        lbl.appendChild(cnt);
+        checkWrap.appendChild(lbl);
+      });
+      wrap.appendChild(checkWrap);
+      body.appendChild(wrap);
+    });
+
+    details.appendChild(body);
+    filterGroupsEl.appendChild(details);
+  }
+
+  function buildBoolGroup(){
+    const details = document.createElement('details');
+    details.className = 'filter-group';
+    details.open = true;
+    const summary = document.createElement('summary');
+    summary.textContent = 'Pakete & Einzeloptionen';
+    details.appendChild(summary);
+    const body = document.createElement('div');
+    body.className = 'filter-group-body';
+
+    const grid = document.createElement('div');
+    grid.className = 'bool-grid';
+
+    BOOL_FIELDS.forEach(f => {
+      const wrap = document.createElement('div');
+      wrap.className = 'bool-field';
+      const label = document.createElement('span');
+      label.className = 'field-label';
+      label.textContent = f.label;
+      wrap.appendChild(label);
+
+      const sel = document.createElement('select');
+      sel.className = 'tri-select';
+      ['Alle', 'Ja', 'Nein'].forEach(opt => {
+        const o = document.createElement('option');
+        o.value = opt === 'Alle' ? 'alle' : opt;
+        o.textContent = opt;
+        sel.appendChild(o);
+      });
+      sel.addEventListener('change', () => {
+        state[f.key] = sel.value;
+        render();
+      });
+      sel.dataset.field = f.key;
+      wrap.appendChild(sel);
+      grid.appendChild(wrap);
+    });
+
+    body.appendChild(grid);
+    details.appendChild(body);
+    filterGroupsEl.appendChild(details);
+  }
+
+  function buildDateRangeGroup(){
+    const details = document.createElement('details');
+    details.className = 'filter-group';
+    details.open = true;
+    const summary = document.createElement('summary');
+    summary.textContent = 'Bestellzeitraum';
+    details.appendChild(summary);
+
+    const body = document.createElement('div');
+    body.className = 'filter-group-body';
+
+    const labelsWrap = document.createElement('div');
+    labelsWrap.className = 'date-range-labels';
+    labelsWrap.innerHTML = `
+      <div><span class="lbl">Von</span><span id="dateFromLabel"></span></div>
+      <div style="text-align:right;"><span class="lbl">Bis</span><span id="dateToLabel"></span></div>
+    `;
+    body.appendChild(labelsWrap);
+
+    const sliderWrap = document.createElement('div');
+    sliderWrap.className = 'range-slider';
+    sliderWrap.innerHTML = `
+      <div class="track-bg"></div>
+      <div class="track-fill" id="dateTrackFill"></div>
+    `;
+    const inputFrom = document.createElement('input');
+    inputFrom.type = 'range'; inputFrom.id = 'dateFrom';
+    inputFrom.min = DATE_MIN; inputFrom.max = DATE_MAX; inputFrom.step = DAY_MS; inputFrom.value = DATE_MIN;
+
+    const inputTo = document.createElement('input');
+    inputTo.type = 'range'; inputTo.id = 'dateTo';
+    inputTo.min = DATE_MIN; inputTo.max = DATE_MAX; inputTo.step = DAY_MS; inputTo.value = DATE_MAX;
+
+    sliderWrap.appendChild(inputFrom);
+    sliderWrap.appendChild(inputTo);
+    body.appendChild(sliderWrap);
+
+    function onSlide(){
+      let from = parseInt(inputFrom.value, 10);
+      let to = parseInt(inputTo.value, 10);
+      if (from > to){ [from, to] = [to, from]; }
+      state.dateRange = [from, to];
+      updateDateUI();
+      render();
+    }
+    inputFrom.addEventListener('input', onSlide);
+    inputTo.addEventListener('input', onSlide);
+
+    details.appendChild(body);
+    filterGroupsEl.appendChild(details);
+  }
+
+  function updateDateUI(){
+    const [from, to] = state.dateRange;
+    document.getElementById('dateFromLabel').textContent = fmtDate(from);
+    document.getElementById('dateToLabel').textContent = fmtDate(to);
+    const fromEl = document.getElementById('dateFrom');
+    const toEl = document.getElementById('dateTo');
+    if (fromEl) fromEl.value = from;
+    if (toEl) toEl.value = to;
+    const range = DATE_MAX - DATE_MIN || 1;
+    const leftPct = ((from - DATE_MIN) / range) * 100;
+    const rightPct = ((to - DATE_MIN) / range) * 100;
+    const fill = document.getElementById('dateTrackFill');
+    if (fill){
+      fill.style.left = leftPct + '%';
+      fill.style.width = Math.max(0, rightPct - leftPct) + '%';
+    }
+  }
+
+  buildDateRangeGroup();
+  buildMultiGroup();
+  buildBoolGroup();
+  updateDateUI();
+
+  // On phones the drawer is long, so start the two big groups collapsed.
+  if (window.matchMedia('(max-width: 980px)').matches){
+    document.querySelectorAll('#filterGroups details').forEach((d, i) => {
+      if (i > 0) d.open = false;
+    });
+  }
+
+  // ---- Filter search ----
+  // With 23 filter fields and some long value lists (models, colors), a
+  // quick text search across all of them beats scrolling. Matching rows stay
+  // visible, non-matching ones are hidden, and collapsed groups auto-expand
+  // just for the duration of the search so results are never hidden behind
+  // a closed <details>. Clearing the search restores whatever open/closed
+  // state the groups had before.
+  function initFilterSearch(){
+    const input = document.getElementById('filterSearch');
+    const clearBtn = document.getElementById('filterSearchClear');
+    const groups = document.querySelectorAll('#filterGroups > details.filter-group');
+    let openBeforeSearch = null;
+
+    function applySearch(raw){
+      const q = raw.trim().toLowerCase();
+      clearBtn.hidden = !q;
+
+      if (q && !openBeforeSearch){
+        openBeforeSearch = new Map();
+        groups.forEach(d => openBeforeSearch.set(d, d.open));
+      } else if (!q && openBeforeSearch){
+        groups.forEach(d => { d.open = openBeforeSearch.get(d); });
+        openBeforeSearch = null;
+      }
+
+      // Tri-state selects (Pakete & Einzeloptionen) — match on their label.
+      document.querySelectorAll('.bool-field').forEach(field => {
+        const text = (field.querySelector('.field-label')?.textContent || '').toLowerCase();
+        field.style.display = (!q || text.includes(q)) ? '' : 'none';
+      });
+
+      // Plain checkbox lists (Farbe, Land, Innenausstattung, Felgenname, Ausstattungslinie).
+      document.querySelectorAll('.multi-check').forEach(list => {
+        let anyVisible = false;
+        list.querySelectorAll('label').forEach(lbl => {
+          const match = !q || lbl.textContent.toLowerCase().includes(q);
+          lbl.style.display = match ? '' : 'none';
+          if (match) anyVisible = true;
+        });
+        // .multi-check IS the div matched by CSS; its field wrapper is the parent.
+        if (list.parentElement) list.parentElement.style.display = (anyVisible || !q) ? '' : 'none';
+      });
+
+      // Model tree — a match on the group name keeps every variant visible;
+      // a match on a variant name keeps just that variant and expands the group.
+      document.querySelectorAll('.model-group').forEach(group => {
+        const groupName = (group.querySelector('.model-group-head span:not(.count)')?.textContent || '').toLowerCase();
+        const groupNameMatches = !q || groupName.includes(q);
+        const variantsBox = group.querySelector('.model-variants');
+        let anyVariantMatch = false;
+
+        variantsBox?.querySelectorAll('label').forEach(lbl => {
+          const match = groupNameMatches || lbl.textContent.toLowerCase().includes(q);
+          lbl.style.display = match ? '' : 'none';
+          if (match && !groupNameMatches) anyVariantMatch = true;
+        });
+
+        group.style.display = (groupNameMatches || anyVariantMatch) ? '' : 'none';
+        if (q && anyVariantMatch && variantsBox) variantsBox.classList.add('open');
+      });
+
+      // Auto-open any collapsed <details> that still contains a visible match.
+      if (q){
+        groups.forEach(d => {
+          const hasMatch = [...d.querySelectorAll('.multi-check label, .model-group, .bool-field')]
+            .some(el => el.style.display !== 'none');
+          if (hasMatch) d.open = true;
+        });
+      }
+    }
+
+    input.addEventListener('input', () => applySearch(input.value));
+    clearBtn.addEventListener('click', () => {
+      input.value = '';
+      applySearch('');
+      input.focus();
+    });
+  }
+  initFilterSearch();
+
+  // ---- Shareable filter links ----
+  // The whole filter state is mirrored into the URL hash (replaceState, so it
+  // never spams browser history) and read back on load. That turns any
+  // filtered view — "all RS with tow bar" — into a link someone can send.
+  function isoDate(ts){
+    const d = new Date(ts);
+    const pad = n => String(n).padStart(2, '0');
+    return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+  }
+  function parseIsoDate(s){
+    const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s || '');
+    if (!m) return null;
+    const d = new Date(+m[1], +m[2]-1, +m[3]);
+    return isNaN(d) ? null : d.getTime();
+  }
+
+  function stateToHash(){
+    const p = new URLSearchParams();
+    MULTI_FIELDS.forEach(f => {
+      if (state[f.key].size) p.set(f.key, [...state[f.key]].join('|'));
+    });
+    BOOL_FIELDS.forEach(f => {
+      if (state[f.key] !== 'alle') p.set(f.key, state[f.key]);
+    });
+    if (state.dateRange[0] !== DATE_MIN) p.set('von', isoDate(state.dateRange[0]));
+    if (state.dateRange[1] !== DATE_MAX) p.set('bis', isoDate(state.dateRange[1]));
+    return p.toString();
+  }
+
+  function updateUrlHash(){
+    // In sandboxed previews without "allow-same-origin" (opaque origin,
+    // e.g. many in-app HTML preview panels) history.replaceState() throws a
+    // SecurityError. Since URL-syncing is a nice-to-have, not core
+    // functionality, failing silently here keeps the rest of the dashboard
+    // working instead of aborting the whole render.
+    try {
+      const hash = stateToHash();
+      const url = hash ? `#${hash}` : location.pathname + location.search;
+      history.replaceState(null, '', url);
+    } catch (e) { /* opaque-origin preview context — no-op */ }
+  }
+
+  function applyHashToState(){
+    let hash;
+    try { hash = location.hash; } catch (e) { return; }
+    if (!hash || hash.length < 2) return;
+    const p = new URLSearchParams(hash.slice(1));
+
+    MULTI_FIELDS.forEach(f => {
+      const raw = p.get(f.key);
+      if (!raw) return;
+      raw.split('|').forEach(val => {
+        if (!val) return;
+        state[f.key].add(val);
+        const el = document.getElementById('chk_' + f.key + '_' + val.replace(/[^a-zA-Z0-9]/g, ''));
+        if (el) el.checked = true;
+      });
+    });
+    syncModelGroupBoxes();
+
+    BOOL_FIELDS.forEach(f => {
+      const raw = p.get(f.key);
+      if (raw !== 'Ja' && raw !== 'Nein') return;
+      state[f.key] = raw;
+      const el = document.querySelector(`select[data-field="${f.key}"]`);
+      if (el) el.value = raw;
+    });
+
+    const von = parseIsoDate(p.get('von'));
+    const bis = parseIsoDate(p.get('bis'));
+    if (von !== null) state.dateRange[0] = Math.max(DATE_MIN, von);
+    if (bis !== null) state.dateRange[1] = Math.min(DATE_MAX, bis);
+    if (von !== null || bis !== null) updateDateUI();
+
+    // A shared link about a specific configuration is exactly the case where
+    // starting with the filter groups already expanded saves a tap.
+    if (window.matchMedia('(max-width: 980px)').matches){
+      document.querySelectorAll('#filterGroups details').forEach(d => { d.open = true; });
+    }
+  }
+
+  function copyShareLink(){
+    const btn = document.getElementById('copyLinkBtn');
+    const url = location.href;
+    const done = ok => {
+      const original = btn.innerHTML;
+      btn.innerHTML = ok
+        ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg> Link kopiert'
+        : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg> Kopieren fehlgeschlagen';
+      setTimeout(() => { btn.innerHTML = original; }, 1800);
+    };
+    if (navigator.clipboard && window.isSecureContext !== false){
+      navigator.clipboard.writeText(url).then(() => done(true)).catch(() => fallbackCopy(url, done));
+    } else {
+      fallbackCopy(url, done);
+    }
+  }
+  function fallbackCopy(text, done){
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      const ok = document.execCommand('copy');
+      ta.remove();
+      done(ok);
+    } catch (e){
+      done(false);
+    }
+  }
+
+  applyHashToState();
+  document.getElementById('copyLinkBtn').addEventListener('click', copyShareLink);
+
+  // ---- Filtering ----
+  function getFiltered(){
+    return DATA.filter(r => {
+      if (!inDateRange(r)) return false;
+      for (const f of MULTI_FIELDS){
+        const sel = state[f.key];
+        if (sel.size === 0) continue;
+        if (!sel.has(normalizedValue(r, f.key))) return false;
+      }
+      for (const f of BOOL_FIELDS){
+        const sel = state[f.key];
+        if (sel === 'alle') continue;
+        if (r[f.key] !== sel) return false;
+      }
+      return true;
+    });
+  }
+
+  // Same as getFiltered(), but ignores one MULTI_FIELDS field's own selection.
+  // That's what makes the counts next to each checkbox reflect "how many
+  // results if I also pick this value", instead of always showing the count
+  // from the full, unfiltered dataset.
+  function getFilteredExcept(excludeField){
+    return DATA.filter(r => {
+      if (!inDateRange(r)) return false;
+      for (const f of MULTI_FIELDS){
+        if (f.key === excludeField) continue;
+        const sel = state[f.key];
+        if (sel.size === 0) continue;
+        if (!sel.has(normalizedValue(r, f.key))) return false;
+      }
+      for (const f of BOOL_FIELDS){
+        const sel = state[f.key];
+        if (sel === 'alle') continue;
+        if (r[f.key] !== sel) return false;
+      }
+      return true;
+    });
+  }
+
+  function updateFacetCounts(){
+    MULTI_FIELDS.forEach(f => {
+      const pool = getFilteredExcept(f.key);
+      const counts = {};
+      pool.forEach(r => {
+        const v = normalizedValue(r, f.key);
+        counts[v] = (counts[v] || 0) + 1;
+      });
+
+      Object.entries(COUNT_ELS[f.key]).forEach(([val, el]) => {
+        const n = counts[val] || 0;
+        el.textContent = n;
+        el.closest('label').classList.toggle('zero', n === 0);
+      });
+
+      // The "Leeren" link next to each field only makes sense once something
+      // in that field is actually selected.
+      if (CLEAR_BTNS[f.key]) CLEAR_BTNS[f.key].hidden = state[f.key].size === 0;
+
+      if (f.key === 'Modell'){
+        const groupCounts = {};
+        pool.forEach(r => { groupCounts[r.Modellgruppe] = (groupCounts[r.Modellgruppe] || 0) + 1; });
+        Object.entries(COUNT_ELS.__modelGroup__).forEach(([grp, el]) => {
+          const n = groupCounts[grp] || 0;
+          el.textContent = n;
+          el.closest('.model-group-head').classList.toggle('zero', n === 0);
+        });
+      }
+    });
+  }
+
+
+  function stats(rows){
+    const n = rows.length;
+    if (n === 0) return { n:0, avg:0, median:0, min:0, max:0 };
+    const times = rows.map(r => r.WartezeitTage).sort((a,b)=>a-b);
+    const sum = times.reduce((a,b)=>a+b,0);
+    const avg = sum / n;
+    const mid = Math.floor(n/2);
+    const median = n % 2 === 0 ? (times[mid-1]+times[mid])/2 : times[mid];
+    return { n, avg, median, min: times[0], max: times[n-1] };
+  }
+
+  const GLOBAL_STATS = stats(DATA);
+
+  // ---- Chips ----
+  function fieldLabel(key){
+    const all = [...MULTI_FIELDS, ...BOOL_FIELDS];
+    const found = all.find(f => f.key === key);
+    return found ? found.label : key;
+  }
+
+  function renderChips(){
+    const chipsRow = document.getElementById('chipsRow');
+    chipsRow.innerHTML = '';
+    let any = false;
+
+    if (state.dateRange[0] !== DATE_MIN || state.dateRange[1] !== DATE_MAX){
+      any = true;
+      const chip = document.createElement('span');
+      chip.className = 'chip';
+      chip.innerHTML = `<span>Zeitraum: <strong>${fmtDate(state.dateRange[0])} – ${fmtDate(state.dateRange[1])}</strong></span>`;
+      const btn = document.createElement('button');
+      btn.textContent = '✕';
+      btn.addEventListener('click', () => {
+        state.dateRange = [DATE_MIN, DATE_MAX];
+        updateDateUI();
+        render();
+      });
+      chip.appendChild(btn);
+      chipsRow.appendChild(chip);
+    }
+
+    MULTI_FIELDS.forEach(f => {
+      state[f.key].forEach(val => {
+        any = true;
+        const chip = document.createElement('span');
+        chip.className = 'chip';
+        chip.innerHTML = `<span>${fieldLabel(f.key)}: <strong>${val}</strong></span>`;
+        const btn = document.createElement('button');
+        btn.textContent = '✕';
+        btn.addEventListener('click', () => {
+          state[f.key].delete(val);
+          const el = document.getElementById('chk_' + f.key + '_' + val.replace(/[^a-zA-Z0-9]/g,''));
+          if (el) el.checked = false;
+          if (f.key === 'Modell') syncModelGroupBoxes();
+          render();
+        });
+        chip.appendChild(btn);
+        chipsRow.appendChild(chip);
+      });
+    });
+
+    BOOL_FIELDS.forEach(f => {
+      if (state[f.key] !== 'alle'){
+        any = true;
+        const chip = document.createElement('span');
+        chip.className = 'chip';
+        chip.innerHTML = `<span>${fieldLabel(f.key)}: <strong>${state[f.key]}</strong></span>`;
+        const btn = document.createElement('button');
+        btn.textContent = '✕';
+        btn.addEventListener('click', () => {
+          state[f.key] = 'alle';
+          const sel = document.querySelector(`select[data-field="${f.key}"]`);
+          if (sel) sel.value = 'alle';
+          render();
+        });
+        chip.appendChild(btn);
+        chipsRow.appendChild(chip);
+      }
+    });
+
+    const status = document.getElementById('filterStatus');
+    if (any){
+      status.textContent = 'Filter aktiv — gefilterte Auswertung unten';
+      status.classList.add('active');
+    } else {
+      status.textContent = 'Keine Filter aktiv — Gesamtübersicht';
+      status.classList.remove('active');
+    }
+  }
+
+  // ---- KPI + Gauge ----
+  // ---- Smooth number transitions ----
+  // KPI cards and the gauge are built ONCE and then only updated in place;
+  // rebuilding them from scratch every render (as before) leaves nothing to
+  // animate from, since freshly-created DOM nodes have no "previous" value.
+  function animateNumber(el, target, formatFn){
+    const format = formatFn || (v => Math.round(v).toString());
+    if (el._raf) cancelAnimationFrame(el._raf);
+
+    if (target === null || target === undefined || Number.isNaN(target)){
+      el.textContent = '–';
+      delete el.dataset.val;
+      return;
+    }
+
+    const prev = parseFloat(el.dataset.val);
+    const from = Number.isFinite(prev) ? prev : target;
+    el.dataset.val = target;
+
+    if (from === target){ el.textContent = format(target); return; }
+
+    const duration = 450;
+    const start = performance.now();
+    function tick(now){
+      const t = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - t, 3); // ease-out cubic
+      el.textContent = format(from + (target - from) * eased);
+      if (t < 1){ el._raf = requestAnimationFrame(tick); }
+      else { el.textContent = format(target); el._raf = null; }
+    }
+    el._raf = requestAnimationFrame(tick);
+  }
+
+  const GAUGE = { cx: 90, cy: 92, r: 68, startAngle: -210, endAngle: 30 };
+  let gaugeLastAvg = null;
+
+  function gaugePolar(angDeg, r){
+    const a = (angDeg - 90) * Math.PI / 180;
+    return [GAUGE.cx + r * Math.cos(a), GAUGE.cy + r * Math.sin(a)];
+  }
+  function gaugeArcPath(a1, a2, r){
+    const [x1, y1] = gaugePolar(a1, r);
+    const [x2, y2] = gaugePolar(a2, r);
+    const large = (a2 - a1) <= 180 ? 0 : 1;
+    return `M ${x1} ${y1} A ${r} ${r} 0 ${large} 1 ${x2} ${y2}`;
+  }
+  function gaugeAngleFor(avg){
+    const range = GLOBAL_STATS.max - GLOBAL_STATS.min || 1;
+    const clamped = Math.max(GLOBAL_STATS.min, Math.min(GLOBAL_STATS.max, avg || GLOBAL_STATS.min));
+    const frac = (clamped - GLOBAL_STATS.min) / range;
+    return GAUGE.startAngle + frac * (GAUGE.endAngle - GAUGE.startAngle);
+  }
+
+  function buildGaugeCard(){
+    const card = document.createElement('div');
+    card.className = 'kpi-card gauge-card';
+    const bgArc = gaugeArcPath(GAUGE.startAngle, GAUGE.endAngle, GAUGE.r);
+    card.innerHTML = `
+      <svg viewBox="0 0 180 150" width="150" height="125" role="img" aria-label="Durchschnittliche Wartezeit als Tacho">
+        <path d="${bgArc}" fill="none" stroke="#2a352e" stroke-width="12" stroke-linecap="round"/>
+        <path id="gaugeValArc" fill="none" stroke="#9fe870" stroke-width="12" stroke-linecap="round"/>
+        <line id="gaugeNeedle" x1="${GAUGE.cx}" y1="${GAUGE.cy}" x2="${GAUGE.cx}" y2="${GAUGE.cy}" stroke="#f2a93b" stroke-width="3" stroke-linecap="round"/>
+        <circle cx="${GAUGE.cx}" cy="${GAUGE.cy}" r="5" fill="#f2a93b"/>
+        <text id="gaugeValueText" x="${GAUGE.cx}" y="${GAUGE.cy+2}" text-anchor="middle" class="gauge-value" dy="34">–</text>
+        <text x="${GAUGE.cx}" y="${GAUGE.cy+2}" text-anchor="middle" class="gauge-unit" dy="52">Tage Ø</text>
+      </svg>
+      <div class="kpi-label" style="margin-top:2px;">Ø Wartezeit (gefiltert)</div>
+    `;
+    return card;
+  }
+
+  function updateGauge(avg){
+    const svg = document.getElementById('gaugeValArc')?.closest('svg');
+    const valArc = document.getElementById('gaugeValArc');
+    const needle = document.getElementById('gaugeNeedle');
+    const valueText = document.getElementById('gaugeValueText');
+    if (!valArc) return;
+
+    const hasValue = avg !== null && avg !== undefined && !Number.isNaN(avg) && avg > 0;
+    const fromAvg = gaugeLastAvg === null ? (hasValue ? avg : GLOBAL_STATS.min) : gaugeLastAvg;
+    const toAvg = hasValue ? avg : GLOBAL_STATS.min;
+    gaugeLastAvg = toAvg;
+
+    svg.setAttribute('aria-label', hasValue
+      ? `Durchschnittliche Wartezeit: ${Math.round(avg)} Tage. Skala von ${GLOBAL_STATS.min} bis ${GLOBAL_STATS.max} Tagen.`
+      : 'Keine Bestellungen in der aktuellen Filterauswahl.');
+
+    if (valArc._raf) cancelAnimationFrame(valArc._raf);
+    const duration = 450;
+    const start = performance.now();
+    function tick(now){
+      const t = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - t, 3);
+      const curAvg = fromAvg + (toAvg - fromAvg) * eased;
+      const angle = gaugeAngleFor(curAvg);
+      valArc.setAttribute('d', gaugeArcPath(GAUGE.startAngle, angle, GAUGE.r));
+      const [nx, ny] = gaugePolar(angle, GAUGE.r - 12);
+      needle.setAttribute('x2', nx);
+      needle.setAttribute('y2', ny);
+      valueText.textContent = hasValue ? Math.round(curAvg) : '–';
+      if (t < 1){ valArc._raf = requestAnimationFrame(tick); }
+      else { valArc._raf = null; valueText.textContent = hasValue ? Math.round(avg) : '–'; }
+    }
+    valArc._raf = requestAnimationFrame(tick);
+  }
+
+  // Built once on init; renderKPIs() below only updates the numbers inside.
+  function initKPIRow(){
+    const kpiRow = document.getElementById('kpiRow');
+    kpiRow.appendChild(buildGaugeCard());
+
+    const defs = [
+      { id: 'kpiOrders', label: 'Bestellungen', unit: `von ${GLOBAL_STATS.n}` },
+      { id: 'kpiMedian', label: 'Median Wartezeit', unit: 'Tage' },
+      { id: 'kpiMin', label: 'Kürzeste Wartezeit', unit: 'Tage' },
+      { id: 'kpiMax', label: 'Längste Wartezeit', unit: 'Tage' },
+    ];
+    defs.forEach(d => {
+      const card = document.createElement('div');
+      card.className = 'kpi-card';
+      card.innerHTML = `
+        <div class="kpi-label">${d.label}</div>
+        <div class="kpi-value mono"><span id="${d.id}">–</span><span>${d.unit}</span></div>
+      `;
+      kpiRow.appendChild(card);
+    });
+  }
+
+  function renderKPIs(filtered){
+    const s = stats(filtered);
+    animateNumber(document.getElementById('kpiOrders'), s.n);
+    animateNumber(document.getElementById('kpiMedian'), s.n ? s.median : null);
+    animateNumber(document.getElementById('kpiMin'), s.n ? s.min : null);
+    animateNumber(document.getElementById('kpiMax'), s.n ? s.max : null);
+    updateGauge(s.n ? s.avg : null);
+  }
+
+  // ---- Histogram ----
+  function renderHistogram(filtered){
+    const svg = document.getElementById('histChart');
+    // Narrower viewBox on phones keeps the chart from rendering as a flat strip,
+    // since the SVG now scales proportionally rather than stretching.
+    const isNarrow = window.matchMedia('(max-width: 980px)').matches;
+    const W = isNarrow ? 420 : 800, H = 190, padL = isNarrow ? 24 : 30, padB = 24, padT = 10;
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    const binSize = 20;
+    const maxDay = GLOBAL_STATS.max;
+    const nBins = Math.ceil((maxDay+1) / binSize);
+    const bins = new Array(nBins).fill(0);
+    filtered.forEach(r => {
+      const idx = Math.min(nBins-1, Math.floor(r.WartezeitTage / binSize));
+      bins[idx]++;
+    });
+    const maxCount = Math.max(1, ...bins);
+    const plotW = W - padL - 10;
+    const plotH = H - padT - padB;
+    const bw = plotW / nBins;
+
+    let bars = '';
+    bins.forEach((c, i) => {
+      const bh = (c / maxCount) * plotH;
+      const x = padL + i * bw;
+      const y = padT + plotH - bh;
+      const rangeFrom = i * binSize, rangeTo = rangeFrom + binSize - 1;
+      bars += `<rect x="${x+1.5}" y="${y}" width="${Math.max(bw-3,1)}" height="${Math.max(bh,1)}" fill="#9fe870" opacity="0.85" rx="2">
+        <title>${rangeFrom}–${rangeTo} Tage: ${c} Bestellung${c===1?'':'en'}</title>
+      </rect>`;
+    });
+
+    // axis line
+    let axis = `<line x1="${padL}" y1="${padT+plotH}" x2="${W-10}" y2="${padT+plotH}" stroke="#2a352e" stroke-width="1"/>`;
+    // x labels, thinned out so they never collide on narrow screens
+    let labels = '';
+    const step = Math.max(1, Math.round(nBins / (isNarrow ? 5 : 8)));
+    const fs = isNarrow ? 11 : 9.5;
+    for (let i=0; i<nBins; i+=step){
+      const x = padL + i*bw;
+      labels += `<text x="${x}" y="${H-6}" font-size="${fs}" fill="#8fa090" font-family="IBM Plex Mono, monospace">${i*binSize}</text>`;
+    }
+
+    // avg marker (global) as reference
+    const gAvgX = padL + Math.min(nBins-0.01, GLOBAL_STATS.avg/binSize) * bw;
+    const refLine = `<line x1="${gAvgX}" y1="${padT}" x2="${gAvgX}" y2="${padT+plotH}" stroke="#f2a93b" stroke-width="1.3" stroke-dasharray="4 3" opacity="0.85"/>`;
+
+    svg.innerHTML = bars + axis + labels + refLine;
+    svg.setAttribute('role', 'img');
+    svg.setAttribute('aria-label',
+      filtered.length
+        ? `Histogramm der Wartezeit in ${binSize}-Tage-Intervallen. ${filtered.length} Bestellungen in der aktuellen Auswahl, Durchschnitt über alle Bestellungen ${Math.round(GLOBAL_STATS.avg)} Tage.`
+        : 'Histogramm der Wartezeit: keine Bestellungen in der aktuellen Filterauswahl.'
+    );
+
+    document.getElementById('chartLegend').innerHTML = `
+      <span><span class="legend-dot" style="background:#9fe870;"></span>Anzahl Bestellungen je Wartezeit-Bin (${binSize} Tage)</span>
+      <span><span class="legend-dot" style="background:#f2a93b;"></span>Ø Wartezeit gesamt: ${Math.round(GLOBAL_STATS.avg)} Tage</span>
+    `;
+  }
+
+  // ---- Trend: average waiting time by order month ----
+  function monthKey(ts){
+    const d = new Date(ts);
+    return d.getFullYear() * 100 + (d.getMonth() + 1); // e.g. 202603
+  }
+  function monthLabel(key){
+    const y = Math.floor(key / 100), m = (key % 100) - 1;
+    return new Intl.DateTimeFormat('de-DE', { month: 'short', year: '2-digit' }).format(new Date(y, m, 1));
+  }
+
+  function renderTrendChart(filtered){
+    const svg = document.getElementById('trendChart');
+    const isNarrow = window.matchMedia('(max-width: 980px)').matches;
+    const W = isNarrow ? 420 : 800, H = 190, padL = isNarrow ? 30 : 36, padR = 10, padB = 26, padT = 14;
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+
+    const byMonth = {};
+    filtered.forEach(r => {
+      const k = monthKey(r.BestelldatumTS);
+      (byMonth[k] = byMonth[k] || []).push(r.WartezeitTage);
+    });
+    const keys = Object.keys(byMonth).map(Number).sort((a, b) => a - b);
+
+    if (keys.length < 2){
+      svg.innerHTML = '';
+      svg.setAttribute('role', 'img');
+      svg.setAttribute('aria-label', 'Zu wenige unterschiedliche Bestellmonate für einen Trend in dieser Auswahl.');
+      document.getElementById('trendLegend').innerHTML =
+        `<span>Zu wenige unterschiedliche Bestellmonate für einen Trend in dieser Auswahl.</span>`;
+      return;
+    }
+
+    const points = keys.map(k => {
+      const vals = byMonth[k];
+      return { k, avg: vals.reduce((a, b) => a + b, 0) / vals.length, n: vals.length };
+    });
+
+    const maxAvg = Math.max(...points.map(p => p.avg));
+    const minAvg = Math.min(...points.map(p => p.avg));
+    const range = (maxAvg - minAvg) || 1;
+    const plotW = W - padL - padR, plotH = H - padT - padB;
+    const stepX = points.length > 1 ? plotW / (points.length - 1) : 0;
+
+    const xy = points.map((p, i) => ({
+      x: padL + i * stepX,
+      y: padT + plotH - ((p.avg - minAvg) / range) * plotH,
+      p,
+    }));
+
+    const path = xy.map((pt, i) => `${i === 0 ? 'M' : 'L'} ${pt.x.toFixed(1)} ${pt.y.toFixed(1)}`).join(' ');
+    const areaPath = `${path} L ${xy[xy.length-1].x.toFixed(1)} ${padT+plotH} L ${xy[0].x.toFixed(1)} ${padT+plotH} Z`;
+
+    // Point radius scales gently with sample size so thin months don't look
+    // as authoritative as months backed by many orders.
+    const maxN = Math.max(...points.map(p => p.n));
+    const dots = xy.map(pt => {
+      const r = 2.2 + (pt.p.n / maxN) * 2.3;
+      return `<circle cx="${pt.x.toFixed(1)}" cy="${pt.y.toFixed(1)}" r="${r.toFixed(1)}" fill="#9fe870">
+        <title>${monthLabel(pt.p.k)}: Ø ${Math.round(pt.p.avg)} Tage (${pt.p.n} Bestellungen)</title>
+      </circle>`;
+    }).join('');
+
+    const axis = `<line x1="${padL}" y1="${padT+plotH}" x2="${W-padR}" y2="${padT+plotH}" stroke="#2a352e" stroke-width="1"/>`;
+
+    const labelStep = Math.max(1, Math.ceil(points.length / (isNarrow ? 4 : 9)));
+    const fs = isNarrow ? 10.5 : 9.5;
+    let labels = '';
+    xy.forEach((pt, i) => {
+      if (i % labelStep !== 0 && i !== xy.length - 1) return;
+      labels += `<text x="${pt.x.toFixed(1)}" y="${H-8}" font-size="${fs}" fill="#8fa090" text-anchor="middle" font-family="IBM Plex Mono, monospace">${monthLabel(pt.p.k)}</text>`;
+    });
+
+    // y-axis min/max labels keep the chart readable without a full grid
+    const yLabels = `
+      <text x="${padL-6}" y="${padT+4}" font-size="9.5" fill="#5f7266" text-anchor="end" font-family="IBM Plex Mono, monospace">${Math.round(maxAvg)}</text>
+      <text x="${padL-6}" y="${padT+plotH}" font-size="9.5" fill="#5f7266" text-anchor="end" font-family="IBM Plex Mono, monospace">${Math.round(minAvg)}</text>
+    `;
+
+    svg.innerHTML = `
+      <path d="${areaPath}" fill="#9fe870" opacity="0.08"/>
+      <path d="${path}" fill="none" stroke="#9fe870" stroke-width="2"/>
+      ${dots}
+      ${axis}
+      ${labels}
+      ${yLabels}
+    `;
+    svg.setAttribute('role', 'img');
+    svg.setAttribute('aria-label',
+      `Linienverlauf der durchschnittlichen Wartezeit über ${points.length} Monate, ` +
+      `von ${monthLabel(points[0].k)} (${Math.round(points[0].avg)} Tage) bis ` +
+      `${monthLabel(points[points.length-1].k)} (${Math.round(points[points.length-1].avg)} Tage).`
+    );
+
+    document.getElementById('trendLegend').innerHTML = `
+      <span><span class="legend-dot" style="background:#9fe870;"></span>Ø Wartezeit je Bestellmonat, Punktgröße = Anzahl Bestellungen</span>
+      <span>${points.length} Monate im gewählten Zeitraum</span>
+    `;
+  }
+
+  // ---- Breakdown by Modell ----
+  function renderBreakdown(filtered){
+    const table = document.getElementById('breakdownTable');
+    if (filtered.length === 0){
+      table.innerHTML = `<tr><td class="empty-state">Keine Bestellungen für diese Filterkombination.</td></tr>`;
+      return;
+    }
+    const groups = {};
+    filtered.forEach(r => {
+      const key = r.Modell || 'Unbekannt';
+      if (!groups[key]) groups[key] = [];
+      groups[key].push(r.WartezeitTage);
+    });
+    const rows = Object.entries(groups).map(([modell, times]) => {
+      const n = times.length;
+      const avg = times.reduce((a,b)=>a+b,0)/n;
+      return { modell, n, avg };
+    }).sort((a,b) => b.avg - a.avg);
+
+    const maxAvg = Math.max(...rows.map(r=>r.avg));
+
+    let html = `<thead><tr><th>Modell</th><th>Anzahl</th><th>Ø Wartezeit</th><th></th></tr></thead><tbody>`;
+    rows.forEach(r => {
+      html += `<tr>
+        <td>${r.modell}</td>
+        <td class="mono">${r.n}</td>
+        <td class="mono">${Math.round(r.avg)} Tage</td>
+        <td>
+          <div class="bar-cell">
+            <div class="bar-track"><div class="bar-fill" style="width:${(r.avg/maxAvg*100).toFixed(0)}%"></div></div>
+          </div>
+        </td>
+      </tr>`;
+    });
+    html += `</tbody>`;
+    table.innerHTML = html;
+  }
+
+  // ---- Feature ranking: which attributes correlate most with wait time ----
+  // Compares the average wait of orders WITH a given attribute against all
+  // OTHERS, for every boolean option and every category of the relevant
+  // categorical fields. This is a correlation view, not a causal model — the
+  // intro text next to the panel says so explicitly, and stays visible.
+  const RANK_MIN_N = 15;
+  const RANK_CAT_FIELDS = [
+    { key: 'Modellgruppe', label: 'Modell (Antrieb)' },
+    { key: 'Ausstattungslinie', label: 'Ausstattungslinie' },
+    { key: 'Land', label: 'Land' },
+    { key: 'Innenausstattung_DesignSelection', label: 'Innenausstattung' },
+    { key: 'Felgenname', label: 'Felgen' },
+  ];
+
+  function avgOf(arr){ return arr.reduce((a, b) => a + b, 0) / arr.length; }
+
+  function computeFeatureRanking(rows){
+    if (rows.length < RANK_MIN_N * 2) return [];
+    const factors = [];
+
+    BOOL_FIELDS.forEach(f => {
+      const withF = rows.filter(r => r[f.key] === 'Ja');
+      const withoutF = rows.filter(r => r[f.key] === 'Nein');
+      if (withF.length >= RANK_MIN_N && withoutF.length >= RANK_MIN_N){
+        const effect = avgOf(withF.map(r => r.WartezeitTage)) - avgOf(withoutF.map(r => r.WartezeitTage));
+        factors.push({ label: f.label, effect, nA: withF.length, nB: withoutF.length });
+      }
+    });
+
+    RANK_CAT_FIELDS.forEach(cf => {
+      const groups = {};
+      rows.forEach(r => {
+        const v = normalizedValue(r, cf.key);
+        if (v === UNKNOWN) return;
+        (groups[v] = groups[v] || []).push(r);
+      });
+      Object.entries(groups).forEach(([val, group]) => {
+        const rest = rows.filter(r => normalizedValue(r, cf.key) !== val);
+        if (group.length < RANK_MIN_N || rest.length < RANK_MIN_N) return;
+        const effect = avgOf(group.map(r => r.WartezeitTage)) - avgOf(rest.map(r => r.WartezeitTage));
+        factors.push({ label: `${cf.label}: ${val}`, effect, nA: group.length, nB: rest.length });
+      });
+    });
+
+    factors.sort((a, b) => Math.abs(b.effect) - Math.abs(a.effect));
+    return factors.slice(0, 12);
+  }
+
+  function renderFeatureRanking(filtered){
+    const el = document.getElementById('featureRankPanel');
+    const factors = computeFeatureRanking(filtered);
+
+    if (!factors.length){
+      el.innerHTML = `<p class="lk-hint" style="color:var(--text-dim);font-size:12.5px;">
+        Zu wenig Daten für diese Filterauswahl (mind. ${RANK_MIN_N} Bestellungen je Vergleichsgruppe nötig).</p>`;
+      return;
+    }
+
+    const maxAbs = Math.max(...factors.map(f => Math.abs(f.effect)));
+    const rows = factors.map(f => {
+      const pct = (Math.abs(f.effect) / maxAbs) * 50; // half-width = one side of the zero line
+      const dir = f.effect >= 0 ? 'slower' : 'faster';
+      const barStyle = f.effect >= 0
+        ? `left:50%; width:${pct.toFixed(1)}%;`
+        : `right:50%; width:${pct.toFixed(1)}%;`;
+      const sign = f.effect > 0 ? '+' : (f.effect < 0 ? '−' : '±');
+      return `
+        <div class="rank-row">
+          <div class="rank-label">${escapeHtml(f.label)}<span class="n">${f.nA} vs. ${f.nB}</span></div>
+          <div class="rank-track">
+            <div class="rank-zero"></div>
+            <div class="rank-bar ${dir}" style="${barStyle}"></div>
+          </div>
+          <div class="rank-value ${dir}">${sign}${Math.round(Math.abs(f.effect))} Tage</div>
+        </div>`;
+    }).join('');
+
+    el.innerHTML = rows + `
+      <div class="rank-legend">
+        <span><span class="legend-dot" style="background:var(--danger);"></span>Länger als der Rest</span>
+        <span><span class="legend-dot" style="background:var(--accent);"></span>Kürzer als der Rest</span>
+      </div>`;
+  }
+
+  // ---- Extremes (kürzeste / längste Wartezeit) ----
+  const ALL_BOOL_KEYS = BOOL_FIELDS.map(f => f.key);
+
+  function configLines(r){
+    const lines = [
+      ['Benutzer', escapeHtml(r.Benutzername || '–')],
+      ['Modell', escapeHtml(r.Modell || '–')],
+      ['Farbe', escapeHtml(r.Farbe || '–')],
+      ['Innenausstattung', escapeHtml(r.Innenausstattung_DesignSelection || '–')],
+      ['Felgen', escapeHtml(felgenLabel(r))],
+      ['Land', landCell(r.Land)],
+      ['Bestelldatum', escapeHtml(r.Bestelldatum || '–')],
+    ];
+    return lines;
+  }
+
+  function extremeCard(r, type){
+    const isShort = type === 'short';
+    const tag = isShort ? 'Kürzeste Wartezeit' : 'Längste Wartezeit';
+    const rowsHtml = configLines(r).map(([k,v]) => `
+      <div class="extreme-row"><span class="k">${k}</span><span class="v">${v}</span></div>
+    `).join('');
+    const activeOptions = ALL_BOOL_KEYS.filter(k => r[k] === 'Ja');
+    const badgesHtml = activeOptions.length
+      ? activeOptions.map(k => badgeHtml(k)).join('')
+      : `<span class="badge">Keine Zusatzoptionen erkannt</span>`;
+
+    return `
+      <div class="extreme-card ${isShort?'short':'long'}">
+        <span class="extreme-tag">${tag}</span>
+        <div class="extreme-days mono">${r.WartezeitTage} Tage</div>
+        <div class="extreme-rows">${rowsHtml}</div>
+        <div class="extreme-badges">${badgesHtml}</div>
+      </div>
+    `;
+  }
+
+  function renderExtremes(filtered){
+    const grid = document.getElementById('extremesGrid');
+    if (filtered.length === 0){
+      grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;">Keine Bestellungen für diese Filterkombination.</div>`;
+      return;
+    }
+    const sorted = [...filtered].sort((a,b)=> a.WartezeitTage - b.WartezeitTage);
+    const shortest = sorted[0];
+    const longest = sorted[sorted.length-1];
+    grid.innerHTML = extremeCard(shortest, 'short') + extremeCard(longest, 'long');
+  }
+
+  // ---- "Wer hat so bestellt?" ----
+  // Config criteria come from the active filters. Orders are scored by how many
+  // of those criteria they meet, so near-misses stay visible instead of being
+  // silently filtered away — that is where the useful comparisons usually are.
+  const CONFIG_FIELDS = new Set([
+    ...MULTI_FIELDS.map(f => f.key),
+    ...BOOL_FIELDS.map(f => f.key),
+  ]);
+
+  function activeCriteria(){
+    const crit = [];
+    MULTI_FIELDS.forEach(f => {
+      if (state[f.key].size === 0) return;
+      const sel = new Set(state[f.key]);
+      crit.push({
+        label: f.label,
+        test: r => sel.has(normalizedValue(r, f.key)),
+      });
+    });
+    BOOL_FIELDS.forEach(f => {
+      if (state[f.key] === 'alle') return;
+      const want = state[f.key];
+      crit.push({
+        label: f.label,
+        test: r => r[f.key] === want,
+      });
+    });
+    return crit;
+  }
+
+  function inDateRange(r){
+    if (r.BestelldatumTS === null || r.BestelldatumTS === undefined) return true;
+    return r.BestelldatumTS >= state.dateRange[0] && r.BestelldatumTS <= state.dateRange[1];
+  }
+
+  function userChip(r, missed){
+    const name = escapeHtml(r.Benutzername || 'unbekannt');
+    const diff = missed && missed.length
+      ? `<span class="twin-diff">≠ ${missed.map(m => escapeHtml(m.label)).join(', ')}</span>`
+      : '';
+    const inner = `${flagFor(r.Land)}<span>${name}</span><span class="days">${r.WartezeitTage} Tage</span>${diff}`;
+    return r.ProfilURL
+      ? `<a class="twin-user" href="${escapeHtml(r.ProfilURL)}" target="_blank" rel="noopener" title="${name} — Profil im Forum öffnen">${inner}</a>`
+      : `<span class="twin-user">${inner}</span>`;
+  }
+
+  function bucket(title, rows, cls, showDiff){
+    if (!rows.length) return '';
+    const limit = cls === 'exact' ? 48 : 24;
+    const shown = rows.slice(0, limit);
+    const rest = rows.length - shown.length;
+    const avg = Math.round(rows.reduce((a, s) => a + s.r.WartezeitTage, 0) / rows.length);
+    return `
+      <div class="twin-bucket ${cls}">
+        <div class="twin-bucket-head">
+          <span class="twin-bucket-title">${title}</span>
+          <span class="twin-count">${rows.length} · Ø ${avg} Tage</span>
+        </div>
+        <div class="twin-users">
+          ${shown.map(s => userChip(s.r, showDiff ? s.missed : null)).join('')}
+          ${rest > 0 ? `<span class="twin-more">… und ${rest} weitere</span>` : ''}
+        </div>
+      </div>`;
+  }
+
+  // Fallback view when nothing is filtered: which configurations were ordered
+  // more than once, and by whom.
+  function renderClusters(el){
+    const keyFields = ['Modell', 'Farbe', 'Innenausstattung_DesignSelection',
+                       'Felgenname', ...BOOL_FIELDS.map(f => f.key)];
+    const clusters = {};
+    DATA.filter(inDateRange).forEach(r => {
+      const key = keyFields.map(k => r[k] || '').join('|');
+      (clusters[key] = clusters[key] || []).push(r);
+    });
+    const top = Object.values(clusters)
+      .filter(g => g.length > 1)
+      .sort((a, b) => b.length - a.length)
+      .slice(0, 4);
+
+    if (!top.length){
+      el.innerHTML = `<p class="twin-hint">Setze links Filter, um Benutzer mit passender Konfiguration zu finden.</p>`;
+      return;
+    }
+
+    el.innerHTML = `
+      <p class="twin-hint" style="margin:0 0 12px;">
+        Setze links Filter, um Benutzer mit passender Konfiguration zu finden.
+        Ohne Filter siehst du hier die Konfigurationen, die mehrfach identisch bestellt wurden.
+      </p>
+      ${top.map(g => {
+        const r = g[0];
+        const opts = BOOL_FIELDS.filter(f => r[f.key] === 'Ja')
+          .map(f => badgeHtml(f.key)).join('');
+        const avg = Math.round(g.reduce((a, x) => a + x.WartezeitTage, 0) / g.length);
+        return `
+          <div class="twin-cluster">
+            <div class="twin-cluster-config">
+              <strong>${escapeHtml(r.Modell)}</strong> · ${escapeHtml(r.Farbe || '–')}
+              · ${escapeHtml(r.Innenausstattung_DesignSelection || 'Innenausst. unbekannt')}
+              ${r.Felgenname ? '· ' + escapeHtml(r.Felgenname) : ''}
+              <div style="margin-top:6px;">${opts || '<span class="badge">Keine Zusatzoptionen erkannt</span>'}</div>
+            </div>
+            <div class="twin-bucket-head" style="margin-bottom:7px;">
+              <span class="twin-count">${g.length}× bestellt · Ø ${avg} Tage</span>
+            </div>
+            <div class="twin-users">${g.slice(0, 20).map(x => userChip(x, null)).join('')}</div>
+          </div>`;
+      }).join('')}`;
+  }
+
+  function renderTwins(){
+    const el = document.getElementById('twinPanel');
+    const crit = activeCriteria();
+
+    if (crit.length === 0){
+      renderClusters(el);
+      return;
+    }
+
+    const scored = DATA.filter(inDateRange).map(r => ({
+      r,
+      missed: crit.filter(c => !c.test(r)),
+    }));
+
+    // How many deviations still count as "similar" depends on how specific the
+    // filter is. With one or two criteria a single deviation already means the
+    // order has almost nothing in common, so only exact hits are shown.
+    const maxMissed = crit.length <= 2 ? 0 : (crit.length <= 4 ? 1 : 2);
+
+    const byWait = (a, b) => a.r.WartezeitTage - b.r.WartezeitTage;
+    const exact = scored.filter(s => s.missed.length === 0).sort(byWait);
+    const near1 = maxMissed >= 1 ? scored.filter(s => s.missed.length === 1).sort(byWait) : [];
+    const near2 = maxMissed >= 2 ? scored.filter(s => s.missed.length === 2).sort(byWait) : [];
+
+    let html = `<p class="twin-hint" style="margin:0 0 14px;">
+      Verglichen wird gegen <strong>${crit.length}</strong> aktive
+      ${crit.length === 1 ? 'Filterbedingung' : 'Filterbedingungen'}
+      innerhalb des gewählten Bestellzeitraums.
+      ${maxMissed === 0 ? ' Für Beinahe-Treffer setze mindestens drei Bedingungen.' : ''}</p>`;
+
+    if (!exact.length && !near1.length && !near2.length){
+      html += `<p class="twin-hint">Keine Bestellung passt zu dieser Kombination${maxMissed ? ' — auch nicht annähernd' : ''}.
+        Nimm eine Bedingung heraus, um ähnliche Konfigurationen zu sehen.</p>`;
+    } else {
+      html += bucket('Exakt passend', exact, 'exact', false);
+      html += bucket('Fast passend — 1 Abweichung', near1, 'near', true);
+      html += bucket('Ähnlich — 2 Abweichungen', near2, 'near', true);
+    }
+
+    el.innerHTML = html;
+  }
+
+  // ---- Results table ----
+  const RESULT_BADGE_FIELDS = ['Anhaengerkupplung_AHK','Waermepumpe','Paket_Maxx','Paket_Advanced','Paket_Winter','Paket_Sport','Paket_Transport'];
+
+  function renderResults(filtered){
+    const wrap = document.getElementById('resultsTable');
+    document.getElementById('resultsCount').textContent = `${filtered.length} Treffer`;
+
+    if (filtered.length === 0){
+      wrap.innerHTML = `<tr><td class="empty-state">Keine Bestellungen für diese Filterkombination.</td></tr>`;
+      return;
+    }
+
+    const sorted = [...filtered].sort((a,b)=> a.WartezeitTage - b.WartezeitTage);
+    const shown = sorted.slice(0, 150);
+
+    let html = `<thead><tr>
+      <th>Benutzer</th><th>Modell</th><th>Farbe</th><th>Innenausst.</th><th>Felgen</th><th>Land</th><th>Wartezeit</th><th>Merkmale</th>
+    </tr></thead><tbody>`;
+    shown.forEach(r => {
+      const badges = RESULT_BADGE_FIELDS.filter(k => r[k] === 'Ja')
+        .map(k => badgeHtml(k)).join('');
+      const user = r.ProfilURL
+        ? `<a href="${escapeHtml(r.ProfilURL)}" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:none;">${escapeHtml(r.Benutzername)}</a>`
+        : escapeHtml(r.Benutzername || '–');
+      html += `<tr>
+        <td>${user}</td>
+        <td>${escapeHtml(r.Modell||'')}</td>
+        <td>${escapeHtml(r.Farbe||'')}</td>
+        <td>${escapeHtml(r.Innenausstattung_DesignSelection||'–')}</td>
+        <td>${escapeHtml(felgenLabel(r))}</td>
+        <td>${landCell(r.Land)}</td>
+        <td class="mono">${r.WartezeitTage} Tage</td>
+        <td>${badges||'<span class="badge">–</span>'}</td>
+      </tr>`;
+    });
+    html += `</tbody>`;
+    wrap.innerHTML = html;
+    if (filtered.length > 150){
+      wrap.innerHTML += '';
+      const note = document.createElement('div');
+      note.className = 'empty-state';
+      note.textContent = `… und ${filtered.length-150} weitere (nach kürzester Wartezeit sortiert, erste 150 angezeigt)`;
+      document.getElementById('resultsTable').parentElement.appendChild(note);
+    }
+
+    // Toggle the right-edge fade only when the table actually overflows —
+    // otherwise it would hint at hidden content that isn't there.
+    const outer = document.getElementById('resultsTableOuter');
+    const scroller = wrap.parentElement; // .results-table-wrap
+    outer.classList.toggle('has-x-overflow', scroller.scrollWidth > scroller.clientWidth + 1);
+  }
+
+  // ---- Reset ----
+  document.getElementById('resetBtn').addEventListener('click', () => {
+    MULTI_FIELDS.forEach(f => state[f.key].clear());
+    BOOL_FIELDS.forEach(f => state[f.key] = 'alle');
+    state.dateRange = [DATE_MIN, DATE_MAX];
+    updateDateUI();
+    document.querySelectorAll('.multi-check input[type=checkbox], .model-variants input[type=checkbox]').forEach(cb => cb.checked = false);
+    document.querySelectorAll('select.tri-select').forEach(sel => sel.value = 'alle');
+    syncModelGroupBoxes();
+    render();
+  });
+
+  // ---- Personal lookup & delivery forecast ----
+  const longDateFmt = new Intl.DateTimeFormat('de-DE',
+    { day: 'numeric', month: 'long', year: 'numeric' });
+  const fmtLong = ts => longDateFmt.format(new Date(ts));
+
+  function qtile(sorted, q){
+    if (!sorted.length) return 0;
+    const pos = (sorted.length - 1) * q;
+    const lo = Math.floor(pos), hi = Math.min(lo + 1, sorted.length - 1);
+    return sorted[lo] + (sorted[hi] - sorted[lo]) * (pos - lo);
+  }
+
+  // Configuration similarity, 0..1. Drivetrain dominates because it drives
+  // production scheduling far more than any single option does. Land carries
+  // real weight too — the feature-ranking analysis shows country alone shifts
+  // waiting time by 50+ days, more than most single options — but in practice
+  // it's handled as a hard pre-filter below (predict()), not through this
+  // score, since predict() only falls back to cross-country comparisons when
+  // there isn't enough same-country data to work with.
+  function similarity(a, b){
+    let score = 0, max = 0;
+    const add = (w, ok) => { max += w; if (ok) score += w; };
+    add(4, a.Modellgruppe === b.Modellgruppe);
+    add(2, a.Modell === b.Modell);
+    add(3, (a.Land || '') === (b.Land || ''));
+    add(1, (a.Innenausstattung_DesignSelection || '') === (b.Innenausstattung_DesignSelection || ''));
+    add(1, (a.Felgenname || '') === (b.Felgenname || ''));
+    BOOL_FIELDS.forEach(f => add(0.6, a[f.key] === b[f.key]));
+    return max ? score / max : 0;
+  }
+
+  // Waiting times shifted a lot over the two years covered here, so references
+  // are taken from orders placed around the same time. Without that window an
+  // order from 2026 would be predicted using the 2024 launch backlog.
+  const ERA_WINDOW = 180;
+
+  // Minimum number of same-country orders required before predict() trusts a
+  // country-only comparison pool. Below this, cross-country noise from a
+  // small sample would be worse than just widening to all countries.
+  const MIN_COUNTRY_POOL = 15;
+
+  // Core era + similarity-tier matching against a given comparison pool.
+  // Factored out of predict() so it can run once against a same-country pool
+  // and, only if that comes up short, a second time against all countries.
+  function similarityMatch(order, pool){
+    if (pool.length < 5) return null;
+
+    const era = pool
+      .map(d => ({ d, dt: Math.abs(d.BestelldatumTS - order.BestelldatumTS) }))
+      .sort((a, b) => a.dt - b.dt)
+      .slice(0, Math.min(ERA_WINDOW, pool.length))
+      .map(x => ({ d: x.d, sim: similarity(order, x.d) }))
+      .sort((a, b) => b.sim - a.sim);
+
+    const tiers = [
+      { min: 0.80, take: 20, label: 'sehr ähnliche Konfigurationen', quality: 'q-high' },
+      { min: 0.65, take: 25, label: 'ähnliche Konfigurationen', quality: 'q-mid' },
+      { min: 0.00, take: 30, label: 'grob vergleichbare Bestellungen', quality: 'q-low',
+        groupOnly: true },
+    ];
+
+    let refs = [], tier = tiers[tiers.length - 1];
+    for (const t of tiers){
+      const cand = t.groupOnly
+        ? era.filter(x => x.d.Modellgruppe === order.Modellgruppe)
+        : era.filter(x => x.sim >= t.min);
+      if (cand.length >= 5){ refs = cand.slice(0, t.take); tier = t; break; }
+    }
+    if (refs.length < 5){ refs = era.slice(0, 30); tier = tiers[tiers.length - 1]; }
+    if (!refs.length) return null;
+
+    const days = refs.map(x => x.d.WartezeitTage).sort((a, b) => a - b);
+    const median = Math.round(qtile(days, 0.5));
+    const p25 = Math.round(qtile(days, 0.25));
+    const p75 = Math.round(qtile(days, 0.75));
+    // Zusaetzliche Konfidenzstufen (80% und 95%) fuer die Unsicherheits-Visualisierung.
+    const p10 = Math.round(qtile(days, 0.10));
+    const p90 = Math.round(qtile(days, 0.90));
+    const p2_5 = Math.round(qtile(days, 0.025));
+    const p97_5 = Math.round(qtile(days, 0.975));
+
+    const refDates = refs.map(x => x.d.BestelldatumTS).sort((a, b) => a - b);
+    const dateFor = days => order.BestelldatumTS + days * DAY_MS;
+
+    return {
+      median, p25, p75, p10, p90, p2_5, p97_5, tier,
+      count: refs.length,
+      eraFrom: refDates[0],
+      eraTo: refDates[refDates.length - 1],
+      dateMedian: dateFor(median),
+      dateEarly: dateFor(p25), dateLate: dateFor(p75),
+      dateP10: dateFor(p10), dateP90: dateFor(p90),
+      dateP2_5: dateFor(p2_5), dateP97_5: dateFor(p97_5),
+      refs: refs.map(x => x.d),
+      logged: false,
+    };
+  }
+
+  function predict(order){
+    if (DATA.length < 5) return null;
+
+    const countryPool = DATA.filter(d => (d.Land || '') === (order.Land || ''));
+    const tryCountry = countryPool.length >= MIN_COUNTRY_POOL;
+
+    let result = tryCountry ? similarityMatch(order, countryPool) : null;
+    let countryScoped = tryCountry && !!result;
+
+    // Same-country pool exists but was too thin for even the loosest tier
+    // (e.g. a rare configuration within a smaller country) — widen the net
+    // rather than returning nothing.
+    if (!result){
+      result = similarityMatch(order, DATA);
+      countryScoped = false;
+    }
+    if (result) result.countryScoped = countryScoped;
+    return result;
+  }
+
+  // The dashboard-generator (Python) logs a prediction the first time it sees
+  // an open order and never changes it afterwards — that fixed value is what
+  // later gets checked against the real delivery date. Whenever that logged
+  // prediction is available it is shown in place of a freshly computed one,
+  // so what the person sees today matches what will be validated tomorrow.
+  function predictionFor(order){
+    if (order.PredictedDate){
+      return {
+        median: order.PredictedMedianDays, p25: order.PredictedRangeLowDays,
+        p75: order.PredictedRangeHighDays, count: order.ReferenceCount,
+        p10: order.PredictedP10Days, p90: order.PredictedP90Days,
+        p2_5: order.PredictedP2_5Days, p97_5: order.PredictedP97_5Days,
+        tier: { label: order.ReferenceQualityLabel, quality: qualityClass(order.ReferenceCount) },
+        eraFrom: order.ReferenceEraFrom, eraTo: order.ReferenceEraTo,
+        dateMedian: order.PredictedDate, dateEarly: order.PredictedRangeLowDate,
+        dateLate: order.PredictedRangeHighDate,
+        dateP10: order.PredictedP10Date, dateP90: order.PredictedP90Date,
+        dateP2_5: order.PredictedP2_5Date, dateP97_5: order.PredictedP97_5Date,
+        refs: order.References || [],
+        logged: true, loggedAt: order.LoggedAt,
+        countryScoped: order.CountryScoped !== false,
+      };
+    }
+    return predict(order);
+  }
+
+  function qualityClass(count){
+    if (count >= 20) return 'q-high';
+    if (count >= 10) return 'q-mid';
+    return 'q-low';
+  }
+
+  // Country turned out to be the single strongest factor in the
+  // feature-ranking analysis, so predictions are scoped to same-country
+  // orders whenever there's enough data — this note makes that visible
+  // instead of leaving it as an invisible implementation detail.
+  function countryScopeNote(p, land){
+    const landTxt = land ? escapeHtml(land) : 'unbekanntem Land';
+    return p.countryScoped
+      ? `Grundlage sind ausschließlich Bestellungen aus ${landTxt} — das Land beeinflusst die Wartezeit stärker als jede einzelne Ausstattungsoption.`
+      : `Für ${landTxt} gab es zu wenige Vergleichsbestellungen, daher fließen hier alle Länder mit ein.`;
+  }
+
+  function configSummary(r){
+    const opts = BOOL_FIELDS.filter(f => r[f.key] === 'Ja')
+      .map(f => badgeHtml(f.key)).join('');
+    return `
+      <p class="lk-config">
+        <strong>${escapeHtml(r.Modell)}</strong> · ${escapeHtml(r.Farbe || 'Farbe unbekannt')}
+        · ${escapeHtml(r.Innenausstattung_DesignSelection || 'Innenausst. unbekannt')}
+        ${r.Felgenname ? '· ' + escapeHtml(r.Felgenname) : ''}
+        · bestellt am ${escapeHtml(r.Bestelldatum)} ${flagFor(r.Land)}
+      </p>
+      <div class="lk-badges">${opts || '<span class="badge">Keine Zusatzoptionen erkannt</span>'}</div>`;
+  }
+
+  // ---- "Gleiche Konfiguration" — everyone with an identical build, whether
+  // their order has arrived yet or not. Land is deliberately NOT part of the
+  // match: two people in different countries with the literal same build are
+  // still the most relevant comparison, and often the most telling one given
+  // how much country alone shifts waiting time.
+  const CONFIG_MATCH_FIELDS = [
+    'Modell', 'Farbe', 'Innenausstattung_DesignSelection', 'Felgenname',
+    ...BOOL_FIELDS.map(f => f.key),
+  ];
+
+  function findSameConfigPeople(order){
+    return ALL_ORDERS.filter(r => {
+      if (order.ID != null && r.ID === order.ID) return false;
+      return CONFIG_MATCH_FIELDS.every(k => (r[k] || '') === (order[k] || ''));
+    });
+  }
+
+  function sameConfigChip(r){
+    const isOpen = r.Ausgeliefert === false;
+    const status = isOpen
+      ? (r.PredictedDate ? `Prognose ${fmtDate(r.PredictedDate)}` : 'offen')
+      : `${r.WartezeitTage} Tage`;
+    const inner = `${flagFor(r.Land)}<span>${escapeHtml(r.Benutzername)}</span>` +
+      `<span class="days${isOpen ? ' pending' : ''}">${status}</span>`;
+    return r.ProfilURL
+      ? `<a class="twin-user" href="${escapeHtml(r.ProfilURL)}" target="_blank" rel="noopener">${inner}</a>`
+      : `<span class="twin-user">${inner}</span>`;
+  }
+
+  function sameConfigBlock(order){
+    const matches = findSameConfigPeople(order);
+    if (!matches.length){
+      return `<div class="lk-samecfg">
+        <div class="lk-samecfg-head"><strong>Gleiche Konfiguration</strong></div>
+        <p class="lk-sub" style="margin:0;">Bisher niemand sonst mit exakt dieser Konfiguration gefunden.</p>
+      </div>`;
+    }
+    const deliveredN = matches.filter(r => r.Ausgeliefert !== false).length;
+    const openN = matches.length - deliveredN;
+    const chips = [...matches]
+      .sort((a, b) => (a.Ausgeliefert === false) - (b.Ausgeliefert === false))
+      .map(sameConfigChip).join('');
+    return `
+      <div class="lk-samecfg">
+        <div class="lk-samecfg-head">
+          <strong>Gleiche Konfiguration</strong>
+          <span class="twin-count">${matches.length} ${matches.length === 1 ? 'Person' : 'Personen'} · ${deliveredN} ausgeliefert · ${openN} offen</span>
+        </div>
+        <div class="twin-users">${chips}</div>
+      </div>`;
+  }
+
+  function deliveredCard(r){
+    // If this order was tracked while still open, show the *logged* forecast
+    // against what actually happened — that is the real accuracy check.
+    // Otherwise fall back to a live comparison against similar orders.
+    let historyBlock = '';
+    if (r.DeviationDays !== undefined && r.DeviationDays !== null){
+      const dev = r.DeviationDays;
+      const word = dev < 0 ? 'früher' : (dev > 0 ? 'später' : 'genau pünktlich');
+      const devTxt = dev === 0
+        ? 'Die Prognose hat exakt gestimmt.'
+        : `Tatsächlich <strong>${Math.abs(dev)} Tage ${word}</strong> als prognostiziert.`;
+      const scopeTxt = r.CountryScoped === false
+        ? ` (Basis: alle Länder, da zu wenige Bestellungen aus ${escapeHtml(r.Land || 'diesem Land')} vorlagen.)`
+        : '';
+      historyBlock = `
+        <div class="lk-range">
+          <strong>Prognose-Historie:</strong> Am ${fmtDate(r.LoggedAt)} wurde für diese Bestellung
+          ${fmtLong(r.PredictedDate)} vorhergesagt (${r.PredictedMedianDays} Tage,
+          auf Basis von ${r.ReferenceCount} ${r.ReferenceQualityLabel || 'Referenzen'}).${scopeTxt}
+          ${devTxt}
+        </div>`;
+    } else {
+      const p = predict(r);
+      if (p){
+        const diff = r.WartezeitTage - p.median;
+        const word = diff < 0 ? 'schneller' : 'langsamer';
+        const verdict = Math.abs(diff) < 5
+          ? `Das entspricht ziemlich genau dem Schnitt vergleichbarer Bestellungen (${p.median} Tage).`
+          : `Das ist <strong>${Math.abs(diff)} Tage ${word}</strong> als vergleichbare Bestellungen (${p.median} Tage).`;
+        historyBlock = `<p class="lk-sub" style="margin:6px 0 0;">${verdict}
+          <span style="color:var(--text-dim);">(Diese Bestellung wurde nicht als offen erfasst, daher nur ein Live-Vergleich statt einer geloggten Prognose.)</span></p>`;
+      }
+    }
+    return `
+      <div class="lk-card delivered">
+        <div class="lk-head">
+          <span class="lk-user">${escapeHtml(r.Benutzername)}</span>
+          <span class="lk-status">Ausgeliefert</span>
+        </div>
+        <div class="lk-hero">
+          <span class="lk-date">${r.Lieferdatum ? escapeHtml(r.Lieferdatum) : fmtLong(r.BestelldatumTS + r.WartezeitTage * DAY_MS)}</span>
+          <span class="lk-sub">nach ${r.WartezeitTage} Tagen Wartezeit</span>
+        </div>
+        ${historyBlock}
+        ${configSummary(r)}
+        ${sameConfigBlock(r)}
+      </div>`;
+  }
+
+  // Renders the prediction uncertainty as three nested confidence bands
+  // (50/80/95%) around the median — a compact "fan chart", the standard way
+  // forecasters visualize widening uncertainty rather than a single number.
+  function confidenceFanSVG(p){
+    const hasWide = p.dateP2_5 != null && p.dateP97_5 != null;
+    const hasMid = p.dateP10 != null && p.dateP90 != null;
+    const outerFrom = hasWide ? p.dateP2_5 : p.dateEarly;
+    const outerTo = hasWide ? p.dateP97_5 : p.dateLate;
+
+    const W = 600, H = 76, padX = 8, barY = 32, barH = 22, radius = 5;
+    const span = Math.max(DAY_MS, outerTo - outerFrom);
+    const xFor = ts => padX + ((ts - outerFrom) / span) * (W - padX * 2);
+
+    function band(fromTs, toTs, opacity){
+      const x1 = xFor(fromTs), x2 = xFor(toTs);
+      const w = Math.max(3, x2 - x1);
+      return `<rect x="${x1.toFixed(1)}" y="${barY}" width="${w.toFixed(1)}" height="${barH}" rx="${radius}" fill="#f2a93b" opacity="${opacity}"/>`;
+    }
+
+    let bands = band(outerFrom, outerTo, 0.15);
+    if (hasMid) bands += band(p.dateP10, p.dateP90, 0.32);
+    bands += band(p.dateEarly, p.dateLate, 0.68);
+
+    const medX = xFor(p.dateMedian);
+    const marker = `
+      <line x1="${medX.toFixed(1)}" y1="${barY-7}" x2="${medX.toFixed(1)}" y2="${barY+barH+7}" stroke="#f2a93b" stroke-width="2.5"/>
+      <circle cx="${medX.toFixed(1)}" cy="${(barY+barH/2).toFixed(1)}" r="4.5" fill="#0f1512" stroke="#f2a93b" stroke-width="2.5"/>
+    `;
+
+    const label = (ts, x, anchor) =>
+      `<text x="${x.toFixed(1)}" y="${H-6}" font-size="10" fill="#8fa090" text-anchor="${anchor}" font-family="IBM Plex Mono, monospace">${fmtDate(ts)}</text>`;
+
+    const ariaLabel = `Prognose-Unsicherheit: 50 Prozent Wahrscheinlichkeit zwischen ${fmtDate(p.dateEarly)} und ${fmtDate(p.dateLate)}` +
+      (hasWide ? `, 95 Prozent zwischen ${fmtDate(outerFrom)} und ${fmtDate(outerTo)}` : '') + `. Median: ${fmtDate(p.dateMedian)}.`;
+
+    return `
+      <svg viewBox="0 0 ${W} ${H}" class="confidence-fan" role="img" aria-label="${ariaLabel}" preserveAspectRatio="xMidYMid meet">
+        ${bands}
+        ${marker}
+        <text x="${medX.toFixed(1)}" y="${barY-12}" font-size="11" fill="#f2a93b" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-weight="600">${fmtDate(p.dateMedian)}</text>
+        ${label(outerFrom, padX, 'start')}
+        ${label(outerTo, W - padX, 'end')}
+      </svg>
+      <div class="fan-legend">
+        <span><span class="fan-dot" style="opacity:.68"></span>50%</span>
+        ${hasMid ? '<span><span class="fan-dot" style="opacity:.32"></span>80%</span>' : ''}
+        ${hasWide ? '<span><span class="fan-dot" style="opacity:.15"></span>95%</span>' : ''}
+      </div>`;
+  }
+
+  function openCard(r){
+    const p = predictionFor(r);
+    if (!p){
+      return `<div class="lk-card open">
+        <div class="lk-head"><span class="lk-user">${escapeHtml(r.Benutzername)}</span>
+        <span class="lk-status">Offen</span></div>
+        <p class="lk-sub">Zu wenig Vergleichsdaten für eine Prognose.</p>
+        ${configSummary(r)}</div>`;
+    }
+
+    const today = Date.now();
+    const daysSoFar = Math.round((today - r.BestelldatumTS) / DAY_MS);
+    const daysLeft = Math.round((p.dateMedian - today) / DAY_MS);
+
+    let timing;
+    if (daysLeft > 0){
+      timing = `noch ca. <strong>${daysLeft} Tage</strong> — bisher ${daysSoFar} Tage gewartet`;
+    } else {
+      timing = `rechnerisch seit <strong>${Math.abs(daysLeft)} Tagen</strong> überfällig — bisher ${daysSoFar} Tage gewartet`;
+    }
+
+    // The forum's own expected date is user-entered; showing both side by side
+    // is more honest than silently picking one.
+    let forumNote = '';
+    if (r.VorausLieferdatum){
+      forumNote = `<div class="lk-range">Eigene Angabe im Forum: ${escapeHtml(r.VorausLieferdatum)}</div>`;
+    }
+
+    const refChips = p.refs.slice(0, 12).map(d => {
+      const inner = `${flagFor(d.Land)}<span>${escapeHtml(d.Benutzername)}</span><span class="days">${d.WartezeitTage} Tage</span>`;
+      return d.ProfilURL
+        ? `<a class="twin-user" href="${escapeHtml(d.ProfilURL)}" target="_blank" rel="noopener">${inner}</a>`
+        : `<span class="twin-user">${inner}</span>`;
+    }).join('');
+
+    const loggedNote = p.logged
+      ? `Diese Prognose wurde am ${fmtDate(p.loggedAt)} festgehalten und bleibt bis zur Auslieferung unverändert — so lässt sich später prüfen, wie genau sie war.`
+      : `Live berechnet (für diese Bestellung liegt noch kein geloggter Wert vor).`;
+
+    return `
+      <div class="lk-card open">
+        <div class="lk-head">
+          <span class="lk-user">${escapeHtml(r.Benutzername)}</span>
+          <span class="lk-status">Auslieferung offen</span>
+          <span class="lk-quality ${p.tier.quality}">${p.count} Referenzen</span>
+        </div>
+        <div class="lk-hero">
+          <span class="lk-date">${fmtLong(p.dateMedian)}</span>
+          <span class="lk-sub">${timing}</span>
+        </div>
+        <div class="lk-range">
+          Wahrscheinlicher Korridor: ${fmtLong(p.dateEarly)} – ${fmtLong(p.dateLate)}
+          &nbsp;·&nbsp; ${p.median} Tage Wartezeit (Spanne ${p.p25}–${p.p75})
+        </div>
+        <div class="confidence-fan-wrap">${confidenceFanSVG(p)}</div>
+        ${forumNote}
+        ${configSummary(r)}
+        ${sameConfigBlock(r)}
+        <div class="lk-method">
+          <strong>Grundlage:</strong> ${p.count} ${p.tier.label}, bestellt zwischen
+          ${fmtDate(p.eraFrom)} und ${fmtDate(p.eraTo)}. Angegeben ist der Median.
+          ${countryScopeNote(p, r.Land)}
+          ${loggedNote}
+          <div class="lk-refs">${refChips}</div>
+        </div>
+      </div>`;
+  }
+
+  function runLookup(nameRaw){
+    const el = document.getElementById('lookupResult');
+    const name = (nameRaw || '').trim();
+    if (!name){
+      el.innerHTML = `<div class="lk-error">Bitte einen Benutzernamen eingeben.</div>`;
+      return;
+    }
+
+    const lower = name.toLowerCase();
+    const hits = ALL_ORDERS.filter(r => (r.Benutzername || '').toLowerCase() === lower);
+
+    if (!hits.length){
+      const near = [...new Set(ALL_ORDERS
+        .map(r => r.Benutzername)
+        .filter(u => u && u.toLowerCase().includes(lower)))].slice(0, 6);
+      el.innerHTML = `
+        <div class="lk-error">
+          Kein Eintrag für <strong>${escapeHtml(name)}</strong> gefunden.
+          ${near.length
+            ? 'Meintest du: ' + near.map(u =>
+                `<button class="lk-suggest" data-user="${escapeHtml(u)}">${escapeHtml(u)}</button>`).join(' ')
+            : 'Prüfe die Schreibweise — der Name muss exakt dem Forumsprofil entsprechen.'}
+          ${OPEN_ORDERS.length === 0
+            ? '<br><br>Hinweis: In dieser Datei sind nur ausgelieferte Bestellungen enthalten. Führe das Update-Skript erneut aus, damit auch offene Bestellungen nachschlagbar sind.'
+            : ''}
+        </div>`;
+      el.querySelectorAll('.lk-suggest').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.getElementById('userInput').value = btn.dataset.user;
+          runLookup(btn.dataset.user);
+        });
+      });
+      return;
+    }
+
+    // Newest order first — most people care about their current one.
+    hits.sort((a, b) => b.BestelldatumTS - a.BestelldatumTS);
+    el.innerHTML = hits.map(r => r.Ausgeliefert === false ? openCard(r) : deliveredCard(r)).join('');
+  }
+
+  function initLookup(){
+    const list = document.getElementById('userList');
+    const names = [...new Set(ALL_ORDERS.map(r => r.Benutzername).filter(Boolean))]
+      .sort((a, b) => a.localeCompare(b, 'de'));
+    list.innerHTML = names.map(n => `<option value="${escapeHtml(n)}"></option>`).join('');
+
+    const input = document.getElementById('userInput');
+    document.getElementById('lookupBtn').addEventListener('click', () => runLookup(input.value));
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter') runLookup(input.value);
+    });
+  }
+
+  // ---- What-if calculator ----
+  // Reuses the exact same predict()/similarity() machinery as the personal
+  // lookup for open orders — a hypothetical configuration is scored the same
+  // way a real one would be, just without a logged, immutable snapshot.
+  function initWhatIf(){
+    // Group models by drivetrain group for the <select>, mirroring the filter tree.
+    const byGroup = {};
+    ALL_ORDERS.forEach(r => {
+      if (!r.Modell) return;
+      (byGroup[r.Modellgruppe] = byGroup[r.Modellgruppe] || new Set()).add(r.Modell);
+    });
+    const groupOrder = Object.entries(byGroup)
+      .sort((a, b) => b[1].size - a[1].size || a[0].localeCompare(b[0], 'de'));
+
+    const modellSel = document.getElementById('wiModell');
+    modellSel.innerHTML = groupOrder.map(([group, models]) => `
+      <optgroup label="${escapeHtml(group)}">
+        ${[...models].sort((a, b) => a.localeCompare(b, 'de'))
+          .map(m => `<option value="${escapeHtml(m)}">${escapeHtml(m.replace(/^Skoda\s+/, ''))}</option>`).join('')}
+      </optgroup>`).join('');
+
+    const fillSelect = (id, key, includeCounts) => {
+      const el = document.getElementById(id);
+      distinctValues(key).forEach(([val, count]) => {
+        if (val === UNKNOWN) return;
+        const o = document.createElement('option');
+        o.value = val;
+        o.textContent = includeCounts ? `${val} (${count})` : val;
+        el.appendChild(o);
+      });
+    };
+    fillSelect('wiFarbe', 'Farbe', false);
+    fillSelect('wiInnen', 'Innenausstattung_DesignSelection', false);
+    fillSelect('wiFelgen', 'Felgenname', false);
+
+    const landSel = document.getElementById('wiLand');
+    distinctValues('Land').forEach(([val]) => {
+      if (val === UNKNOWN) return;
+      const o = document.createElement('option');
+      o.value = val; o.textContent = val;
+      landSel.appendChild(o);
+    });
+
+    const boolsWrap = document.getElementById('whatIfBools');
+    BOOL_FIELDS.forEach(f => {
+      const label = document.createElement('label');
+      const cb = document.createElement('input');
+      cb.type = 'checkbox';
+      cb.dataset.wiField = f.key;
+      label.appendChild(cb);
+      label.appendChild(document.createTextNode(f.label));
+      boolsWrap.appendChild(label);
+    });
+
+    // Default order date: today, clamped into the range the data can speak to.
+    const dateInput = document.getElementById('wiDate');
+    const todayIso = new Date().toISOString().slice(0, 10);
+    dateInput.value = todayIso;
+
+    document.getElementById('whatIfForm').addEventListener('submit', e => {
+      e.preventDefault();
+      computeWhatIf();
+    });
+  }
+
+  function computeWhatIf(){
+    const el = document.getElementById('whatIfResult');
+    const modell = document.getElementById('wiModell').value;
+    const dateVal = document.getElementById('wiDate').value;
+    if (!modell || !dateVal){
+      el.innerHTML = `<div class="lk-error">Bitte mindestens Modell und Bestelldatum angeben.</div>`;
+      return;
+    }
+
+    const [y, m, d] = dateVal.split('-').map(Number);
+    const orderTs = new Date(y, m - 1, d).getTime();
+
+    const order = {
+      Modell: modell,
+      Modellgruppe: model_group_lookup(modell),
+      BestelldatumTS: orderTs,
+      Land: document.getElementById('wiLand').value,
+      Farbe: document.getElementById('wiFarbe').value,
+      Innenausstattung_DesignSelection: document.getElementById('wiInnen').value,
+      Felgenname: document.getElementById('wiFelgen').value,
+    };
+    BOOL_FIELDS.forEach(f => {
+      const cb = document.querySelector(`#whatIfBools input[data-wi-field="${f.key}"]`);
+      order[f.key] = cb && cb.checked ? 'Ja' : 'Nein';
+    });
+
+    const p = predict(order);
+    if (!p){
+      el.innerHTML = `<div class="lk-error">Zu wenig Vergleichsdaten für diese Konfiguration.</div>`;
+      return;
+    }
+
+    const today = Date.now();
+    const isFuture = orderTs > today;
+    const daysUntil = Math.round((p.dateMedian - today) / DAY_MS);
+
+    let timing;
+    if (isFuture){
+      timing = `Bestellung am ${fmtLong(orderTs)} → erwartetes Datum liegt ca. ${p.median} Tage später.`;
+    } else if (daysUntil > 0){
+      timing = `Bei Bestellung heute wäre der Median in ca. <strong>${daysUntil} Tagen</strong> erreicht.`;
+    } else {
+      timing = `Der berechnete Zeitpunkt läge bereits ${Math.abs(daysUntil)} Tage in der Vergangenheit — mit dieser Konfiguration ist die Wartezeit historisch eher kurz.`;
+    }
+
+    const refChips = p.refs.slice(0, 12).map(d => {
+      const inner = `${flagFor(d.Land)}<span>${escapeHtml(d.Benutzername)}</span><span class="days">${d.WartezeitTage} Tage</span>`;
+      return d.ProfilURL
+        ? `<a class="twin-user" href="${escapeHtml(d.ProfilURL)}" target="_blank" rel="noopener">${inner}</a>`
+        : `<span class="twin-user">${inner}</span>`;
+    }).join('');
+
+    const opts = BOOL_FIELDS.filter(f => order[f.key] === 'Ja')
+      .map(f => badgeHtml(f.key)).join('');
+
+    el.innerHTML = `
+      <div class="lk-card open">
+        <div class="lk-head">
+          <span class="lk-user">Hypothetische Konfiguration</span>
+          <span class="lk-status">Prognose</span>
+          <span class="lk-quality ${p.tier.quality}">${p.count} Referenzen</span>
+        </div>
+        <div class="lk-hero">
+          <span class="lk-date">${fmtLong(p.dateMedian)}</span>
+          <span class="lk-sub">${p.median} Tage Wartezeit (Median)</span>
+        </div>
+        <div class="lk-range">
+          Wahrscheinlicher Korridor: ${fmtLong(p.dateEarly)} – ${fmtLong(p.dateLate)}
+          &nbsp;·&nbsp; Spanne ${p.p25}–${p.p75} Tage
+        </div>
+        <div class="confidence-fan-wrap">${confidenceFanSVG(p)}</div>
+        <p class="lk-sub" style="margin:10px 0 0;">${timing}</p>
+        <p class="lk-config">
+          <strong>${escapeHtml(modell)}</strong>
+          ${order.Farbe ? '· ' + escapeHtml(order.Farbe) : ''}
+          ${order.Innenausstattung_DesignSelection ? '· ' + escapeHtml(order.Innenausstattung_DesignSelection) : ''}
+          ${order.Felgenname ? '· ' + escapeHtml(order.Felgenname) : ''}
+          · Bestelldatum ${fmtDate(orderTs)} ${flagFor(order.Land)}
+        </p>
+        <div class="lk-badges">${opts || '<span class="badge">Keine Zusatzoptionen ausgewählt</span>'}</div>
+        ${sameConfigBlock(order)}
+        <div class="lk-method">
+          <strong>Grundlage:</strong> ${p.count} ${p.tier.label}, bestellt zwischen
+          ${fmtDate(p.eraFrom)} und ${fmtDate(p.eraTo)}. Angegeben ist der Median.
+          ${countryScopeNote(p, order.Land)}
+          Diese Prognose wird bei jeder Berechnung neu ermittelt und nicht geloggt.
+          <div class="lk-refs">${refChips}</div>
+        </div>
+      </div>`;
+  }
+
+  function model_group_lookup(modell){
+    const hit = ALL_ORDERS.find(r => r.Modell === modell);
+    return hit ? hit.Modellgruppe : '';
+  }
+
+  function renderAccuracyPanel(){
+    const el = document.getElementById('accuracyPanel');
+    const resolved = ALL_ORDERS.filter(r => r.DeviationDays !== undefined && r.DeviationDays !== null);
+    if (!resolved.length){
+      el.innerHTML = '';
+      return;
+    }
+    const mae = resolved.reduce((a, r) => a + Math.abs(r.DeviationDays), 0) / resolved.length;
+    const within2w = resolved.filter(r => Math.abs(r.DeviationDays) <= 14).length / resolved.length;
+    const early = resolved.filter(r => r.DeviationDays < 0).length;
+    const late = resolved.filter(r => r.DeviationDays > 0).length;
+
+    el.innerHTML = `
+      <div class="accuracy-wrap">
+        <div class="accuracy-head">
+          <span class="accuracy-title">Prognose-Genauigkeit über alle Nutzer</span>
+        </div>
+        <div class="accuracy-stats">
+          <div class="accuracy-stat"><div class="num mono">${resolved.length}</div><div class="lbl">Aufgelöste Prognosen</div></div>
+          <div class="accuracy-stat"><div class="num mono">±${Math.round(mae)}</div><div class="lbl">Mittlere Abweichung (Tage)</div></div>
+          <div class="accuracy-stat"><div class="num mono">${Math.round(within2w*100)}%</div><div class="lbl">Innerhalb ±14 Tagen</div></div>
+          <div class="accuracy-stat"><div class="num mono">${early} / ${late}</div><div class="lbl">Zu früh / zu spät</div></div>
+        </div>
+      </div>`;
+  }
+
+  // ---- Personal-area tabs (Nachschlagen / Was-wäre-wenn) ----
+  function initTabs(){
+    const buttons = document.querySelectorAll('.tab-btn');
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const target = btn.dataset.tab;
+        buttons.forEach(b => {
+          const active = b === btn;
+          b.classList.toggle('active', active);
+          b.setAttribute('aria-selected', String(active));
+        });
+        document.querySelectorAll('.tab-panel').forEach(p => {
+          p.hidden = p.dataset.tabPanel !== target;
+        });
+      });
+    });
+  }
+
+  // ---- Vehicle switcher (Elroq/Enyaq dropdown, Notion/Linear-style) ----
+  function initVehicleSwitch(){
+    const trigger = document.getElementById('vswitchTrigger');
+    const menu = document.getElementById('vswitchMenu');
+    if (!trigger || !menu) return;
+
+    const items = [...menu.querySelectorAll('.vswitch-item')];
+    items.forEach(el => el.setAttribute('aria-selected', el.classList.contains('active') ? 'true' : 'false'));
+
+    function open(){
+      menu.hidden = false;
+      trigger.setAttribute('aria-expanded', 'true');
+      // Focus the current item so arrow keys work immediately without an
+      // extra tab press, but don't steal focus from a mouse click.
+      const current = items.find(el => el.classList.contains('active')) || items[0];
+      current?.focus({ preventScroll: true });
+    }
+    function close(returnFocus){
+      menu.hidden = true;
+      trigger.setAttribute('aria-expanded', 'false');
+      if (returnFocus) trigger.focus();
+    }
+
+    trigger.addEventListener('click', () => {
+      menu.hidden ? open() : close(false);
+    });
+
+    document.addEventListener('click', e => {
+      if (!menu.hidden && !menu.contains(e.target) && e.target !== trigger){
+        close(false);
+      }
+    });
+
+    document.addEventListener('keydown', e => {
+      if (menu.hidden) return;
+      if (e.key === 'Escape'){ close(true); return; }
+      const idx = items.indexOf(document.activeElement);
+      if (e.key === 'ArrowDown'){
+        e.preventDefault();
+        (items[idx + 1] || items[0]).focus();
+      } else if (e.key === 'ArrowUp'){
+        e.preventDefault();
+        (items[idx - 1] || items[items.length - 1]).focus();
+      }
+    });
+  }
+
+  initKPIRow();
+  initVehicleSwitch();
+  initLookup();
+  initWhatIf();
+  initTabs();
+  renderAccuracyPanel();
+
+  // ---- Mobile filter drawer ----
+  const panelEl = document.getElementById('filterPanel');
+  const backdropEl = document.getElementById('drawerBackdrop');
+  const openBtn = document.getElementById('openFiltersBtn');
+
+  function openDrawer(){
+    panelEl.classList.add('open');
+    backdropEl.hidden = false;
+    requestAnimationFrame(() => backdropEl.classList.add('open'));
+    document.body.style.overflow = 'hidden';
+    openBtn.setAttribute('aria-expanded', 'true');
+  }
+  function closeDrawer(){
+    panelEl.classList.remove('open');
+    backdropEl.classList.remove('open');
+    setTimeout(() => { backdropEl.hidden = true; }, 200);
+    document.body.style.overflow = '';
+    openBtn.setAttribute('aria-expanded', 'false');
+  }
+
+  openBtn.addEventListener('click', openDrawer);
+  document.getElementById('closeFiltersBtn').addEventListener('click', closeDrawer);
+  document.getElementById('applyFiltersBtn').addEventListener('click', closeDrawer);
+  backdropEl.addEventListener('click', closeDrawer);
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && panelEl.classList.contains('open')) closeDrawer();
+  });
+
+  function countActiveFilters(){
+    let n = 0;
+    MULTI_FIELDS.forEach(f => { n += state[f.key].size; });
+    BOOL_FIELDS.forEach(f => { if (state[f.key] !== 'alle') n++; });
+    if (state.dateRange[0] !== DATE_MIN || state.dateRange[1] !== DATE_MAX) n++;
+    return n;
+  }
+
+  function renderMobileBar(filtered){
+    const pill = document.getElementById('activeFilterCount');
+    const n = countActiveFilters();
+    if (n > 0){ pill.hidden = false; pill.textContent = n; }
+    else { pill.hidden = true; }
+    document.getElementById('mobileResultCount').textContent = `${filtered.length} von ${GLOBAL_STATS.n}`;
+  }
+
+  // ---- CSV export of the current filter selection ----
+  const CSV_COLUMNS = [
+    'Benutzername', 'Modell', 'Ausstattungslinie', 'Farbe', 'Land',
+    'Innenausstattung_DesignSelection', 'Felgenname', 'Felgengroesse_Zoll',
+    'Bestelldatum', 'Lieferdatum', 'WartezeitTage',
+    ...BOOL_FIELDS.map(f => f.key),
+  ];
+
+  function csvEscape(v){
+    const s = v === null || v === undefined ? '' : String(v);
+    return /[",;\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+  }
+
+  function exportCsv(){
+    const filtered = getFiltered();
+    if (!filtered.length) return;
+    const header = CSV_COLUMNS.join(';');
+    const rows = filtered.map(r => CSV_COLUMNS.map(c => csvEscape(r[c])).join(';'));
+    // Leading BOM so Excel opens the umlaut-heavy content as UTF-8 by default.
+    const csv = '\uFEFF' + [header, ...rows].join('\r\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const stamp = new Date().toISOString().slice(0, 10);
+    a.href = url;
+    a.download = `elroq-bestellungen-gefiltert-${stamp}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  document.getElementById('exportCsvBtn').addEventListener('click', exportCsv);
+
+  // ---- Render all ----
+  function render(){
+    const filtered = getFiltered();
+    updateUrlHash();
+    updateFacetCounts();
+    renderChips();
+    renderMobileBar(filtered);
+    renderKPIs(filtered);
+    renderHistogram(filtered);
+    renderTrendChart(filtered);
+    renderBreakdown(filtered);
+    renderFeatureRanking(filtered);
+    renderExtremes(filtered);
+    renderTwins();
+    renderResults(filtered);
+  }
+
+  render();
+
+  // Re-render on resize/rotation so the chart picks up the right viewBox.
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      renderHistogram(getFiltered());
+      renderTrendChart(getFiltered());
+      const outer = document.getElementById('resultsTableOuter');
+      const scroller = document.getElementById('resultsTable').parentElement;
+      outer.classList.toggle('has-x-overflow', scroller.scrollWidth > scroller.clientWidth + 1);
+    }, 150);
+  });
+})();
