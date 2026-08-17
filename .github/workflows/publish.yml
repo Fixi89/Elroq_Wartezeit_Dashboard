@@ -1,0 +1,38 @@
+name: Dashboard automatisch aktualisieren
+
+# Läuft täglich automatisch (Cron) und lässt sich zusätzlich jederzeit von
+# Hand über den "Run workflow"-Button im Actions-Tab starten.
+on:
+  schedule:
+    # Achtung: Cron-Zeiten in GitHub Actions sind IMMER UTC, nicht MEZ/MESZ.
+    # "0 6 * * *" = 06:00 UTC = 07:00 MEZ (Winter) bzw. 08:00 MESZ (Sommer).
+    # Bei Bedarf einfach die Uhrzeit hier anpassen.
+    - cron: "0 6 * * *"
+  workflow_dispatch: {}
+
+# Damit der Job im Repo committen und pushen darf.
+permissions:
+  contents: write
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repository auschecken
+        uses: actions/checkout@v4
+
+      - name: Python einrichten
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Abhängigkeiten installieren
+        run: pip install requests beautifulsoup4
+
+      - name: Git-Identität für den automatischen Commit setzen
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Dashboards bauen und veröffentlichen
+        run: python3 publish.py --vehicle both
