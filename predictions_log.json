@@ -501,13 +501,13 @@
     "DeviationDays": null,
     "PredictedDate": 1800230400000,
     "PredictedRangeLowDate": 1798588800000,
-    "PredictedRangeHighDate": 1801612800000,
+    "PredictedRangeHighDate": 1801008000000,
     "PredictedMedianDays": 173,
     "PredictedRangeLowDays": 154,
-    "PredictedRangeHighDays": 189,
+    "PredictedRangeHighDays": 182,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
-    "ReferenceEraFrom": 1753056000000,
+    "ReferenceEraFrom": 1753228800000,
     "ReferenceEraTo": 1775779200000,
     "References": [
       {
@@ -553,6 +553,12 @@
         "WartezeitTage": 101
       },
       {
+        "Benutzername": "Daniel80",
+        "ProfilURL": "https://www.elroq-forum.de/user/2717-daniel80/",
+        "Land": "Deutschland",
+        "WartezeitTage": 181
+      },
+      {
         "Benutzername": "F1nK",
         "ProfilURL": "https://www.elroq-forum.de/user/3587-f1nk/",
         "Land": "Deutschland",
@@ -575,24 +581,18 @@
         "ProfilURL": "https://www.elroq-forum.de/user/3230-ludwig/",
         "Land": "Deutschland",
         "WartezeitTage": 237
-      },
-      {
-        "Benutzername": "Moin",
-        "ProfilURL": "https://www.elroq-forum.de/user/2059-moin/",
-        "Land": "Deutschland",
-        "WartezeitTage": 173
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
     "PredictedP10Date": 1797897600000,
-    "PredictedP90Date": 1806105600000,
+    "PredictedP90Date": 1805760000000,
     "PredictedP2_5Date": 1795305600000,
-    "PredictedP97_5Date": 1807660800000,
+    "PredictedP97_5Date": 1807056000000,
     "PredictedP10Days": 146,
-    "PredictedP90Days": 241,
+    "PredictedP90Days": 237,
     "PredictedP2_5Days": 116,
-    "PredictedP97_5Days": 259,
+    "PredictedP97_5Days": 252,
     "OriginalPredictedDate": 1800223200000,
     "OriginalPredictedRangeLowDate": 1798581600000,
     "OriginalPredictedRangeHighDate": 1801605600000,
@@ -701,15 +701,15 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1800921600000,
-    "PredictedRangeLowDate": 1799193600000,
-    "PredictedRangeHighDate": 1802304000000,
-    "PredictedMedianDays": 182,
-    "PredictedRangeLowDays": 162,
-    "PredictedRangeHighDays": 198,
-    "ReferenceCount": 16,
+    "PredictedDate": 1800835200000,
+    "PredictedRangeLowDate": 1799020800000,
+    "PredictedRangeHighDate": 1801612800000,
+    "PredictedMedianDays": 181,
+    "PredictedRangeLowDays": 160,
+    "PredictedRangeHighDays": 190,
+    "ReferenceCount": 15,
     "ReferenceQualityLabel": "ähnliche Konfigurationen",
-    "ReferenceEraFrom": 1753056000000,
+    "ReferenceEraFrom": 1753142400000,
     "ReferenceEraTo": 1770336000000,
     "References": [
       {
@@ -787,14 +787,14 @@
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1797724800000,
-    "PredictedP90Date": 1806451200000,
-    "PredictedP2_5Date": 1793923200000,
-    "PredictedP97_5Date": 1807660800000,
-    "PredictedP10Days": 145,
-    "PredictedP90Days": 246,
-    "PredictedP2_5Days": 101,
-    "PredictedP97_5Days": 260,
+    "PredictedP10Date": 1797638400000,
+    "PredictedP90Date": 1804982400000,
+    "PredictedP2_5Date": 1793836800000,
+    "PredictedP97_5Date": 1807142400000,
+    "PredictedP10Days": 144,
+    "PredictedP90Days": 229,
+    "PredictedP2_5Days": 100,
+    "PredictedP97_5Days": 254,
     "OriginalPredictedDate": 1800914400000,
     "OriginalPredictedRangeLowDate": 1799186400000,
     "OriginalPredictedRangeHighDate": 1802296800000,
@@ -2711,15 +2711,21 @@
     "DeviationDays": null,
     "PredictedDate": 1799539200000,
     "PredictedRangeLowDate": 1798070400000,
-    "PredictedRangeHighDate": 1802217600000,
+    "PredictedRangeHighDate": 1800748800000,
     "PredictedMedianDays": 178,
     "PredictedRangeLowDays": 161,
-    "PredictedRangeHighDays": 209,
+    "PredictedRangeHighDays": 192,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
     "ReferenceEraFrom": 1753401600000,
     "ReferenceEraTo": 1772150400000,
     "References": [
+      {
+        "Benutzername": "Daniel80",
+        "ProfilURL": "https://www.elroq-forum.de/user/2717-daniel80/",
+        "Land": "Deutschland",
+        "WartezeitTage": 181
+      },
       {
         "Benutzername": "Valifrigg",
         "ProfilURL": "https://www.elroq-forum.de/user/3198-valifrigg/",
@@ -2785,24 +2791,18 @@
         "ProfilURL": "https://www.elroq-forum.de/user/2059-moin/",
         "Land": "Deutschland",
         "WartezeitTage": 173
-      },
-      {
-        "Benutzername": "Heiko",
-        "ProfilURL": "https://www.elroq-forum.de/user/2197-heiko/",
-        "Land": "Deutschland",
-        "WartezeitTage": 173
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
     "PredictedP10Date": 1797552000000,
-    "PredictedP90Date": 1804896000000,
+    "PredictedP90Date": 1804636800000,
     "PredictedP2_5Date": 1797120000000,
-    "PredictedP97_5Date": 1806019200000,
+    "PredictedP97_5Date": 1804982400000,
     "PredictedP10Days": 155,
-    "PredictedP90Days": 240,
+    "PredictedP90Days": 237,
     "PredictedP2_5Days": 150,
-    "PredictedP97_5Days": 253,
+    "PredictedP97_5Days": 241,
     "OriginalPredictedDate": 1799532000000,
     "OriginalPredictedRangeLowDate": 1798063200000,
     "OriginalPredictedRangeHighDate": 1802210400000,
@@ -2911,17 +2911,23 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1798934400000,
-    "PredictedRangeLowDate": 1797292800000,
+    "PredictedDate": 1799020800000,
+    "PredictedRangeLowDate": 1797465600000,
     "PredictedRangeHighDate": 1799798400000,
-    "PredictedMedianDays": 173,
-    "PredictedRangeLowDays": 154,
+    "PredictedMedianDays": 174,
+    "PredictedRangeLowDays": 156,
     "PredictedRangeHighDays": 183,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
     "ReferenceEraFrom": 1753228800000,
     "ReferenceEraTo": 1775779200000,
     "References": [
+      {
+        "Benutzername": "Daniel80",
+        "ProfilURL": "https://www.elroq-forum.de/user/2717-daniel80/",
+        "Land": "Deutschland",
+        "WartezeitTage": 181
+      },
       {
         "Benutzername": "Bigro",
         "ProfilURL": "https://www.elroq-forum.de/user/2572-bigro/",
@@ -2987,21 +2993,15 @@
         "ProfilURL": "https://www.elroq-forum.de/user/3198-valifrigg/",
         "Land": "Deutschland",
         "WartezeitTage": 240
-      },
-      {
-        "Benutzername": "Ludwig",
-        "ProfilURL": "https://www.elroq-forum.de/user/3230-ludwig/",
-        "Land": "Deutschland",
-        "WartezeitTage": 237
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1796601600000,
+    "PredictedP10Date": 1796947200000,
     "PredictedP90Date": 1804464000000,
     "PredictedP2_5Date": 1794009600000,
     "PredictedP97_5Date": 1804809600000,
-    "PredictedP10Days": 146,
+    "PredictedP10Days": 150,
     "PredictedP90Days": 237,
     "PredictedP2_5Days": 116,
     "PredictedP97_5Days": 241,
@@ -4003,12 +4003,12 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1797638400000,
+    "PredictedDate": 1797724800000,
     "PredictedRangeLowDate": 1796774400000,
-    "PredictedRangeHighDate": 1798156800000,
-    "PredictedMedianDays": 173,
+    "PredictedRangeHighDate": 1798243200000,
+    "PredictedMedianDays": 174,
     "PredictedRangeLowDays": 163,
-    "PredictedRangeHighDays": 179,
+    "PredictedRangeHighDays": 180,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
     "ReferenceEraFrom": 1753660800000,
@@ -6095,10 +6095,10 @@
     "DeviationDays": null,
     "PredictedDate": 1795651200000,
     "PredictedRangeLowDate": 1794960000000,
-    "PredictedRangeHighDate": 1802304000000,
+    "PredictedRangeHighDate": 1801526400000,
     "PredictedMedianDays": 160,
     "PredictedRangeLowDays": 152,
-    "PredictedRangeHighDays": 237,
+    "PredictedRangeHighDays": 228,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
     "ReferenceEraFrom": 1753401600000,
@@ -6165,28 +6165,28 @@
         "WartezeitTage": 238
       },
       {
+        "Benutzername": "Daniel80",
+        "ProfilURL": "https://www.elroq-forum.de/user/2717-daniel80/",
+        "Land": "Deutschland",
+        "WartezeitTage": 181
+      },
+      {
         "Benutzername": "Valifrigg",
         "ProfilURL": "https://www.elroq-forum.de/user/3198-valifrigg/",
         "Land": "Deutschland",
         "WartezeitTage": 240
-      },
-      {
-        "Benutzername": "Ludwig",
-        "ProfilURL": "https://www.elroq-forum.de/user/3230-ludwig/",
-        "Land": "Deutschland",
-        "WartezeitTage": 237
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
     "PredictedP10Date": 1794441600000,
-    "PredictedP90Date": 1802736000000,
+    "PredictedP90Date": 1802563200000,
     "PredictedP2_5Date": 1792972800000,
-    "PredictedP97_5Date": 1803859200000,
+    "PredictedP97_5Date": 1802908800000,
     "PredictedP10Days": 146,
-    "PredictedP90Days": 242,
+    "PredictedP90Days": 240,
     "PredictedP2_5Days": 129,
-    "PredictedP97_5Days": 255,
+    "PredictedP97_5Days": 244,
     "OriginalPredictedDate": 1795644000000,
     "OriginalPredictedRangeLowDate": 1794952800000,
     "OriginalPredictedRangeHighDate": 1802296800000,
@@ -8031,10 +8031,10 @@
     "DeviationDays": null,
     "PredictedDate": 1795564800000,
     "PredictedRangeLowDate": 1794096000000,
-    "PredictedRangeHighDate": 1799539200000,
+    "PredictedRangeHighDate": 1797206400000,
     "PredictedMedianDays": 170,
     "PredictedRangeLowDays": 153,
-    "PredictedRangeHighDays": 216,
+    "PredictedRangeHighDays": 189,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
     "ReferenceEraFrom": 1753228800000,
@@ -8753,12 +8753,12 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1795046400000,
-    "PredictedRangeLowDate": 1794096000000,
-    "PredictedRangeHighDate": 1795910400000,
-    "PredictedMedianDays": 167,
-    "PredictedRangeLowDays": 156,
-    "PredictedRangeHighDays": 177,
+    "PredictedDate": 1795219200000,
+    "PredictedRangeLowDate": 1794614400000,
+    "PredictedRangeHighDate": 1796169600000,
+    "PredictedMedianDays": 169,
+    "PredictedRangeLowDays": 162,
+    "PredictedRangeHighDays": 180,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
     "ReferenceEraFrom": 1753228800000,
@@ -11297,13 +11297,13 @@
     "DeviationDays": null,
     "PredictedDate": 1794700800000,
     "PredictedRangeLowDate": 1793145600000,
-    "PredictedRangeHighDate": 1797724800000,
+    "PredictedRangeHighDate": 1795996800000,
     "PredictedMedianDays": 172,
     "PredictedRangeLowDays": 154,
-    "PredictedRangeHighDays": 207,
+    "PredictedRangeHighDays": 187,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
-    "ReferenceEraFrom": 1753056000000,
+    "ReferenceEraFrom": 1753401600000,
     "ReferenceEraTo": 1772150400000,
     "References": [
       {
@@ -11343,6 +11343,12 @@
         "WartezeitTage": 164
       },
       {
+        "Benutzername": "Daniel80",
+        "ProfilURL": "https://www.elroq-forum.de/user/2717-daniel80/",
+        "Land": "Deutschland",
+        "WartezeitTage": 181
+      },
+      {
         "Benutzername": "Green Mamba",
         "ProfilURL": "https://www.elroq-forum.de/user/3337-green-mamba/",
         "Land": "Deutschland",
@@ -11371,24 +11377,18 @@
         "ProfilURL": "https://www.elroq-forum.de/user/2014-andreasmk/",
         "Land": "Deutschland",
         "WartezeitTage": 155
-      },
-      {
-        "Benutzername": "KDF",
-        "ProfilURL": "https://www.elroq-forum.de/user/1222-kdf/",
-        "Land": "Deutschland",
-        "WartezeitTage": 204
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
     "PredictedP10Date": 1792627200000,
-    "PredictedP90Date": 1800662400000,
+    "PredictedP90Date": 1800316800000,
     "PredictedP2_5Date": 1792281600000,
-    "PredictedP97_5Date": 1802217600000,
+    "PredictedP97_5Date": 1801612800000,
     "PredictedP10Days": 148,
-    "PredictedP90Days": 241,
+    "PredictedP90Days": 237,
     "PredictedP2_5Days": 144,
-    "PredictedP97_5Days": 259,
+    "PredictedP97_5Days": 252,
     "OriginalPredictedDate": 1794693600000,
     "OriginalPredictedRangeLowDate": 1793138400000,
     "OriginalPredictedRangeHighDate": 1797717600000,
@@ -12081,13 +12081,13 @@
     "DeviationDays": null,
     "PredictedDate": 1794355200000,
     "PredictedRangeLowDate": 1792972800000,
-    "PredictedRangeHighDate": 1797379200000,
+    "PredictedRangeHighDate": 1795910400000,
     "PredictedMedianDays": 174,
     "PredictedRangeLowDays": 158,
-    "PredictedRangeHighDays": 209,
+    "PredictedRangeHighDays": 192,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
-    "ReferenceEraFrom": 1753056000000,
+    "ReferenceEraFrom": 1753401600000,
     "ReferenceEraTo": 1772150400000,
     "References": [
       {
@@ -12133,6 +12133,12 @@
         "WartezeitTage": 163
       },
       {
+        "Benutzername": "Daniel80",
+        "ProfilURL": "https://www.elroq-forum.de/user/2717-daniel80/",
+        "Land": "Deutschland",
+        "WartezeitTage": 181
+      },
+      {
         "Benutzername": "HenrikP",
         "ProfilURL": "https://www.elroq-forum.de/user/2967-henrikp/",
         "Land": "Deutschland",
@@ -12155,24 +12161,18 @@
         "ProfilURL": "https://www.elroq-forum.de/user/2197-heiko/",
         "Land": "Deutschland",
         "WartezeitTage": 173
-      },
-      {
-        "Benutzername": "g.harry",
-        "ProfilURL": "https://www.elroq-forum.de/user/1868-g-harry/",
-        "Land": "Deutschland",
-        "WartezeitTage": 158
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
     "PredictedP10Date": 1792454400000,
-    "PredictedP90Date": 1800144000000,
+    "PredictedP90Date": 1799798400000,
     "PredictedP2_5Date": 1792022400000,
-    "PredictedP97_5Date": 1801699200000,
+    "PredictedP97_5Date": 1801094400000,
     "PredictedP10Days": 152,
-    "PredictedP90Days": 241,
+    "PredictedP90Days": 237,
     "PredictedP2_5Days": 147,
-    "PredictedP97_5Days": 259,
+    "PredictedP97_5Days": 252,
     "OriginalPredictedDate": 1794348000000,
     "OriginalPredictedRangeLowDate": 1792965600000,
     "OriginalPredictedRangeHighDate": 1797372000000,
@@ -12449,7 +12449,7 @@
     "PredictedRangeHighDays": 191,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
-    "ReferenceEraFrom": 1753056000000,
+    "ReferenceEraFrom": 1753401600000,
     "ReferenceEraTo": 1775779200000,
     "References": [
       {
@@ -12507,12 +12507,6 @@
         "WartezeitTage": 263
       },
       {
-        "Benutzername": "Schmidt",
-        "ProfilURL": "https://www.elroq-forum.de/user/719-schmidt/",
-        "Land": "Deutschland",
-        "WartezeitTage": 254
-      },
-      {
         "Benutzername": "Horres",
         "ProfilURL": "https://www.elroq-forum.de/user/820-horres/",
         "Land": "Deutschland",
@@ -12523,6 +12517,12 @@
         "ProfilURL": "https://www.elroq-forum.de/user/2572-bigro/",
         "Land": "Deutschland",
         "WartezeitTage": 153
+      },
+      {
+        "Benutzername": "Sidewinder131",
+        "ProfilURL": "https://www.elroq-forum.de/user/2408-sidewinder131/",
+        "Land": "Deutschland",
+        "WartezeitTage": 147
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
@@ -12530,11 +12530,11 @@
     "PredictedP10Date": 1791849600000,
     "PredictedP90Date": 1800144000000,
     "PredictedP2_5Date": 1789603200000,
-    "PredictedP97_5Date": 1801612800000,
+    "PredictedP97_5Date": 1801267200000,
     "PredictedP10Days": 146,
     "PredictedP90Days": 242,
     "PredictedP2_5Days": 120,
-    "PredictedP97_5Days": 259,
+    "PredictedP97_5Days": 255,
     "OriginalPredictedDate": 1793743200000,
     "OriginalPredictedRangeLowDate": 1792447200000,
     "OriginalPredictedRangeHighDate": 1795730400000,
@@ -13189,12 +13189,12 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1793404800000,
+    "PredictedDate": 1793577600000,
     "PredictedRangeLowDate": 1792195200000,
-    "PredictedRangeHighDate": 1794614400000,
-    "PredictedMedianDays": 166,
+    "PredictedRangeHighDate": 1794787200000,
+    "PredictedMedianDays": 168,
     "PredictedRangeLowDays": 152,
-    "PredictedRangeHighDays": 180,
+    "PredictedRangeHighDays": 182,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
     "ReferenceEraFrom": 1753228800000,
@@ -14123,13 +14123,13 @@
     "DeviationDays": null,
     "PredictedDate": 1793836800000,
     "PredictedRangeLowDate": 1792454400000,
-    "PredictedRangeHighDate": 1796860800000,
+    "PredictedRangeHighDate": 1795392000000,
     "PredictedMedianDays": 174,
     "PredictedRangeLowDays": 158,
-    "PredictedRangeHighDays": 209,
+    "PredictedRangeHighDays": 192,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
-    "ReferenceEraFrom": 1753056000000,
+    "ReferenceEraFrom": 1753401600000,
     "ReferenceEraTo": 1772150400000,
     "References": [
       {
@@ -14175,6 +14175,12 @@
         "WartezeitTage": 163
       },
       {
+        "Benutzername": "Daniel80",
+        "ProfilURL": "https://www.elroq-forum.de/user/2717-daniel80/",
+        "Land": "Deutschland",
+        "WartezeitTage": 181
+      },
+      {
         "Benutzername": "HenrikP",
         "ProfilURL": "https://www.elroq-forum.de/user/2967-henrikp/",
         "Land": "Deutschland",
@@ -14197,24 +14203,18 @@
         "ProfilURL": "https://www.elroq-forum.de/user/2197-heiko/",
         "Land": "Deutschland",
         "WartezeitTage": 173
-      },
-      {
-        "Benutzername": "g.harry",
-        "ProfilURL": "https://www.elroq-forum.de/user/1868-g-harry/",
-        "Land": "Deutschland",
-        "WartezeitTage": 158
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
     "PredictedP10Date": 1791936000000,
-    "PredictedP90Date": 1799625600000,
+    "PredictedP90Date": 1799280000000,
     "PredictedP2_5Date": 1791504000000,
-    "PredictedP97_5Date": 1801180800000,
+    "PredictedP97_5Date": 1800576000000,
     "PredictedP10Days": 152,
-    "PredictedP90Days": 241,
+    "PredictedP90Days": 237,
     "PredictedP2_5Days": 147,
-    "PredictedP97_5Days": 259,
+    "PredictedP97_5Days": 252,
     "OriginalPredictedDate": 1793484000000,
     "OriginalPredictedRangeLowDate": 1792447200000,
     "OriginalPredictedRangeHighDate": 1795039200000,
@@ -14705,13 +14705,13 @@
     "DeviationDays": null,
     "PredictedDate": 1793577600000,
     "PredictedRangeLowDate": 1791936000000,
-    "PredictedRangeHighDate": 1794960000000,
+    "PredictedRangeHighDate": 1794355200000,
     "PredictedMedianDays": 173,
     "PredictedRangeLowDays": 154,
-    "PredictedRangeHighDays": 189,
+    "PredictedRangeHighDays": 182,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
-    "ReferenceEraFrom": 1753056000000,
+    "ReferenceEraFrom": 1753228800000,
     "ReferenceEraTo": 1775779200000,
     "References": [
       {
@@ -14757,6 +14757,12 @@
         "WartezeitTage": 101
       },
       {
+        "Benutzername": "Daniel80",
+        "ProfilURL": "https://www.elroq-forum.de/user/2717-daniel80/",
+        "Land": "Deutschland",
+        "WartezeitTage": 181
+      },
+      {
         "Benutzername": "F1nK",
         "ProfilURL": "https://www.elroq-forum.de/user/3587-f1nk/",
         "Land": "Deutschland",
@@ -14779,24 +14785,18 @@
         "ProfilURL": "https://www.elroq-forum.de/user/3230-ludwig/",
         "Land": "Deutschland",
         "WartezeitTage": 237
-      },
-      {
-        "Benutzername": "Moin",
-        "ProfilURL": "https://www.elroq-forum.de/user/2059-moin/",
-        "Land": "Deutschland",
-        "WartezeitTage": 173
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
     "PredictedP10Date": 1791244800000,
-    "PredictedP90Date": 1799452800000,
+    "PredictedP90Date": 1799107200000,
     "PredictedP2_5Date": 1788652800000,
-    "PredictedP97_5Date": 1801008000000,
+    "PredictedP97_5Date": 1800403200000,
     "PredictedP10Days": 146,
-    "PredictedP90Days": 241,
+    "PredictedP90Days": 237,
     "PredictedP2_5Days": 116,
-    "PredictedP97_5Days": 259,
+    "PredictedP97_5Days": 252,
     "OriginalPredictedDate": 1793570400000,
     "OriginalPredictedRangeLowDate": 1791928800000,
     "OriginalPredictedRangeHighDate": 1794952800000,
@@ -15429,13 +15429,13 @@
     "DeviationDays": null,
     "PredictedDate": 1793577600000,
     "PredictedRangeLowDate": 1792195200000,
-    "PredictedRangeHighDate": 1796601600000,
+    "PredictedRangeHighDate": 1795132800000,
     "PredictedMedianDays": 174,
     "PredictedRangeLowDays": 158,
-    "PredictedRangeHighDays": 209,
+    "PredictedRangeHighDays": 192,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
-    "ReferenceEraFrom": 1753056000000,
+    "ReferenceEraFrom": 1753401600000,
     "ReferenceEraTo": 1772150400000,
     "References": [
       {
@@ -15481,6 +15481,12 @@
         "WartezeitTage": 163
       },
       {
+        "Benutzername": "Daniel80",
+        "ProfilURL": "https://www.elroq-forum.de/user/2717-daniel80/",
+        "Land": "Deutschland",
+        "WartezeitTage": 181
+      },
+      {
         "Benutzername": "HenrikP",
         "ProfilURL": "https://www.elroq-forum.de/user/2967-henrikp/",
         "Land": "Deutschland",
@@ -15503,24 +15509,18 @@
         "ProfilURL": "https://www.elroq-forum.de/user/2197-heiko/",
         "Land": "Deutschland",
         "WartezeitTage": 173
-      },
-      {
-        "Benutzername": "g.harry",
-        "ProfilURL": "https://www.elroq-forum.de/user/1868-g-harry/",
-        "Land": "Deutschland",
-        "WartezeitTage": 158
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
     "PredictedP10Date": 1791676800000,
-    "PredictedP90Date": 1799366400000,
+    "PredictedP90Date": 1799020800000,
     "PredictedP2_5Date": 1791244800000,
-    "PredictedP97_5Date": 1800921600000,
+    "PredictedP97_5Date": 1800316800000,
     "PredictedP10Days": 152,
-    "PredictedP90Days": 241,
+    "PredictedP90Days": 237,
     "PredictedP2_5Days": 147,
-    "PredictedP97_5Days": 259,
+    "PredictedP97_5Days": 252,
     "OriginalPredictedDate": 1793570400000,
     "OriginalPredictedRangeLowDate": 1792188000000,
     "OriginalPredictedRangeHighDate": 1796594400000,
@@ -17377,10 +17377,10 @@
     "DeviationDays": null,
     "PredictedDate": 1792627200000,
     "PredictedRangeLowDate": 1791158400000,
-    "PredictedRangeHighDate": 1796601600000,
+    "PredictedRangeHighDate": 1794268800000,
     "PredictedMedianDays": 170,
     "PredictedRangeLowDays": 153,
-    "PredictedRangeHighDays": 216,
+    "PredictedRangeHighDays": 189,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
     "ReferenceEraFrom": 1753228800000,
@@ -17791,6 +17791,12 @@
     "ReferenceEraTo": 1772150400000,
     "References": [
       {
+        "Benutzername": "Daniel80",
+        "ProfilURL": "https://www.elroq-forum.de/user/2717-daniel80/",
+        "Land": "Deutschland",
+        "WartezeitTage": 181
+      },
+      {
         "Benutzername": "Valifrigg",
         "ProfilURL": "https://www.elroq-forum.de/user/3198-valifrigg/",
         "Land": "Deutschland",
@@ -17855,12 +17861,6 @@
         "ProfilURL": "https://www.elroq-forum.de/user/2731-der-hohn/",
         "Land": "Deutschland",
         "WartezeitTage": 213
-      },
-      {
-        "Benutzername": "tgl",
-        "ProfilURL": "https://www.elroq-forum.de/user/35-tgl/",
-        "Land": "Deutschland",
-        "WartezeitTage": 246
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
@@ -18185,13 +18185,13 @@
     "DeviationDays": null,
     "PredictedDate": 1792972800000,
     "PredictedRangeLowDate": 1791417600000,
-    "PredictedRangeHighDate": 1796256000000,
+    "PredictedRangeHighDate": 1794614400000,
     "PredictedMedianDays": 174,
     "PredictedRangeLowDays": 156,
-    "PredictedRangeHighDays": 212,
+    "PredictedRangeHighDays": 193,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
-    "ReferenceEraFrom": 1753056000000,
+    "ReferenceEraFrom": 1753228800000,
     "ReferenceEraTo": 1775779200000,
     "References": [
       {
@@ -18243,6 +18243,12 @@
         "WartezeitTage": 101
       },
       {
+        "Benutzername": "Daniel80",
+        "ProfilURL": "https://www.elroq-forum.de/user/2717-daniel80/",
+        "Land": "Deutschland",
+        "WartezeitTage": 181
+      },
+      {
         "Benutzername": "F1nK",
         "ProfilURL": "https://www.elroq-forum.de/user/3587-f1nk/",
         "Land": "Deutschland",
@@ -18259,24 +18265,18 @@
         "ProfilURL": "https://www.elroq-forum.de/user/3198-valifrigg/",
         "Land": "Deutschland",
         "WartezeitTage": 240
-      },
-      {
-        "Benutzername": "Ludwig",
-        "ProfilURL": "https://www.elroq-forum.de/user/3230-ludwig/",
-        "Land": "Deutschland",
-        "WartezeitTage": 237
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
     "PredictedP10Date": 1789171200000,
-    "PredictedP90Date": 1798848000000,
+    "PredictedP90Date": 1798675200000,
     "PredictedP2_5Date": 1787356800000,
-    "PredictedP97_5Date": 1800316800000,
+    "PredictedP97_5Date": 1799798400000,
     "PredictedP10Days": 130,
-    "PredictedP90Days": 242,
+    "PredictedP90Days": 240,
     "PredictedP2_5Days": 109,
-    "PredictedP97_5Days": 259,
+    "PredictedP97_5Days": 253,
     "OriginalPredictedDate": 1792965600000,
     "OriginalPredictedRangeLowDate": 1791410400000,
     "OriginalPredictedRangeHighDate": 1796248800000,
@@ -18457,16 +18457,16 @@
         "WartezeitTage": 182
       },
       {
+        "Benutzername": "Daniel80",
+        "ProfilURL": "https://www.elroq-forum.de/user/2717-daniel80/",
+        "Land": "Deutschland",
+        "WartezeitTage": 181
+      },
+      {
         "Benutzername": "hoplit",
         "ProfilURL": "https://www.elroq-forum.de/user/2466-hoplit/",
         "Land": "Deutschland",
         "WartezeitTage": 174
-      },
-      {
-        "Benutzername": "Valifrigg",
-        "ProfilURL": "https://www.elroq-forum.de/user/3198-valifrigg/",
-        "Land": "Deutschland",
-        "WartezeitTage": 240
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
@@ -19193,10 +19193,10 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1792540800000,
+    "PredictedDate": 1792800000000,
     "PredictedRangeLowDate": 1791590400000,
     "PredictedRangeHighDate": 1794355200000,
-    "PredictedMedianDays": 174,
+    "PredictedMedianDays": 177,
     "PredictedRangeLowDays": 163,
     "PredictedRangeHighDays": 195,
     "ReferenceCount": 20,
@@ -19209,6 +19209,12 @@
         "ProfilURL": "https://www.elroq-forum.de/user/2924-tomfreude/",
         "Land": "Deutschland",
         "WartezeitTage": 180
+      },
+      {
+        "Benutzername": "Daniel80",
+        "ProfilURL": "https://www.elroq-forum.de/user/2717-daniel80/",
+        "Land": "Deutschland",
+        "WartezeitTage": 181
       },
       {
         "Benutzername": "Valifrigg",
@@ -19269,12 +19275,6 @@
         "ProfilURL": "https://www.elroq-forum.de/user/2183-skoddy/",
         "Land": "Deutschland",
         "WartezeitTage": 188
-      },
-      {
-        "Benutzername": "Brisa",
-        "ProfilURL": "https://www.elroq-forum.de/user/2256-brisa/",
-        "Land": "Deutschland",
-        "WartezeitTage": 163
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
@@ -20205,13 +20205,13 @@
     "DeviationDays": null,
     "PredictedDate": 1792800000000,
     "PredictedRangeLowDate": 1790899200000,
-    "PredictedRangeHighDate": 1796515200000,
+    "PredictedRangeHighDate": 1796342400000,
     "PredictedMedianDays": 178,
     "PredictedRangeLowDays": 156,
-    "PredictedRangeHighDays": 221,
+    "PredictedRangeHighDays": 219,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
-    "ReferenceEraFrom": 1753056000000,
+    "ReferenceEraFrom": 1753401600000,
     "ReferenceEraTo": 1772150400000,
     "References": [
       {
@@ -20290,13 +20290,13 @@
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
     "PredictedP10Date": 1790208000000,
-    "PredictedP90Date": 1798761600000,
+    "PredictedP90Date": 1797984000000,
     "PredictedP2_5Date": 1788739200000,
-    "PredictedP97_5Date": 1799798400000,
+    "PredictedP97_5Date": 1799452800000,
     "PredictedP10Days": 148,
-    "PredictedP90Days": 247,
+    "PredictedP90Days": 238,
     "PredictedP2_5Days": 131,
-    "PredictedP97_5Days": 259,
+    "PredictedP97_5Days": 255,
     "OriginalPredictedDate": 1792792800000,
     "OriginalPredictedRangeLowDate": 1790892000000,
     "OriginalPredictedRangeHighDate": 1796508000000,
@@ -21747,16 +21747,16 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1793404800000,
-    "PredictedRangeLowDate": 1792195200000,
-    "PredictedRangeHighDate": 1796515200000,
-    "PredictedMedianDays": 192,
-    "PredictedRangeLowDays": 178,
-    "PredictedRangeHighDays": 228,
+    "PredictedDate": 1792886400000,
+    "PredictedRangeLowDate": 1792108800000,
+    "PredictedRangeHighDate": 1795910400000,
+    "PredictedMedianDays": 186,
+    "PredictedRangeLowDays": 177,
+    "PredictedRangeHighDays": 221,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
-    "ReferenceEraFrom": 1753056000000,
-    "ReferenceEraTo": 1770940800000,
+    "ReferenceEraFrom": 1753401600000,
+    "ReferenceEraTo": 1772150400000,
     "References": [
       {
         "Benutzername": "Green Mamba",
@@ -21833,14 +21833,14 @@
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1791676800000,
-    "PredictedP90Date": 1797638400000,
-    "PredictedP2_5Date": 1790467200000,
-    "PredictedP97_5Date": 1799193600000,
-    "PredictedP10Days": 172,
-    "PredictedP90Days": 241,
-    "PredictedP2_5Days": 158,
-    "PredictedP97_5Days": 259,
+    "PredictedP10Date": 1790726400000,
+    "PredictedP90Date": 1797379200000,
+    "PredictedP2_5Date": 1790121600000,
+    "PredictedP97_5Date": 1798588800000,
+    "PredictedP10Days": 161,
+    "PredictedP90Days": 238,
+    "PredictedP2_5Days": 154,
+    "PredictedP97_5Days": 252,
     "OriginalPredictedDate": 1793397600000,
     "OriginalPredictedRangeLowDate": 1792188000000,
     "OriginalPredictedRangeHighDate": 1796508000000,
@@ -22557,13 +22557,13 @@
     "DeviationDays": null,
     "PredictedDate": 1792022400000,
     "PredictedRangeLowDate": 1790467200000,
-    "PredictedRangeHighDate": 1795564800000,
+    "PredictedRangeHighDate": 1795478400000,
     "PredictedMedianDays": 178,
     "PredictedRangeLowDays": 160,
-    "PredictedRangeHighDays": 219,
+    "PredictedRangeHighDays": 218,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
-    "ReferenceEraFrom": 1753056000000,
+    "ReferenceEraFrom": 1753401600000,
     "ReferenceEraTo": 1772150400000,
     "References": [
       {
@@ -22642,13 +22642,13 @@
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
     "PredictedP10Date": 1789776000000,
-    "PredictedP90Date": 1797379200000,
+    "PredictedP90Date": 1797120000000,
     "PredictedP2_5Date": 1789084800000,
-    "PredictedP97_5Date": 1799020800000,
+    "PredictedP97_5Date": 1798329600000,
     "PredictedP10Days": 152,
-    "PredictedP90Days": 240,
+    "PredictedP90Days": 237,
     "PredictedP2_5Days": 144,
-    "PredictedP97_5Days": 259,
+    "PredictedP97_5Days": 251,
     "OriginalPredictedDate": 1792015200000,
     "OriginalPredictedRangeLowDate": 1790460000000,
     "OriginalPredictedRangeHighDate": 1795557600000,
@@ -23363,16 +23363,16 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1792108800000,
-    "PredictedRangeLowDate": 1789948800000,
-    "PredictedRangeHighDate": 1795824000000,
-    "PredictedMedianDays": 179,
-    "PredictedRangeLowDays": 154,
-    "PredictedRangeHighDays": 222,
+    "PredictedDate": 1792022400000,
+    "PredictedRangeLowDate": 1789862400000,
+    "PredictedRangeHighDate": 1794614400000,
+    "PredictedMedianDays": 178,
+    "PredictedRangeLowDays": 153,
+    "PredictedRangeHighDays": 208,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
-    "ReferenceEraFrom": 1753056000000,
-    "ReferenceEraTo": 1772150400000,
+    "ReferenceEraFrom": 1753401600000,
+    "ReferenceEraTo": 1775779200000,
     "References": [
       {
         "Benutzername": "Ludwig",
@@ -23391,12 +23391,6 @@
         "ProfilURL": "https://www.elroq-forum.de/user/519-uwej/",
         "Land": "Deutschland",
         "WartezeitTage": 263
-      },
-      {
-        "Benutzername": "Schmidt",
-        "ProfilURL": "https://www.elroq-forum.de/user/719-schmidt/",
-        "Land": "Deutschland",
-        "WartezeitTage": 254
       },
       {
         "Benutzername": "Bigro",
@@ -23445,18 +23439,24 @@
         "ProfilURL": "https://www.elroq-forum.de/user/2246-higgy/",
         "Land": "Deutschland",
         "WartezeitTage": 152
+      },
+      {
+        "Benutzername": "DonRoq",
+        "ProfilURL": "https://www.elroq-forum.de/user/2116-donroq/",
+        "Land": "Deutschland",
+        "WartezeitTage": 241
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1789430400000,
-    "PredictedP90Date": 1797984000000,
-    "PredictedP2_5Date": 1789084800000,
-    "PredictedP97_5Date": 1799020800000,
-    "PredictedP10Days": 148,
-    "PredictedP90Days": 247,
-    "PredictedP2_5Days": 144,
-    "PredictedP97_5Days": 259,
+    "PredictedP10Date": 1789257600000,
+    "PredictedP90Date": 1797552000000,
+    "PredictedP2_5Date": 1787011200000,
+    "PredictedP97_5Date": 1798675200000,
+    "PredictedP10Days": 146,
+    "PredictedP90Days": 242,
+    "PredictedP2_5Days": 120,
+    "PredictedP97_5Days": 255,
     "OriginalPredictedDate": 1792101600000,
     "OriginalPredictedRangeLowDate": 1789941600000,
     "OriginalPredictedRangeHighDate": 1795816800000,
@@ -23767,16 +23767,16 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1793750400000,
+    "PredictedDate": 1792540800000,
     "PredictedRangeLowDate": 1791072000000,
-    "PredictedRangeHighDate": 1797206400000,
-    "PredictedMedianDays": 200,
+    "PredictedRangeHighDate": 1797033600000,
+    "PredictedMedianDays": 186,
     "PredictedRangeLowDays": 169,
-    "PredictedRangeHighDays": 240,
+    "PredictedRangeHighDays": 238,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
-    "ReferenceEraFrom": 1753056000000,
-    "ReferenceEraTo": 1766966400000,
+    "ReferenceEraFrom": 1753401600000,
+    "ReferenceEraTo": 1770940800000,
     "References": [
       {
         "Benutzername": "Noi",
@@ -23821,6 +23821,12 @@
         "WartezeitTage": 243
       },
       {
+        "Benutzername": "Daniel80",
+        "ProfilURL": "https://www.elroq-forum.de/user/2717-daniel80/",
+        "Land": "Deutschland",
+        "WartezeitTage": 181
+      },
+      {
         "Benutzername": "Valifrigg",
         "ProfilURL": "https://www.elroq-forum.de/user/3198-valifrigg/",
         "Land": "Deutschland",
@@ -23843,24 +23849,18 @@
         "ProfilURL": "https://www.elroq-forum.de/user/1181-matthias/",
         "Land": "Deutschland",
         "WartezeitTage": 183
-      },
-      {
-        "Benutzername": "AndreasMK",
-        "ProfilURL": "https://www.elroq-forum.de/user/2014-andreasmk/",
-        "Land": "Deutschland",
-        "WartezeitTage": 155
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
     "PredictedP10Date": 1789257600000,
-    "PredictedP90Date": 1797811200000,
+    "PredictedP90Date": 1797465600000,
     "PredictedP2_5Date": 1787788800000,
-    "PredictedP97_5Date": 1798848000000,
+    "PredictedP97_5Date": 1798502400000,
     "PredictedP10Days": 148,
-    "PredictedP90Days": 247,
+    "PredictedP90Days": 243,
     "PredictedP2_5Days": 131,
-    "PredictedP97_5Days": 259,
+    "PredictedP97_5Days": 255,
     "OriginalPredictedDate": 1793743200000,
     "OriginalPredictedRangeLowDate": 1791064800000,
     "OriginalPredictedRangeHighDate": 1797199200000,
@@ -25181,15 +25181,15 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1791158400000,
-    "PredictedRangeLowDate": 1789603200000,
-    "PredictedRangeHighDate": 1792022400000,
-    "PredictedMedianDays": 172,
-    "PredictedRangeLowDays": 154,
-    "PredictedRangeHighDays": 182,
+    "PredictedDate": 1790899200000,
+    "PredictedRangeLowDate": 1789516800000,
+    "PredictedRangeHighDate": 1791763200000,
+    "PredictedMedianDays": 169,
+    "PredictedRangeLowDays": 153,
+    "PredictedRangeHighDays": 179,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
-    "ReferenceEraFrom": 1753056000000,
+    "ReferenceEraFrom": 1753228800000,
     "ReferenceEraTo": 1775779200000,
     "References": [
       {
@@ -25268,13 +25268,13 @@
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
     "PredictedP10Date": 1787529600000,
-    "PredictedP90Date": 1796947200000,
+    "PredictedP90Date": 1793059200000,
     "PredictedP2_5Date": 1785715200000,
-    "PredictedP97_5Date": 1798675200000,
+    "PredictedP97_5Date": 1797984000000,
     "PredictedP10Days": 130,
-    "PredictedP90Days": 239,
+    "PredictedP90Days": 194,
     "PredictedP2_5Days": 109,
-    "PredictedP97_5Days": 259,
+    "PredictedP97_5Days": 251,
     "OriginalPredictedDate": 1791151200000,
     "OriginalPredictedRangeLowDate": 1789596000000,
     "OriginalPredictedRangeHighDate": 1792015200000,
@@ -25501,16 +25501,16 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1791676800000,
-    "PredictedRangeLowDate": 1789516800000,
-    "PredictedRangeHighDate": 1795392000000,
-    "PredictedMedianDays": 179,
-    "PredictedRangeLowDays": 154,
-    "PredictedRangeHighDays": 222,
+    "PredictedDate": 1791590400000,
+    "PredictedRangeLowDate": 1789430400000,
+    "PredictedRangeHighDate": 1794182400000,
+    "PredictedMedianDays": 178,
+    "PredictedRangeLowDays": 153,
+    "PredictedRangeHighDays": 208,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
-    "ReferenceEraFrom": 1753056000000,
-    "ReferenceEraTo": 1772150400000,
+    "ReferenceEraFrom": 1753401600000,
+    "ReferenceEraTo": 1775779200000,
     "References": [
       {
         "Benutzername": "Ludwig",
@@ -25529,12 +25529,6 @@
         "ProfilURL": "https://www.elroq-forum.de/user/519-uwej/",
         "Land": "Deutschland",
         "WartezeitTage": 263
-      },
-      {
-        "Benutzername": "Schmidt",
-        "ProfilURL": "https://www.elroq-forum.de/user/719-schmidt/",
-        "Land": "Deutschland",
-        "WartezeitTage": 254
       },
       {
         "Benutzername": "Bigro",
@@ -25583,18 +25577,24 @@
         "ProfilURL": "https://www.elroq-forum.de/user/2246-higgy/",
         "Land": "Deutschland",
         "WartezeitTage": 152
+      },
+      {
+        "Benutzername": "DonRoq",
+        "ProfilURL": "https://www.elroq-forum.de/user/2116-donroq/",
+        "Land": "Deutschland",
+        "WartezeitTage": 241
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1788998400000,
-    "PredictedP90Date": 1797552000000,
-    "PredictedP2_5Date": 1788652800000,
-    "PredictedP97_5Date": 1798588800000,
-    "PredictedP10Days": 148,
-    "PredictedP90Days": 247,
-    "PredictedP2_5Days": 144,
-    "PredictedP97_5Days": 259,
+    "PredictedP10Date": 1788825600000,
+    "PredictedP90Date": 1797120000000,
+    "PredictedP2_5Date": 1786579200000,
+    "PredictedP97_5Date": 1798243200000,
+    "PredictedP10Days": 146,
+    "PredictedP90Days": 242,
+    "PredictedP2_5Days": 120,
+    "PredictedP97_5Days": 255,
     "OriginalPredictedDate": 1791669600000,
     "OriginalPredictedRangeLowDate": 1789509600000,
     "OriginalPredictedRangeHighDate": 1795384800000,
@@ -27439,13 +27439,13 @@
     "DeviationDays": null,
     "PredictedDate": 1790640000000,
     "PredictedRangeLowDate": 1789257600000,
-    "PredictedRangeHighDate": 1793664000000,
+    "PredictedRangeHighDate": 1792195200000,
     "PredictedMedianDays": 174,
     "PredictedRangeLowDays": 158,
-    "PredictedRangeHighDays": 209,
+    "PredictedRangeHighDays": 192,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
-    "ReferenceEraFrom": 1753056000000,
+    "ReferenceEraFrom": 1753401600000,
     "ReferenceEraTo": 1772150400000,
     "References": [
       {
@@ -27491,6 +27491,12 @@
         "WartezeitTage": 163
       },
       {
+        "Benutzername": "Daniel80",
+        "ProfilURL": "https://www.elroq-forum.de/user/2717-daniel80/",
+        "Land": "Deutschland",
+        "WartezeitTage": 181
+      },
+      {
         "Benutzername": "HenrikP",
         "ProfilURL": "https://www.elroq-forum.de/user/2967-henrikp/",
         "Land": "Deutschland",
@@ -27513,24 +27519,18 @@
         "ProfilURL": "https://www.elroq-forum.de/user/2197-heiko/",
         "Land": "Deutschland",
         "WartezeitTage": 173
-      },
-      {
-        "Benutzername": "g.harry",
-        "ProfilURL": "https://www.elroq-forum.de/user/1868-g-harry/",
-        "Land": "Deutschland",
-        "WartezeitTage": 158
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
     "PredictedP10Date": 1788739200000,
-    "PredictedP90Date": 1796428800000,
+    "PredictedP90Date": 1796083200000,
     "PredictedP2_5Date": 1788307200000,
-    "PredictedP97_5Date": 1797984000000,
+    "PredictedP97_5Date": 1797379200000,
     "PredictedP10Days": 152,
-    "PredictedP90Days": 241,
+    "PredictedP90Days": 237,
     "PredictedP2_5Days": 147,
-    "PredictedP97_5Days": 259,
+    "PredictedP97_5Days": 252,
     "OriginalPredictedDate": 1790632800000,
     "OriginalPredictedRangeLowDate": 1789250400000,
     "OriginalPredictedRangeHighDate": 1793656800000,
@@ -27843,13 +27843,13 @@
     "DeviationDays": null,
     "PredictedDate": 1790985600000,
     "PredictedRangeLowDate": 1789084800000,
-    "PredictedRangeHighDate": 1794700800000,
+    "PredictedRangeHighDate": 1794528000000,
     "PredictedMedianDays": 178,
     "PredictedRangeLowDays": 156,
-    "PredictedRangeHighDays": 221,
+    "PredictedRangeHighDays": 219,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
-    "ReferenceEraFrom": 1753056000000,
+    "ReferenceEraFrom": 1753401600000,
     "ReferenceEraTo": 1772150400000,
     "References": [
       {
@@ -27928,13 +27928,13 @@
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
     "PredictedP10Date": 1788393600000,
-    "PredictedP90Date": 1796947200000,
+    "PredictedP90Date": 1796169600000,
     "PredictedP2_5Date": 1786924800000,
-    "PredictedP97_5Date": 1797984000000,
+    "PredictedP97_5Date": 1797638400000,
     "PredictedP10Days": 148,
-    "PredictedP90Days": 247,
+    "PredictedP90Days": 238,
     "PredictedP2_5Days": 131,
-    "PredictedP97_5Days": 259,
+    "PredictedP97_5Days": 255,
     "OriginalPredictedDate": 1790978400000,
     "OriginalPredictedRangeLowDate": 1789077600000,
     "OriginalPredictedRangeHighDate": 1794693600000,
@@ -28859,7 +28859,7 @@
     "PredictedRangeHighDays": 228,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
-    "ReferenceEraFrom": 1753056000000,
+    "ReferenceEraFrom": 1753401600000,
     "ReferenceEraTo": 1772150400000,
     "References": [
       {
@@ -28911,12 +28911,6 @@
         "WartezeitTage": 263
       },
       {
-        "Benutzername": "Schmidt",
-        "ProfilURL": "https://www.elroq-forum.de/user/719-schmidt/",
-        "Land": "Deutschland",
-        "WartezeitTage": 254
-      },
-      {
         "Benutzername": "Bigro",
         "ProfilURL": "https://www.elroq-forum.de/user/2572-bigro/",
         "Land": "Deutschland",
@@ -28933,6 +28927,12 @@
         "ProfilURL": "https://www.elroq-forum.de/user/2455-f-beutlin0/",
         "Land": "Deutschland",
         "WartezeitTage": 156
+      },
+      {
+        "Benutzername": "49393Elroq",
+        "ProfilURL": "https://www.elroq-forum.de/user/2414-49393elroq/",
+        "Land": "Deutschland",
+        "WartezeitTage": 162
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
@@ -28940,11 +28940,11 @@
     "PredictedP10Date": 1787702400000,
     "PredictedP90Date": 1795824000000,
     "PredictedP2_5Date": 1787356800000,
-    "PredictedP97_5Date": 1797292800000,
+    "PredictedP97_5Date": 1796947200000,
     "PredictedP10Days": 148,
     "PredictedP90Days": 242,
     "PredictedP2_5Days": 144,
-    "PredictedP97_5Days": 259,
+    "PredictedP97_5Days": 255,
     "OriginalPredictedDate": 1790114400000,
     "OriginalPredictedRangeLowDate": 1788213600000,
     "OriginalPredictedRangeHighDate": 1794607200000,
@@ -29053,16 +29053,16 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1790380800000,
-    "PredictedRangeLowDate": 1788220800000,
-    "PredictedRangeHighDate": 1794096000000,
-    "PredictedMedianDays": 179,
-    "PredictedRangeLowDays": 154,
-    "PredictedRangeHighDays": 222,
+    "PredictedDate": 1790294400000,
+    "PredictedRangeLowDate": 1788134400000,
+    "PredictedRangeHighDate": 1792886400000,
+    "PredictedMedianDays": 178,
+    "PredictedRangeLowDays": 153,
+    "PredictedRangeHighDays": 208,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
-    "ReferenceEraFrom": 1753056000000,
-    "ReferenceEraTo": 1772150400000,
+    "ReferenceEraFrom": 1753401600000,
+    "ReferenceEraTo": 1775779200000,
     "References": [
       {
         "Benutzername": "Ludwig",
@@ -29081,12 +29081,6 @@
         "ProfilURL": "https://www.elroq-forum.de/user/519-uwej/",
         "Land": "Deutschland",
         "WartezeitTage": 263
-      },
-      {
-        "Benutzername": "Schmidt",
-        "ProfilURL": "https://www.elroq-forum.de/user/719-schmidt/",
-        "Land": "Deutschland",
-        "WartezeitTage": 254
       },
       {
         "Benutzername": "Bigro",
@@ -29135,18 +29129,24 @@
         "ProfilURL": "https://www.elroq-forum.de/user/2246-higgy/",
         "Land": "Deutschland",
         "WartezeitTage": 152
+      },
+      {
+        "Benutzername": "DonRoq",
+        "ProfilURL": "https://www.elroq-forum.de/user/2116-donroq/",
+        "Land": "Deutschland",
+        "WartezeitTage": 241
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1787702400000,
-    "PredictedP90Date": 1796256000000,
-    "PredictedP2_5Date": 1787356800000,
-    "PredictedP97_5Date": 1797292800000,
-    "PredictedP10Days": 148,
-    "PredictedP90Days": 247,
-    "PredictedP2_5Days": 144,
-    "PredictedP97_5Days": 259,
+    "PredictedP10Date": 1787529600000,
+    "PredictedP90Date": 1795824000000,
+    "PredictedP2_5Date": 1785283200000,
+    "PredictedP97_5Date": 1796947200000,
+    "PredictedP10Days": 146,
+    "PredictedP90Days": 242,
+    "PredictedP2_5Days": 120,
+    "PredictedP97_5Days": 255,
     "OriginalPredictedDate": 1790373600000,
     "OriginalPredictedRangeLowDate": 1788213600000,
     "OriginalPredictedRangeHighDate": 1794088800000,
@@ -29263,7 +29263,7 @@
     "PredictedRangeHighDays": 191,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
-    "ReferenceEraFrom": 1753056000000,
+    "ReferenceEraFrom": 1753401600000,
     "ReferenceEraTo": 1775779200000,
     "References": [
       {
@@ -29321,12 +29321,6 @@
         "WartezeitTage": 263
       },
       {
-        "Benutzername": "Schmidt",
-        "ProfilURL": "https://www.elroq-forum.de/user/719-schmidt/",
-        "Land": "Deutschland",
-        "WartezeitTage": 254
-      },
-      {
         "Benutzername": "Horres",
         "ProfilURL": "https://www.elroq-forum.de/user/820-horres/",
         "Land": "Deutschland",
@@ -29337,6 +29331,12 @@
         "ProfilURL": "https://www.elroq-forum.de/user/2572-bigro/",
         "Land": "Deutschland",
         "WartezeitTage": 153
+      },
+      {
+        "Benutzername": "Sidewinder131",
+        "ProfilURL": "https://www.elroq-forum.de/user/2408-sidewinder131/",
+        "Land": "Deutschland",
+        "WartezeitTage": 147
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
@@ -29344,11 +29344,11 @@
     "PredictedP10Date": 1787529600000,
     "PredictedP90Date": 1795824000000,
     "PredictedP2_5Date": 1785283200000,
-    "PredictedP97_5Date": 1797292800000,
+    "PredictedP97_5Date": 1796947200000,
     "PredictedP10Days": 146,
     "PredictedP90Days": 242,
     "PredictedP2_5Days": 120,
-    "PredictedP97_5Days": 259,
+    "PredictedP97_5Days": 255,
     "OriginalPredictedDate": 1789423200000,
     "OriginalPredictedRangeLowDate": 1788127200000,
     "OriginalPredictedRangeHighDate": 1791410400000,
@@ -29661,13 +29661,13 @@
     "DeviationDays": null,
     "PredictedDate": 1790208000000,
     "PredictedRangeLowDate": 1788134400000,
-    "PredictedRangeHighDate": 1794009600000,
+    "PredictedRangeHighDate": 1793664000000,
     "PredictedMedianDays": 178,
     "PredictedRangeLowDays": 154,
-    "PredictedRangeHighDays": 222,
+    "PredictedRangeHighDays": 218,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
-    "ReferenceEraFrom": 1753056000000,
+    "ReferenceEraFrom": 1753401600000,
     "ReferenceEraTo": 1772150400000,
     "References": [
       {
@@ -29719,12 +29719,6 @@
         "WartezeitTage": 263
       },
       {
-        "Benutzername": "Schmidt",
-        "ProfilURL": "https://www.elroq-forum.de/user/719-schmidt/",
-        "Land": "Deutschland",
-        "WartezeitTage": 254
-      },
-      {
         "Benutzername": "Bigro",
         "ProfilURL": "https://www.elroq-forum.de/user/2572-bigro/",
         "Land": "Deutschland",
@@ -29741,18 +29735,24 @@
         "ProfilURL": "https://www.elroq-forum.de/user/2455-f-beutlin0/",
         "Land": "Deutschland",
         "WartezeitTage": 156
+      },
+      {
+        "Benutzername": "MM-9411",
+        "ProfilURL": "https://www.elroq-forum.de/user/2459-mm-9411/",
+        "Land": "Deutschland",
+        "WartezeitTage": 179
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
     "PredictedP10Date": 1787616000000,
-    "PredictedP90Date": 1796169600000,
+    "PredictedP90Date": 1795737600000,
     "PredictedP2_5Date": 1787270400000,
-    "PredictedP97_5Date": 1797206400000,
+    "PredictedP97_5Date": 1796860800000,
     "PredictedP10Days": 148,
-    "PredictedP90Days": 247,
+    "PredictedP90Days": 242,
     "PredictedP2_5Days": 144,
-    "PredictedP97_5Days": 259,
+    "PredictedP97_5Days": 255,
     "OriginalPredictedDate": 1790200800000,
     "OriginalPredictedRangeLowDate": 1788127200000,
     "OriginalPredictedRangeHighDate": 1794002400000,
@@ -30265,12 +30265,12 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1788912000000,
+    "PredictedDate": 1789084800000,
     "PredictedRangeLowDate": 1787702400000,
-    "PredictedRangeHighDate": 1790121600000,
-    "PredictedMedianDays": 166,
+    "PredictedRangeHighDate": 1790294400000,
+    "PredictedMedianDays": 168,
     "PredictedRangeLowDays": 152,
-    "PredictedRangeHighDays": 180,
+    "PredictedRangeHighDays": 182,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
     "ReferenceEraFrom": 1753228800000,
@@ -30873,13 +30873,13 @@
     "DeviationDays": null,
     "PredictedDate": 1789430400000,
     "PredictedRangeLowDate": 1787702400000,
-    "PredictedRangeHighDate": 1795046400000,
+    "PredictedRangeHighDate": 1794182400000,
     "PredictedMedianDays": 173,
     "PredictedRangeLowDays": 153,
-    "PredictedRangeHighDays": 238,
+    "PredictedRangeHighDays": 228,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
-    "ReferenceEraFrom": 1753056000000,
+    "ReferenceEraFrom": 1753401600000,
     "ReferenceEraTo": 1772150400000,
     "References": [
       {
@@ -30931,12 +30931,6 @@
         "WartezeitTage": 263
       },
       {
-        "Benutzername": "Schmidt",
-        "ProfilURL": "https://www.elroq-forum.de/user/719-schmidt/",
-        "Land": "Deutschland",
-        "WartezeitTage": 254
-      },
-      {
         "Benutzername": "pos04",
         "ProfilURL": "https://www.elroq-forum.de/user/2570-pos04/",
         "Land": "Deutschland",
@@ -30953,18 +30947,24 @@
         "ProfilURL": "https://www.elroq-forum.de/user/2408-sidewinder131/",
         "Land": "Deutschland",
         "WartezeitTage": 147
+      },
+      {
+        "Benutzername": "f.beutlin0",
+        "ProfilURL": "https://www.elroq-forum.de/user/2455-f-beutlin0/",
+        "Land": "Deutschland",
+        "WartezeitTage": 156
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
     "PredictedP10Date": 1787097600000,
-    "PredictedP90Date": 1795824000000,
+    "PredictedP90Date": 1795392000000,
     "PredictedP2_5Date": 1785628800000,
-    "PredictedP97_5Date": 1796860800000,
+    "PredictedP97_5Date": 1796515200000,
     "PredictedP10Days": 146,
-    "PredictedP90Days": 247,
+    "PredictedP90Days": 242,
     "PredictedP2_5Days": 129,
-    "PredictedP97_5Days": 259,
+    "PredictedP97_5Days": 255,
     "OriginalPredictedDate": 1789426800000,
     "OriginalPredictedRangeLowDate": 1787698800000,
     "OriginalPredictedRangeHighDate": 1795042800000,
@@ -31881,11 +31881,11 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1789344000000,
-    "PredictedRangeLowDate": 1787961600000,
+    "PredictedDate": 1789689600000,
+    "PredictedRangeLowDate": 1788220800000,
     "PredictedRangeHighDate": 1794009600000,
-    "PredictedMedianDays": 174,
-    "PredictedRangeLowDays": 158,
+    "PredictedMedianDays": 178,
+    "PredictedRangeLowDays": 161,
     "PredictedRangeHighDays": 228,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
@@ -33297,13 +33297,13 @@
     "DeviationDays": null,
     "PredictedDate": 1788825600000,
     "PredictedRangeLowDate": 1787270400000,
-    "PredictedRangeHighDate": 1790553600000,
+    "PredictedRangeHighDate": 1789689600000,
     "PredictedMedianDays": 172,
     "PredictedRangeLowDays": 154,
-    "PredictedRangeHighDays": 192,
+    "PredictedRangeHighDays": 182,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
-    "ReferenceEraFrom": 1753056000000,
+    "ReferenceEraFrom": 1753401600000,
     "ReferenceEraTo": 1772150400000,
     "References": [
       {
@@ -33329,6 +33329,12 @@
         "ProfilURL": "https://www.elroq-forum.de/user/820-horres/",
         "Land": "Deutschland",
         "WartezeitTage": 164
+      },
+      {
+        "Benutzername": "Daniel80",
+        "ProfilURL": "https://www.elroq-forum.de/user/2717-daniel80/",
+        "Land": "Deutschland",
+        "WartezeitTage": 181
       },
       {
         "Benutzername": "Green Mamba",
@@ -33367,12 +33373,6 @@
         "WartezeitTage": 263
       },
       {
-        "Benutzername": "Schmidt",
-        "ProfilURL": "https://www.elroq-forum.de/user/719-schmidt/",
-        "Land": "Deutschland",
-        "WartezeitTage": 254
-      },
-      {
         "Benutzername": "core",
         "ProfilURL": "https://www.elroq-forum.de/user/2498-core/",
         "Land": "Deutschland",
@@ -33382,13 +33382,13 @@
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
     "PredictedP10Date": 1786752000000,
-    "PredictedP90Date": 1794873600000,
+    "PredictedP90Date": 1794441600000,
     "PredictedP2_5Date": 1786406400000,
-    "PredictedP97_5Date": 1796342400000,
+    "PredictedP97_5Date": 1795824000000,
     "PredictedP10Days": 148,
-    "PredictedP90Days": 242,
+    "PredictedP90Days": 237,
     "PredictedP2_5Days": 144,
-    "PredictedP97_5Days": 259,
+    "PredictedP97_5Days": 253,
     "OriginalPredictedDate": 1788822000000,
     "OriginalPredictedRangeLowDate": 1787266800000,
     "OriginalPredictedRangeHighDate": 1790550000000,
@@ -33615,15 +33615,15 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1789603200000,
-    "PredictedRangeLowDate": 1788652800000,
+    "PredictedDate": 1789689600000,
+    "PredictedRangeLowDate": 1789257600000,
     "PredictedRangeHighDate": 1793059200000,
-    "PredictedMedianDays": 181,
-    "PredictedRangeLowDays": 170,
+    "PredictedMedianDays": 182,
+    "PredictedRangeLowDays": 177,
     "PredictedRangeHighDays": 221,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
-    "ReferenceEraFrom": 1756080000000,
+    "ReferenceEraFrom": 1756425600000,
     "ReferenceEraTo": 1771804800000,
     "References": [
       {
@@ -34829,13 +34829,13 @@
     "DeviationDays": null,
     "PredictedDate": 1789171200000,
     "PredictedRangeLowDate": 1787270400000,
-    "PredictedRangeHighDate": 1792886400000,
+    "PredictedRangeHighDate": 1792713600000,
     "PredictedMedianDays": 178,
     "PredictedRangeLowDays": 156,
-    "PredictedRangeHighDays": 221,
+    "PredictedRangeHighDays": 219,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
-    "ReferenceEraFrom": 1753056000000,
+    "ReferenceEraFrom": 1753401600000,
     "ReferenceEraTo": 1772150400000,
     "References": [
       {
@@ -34914,13 +34914,13 @@
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
     "PredictedP10Date": 1786579200000,
-    "PredictedP90Date": 1795132800000,
+    "PredictedP90Date": 1794355200000,
     "PredictedP2_5Date": 1785110400000,
-    "PredictedP97_5Date": 1796169600000,
+    "PredictedP97_5Date": 1795824000000,
     "PredictedP10Days": 148,
-    "PredictedP90Days": 247,
+    "PredictedP90Days": 238,
     "PredictedP2_5Days": 131,
-    "PredictedP97_5Days": 259,
+    "PredictedP97_5Days": 255,
     "OriginalPredictedDate": 1789167600000,
     "OriginalPredictedRangeLowDate": 1787266800000,
     "OriginalPredictedRangeHighDate": 1792882800000,
@@ -35435,13 +35435,13 @@
     "DeviationDays": null,
     "PredictedDate": 1788048000000,
     "PredictedRangeLowDate": 1786665600000,
-    "PredictedRangeHighDate": 1789171200000,
+    "PredictedRangeHighDate": 1789084800000,
     "PredictedMedianDays": 170,
     "PredictedRangeLowDays": 154,
-    "PredictedRangeHighDays": 183,
+    "PredictedRangeHighDays": 182,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
-    "ReferenceEraFrom": 1753056000000,
+    "ReferenceEraFrom": 1753401600000,
     "ReferenceEraTo": 1775779200000,
     "References": [
       {
@@ -35473,6 +35473,12 @@
         "ProfilURL": "https://www.elroq-forum.de/user/3282-staytrue/",
         "Land": "Deutschland",
         "WartezeitTage": 101
+      },
+      {
+        "Benutzername": "Daniel80",
+        "ProfilURL": "https://www.elroq-forum.de/user/2717-daniel80/",
+        "Land": "Deutschland",
+        "WartezeitTage": 181
       },
       {
         "Benutzername": "F1nK",
@@ -35509,24 +35515,18 @@
         "ProfilURL": "https://www.elroq-forum.de/user/1479-rs-pendler/",
         "Land": "Deutschland",
         "WartezeitTage": 184
-      },
-      {
-        "Benutzername": "Proxima",
-        "ProfilURL": "https://www.elroq-forum.de/user/831-proxima/",
-        "Land": "Deutschland",
-        "WartezeitTage": 181
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
     "PredictedP10Date": 1785974400000,
-    "PredictedP90Date": 1794268800000,
+    "PredictedP90Date": 1793836800000,
     "PredictedP2_5Date": 1783728000000,
-    "PredictedP97_5Date": 1795737600000,
+    "PredictedP97_5Date": 1795219200000,
     "PredictedP10Days": 146,
-    "PredictedP90Days": 242,
+    "PredictedP90Days": 237,
     "PredictedP2_5Days": 120,
-    "PredictedP97_5Days": 259,
+    "PredictedP97_5Days": 253,
     "OriginalPredictedDate": 1788044400000,
     "OriginalPredictedRangeLowDate": 1786662000000,
     "OriginalPredictedRangeHighDate": 1789167600000,
@@ -35635,16 +35635,16 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1788825600000,
-    "PredictedRangeLowDate": 1786665600000,
-    "PredictedRangeHighDate": 1792540800000,
-    "PredictedMedianDays": 179,
-    "PredictedRangeLowDays": 154,
-    "PredictedRangeHighDays": 222,
+    "PredictedDate": 1788739200000,
+    "PredictedRangeLowDate": 1786579200000,
+    "PredictedRangeHighDate": 1791331200000,
+    "PredictedMedianDays": 178,
+    "PredictedRangeLowDays": 153,
+    "PredictedRangeHighDays": 208,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
-    "ReferenceEraFrom": 1753056000000,
-    "ReferenceEraTo": 1772150400000,
+    "ReferenceEraFrom": 1753401600000,
+    "ReferenceEraTo": 1775779200000,
     "References": [
       {
         "Benutzername": "Ludwig",
@@ -35663,12 +35663,6 @@
         "ProfilURL": "https://www.elroq-forum.de/user/519-uwej/",
         "Land": "Deutschland",
         "WartezeitTage": 263
-      },
-      {
-        "Benutzername": "Schmidt",
-        "ProfilURL": "https://www.elroq-forum.de/user/719-schmidt/",
-        "Land": "Deutschland",
-        "WartezeitTage": 254
       },
       {
         "Benutzername": "Bigro",
@@ -35717,18 +35711,24 @@
         "ProfilURL": "https://www.elroq-forum.de/user/2246-higgy/",
         "Land": "Deutschland",
         "WartezeitTage": 152
+      },
+      {
+        "Benutzername": "DonRoq",
+        "ProfilURL": "https://www.elroq-forum.de/user/2116-donroq/",
+        "Land": "Deutschland",
+        "WartezeitTage": 241
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1786147200000,
-    "PredictedP90Date": 1794700800000,
-    "PredictedP2_5Date": 1785801600000,
-    "PredictedP97_5Date": 1795737600000,
-    "PredictedP10Days": 148,
-    "PredictedP90Days": 247,
-    "PredictedP2_5Days": 144,
-    "PredictedP97_5Days": 259,
+    "PredictedP10Date": 1785974400000,
+    "PredictedP90Date": 1794268800000,
+    "PredictedP2_5Date": 1783728000000,
+    "PredictedP97_5Date": 1795392000000,
+    "PredictedP10Days": 146,
+    "PredictedP90Days": 242,
+    "PredictedP2_5Days": 120,
+    "PredictedP97_5Days": 255,
     "OriginalPredictedDate": 1788822000000,
     "OriginalPredictedRangeLowDate": 1786662000000,
     "OriginalPredictedRangeHighDate": 1792537200000,
@@ -36445,13 +36445,13 @@
     "DeviationDays": null,
     "PredictedDate": 1787702400000,
     "PredictedRangeLowDate": 1786492800000,
-    "PredictedRangeHighDate": 1789084800000,
+    "PredictedRangeHighDate": 1788912000000,
     "PredictedMedianDays": 168,
     "PredictedRangeLowDays": 154,
-    "PredictedRangeHighDays": 184,
+    "PredictedRangeHighDays": 182,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
-    "ReferenceEraFrom": 1753056000000,
+    "ReferenceEraFrom": 1753401600000,
     "ReferenceEraTo": 1775779200000,
     "References": [
       {
@@ -36483,6 +36483,12 @@
         "ProfilURL": "https://www.elroq-forum.de/user/1907-sam91/",
         "Land": "Deutschland",
         "WartezeitTage": 189
+      },
+      {
+        "Benutzername": "Daniel80",
+        "ProfilURL": "https://www.elroq-forum.de/user/2717-daniel80/",
+        "Land": "Deutschland",
+        "WartezeitTage": 181
       },
       {
         "Benutzername": "Staytrue",
@@ -36519,24 +36525,18 @@
         "ProfilURL": "https://www.elroq-forum.de/user/2014-andreasmk/",
         "Land": "Deutschland",
         "WartezeitTage": 155
-      },
-      {
-        "Benutzername": "Proxima",
-        "ProfilURL": "https://www.elroq-forum.de/user/831-proxima/",
-        "Land": "Deutschland",
-        "WartezeitTage": 181
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
     "PredictedP10Date": 1785283200000,
-    "PredictedP90Date": 1794096000000,
+    "PredictedP90Date": 1793664000000,
     "PredictedP2_5Date": 1782604800000,
-    "PredictedP97_5Date": 1795564800000,
+    "PredictedP97_5Date": 1795046400000,
     "PredictedP10Days": 140,
-    "PredictedP90Days": 242,
+    "PredictedP90Days": 237,
     "PredictedP2_5Days": 109,
-    "PredictedP97_5Days": 259,
+    "PredictedP97_5Days": 253,
     "OriginalPredictedDate": 1787698800000,
     "OriginalPredictedRangeLowDate": 1786489200000,
     "OriginalPredictedRangeHighDate": 1789081200000,
@@ -37251,15 +37251,15 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1788739200000,
+    "PredictedDate": 1788566400000,
     "PredictedRangeLowDate": 1786320000000,
-    "PredictedRangeHighDate": 1792195200000,
-    "PredictedMedianDays": 182,
+    "PredictedRangeHighDate": 1790985600000,
+    "PredictedMedianDays": 180,
     "PredictedRangeLowDays": 154,
-    "PredictedRangeHighDays": 222,
+    "PredictedRangeHighDays": 208,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
-    "ReferenceEraFrom": 1753056000000,
+    "ReferenceEraFrom": 1753401600000,
     "ReferenceEraTo": 1772150400000,
     "References": [
       {
@@ -37267,6 +37267,12 @@
         "ProfilURL": "https://www.elroq-forum.de/user/2116-donroq/",
         "Land": "Deutschland",
         "WartezeitTage": 241
+      },
+      {
+        "Benutzername": "Daniel80",
+        "ProfilURL": "https://www.elroq-forum.de/user/2717-daniel80/",
+        "Land": "Deutschland",
+        "WartezeitTage": 181
       },
       {
         "Benutzername": "Ludwig",
@@ -37291,12 +37297,6 @@
         "ProfilURL": "https://www.elroq-forum.de/user/519-uwej/",
         "Land": "Deutschland",
         "WartezeitTage": 263
-      },
-      {
-        "Benutzername": "Schmidt",
-        "ProfilURL": "https://www.elroq-forum.de/user/719-schmidt/",
-        "Land": "Deutschland",
-        "WartezeitTage": 254
       },
       {
         "Benutzername": "TomFreude",
@@ -37338,13 +37338,13 @@
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
     "PredictedP10Date": 1785801600000,
-    "PredictedP90Date": 1794355200000,
+    "PredictedP90Date": 1793923200000,
     "PredictedP2_5Date": 1785456000000,
-    "PredictedP97_5Date": 1795392000000,
+    "PredictedP97_5Date": 1795046400000,
     "PredictedP10Days": 148,
-    "PredictedP90Days": 247,
+    "PredictedP90Days": 242,
     "PredictedP2_5Days": 144,
-    "PredictedP97_5Days": 259,
+    "PredictedP97_5Days": 255,
     "OriginalPredictedDate": 1788735600000,
     "OriginalPredictedRangeLowDate": 1786316400000,
     "OriginalPredictedRangeHighDate": 1792191600000,
@@ -37455,13 +37455,13 @@
     "DeviationDays": null,
     "PredictedDate": 1788480000000,
     "PredictedRangeLowDate": 1786147200000,
-    "PredictedRangeHighDate": 1790553600000,
+    "PredictedRangeHighDate": 1789862400000,
     "PredictedMedianDays": 179,
     "PredictedRangeLowDays": 152,
-    "PredictedRangeHighDays": 203,
+    "PredictedRangeHighDays": 195,
     "ReferenceCount": 25,
     "ReferenceQualityLabel": "ähnliche Konfigurationen",
-    "ReferenceEraFrom": 1753056000000,
+    "ReferenceEraFrom": 1753401600000,
     "ReferenceEraTo": 1772150400000,
     "References": [
       {
@@ -37540,13 +37540,13 @@
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
     "PredictedP10Date": 1785456000000,
-    "PredictedP90Date": 1794096000000,
+    "PredictedP90Date": 1793664000000,
     "PredictedP2_5Date": 1782950400000,
-    "PredictedP97_5Date": 1795305600000,
+    "PredictedP97_5Date": 1794873600000,
     "PredictedP10Days": 144,
-    "PredictedP90Days": 244,
+    "PredictedP90Days": 239,
     "PredictedP2_5Days": 115,
-    "PredictedP97_5Days": 258,
+    "PredictedP97_5Days": 253,
     "OriginalPredictedDate": 1788476400000,
     "OriginalPredictedRangeLowDate": 1786143600000,
     "OriginalPredictedRangeHighDate": 1790550000000,
@@ -37655,12 +37655,12 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1787356800000,
+    "PredictedDate": 1787529600000,
     "PredictedRangeLowDate": 1786147200000,
-    "PredictedRangeHighDate": 1788566400000,
-    "PredictedMedianDays": 166,
+    "PredictedRangeHighDate": 1788739200000,
+    "PredictedMedianDays": 168,
     "PredictedRangeLowDays": 152,
-    "PredictedRangeHighDays": 180,
+    "PredictedRangeHighDays": 182,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
     "ReferenceEraFrom": 1753228800000,
@@ -37859,13 +37859,13 @@
     "DeviationDays": null,
     "PredictedDate": 1788220800000,
     "PredictedRangeLowDate": 1786060800000,
-    "PredictedRangeHighDate": 1791936000000,
+    "PredictedRangeHighDate": 1790726400000,
     "PredictedMedianDays": 179,
     "PredictedRangeLowDays": 154,
-    "PredictedRangeHighDays": 222,
+    "PredictedRangeHighDays": 208,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
-    "ReferenceEraFrom": 1753056000000,
+    "ReferenceEraFrom": 1753401600000,
     "ReferenceEraTo": 1772150400000,
     "References": [
       {
@@ -37885,12 +37885,6 @@
         "ProfilURL": "https://www.elroq-forum.de/user/519-uwej/",
         "Land": "Deutschland",
         "WartezeitTage": 263
-      },
-      {
-        "Benutzername": "Schmidt",
-        "ProfilURL": "https://www.elroq-forum.de/user/719-schmidt/",
-        "Land": "Deutschland",
-        "WartezeitTage": 254
       },
       {
         "Benutzername": "Bigro",
@@ -37939,18 +37933,24 @@
         "ProfilURL": "https://www.elroq-forum.de/user/2246-higgy/",
         "Land": "Deutschland",
         "WartezeitTage": 152
+      },
+      {
+        "Benutzername": "DonRoq",
+        "ProfilURL": "https://www.elroq-forum.de/user/2116-donroq/",
+        "Land": "Deutschland",
+        "WartezeitTage": 241
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
     "PredictedP10Date": 1785542400000,
-    "PredictedP90Date": 1794096000000,
+    "PredictedP90Date": 1793664000000,
     "PredictedP2_5Date": 1785196800000,
-    "PredictedP97_5Date": 1795132800000,
+    "PredictedP97_5Date": 1794787200000,
     "PredictedP10Days": 148,
-    "PredictedP90Days": 247,
+    "PredictedP90Days": 242,
     "PredictedP2_5Days": 144,
-    "PredictedP97_5Days": 259,
+    "PredictedP97_5Days": 255,
     "OriginalPredictedDate": 1788217200000,
     "OriginalPredictedRangeLowDate": 1786057200000,
     "OriginalPredictedRangeHighDate": 1791932400000,
@@ -38869,13 +38869,13 @@
     "DeviationDays": null,
     "PredictedDate": 1787616000000,
     "PredictedRangeLowDate": 1785888000000,
-    "PredictedRangeHighDate": 1793232000000,
+    "PredictedRangeHighDate": 1792368000000,
     "PredictedMedianDays": 173,
     "PredictedRangeLowDays": 153,
-    "PredictedRangeHighDays": 238,
+    "PredictedRangeHighDays": 228,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
-    "ReferenceEraFrom": 1753056000000,
+    "ReferenceEraFrom": 1753401600000,
     "ReferenceEraTo": 1772150400000,
     "References": [
       {
@@ -38927,12 +38927,6 @@
         "WartezeitTage": 263
       },
       {
-        "Benutzername": "Schmidt",
-        "ProfilURL": "https://www.elroq-forum.de/user/719-schmidt/",
-        "Land": "Deutschland",
-        "WartezeitTage": 254
-      },
-      {
         "Benutzername": "pos04",
         "ProfilURL": "https://www.elroq-forum.de/user/2570-pos04/",
         "Land": "Deutschland",
@@ -38949,18 +38943,24 @@
         "ProfilURL": "https://www.elroq-forum.de/user/2408-sidewinder131/",
         "Land": "Deutschland",
         "WartezeitTage": 147
+      },
+      {
+        "Benutzername": "f.beutlin0",
+        "ProfilURL": "https://www.elroq-forum.de/user/2455-f-beutlin0/",
+        "Land": "Deutschland",
+        "WartezeitTage": 156
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
     "PredictedP10Date": 1785283200000,
-    "PredictedP90Date": 1794009600000,
+    "PredictedP90Date": 1793577600000,
     "PredictedP2_5Date": 1783814400000,
-    "PredictedP97_5Date": 1795046400000,
+    "PredictedP97_5Date": 1794700800000,
     "PredictedP10Days": 146,
-    "PredictedP90Days": 247,
+    "PredictedP90Days": 242,
     "PredictedP2_5Days": 129,
-    "PredictedP97_5Days": 259,
+    "PredictedP97_5Days": 255,
     "OriginalPredictedDate": 1787612400000,
     "OriginalPredictedRangeLowDate": 1785884400000,
     "OriginalPredictedRangeHighDate": 1793228400000,
@@ -39071,13 +39071,13 @@
     "DeviationDays": null,
     "PredictedDate": 1788134400000,
     "PredictedRangeLowDate": 1785974400000,
-    "PredictedRangeHighDate": 1791849600000,
+    "PredictedRangeHighDate": 1790640000000,
     "PredictedMedianDays": 179,
     "PredictedRangeLowDays": 154,
-    "PredictedRangeHighDays": 222,
+    "PredictedRangeHighDays": 208,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
-    "ReferenceEraFrom": 1753056000000,
+    "ReferenceEraFrom": 1753401600000,
     "ReferenceEraTo": 1772150400000,
     "References": [
       {
@@ -39097,12 +39097,6 @@
         "ProfilURL": "https://www.elroq-forum.de/user/519-uwej/",
         "Land": "Deutschland",
         "WartezeitTage": 263
-      },
-      {
-        "Benutzername": "Schmidt",
-        "ProfilURL": "https://www.elroq-forum.de/user/719-schmidt/",
-        "Land": "Deutschland",
-        "WartezeitTage": 254
       },
       {
         "Benutzername": "Bigro",
@@ -39151,18 +39145,24 @@
         "ProfilURL": "https://www.elroq-forum.de/user/2246-higgy/",
         "Land": "Deutschland",
         "WartezeitTage": 152
+      },
+      {
+        "Benutzername": "DonRoq",
+        "ProfilURL": "https://www.elroq-forum.de/user/2116-donroq/",
+        "Land": "Deutschland",
+        "WartezeitTage": 241
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
     "PredictedP10Date": 1785456000000,
-    "PredictedP90Date": 1794009600000,
+    "PredictedP90Date": 1793577600000,
     "PredictedP2_5Date": 1785110400000,
-    "PredictedP97_5Date": 1795046400000,
+    "PredictedP97_5Date": 1794700800000,
     "PredictedP10Days": 148,
-    "PredictedP90Days": 247,
+    "PredictedP90Days": 242,
     "PredictedP2_5Days": 144,
-    "PredictedP97_5Days": 259,
+    "PredictedP97_5Days": 255,
     "OriginalPredictedDate": 1788130800000,
     "OriginalPredictedRangeLowDate": 1785970800000,
     "OriginalPredictedRangeHighDate": 1791846000000,
@@ -39475,13 +39475,13 @@
     "DeviationDays": null,
     "PredictedDate": 1787961600000,
     "PredictedRangeLowDate": 1786060800000,
-    "PredictedRangeHighDate": 1791676800000,
+    "PredictedRangeHighDate": 1791504000000,
     "PredictedMedianDays": 178,
     "PredictedRangeLowDays": 156,
-    "PredictedRangeHighDays": 221,
+    "PredictedRangeHighDays": 219,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
-    "ReferenceEraFrom": 1753056000000,
+    "ReferenceEraFrom": 1753401600000,
     "ReferenceEraTo": 1772150400000,
     "References": [
       {
@@ -39560,13 +39560,13 @@
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
     "PredictedP10Date": 1785369600000,
-    "PredictedP90Date": 1793923200000,
+    "PredictedP90Date": 1793145600000,
     "PredictedP2_5Date": 1783900800000,
-    "PredictedP97_5Date": 1794960000000,
+    "PredictedP97_5Date": 1794614400000,
     "PredictedP10Days": 148,
-    "PredictedP90Days": 247,
+    "PredictedP90Days": 238,
     "PredictedP2_5Days": 131,
-    "PredictedP97_5Days": 259,
+    "PredictedP97_5Days": 255,
     "OriginalPredictedDate": 1787958000000,
     "OriginalPredictedRangeLowDate": 1786057200000,
     "OriginalPredictedRangeHighDate": 1791673200000,
@@ -39885,7 +39885,7 @@
     "PredictedRangeHighDays": 191,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
-    "ReferenceEraFrom": 1753056000000,
+    "ReferenceEraFrom": 1753401600000,
     "ReferenceEraTo": 1775779200000,
     "References": [
       {
@@ -39943,12 +39943,6 @@
         "WartezeitTage": 263
       },
       {
-        "Benutzername": "Schmidt",
-        "ProfilURL": "https://www.elroq-forum.de/user/719-schmidt/",
-        "Land": "Deutschland",
-        "WartezeitTage": 254
-      },
-      {
         "Benutzername": "Horres",
         "ProfilURL": "https://www.elroq-forum.de/user/820-horres/",
         "Land": "Deutschland",
@@ -39959,6 +39953,12 @@
         "ProfilURL": "https://www.elroq-forum.de/user/2572-bigro/",
         "Land": "Deutschland",
         "WartezeitTage": 153
+      },
+      {
+        "Benutzername": "Sidewinder131",
+        "ProfilURL": "https://www.elroq-forum.de/user/2408-sidewinder131/",
+        "Land": "Deutschland",
+        "WartezeitTage": 147
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
@@ -39966,11 +39966,11 @@
     "PredictedP10Date": 1784851200000,
     "PredictedP90Date": 1793145600000,
     "PredictedP2_5Date": 1782604800000,
-    "PredictedP97_5Date": 1794614400000,
+    "PredictedP97_5Date": 1794268800000,
     "PredictedP10Days": 146,
     "PredictedP90Days": 242,
     "PredictedP2_5Days": 120,
-    "PredictedP97_5Days": 259,
+    "PredictedP97_5Days": 255,
     "OriginalPredictedDate": 1786748400000,
     "OriginalPredictedRangeLowDate": 1785452400000,
     "OriginalPredictedRangeHighDate": 1788735600000,
@@ -40485,13 +40485,13 @@
     "DeviationDays": null,
     "PredictedDate": 1787011200000,
     "PredictedRangeLowDate": 1785283200000,
-    "PredictedRangeHighDate": 1792627200000,
+    "PredictedRangeHighDate": 1791763200000,
     "PredictedMedianDays": 173,
     "PredictedRangeLowDays": 153,
-    "PredictedRangeHighDays": 238,
+    "PredictedRangeHighDays": 228,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
-    "ReferenceEraFrom": 1753056000000,
+    "ReferenceEraFrom": 1753401600000,
     "ReferenceEraTo": 1772150400000,
     "References": [
       {
@@ -40543,12 +40543,6 @@
         "WartezeitTage": 263
       },
       {
-        "Benutzername": "Schmidt",
-        "ProfilURL": "https://www.elroq-forum.de/user/719-schmidt/",
-        "Land": "Deutschland",
-        "WartezeitTage": 254
-      },
-      {
         "Benutzername": "pos04",
         "ProfilURL": "https://www.elroq-forum.de/user/2570-pos04/",
         "Land": "Deutschland",
@@ -40565,18 +40559,24 @@
         "ProfilURL": "https://www.elroq-forum.de/user/2408-sidewinder131/",
         "Land": "Deutschland",
         "WartezeitTage": 147
+      },
+      {
+        "Benutzername": "f.beutlin0",
+        "ProfilURL": "https://www.elroq-forum.de/user/2455-f-beutlin0/",
+        "Land": "Deutschland",
+        "WartezeitTage": 156
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
     "PredictedP10Date": 1784678400000,
-    "PredictedP90Date": 1793404800000,
+    "PredictedP90Date": 1792972800000,
     "PredictedP2_5Date": 1783209600000,
-    "PredictedP97_5Date": 1794441600000,
+    "PredictedP97_5Date": 1794096000000,
     "PredictedP10Days": 146,
-    "PredictedP90Days": 247,
+    "PredictedP90Days": 242,
     "PredictedP2_5Days": 129,
-    "PredictedP97_5Days": 259,
+    "PredictedP97_5Days": 255,
     "OriginalPredictedDate": 1787007600000,
     "OriginalPredictedRangeLowDate": 1785279600000,
     "OriginalPredictedRangeHighDate": 1792623600000,
@@ -42015,16 +42015,16 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1785888000000,
-    "PredictedRangeLowDate": 1784678400000,
-    "PredictedRangeHighDate": 1787097600000,
-    "PredictedMedianDays": 166,
-    "PredictedRangeLowDays": 152,
-    "PredictedRangeHighDays": 180,
+    "PredictedDate": 1786233600000,
+    "PredictedRangeLowDate": 1784764800000,
+    "PredictedRangeHighDate": 1787270400000,
+    "PredictedMedianDays": 170,
+    "PredictedRangeLowDays": 153,
+    "PredictedRangeHighDays": 182,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
     "ReferenceEraFrom": 1753228800000,
-    "ReferenceEraTo": 1775779200000,
+    "ReferenceEraTo": 1772150400000,
     "References": [
       {
         "Benutzername": "Brisa",
@@ -42101,13 +42101,13 @@
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1783123200000,
+    "PredictedP10Date": 1784160000000,
     "PredictedP90Date": 1790208000000,
-    "PredictedP2_5Date": 1781568000000,
+    "PredictedP2_5Date": 1783036800000,
     "PredictedP97_5Date": 1792713600000,
-    "PredictedP10Days": 134,
+    "PredictedP10Days": 146,
     "PredictedP90Days": 216,
-    "PredictedP2_5Days": 116,
+    "PredictedP2_5Days": 133,
     "PredictedP97_5Days": 245,
     "OriginalPredictedDate": 1785884400000,
     "OriginalPredictedRangeLowDate": 1784674800000,
@@ -42219,13 +42219,13 @@
     "DeviationDays": null,
     "PredictedDate": 1787011200000,
     "PredictedRangeLowDate": 1784851200000,
-    "PredictedRangeHighDate": 1790726400000,
+    "PredictedRangeHighDate": 1789516800000,
     "PredictedMedianDays": 179,
     "PredictedRangeLowDays": 154,
-    "PredictedRangeHighDays": 222,
+    "PredictedRangeHighDays": 208,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
-    "ReferenceEraFrom": 1753056000000,
+    "ReferenceEraFrom": 1753401600000,
     "ReferenceEraTo": 1772150400000,
     "References": [
       {
@@ -42245,12 +42245,6 @@
         "ProfilURL": "https://www.elroq-forum.de/user/519-uwej/",
         "Land": "Deutschland",
         "WartezeitTage": 263
-      },
-      {
-        "Benutzername": "Schmidt",
-        "ProfilURL": "https://www.elroq-forum.de/user/719-schmidt/",
-        "Land": "Deutschland",
-        "WartezeitTage": 254
       },
       {
         "Benutzername": "Sidewinder131",
@@ -42299,18 +42293,24 @@
         "ProfilURL": "https://www.elroq-forum.de/user/2246-higgy/",
         "Land": "Deutschland",
         "WartezeitTage": 152
+      },
+      {
+        "Benutzername": "DonRoq",
+        "ProfilURL": "https://www.elroq-forum.de/user/2116-donroq/",
+        "Land": "Deutschland",
+        "WartezeitTage": 241
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
     "PredictedP10Date": 1784332800000,
-    "PredictedP90Date": 1792886400000,
+    "PredictedP90Date": 1792454400000,
     "PredictedP2_5Date": 1783987200000,
-    "PredictedP97_5Date": 1793923200000,
+    "PredictedP97_5Date": 1793577600000,
     "PredictedP10Days": 148,
-    "PredictedP90Days": 247,
+    "PredictedP90Days": 242,
     "PredictedP2_5Days": 144,
-    "PredictedP97_5Days": 259,
+    "PredictedP97_5Days": 255,
     "OriginalPredictedDate": 1787007600000,
     "OriginalPredictedRangeLowDate": 1784847600000,
     "OriginalPredictedRangeHighDate": 1790722800000,
@@ -42421,13 +42421,13 @@
     "DeviationDays": null,
     "PredictedDate": 1786233600000,
     "PredictedRangeLowDate": 1784851200000,
-    "PredictedRangeHighDate": 1787356800000,
+    "PredictedRangeHighDate": 1787270400000,
     "PredictedMedianDays": 170,
     "PredictedRangeLowDays": 154,
-    "PredictedRangeHighDays": 183,
+    "PredictedRangeHighDays": 182,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
-    "ReferenceEraFrom": 1753056000000,
+    "ReferenceEraFrom": 1753401600000,
     "ReferenceEraTo": 1775779200000,
     "References": [
       {
@@ -42441,6 +42441,12 @@
         "ProfilURL": "https://www.elroq-forum.de/user/2116-donroq/",
         "Land": "Deutschland",
         "WartezeitTage": 241
+      },
+      {
+        "Benutzername": "Daniel80",
+        "ProfilURL": "https://www.elroq-forum.de/user/2717-daniel80/",
+        "Land": "Deutschland",
+        "WartezeitTage": 181
       },
       {
         "Benutzername": "F1nK",
@@ -42495,24 +42501,18 @@
         "ProfilURL": "https://www.elroq-forum.de/user/519-uwej/",
         "Land": "Deutschland",
         "WartezeitTage": 263
-      },
-      {
-        "Benutzername": "Schmidt",
-        "ProfilURL": "https://www.elroq-forum.de/user/719-schmidt/",
-        "Land": "Deutschland",
-        "WartezeitTage": 254
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
     "PredictedP10Date": 1784160000000,
-    "PredictedP90Date": 1792454400000,
+    "PredictedP90Date": 1792022400000,
     "PredictedP2_5Date": 1781913600000,
-    "PredictedP97_5Date": 1793923200000,
+    "PredictedP97_5Date": 1793404800000,
     "PredictedP10Days": 146,
-    "PredictedP90Days": 242,
+    "PredictedP90Days": 237,
     "PredictedP2_5Days": 120,
-    "PredictedP97_5Days": 259,
+    "PredictedP97_5Days": 253,
     "OriginalPredictedDate": 1786230000000,
     "OriginalPredictedRangeLowDate": 1784847600000,
     "OriginalPredictedRangeHighDate": 1787353200000,
@@ -42825,13 +42825,13 @@
     "DeviationDays": null,
     "PredictedDate": 1786924800000,
     "PredictedRangeLowDate": 1784678400000,
-    "PredictedRangeHighDate": 1787875200000,
+    "PredictedRangeHighDate": 1787788800000,
     "PredictedMedianDays": 179,
     "PredictedRangeLowDays": 153,
-    "PredictedRangeHighDays": 190,
+    "PredictedRangeHighDays": 189,
     "ReferenceCount": 25,
     "ReferenceQualityLabel": "ähnliche Konfigurationen",
-    "ReferenceEraFrom": 1753056000000,
+    "ReferenceEraFrom": 1753315200000,
     "ReferenceEraTo": 1772668800000,
     "References": [
       {
@@ -42910,11 +42910,11 @@
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
     "PredictedP10Date": 1783641600000,
-    "PredictedP90Date": 1792800000000,
+    "PredictedP90Date": 1791244800000,
     "PredictedP2_5Date": 1778112000000,
     "PredictedP97_5Date": 1794528000000,
     "PredictedP10Days": 141,
-    "PredictedP90Days": 247,
+    "PredictedP90Days": 229,
     "PredictedP2_5Days": 77,
     "PredictedP97_5Days": 267,
     "OriginalPredictedDate": 1786921200000,
@@ -43229,13 +43229,13 @@
     "DeviationDays": null,
     "PredictedDate": 1786838400000,
     "PredictedRangeLowDate": 1784937600000,
-    "PredictedRangeHighDate": 1790553600000,
+    "PredictedRangeHighDate": 1790380800000,
     "PredictedMedianDays": 178,
     "PredictedRangeLowDays": 156,
-    "PredictedRangeHighDays": 221,
+    "PredictedRangeHighDays": 219,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
-    "ReferenceEraFrom": 1753056000000,
+    "ReferenceEraFrom": 1753401600000,
     "ReferenceEraTo": 1772150400000,
     "References": [
       {
@@ -43314,13 +43314,13 @@
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
     "PredictedP10Date": 1784246400000,
-    "PredictedP90Date": 1792800000000,
+    "PredictedP90Date": 1792022400000,
     "PredictedP2_5Date": 1782777600000,
-    "PredictedP97_5Date": 1793836800000,
+    "PredictedP97_5Date": 1793491200000,
     "PredictedP10Days": 148,
-    "PredictedP90Days": 247,
+    "PredictedP90Days": 238,
     "PredictedP2_5Days": 131,
-    "PredictedP97_5Days": 259,
+    "PredictedP97_5Days": 255,
     "OriginalPredictedDate": 1786834800000,
     "OriginalPredictedRangeLowDate": 1784934000000,
     "OriginalPredictedRangeHighDate": 1790550000000,
@@ -43639,7 +43639,7 @@
     "PredictedRangeHighDays": 201,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
-    "ReferenceEraFrom": 1753056000000,
+    "ReferenceEraFrom": 1753401600000,
     "ReferenceEraTo": 1775779200000,
     "References": [
       {
@@ -43697,12 +43697,6 @@
         "WartezeitTage": 263
       },
       {
-        "Benutzername": "Schmidt",
-        "ProfilURL": "https://www.elroq-forum.de/user/719-schmidt/",
-        "Land": "Deutschland",
-        "WartezeitTage": 254
-      },
-      {
         "Benutzername": "Bill_Brandenburg",
         "ProfilURL": "https://www.elroq-forum.de/user/1885-bill-brandenburg/",
         "Land": "Deutschland",
@@ -43713,6 +43707,12 @@
         "ProfilURL": "https://www.elroq-forum.de/user/2408-sidewinder131/",
         "Land": "Deutschland",
         "WartezeitTage": 147
+      },
+      {
+        "Benutzername": "Bigro",
+        "ProfilURL": "https://www.elroq-forum.de/user/2572-bigro/",
+        "Land": "Deutschland",
+        "WartezeitTage": 153
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
@@ -43720,11 +43720,11 @@
     "PredictedP10Date": 1783555200000,
     "PredictedP90Date": 1792368000000,
     "PredictedP2_5Date": 1780876800000,
-    "PredictedP97_5Date": 1793836800000,
+    "PredictedP97_5Date": 1793491200000,
     "PredictedP10Days": 140,
     "PredictedP90Days": 242,
     "PredictedP2_5Days": 109,
-    "PredictedP97_5Days": 259,
+    "PredictedP97_5Days": 255,
     "OriginalPredictedDate": 1785970800000,
     "OriginalPredictedRangeLowDate": 1784502000000,
     "OriginalPredictedRangeHighDate": 1788822000000,
@@ -44441,13 +44441,13 @@
     "DeviationDays": null,
     "PredictedDate": 1786752000000,
     "PredictedRangeLowDate": 1784592000000,
-    "PredictedRangeHighDate": 1790467200000,
+    "PredictedRangeHighDate": 1789257600000,
     "PredictedMedianDays": 179,
     "PredictedRangeLowDays": 154,
-    "PredictedRangeHighDays": 222,
+    "PredictedRangeHighDays": 208,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
-    "ReferenceEraFrom": 1753056000000,
+    "ReferenceEraFrom": 1753401600000,
     "ReferenceEraTo": 1772150400000,
     "References": [
       {
@@ -44467,12 +44467,6 @@
         "ProfilURL": "https://www.elroq-forum.de/user/519-uwej/",
         "Land": "Deutschland",
         "WartezeitTage": 263
-      },
-      {
-        "Benutzername": "Schmidt",
-        "ProfilURL": "https://www.elroq-forum.de/user/719-schmidt/",
-        "Land": "Deutschland",
-        "WartezeitTage": 254
       },
       {
         "Benutzername": "Sidewinder131",
@@ -44521,18 +44515,24 @@
         "ProfilURL": "https://www.elroq-forum.de/user/2246-higgy/",
         "Land": "Deutschland",
         "WartezeitTage": 152
+      },
+      {
+        "Benutzername": "DonRoq",
+        "ProfilURL": "https://www.elroq-forum.de/user/2116-donroq/",
+        "Land": "Deutschland",
+        "WartezeitTage": 241
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
     "PredictedP10Date": 1784073600000,
-    "PredictedP90Date": 1792627200000,
+    "PredictedP90Date": 1792195200000,
     "PredictedP2_5Date": 1783728000000,
-    "PredictedP97_5Date": 1793664000000,
+    "PredictedP97_5Date": 1793318400000,
     "PredictedP10Days": 148,
-    "PredictedP90Days": 247,
+    "PredictedP90Days": 242,
     "PredictedP2_5Days": 144,
-    "PredictedP97_5Days": 259,
+    "PredictedP97_5Days": 255,
     "OriginalPredictedDate": 1786748400000,
     "OriginalPredictedRangeLowDate": 1784588400000,
     "OriginalPredictedRangeHighDate": 1790463600000,
@@ -44643,13 +44643,13 @@
     "DeviationDays": null,
     "PredictedDate": 1786752000000,
     "PredictedRangeLowDate": 1784592000000,
-    "PredictedRangeHighDate": 1790467200000,
+    "PredictedRangeHighDate": 1789257600000,
     "PredictedMedianDays": 179,
     "PredictedRangeLowDays": 154,
-    "PredictedRangeHighDays": 222,
+    "PredictedRangeHighDays": 208,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
-    "ReferenceEraFrom": 1753056000000,
+    "ReferenceEraFrom": 1753401600000,
     "ReferenceEraTo": 1772150400000,
     "References": [
       {
@@ -44669,12 +44669,6 @@
         "ProfilURL": "https://www.elroq-forum.de/user/519-uwej/",
         "Land": "Deutschland",
         "WartezeitTage": 263
-      },
-      {
-        "Benutzername": "Schmidt",
-        "ProfilURL": "https://www.elroq-forum.de/user/719-schmidt/",
-        "Land": "Deutschland",
-        "WartezeitTage": 254
       },
       {
         "Benutzername": "Sidewinder131",
@@ -44723,18 +44717,24 @@
         "ProfilURL": "https://www.elroq-forum.de/user/2246-higgy/",
         "Land": "Deutschland",
         "WartezeitTage": 152
+      },
+      {
+        "Benutzername": "DonRoq",
+        "ProfilURL": "https://www.elroq-forum.de/user/2116-donroq/",
+        "Land": "Deutschland",
+        "WartezeitTage": 241
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
     "PredictedP10Date": 1784073600000,
-    "PredictedP90Date": 1792627200000,
+    "PredictedP90Date": 1792195200000,
     "PredictedP2_5Date": 1783728000000,
-    "PredictedP97_5Date": 1793664000000,
+    "PredictedP97_5Date": 1793318400000,
     "PredictedP10Days": 148,
-    "PredictedP90Days": 247,
+    "PredictedP90Days": 242,
     "PredictedP2_5Days": 144,
-    "PredictedP97_5Days": 259,
+    "PredictedP97_5Days": 255,
     "OriginalPredictedDate": 1786748400000,
     "OriginalPredictedRangeLowDate": 1784588400000,
     "OriginalPredictedRangeHighDate": 1790463600000,
@@ -45241,12 +45241,12 @@
     "Modellgruppe": "Elroq RS",
     "Bestelldatum": "13. Februar 2026",
     "BestelldatumTS": 1770937200000,
-    "Status": "offen",
+    "Status": "eingetroffen",
     "LoggedAt": 1786690916518,
-    "ResolvedAt": null,
-    "ActualDate": null,
-    "ActualWaitDays": null,
-    "DeviationDays": null,
+    "ResolvedAt": 1787034244631,
+    "ActualDate": "14. August 2026",
+    "ActualWaitDays": 181,
+    "DeviationDays": 1,
     "PredictedDate": 1786492800000,
     "PredictedRangeLowDate": 1784246400000,
     "PredictedRangeHighDate": 1791676800000,
@@ -45449,15 +45449,15 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1785974400000,
-    "PredictedRangeLowDate": 1784419200000,
-    "PredictedRangeHighDate": 1786752000000,
-    "PredictedMedianDays": 174,
-    "PredictedRangeLowDays": 156,
-    "PredictedRangeHighDays": 183,
+    "PredictedDate": 1785542400000,
+    "PredictedRangeLowDate": 1784246400000,
+    "PredictedRangeHighDate": 1786492800000,
+    "PredictedMedianDays": 169,
+    "PredictedRangeLowDays": 154,
+    "PredictedRangeHighDays": 180,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
-    "ReferenceEraFrom": 1753056000000,
+    "ReferenceEraFrom": 1753401600000,
     "ReferenceEraTo": 1775779200000,
     "References": [
       {
@@ -45536,13 +45536,13 @@
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
     "PredictedP10Date": 1783382400000,
-    "PredictedP90Date": 1791590400000,
+    "PredictedP90Date": 1789862400000,
     "PredictedP2_5Date": 1780358400000,
-    "PredictedP97_5Date": 1793318400000,
+    "PredictedP97_5Date": 1792627200000,
     "PredictedP10Days": 144,
-    "PredictedP90Days": 239,
+    "PredictedP90Days": 219,
     "PredictedP2_5Days": 109,
-    "PredictedP97_5Days": 259,
+    "PredictedP97_5Days": 251,
     "OriginalPredictedDate": 1785970800000,
     "OriginalPredictedRangeLowDate": 1784415600000,
     "OriginalPredictedRangeHighDate": 1786748400000,
@@ -46853,7 +46853,7 @@
     "PredictedRangeHighDays": 228,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
-    "ReferenceEraFrom": 1753056000000,
+    "ReferenceEraFrom": 1753401600000,
     "ReferenceEraTo": 1772150400000,
     "References": [
       {
@@ -46905,12 +46905,6 @@
         "WartezeitTage": 263
       },
       {
-        "Benutzername": "Schmidt",
-        "ProfilURL": "https://www.elroq-forum.de/user/719-schmidt/",
-        "Land": "Deutschland",
-        "WartezeitTage": 254
-      },
-      {
         "Benutzername": "f.beutlin0",
         "ProfilURL": "https://www.elroq-forum.de/user/2455-f-beutlin0/",
         "Land": "Deutschland",
@@ -46927,6 +46921,12 @@
         "ProfilURL": "https://www.elroq-forum.de/user/2408-sidewinder131/",
         "Land": "Deutschland",
         "WartezeitTage": 147
+      },
+      {
+        "Benutzername": "Bigro",
+        "ProfilURL": "https://www.elroq-forum.de/user/2572-bigro/",
+        "Land": "Deutschland",
+        "WartezeitTage": 153
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
@@ -46934,11 +46934,11 @@
     "PredictedP10Date": 1783555200000,
     "PredictedP90Date": 1791676800000,
     "PredictedP2_5Date": 1783209600000,
-    "PredictedP97_5Date": 1793145600000,
+    "PredictedP97_5Date": 1792800000000,
     "PredictedP10Days": 148,
     "PredictedP90Days": 242,
     "PredictedP2_5Days": 144,
-    "PredictedP97_5Days": 259,
+    "PredictedP97_5Days": 255,
     "OriginalPredictedDate": 1785970800000,
     "OriginalPredictedRangeLowDate": 1784070000000,
     "OriginalPredictedRangeHighDate": 1790463600000,
@@ -48057,15 +48057,15 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1785196800000,
-    "PredictedRangeLowDate": 1784073600000,
+    "PredictedDate": 1785542400000,
+    "PredictedRangeLowDate": 1784332800000,
     "PredictedRangeHighDate": 1786924800000,
-    "PredictedMedianDays": 174,
-    "PredictedRangeLowDays": 161,
+    "PredictedMedianDays": 178,
+    "PredictedRangeLowDays": 164,
     "PredictedRangeHighDays": 194,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
-    "ReferenceEraFrom": 1753401600000,
+    "ReferenceEraFrom": 1753488000000,
     "ReferenceEraTo": 1775779200000,
     "References": [
       {
@@ -48129,25 +48129,25 @@
         "WartezeitTage": 168
       },
       {
+        "Benutzername": "Daniel80",
+        "ProfilURL": "https://www.elroq-forum.de/user/2717-daniel80/",
+        "Land": "Deutschland",
+        "WartezeitTage": 181
+      },
+      {
         "Benutzername": "HenrikP",
         "ProfilURL": "https://www.elroq-forum.de/user/2967-henrikp/",
         "Land": "Deutschland",
         "WartezeitTage": 176
-      },
-      {
-        "Benutzername": "Valifrigg",
-        "ProfilURL": "https://www.elroq-forum.de/user/3198-valifrigg/",
-        "Land": "Deutschland",
-        "WartezeitTage": 240
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1782777600000,
+    "PredictedP10Date": 1783123200000,
     "PredictedP90Date": 1790640000000,
     "PredictedP2_5Date": 1780272000000,
     "PredictedP97_5Date": 1790985600000,
-    "PredictedP10Days": 146,
+    "PredictedP10Days": 150,
     "PredictedP90Days": 237,
     "PredictedP2_5Days": 117,
     "PredictedP97_5Days": 241,
@@ -48259,15 +48259,15 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1785542400000,
+    "PredictedDate": 1785456000000,
     "PredictedRangeLowDate": 1783382400000,
-    "PredictedRangeHighDate": 1789257600000,
-    "PredictedMedianDays": 179,
+    "PredictedRangeHighDate": 1788048000000,
+    "PredictedMedianDays": 178,
     "PredictedRangeLowDays": 154,
-    "PredictedRangeHighDays": 222,
+    "PredictedRangeHighDays": 208,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
-    "ReferenceEraFrom": 1753056000000,
+    "ReferenceEraFrom": 1753401600000,
     "ReferenceEraTo": 1772150400000,
     "References": [
       {
@@ -48287,12 +48287,6 @@
         "ProfilURL": "https://www.elroq-forum.de/user/519-uwej/",
         "Land": "Deutschland",
         "WartezeitTage": 263
-      },
-      {
-        "Benutzername": "Schmidt",
-        "ProfilURL": "https://www.elroq-forum.de/user/719-schmidt/",
-        "Land": "Deutschland",
-        "WartezeitTage": 254
       },
       {
         "Benutzername": "f.beutlin0",
@@ -48341,18 +48335,24 @@
         "ProfilURL": "https://www.elroq-forum.de/user/2246-higgy/",
         "Land": "Deutschland",
         "WartezeitTage": 152
+      },
+      {
+        "Benutzername": "DonRoq",
+        "ProfilURL": "https://www.elroq-forum.de/user/2116-donroq/",
+        "Land": "Deutschland",
+        "WartezeitTage": 241
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
     "PredictedP10Date": 1782864000000,
-    "PredictedP90Date": 1791417600000,
+    "PredictedP90Date": 1790985600000,
     "PredictedP2_5Date": 1782518400000,
-    "PredictedP97_5Date": 1792454400000,
+    "PredictedP97_5Date": 1792108800000,
     "PredictedP10Days": 148,
-    "PredictedP90Days": 247,
+    "PredictedP90Days": 242,
     "PredictedP2_5Days": 144,
-    "PredictedP97_5Days": 259,
+    "PredictedP97_5Days": 255,
     "OriginalPredictedDate": 1785538800000,
     "OriginalPredictedRangeLowDate": 1783378800000,
     "OriginalPredictedRangeHighDate": 1789254000000,
@@ -49269,15 +49269,15 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1785456000000,
+    "PredictedDate": 1785283200000,
     "PredictedRangeLowDate": 1783036800000,
-    "PredictedRangeHighDate": 1788912000000,
-    "PredictedMedianDays": 182,
+    "PredictedRangeHighDate": 1787702400000,
+    "PredictedMedianDays": 180,
     "PredictedRangeLowDays": 154,
-    "PredictedRangeHighDays": 222,
+    "PredictedRangeHighDays": 208,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
-    "ReferenceEraFrom": 1753056000000,
+    "ReferenceEraFrom": 1753401600000,
     "ReferenceEraTo": 1772150400000,
     "References": [
       {
@@ -49285,6 +49285,12 @@
         "ProfilURL": "https://www.elroq-forum.de/user/2116-donroq/",
         "Land": "Deutschland",
         "WartezeitTage": 241
+      },
+      {
+        "Benutzername": "Daniel80",
+        "ProfilURL": "https://www.elroq-forum.de/user/2717-daniel80/",
+        "Land": "Deutschland",
+        "WartezeitTage": 181
       },
       {
         "Benutzername": "Ludwig",
@@ -49309,12 +49315,6 @@
         "ProfilURL": "https://www.elroq-forum.de/user/519-uwej/",
         "Land": "Deutschland",
         "WartezeitTage": 263
-      },
-      {
-        "Benutzername": "Schmidt",
-        "ProfilURL": "https://www.elroq-forum.de/user/719-schmidt/",
-        "Land": "Deutschland",
-        "WartezeitTage": 254
       },
       {
         "Benutzername": "TomFreude",
@@ -49356,13 +49356,13 @@
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
     "PredictedP10Date": 1782518400000,
-    "PredictedP90Date": 1791072000000,
+    "PredictedP90Date": 1790640000000,
     "PredictedP2_5Date": 1782172800000,
-    "PredictedP97_5Date": 1792108800000,
+    "PredictedP97_5Date": 1791763200000,
     "PredictedP10Days": 148,
-    "PredictedP90Days": 247,
+    "PredictedP90Days": 242,
     "PredictedP2_5Days": 144,
-    "PredictedP97_5Days": 259,
+    "PredictedP97_5Days": 255,
     "OriginalPredictedDate": 1785452400000,
     "OriginalPredictedRangeLowDate": 1783033200000,
     "OriginalPredictedRangeHighDate": 1788908400000,
@@ -49675,10 +49675,10 @@
     "DeviationDays": null,
     "PredictedDate": 1784332800000,
     "PredictedRangeLowDate": 1782864000000,
-    "PredictedRangeHighDate": 1785628800000,
+    "PredictedRangeHighDate": 1785369600000,
     "PredictedMedianDays": 170,
     "PredictedRangeLowDays": 153,
-    "PredictedRangeHighDays": 185,
+    "PredictedRangeHighDays": 182,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
     "ReferenceEraFrom": 1753228800000,
@@ -49760,11 +49760,11 @@
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
     "PredictedP10Date": 1782259200000,
-    "PredictedP90Date": 1790121600000,
+    "PredictedP90Date": 1788307200000,
     "PredictedP2_5Date": 1781136000000,
     "PredictedP97_5Date": 1790812800000,
     "PredictedP10Days": 146,
-    "PredictedP90Days": 237,
+    "PredictedP90Days": 216,
     "PredictedP2_5Days": 133,
     "PredictedP97_5Days": 245,
     "OriginalPredictedDate": 1784329200000,
@@ -49877,10 +49877,10 @@
     "DeviationDays": null,
     "PredictedDate": 1784073600000,
     "PredictedRangeLowDate": 1782604800000,
-    "PredictedRangeHighDate": 1785369600000,
+    "PredictedRangeHighDate": 1785110400000,
     "PredictedMedianDays": 170,
     "PredictedRangeLowDays": 153,
-    "PredictedRangeHighDays": 185,
+    "PredictedRangeHighDays": 182,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
     "ReferenceEraFrom": 1753228800000,
@@ -49962,11 +49962,11 @@
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
     "PredictedP10Date": 1782000000000,
-    "PredictedP90Date": 1789862400000,
+    "PredictedP90Date": 1788048000000,
     "PredictedP2_5Date": 1780876800000,
     "PredictedP97_5Date": 1790553600000,
     "PredictedP10Days": 146,
-    "PredictedP90Days": 237,
+    "PredictedP90Days": 216,
     "PredictedP2_5Days": 133,
     "PredictedP97_5Days": 245,
     "OriginalPredictedDate": 1784070000000,
@@ -51279,15 +51279,15 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1784592000000,
+    "PredictedDate": 1784505600000,
     "PredictedRangeLowDate": 1782432000000,
-    "PredictedRangeHighDate": 1788307200000,
-    "PredictedMedianDays": 179,
+    "PredictedRangeHighDate": 1787097600000,
+    "PredictedMedianDays": 178,
     "PredictedRangeLowDays": 154,
-    "PredictedRangeHighDays": 222,
+    "PredictedRangeHighDays": 208,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
-    "ReferenceEraFrom": 1753056000000,
+    "ReferenceEraFrom": 1753401600000,
     "ReferenceEraTo": 1772150400000,
     "References": [
       {
@@ -51307,12 +51307,6 @@
         "ProfilURL": "https://www.elroq-forum.de/user/519-uwej/",
         "Land": "Deutschland",
         "WartezeitTage": 263
-      },
-      {
-        "Benutzername": "Schmidt",
-        "ProfilURL": "https://www.elroq-forum.de/user/719-schmidt/",
-        "Land": "Deutschland",
-        "WartezeitTage": 254
       },
       {
         "Benutzername": "MM-9411",
@@ -51361,18 +51355,24 @@
         "ProfilURL": "https://www.elroq-forum.de/user/2572-bigro/",
         "Land": "Deutschland",
         "WartezeitTage": 153
+      },
+      {
+        "Benutzername": "DonRoq",
+        "ProfilURL": "https://www.elroq-forum.de/user/2116-donroq/",
+        "Land": "Deutschland",
+        "WartezeitTage": 241
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
     "PredictedP10Date": 1781913600000,
-    "PredictedP90Date": 1790467200000,
+    "PredictedP90Date": 1790035200000,
     "PredictedP2_5Date": 1781568000000,
-    "PredictedP97_5Date": 1791504000000,
+    "PredictedP97_5Date": 1791158400000,
     "PredictedP10Days": 148,
-    "PredictedP90Days": 247,
+    "PredictedP90Days": 242,
     "PredictedP2_5Days": 144,
-    "PredictedP97_5Days": 259,
+    "PredictedP97_5Days": 255,
     "OriginalPredictedDate": 1784588400000,
     "OriginalPredictedRangeLowDate": 1782428400000,
     "OriginalPredictedRangeHighDate": 1788303600000,
@@ -51683,16 +51683,16 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1784937600000,
+    "PredictedDate": 1784592000000,
     "PredictedRangeLowDate": 1782432000000,
-    "PredictedRangeHighDate": 1789430400000,
-    "PredictedMedianDays": 186,
+    "PredictedRangeHighDate": 1788566400000,
+    "PredictedMedianDays": 182,
     "PredictedRangeLowDays": 157,
-    "PredictedRangeHighDays": 238,
+    "PredictedRangeHighDays": 228,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
-    "ReferenceEraFrom": 1753056000000,
-    "ReferenceEraTo": 1769126400000,
+    "ReferenceEraFrom": 1753401600000,
+    "ReferenceEraTo": 1770163200000,
     "References": [
       {
         "Benutzername": "Noi",
@@ -51770,13 +51770,13 @@
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
     "PredictedP10Date": 1781481600000,
-    "PredictedP90Date": 1790208000000,
+    "PredictedP90Date": 1789862400000,
     "PredictedP2_5Date": 1780012800000,
-    "PredictedP97_5Date": 1791244800000,
+    "PredictedP97_5Date": 1790899200000,
     "PredictedP10Days": 146,
-    "PredictedP90Days": 247,
+    "PredictedP90Days": 243,
     "PredictedP2_5Days": 129,
-    "PredictedP97_5Days": 259,
+    "PredictedP97_5Days": 255,
     "OriginalPredictedDate": 1784934000000,
     "OriginalPredictedRangeLowDate": 1782428400000,
     "OriginalPredictedRangeHighDate": 1789426800000,
@@ -52493,13 +52493,13 @@
     "DeviationDays": null,
     "PredictedDate": 1783296000000,
     "PredictedRangeLowDate": 1781740800000,
-    "PredictedRangeHighDate": 1786579200000,
+    "PredictedRangeHighDate": 1784937600000,
     "PredictedMedianDays": 174,
     "PredictedRangeLowDays": 156,
-    "PredictedRangeHighDays": 212,
+    "PredictedRangeHighDays": 193,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
-    "ReferenceEraFrom": 1753056000000,
+    "ReferenceEraFrom": 1753228800000,
     "ReferenceEraTo": 1775779200000,
     "References": [
       {
@@ -52557,6 +52557,12 @@
         "WartezeitTage": 168
       },
       {
+        "Benutzername": "Daniel80",
+        "ProfilURL": "https://www.elroq-forum.de/user/2717-daniel80/",
+        "Land": "Deutschland",
+        "WartezeitTage": 181
+      },
+      {
         "Benutzername": "Valifrigg",
         "ProfilURL": "https://www.elroq-forum.de/user/3198-valifrigg/",
         "Land": "Deutschland",
@@ -52567,24 +52573,18 @@
         "ProfilURL": "https://www.elroq-forum.de/user/3230-ludwig/",
         "Land": "Deutschland",
         "WartezeitTage": 237
-      },
-      {
-        "Benutzername": "Heiko",
-        "ProfilURL": "https://www.elroq-forum.de/user/2197-heiko/",
-        "Land": "Deutschland",
-        "WartezeitTage": 173
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
     "PredictedP10Date": 1779494400000,
-    "PredictedP90Date": 1789171200000,
+    "PredictedP90Date": 1788998400000,
     "PredictedP2_5Date": 1777680000000,
-    "PredictedP97_5Date": 1790640000000,
+    "PredictedP97_5Date": 1790121600000,
     "PredictedP10Days": 130,
-    "PredictedP90Days": 242,
+    "PredictedP90Days": 240,
     "PredictedP2_5Days": 109,
-    "PredictedP97_5Days": 259,
+    "PredictedP97_5Days": 253,
     "OriginalPredictedDate": 1783292400000,
     "OriginalPredictedRangeLowDate": 1781737200000,
     "OriginalPredictedRangeHighDate": 1786575600000,
@@ -52693,15 +52693,15 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1784073600000,
+    "PredictedDate": 1783728000000,
     "PredictedRangeLowDate": 1781481600000,
-    "PredictedRangeHighDate": 1788912000000,
-    "PredictedMedianDays": 184,
+    "PredictedRangeHighDate": 1788739200000,
+    "PredictedMedianDays": 180,
     "PredictedRangeLowDays": 154,
-    "PredictedRangeHighDays": 240,
+    "PredictedRangeHighDays": 238,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
-    "ReferenceEraFrom": 1753056000000,
+    "ReferenceEraFrom": 1753401600000,
     "ReferenceEraTo": 1772150400000,
     "References": [
       {
@@ -52721,6 +52721,12 @@
         "ProfilURL": "https://www.elroq-forum.de/user/2572-bigro/",
         "Land": "Deutschland",
         "WartezeitTage": 153
+      },
+      {
+        "Benutzername": "Daniel80",
+        "ProfilURL": "https://www.elroq-forum.de/user/2717-daniel80/",
+        "Land": "Deutschland",
+        "WartezeitTage": 181
       },
       {
         "Benutzername": "Valifrigg",
@@ -52753,12 +52759,6 @@
         "WartezeitTage": 263
       },
       {
-        "Benutzername": "Schmidt",
-        "ProfilURL": "https://www.elroq-forum.de/user/719-schmidt/",
-        "Land": "Deutschland",
-        "WartezeitTage": 254
-      },
-      {
         "Benutzername": "ToWi80",
         "ProfilURL": "https://www.elroq-forum.de/user/2235-towi80/",
         "Land": "Deutschland",
@@ -52780,13 +52780,13 @@
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
     "PredictedP10Date": 1780963200000,
-    "PredictedP90Date": 1789516800000,
+    "PredictedP90Date": 1789084800000,
     "PredictedP2_5Date": 1780617600000,
-    "PredictedP97_5Date": 1790553600000,
+    "PredictedP97_5Date": 1790208000000,
     "PredictedP10Days": 148,
-    "PredictedP90Days": 247,
+    "PredictedP90Days": 242,
     "PredictedP2_5Days": 144,
-    "PredictedP97_5Days": 259,
+    "PredictedP97_5Days": 255,
     "OriginalPredictedDate": 1784070000000,
     "OriginalPredictedRangeLowDate": 1781478000000,
     "OriginalPredictedRangeHighDate": 1788908400000,
@@ -52897,13 +52897,13 @@
     "DeviationDays": null,
     "PredictedDate": 1782864000000,
     "PredictedRangeLowDate": 1781481600000,
-    "PredictedRangeHighDate": 1783987200000,
+    "PredictedRangeHighDate": 1783900800000,
     "PredictedMedianDays": 170,
     "PredictedRangeLowDays": 154,
-    "PredictedRangeHighDays": 183,
+    "PredictedRangeHighDays": 182,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
-    "ReferenceEraFrom": 1753056000000,
+    "ReferenceEraFrom": 1753401600000,
     "ReferenceEraTo": 1775779200000,
     "References": [
       {
@@ -52923,6 +52923,12 @@
         "ProfilURL": "https://www.elroq-forum.de/user/3587-f1nk/",
         "Land": "Deutschland",
         "WartezeitTage": 168
+      },
+      {
+        "Benutzername": "Daniel80",
+        "ProfilURL": "https://www.elroq-forum.de/user/2717-daniel80/",
+        "Land": "Deutschland",
+        "WartezeitTage": 181
       },
       {
         "Benutzername": "Ludwig",
@@ -52971,24 +52977,18 @@
         "ProfilURL": "https://www.elroq-forum.de/user/519-uwej/",
         "Land": "Deutschland",
         "WartezeitTage": 263
-      },
-      {
-        "Benutzername": "Schmidt",
-        "ProfilURL": "https://www.elroq-forum.de/user/719-schmidt/",
-        "Land": "Deutschland",
-        "WartezeitTage": 254
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
     "PredictedP10Date": 1780790400000,
-    "PredictedP90Date": 1789084800000,
+    "PredictedP90Date": 1788652800000,
     "PredictedP2_5Date": 1778544000000,
-    "PredictedP97_5Date": 1790553600000,
+    "PredictedP97_5Date": 1790035200000,
     "PredictedP10Days": 146,
-    "PredictedP90Days": 242,
+    "PredictedP90Days": 237,
     "PredictedP2_5Days": 120,
-    "PredictedP97_5Days": 259,
+    "PredictedP97_5Days": 253,
     "OriginalPredictedDate": 1782860400000,
     "OriginalPredictedRangeLowDate": 1781478000000,
     "OriginalPredictedRangeHighDate": 1783983600000,
@@ -53099,10 +53099,10 @@
     "DeviationDays": null,
     "PredictedDate": 1782259200000,
     "PredictedRangeLowDate": 1781049600000,
-    "PredictedRangeHighDate": 1783468800000,
+    "PredictedRangeHighDate": 1783296000000,
     "PredictedMedianDays": 168,
     "PredictedRangeLowDays": 154,
-    "PredictedRangeHighDays": 182,
+    "PredictedRangeHighDays": 180,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
     "ReferenceEraFrom": 1753228800000,
@@ -53703,10 +53703,10 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1780617600000,
+    "PredictedDate": 1780876800000,
     "PredictedRangeLowDate": 1779321600000,
     "PredictedRangeHighDate": 1781740800000,
-    "PredictedMedianDays": 170,
+    "PredictedMedianDays": 173,
     "PredictedRangeLowDays": 155,
     "PredictedRangeHighDays": 183,
     "ReferenceCount": 20,
@@ -54310,15 +54310,15 @@
     "ActualWaitDays": null,
     "DeviationDays": null,
     "PredictedDate": 1781395200000,
-    "PredictedRangeLowDate": 1778457600000,
+    "PredictedRangeLowDate": 1778630400000,
     "PredictedRangeHighDate": 1785715200000,
     "PredictedMedianDays": 188,
-    "PredictedRangeLowDays": 154,
+    "PredictedRangeLowDays": 156,
     "PredictedRangeHighDays": 238,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
-    "ReferenceEraFrom": 1752710400000,
-    "ReferenceEraTo": 1769126400000,
+    "ReferenceEraFrom": 1753056000000,
+    "ReferenceEraTo": 1770595200000,
     "References": [
       {
         "Benutzername": "Dila3543",
@@ -54375,12 +54375,6 @@
         "WartezeitTage": 254
       },
       {
-        "Benutzername": "Bjoern1896",
-        "ProfilURL": "https://www.elroq-forum.de/user/1246-bjoern1896/",
-        "Land": "Deutschland",
-        "WartezeitTage": 130
-      },
-      {
         "Benutzername": "pos04",
         "ProfilURL": "https://www.elroq-forum.de/user/2570-pos04/",
         "Land": "Deutschland",
@@ -54391,17 +54385,23 @@
         "ProfilURL": "https://www.elroq-forum.de/user/2116-donroq/",
         "Land": "Deutschland",
         "WartezeitTage": 241
+      },
+      {
+        "Benutzername": "Higgy",
+        "ProfilURL": "https://www.elroq-forum.de/user/2246-higgy/",
+        "Land": "Deutschland",
+        "WartezeitTage": 152
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1777334400000,
+    "PredictedP10Date": 1777852800000,
     "PredictedP90Date": 1786492800000,
-    "PredictedP2_5Date": 1775779200000,
+    "PredictedP2_5Date": 1776297600000,
     "PredictedP97_5Date": 1787529600000,
-    "PredictedP10Days": 141,
+    "PredictedP10Days": 147,
     "PredictedP90Days": 247,
-    "PredictedP2_5Days": 123,
+    "PredictedP2_5Days": 129,
     "PredictedP97_5Days": 259,
     "OriginalPredictedDate": 1781391600000,
     "OriginalPredictedRangeLowDate": 1778454000000,
@@ -78205,13 +78205,13 @@
     "DeviationDays": null,
     "PredictedDate": 1791590400000,
     "PredictedRangeLowDate": 1790294400000,
-    "PredictedRangeHighDate": 1792627200000,
+    "PredictedRangeHighDate": 1792368000000,
     "PredictedMedianDays": 173,
     "PredictedRangeLowDays": 158,
-    "PredictedRangeHighDays": 185,
+    "PredictedRangeHighDays": 182,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
-    "ReferenceEraFrom": 1755043200000,
+    "ReferenceEraFrom": 1755561600000,
     "ReferenceEraTo": 1772150400000,
     "References": [
       {
@@ -78275,16 +78275,16 @@
         "WartezeitTage": 163
       },
       {
+        "Benutzername": "Daniel80",
+        "ProfilURL": "https://www.elroq-forum.de/user/2717-daniel80/",
+        "Land": "Deutschland",
+        "WartezeitTage": 181
+      },
+      {
         "Benutzername": "hoplit",
         "ProfilURL": "https://www.elroq-forum.de/user/2466-hoplit/",
         "Land": "Deutschland",
         "WartezeitTage": 174
-      },
-      {
-        "Benutzername": "HenrikP",
-        "ProfilURL": "https://www.elroq-forum.de/user/2967-henrikp/",
-        "Land": "Deutschland",
-        "WartezeitTage": 176
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
@@ -78405,15 +78405,15 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1800662400000,
+    "PredictedDate": 1800316800000,
     "PredictedRangeLowDate": 1798070400000,
-    "PredictedRangeHighDate": 1805500800000,
-    "PredictedMedianDays": 184,
+    "PredictedRangeHighDate": 1805328000000,
+    "PredictedMedianDays": 180,
     "PredictedRangeLowDays": 154,
-    "PredictedRangeHighDays": 240,
+    "PredictedRangeHighDays": 238,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
-    "ReferenceEraFrom": 1753056000000,
+    "ReferenceEraFrom": 1753401600000,
     "ReferenceEraTo": 1772150400000,
     "References": [
       {
@@ -78433,6 +78433,12 @@
         "ProfilURL": "https://www.elroq-forum.de/user/2459-mm-9411/",
         "Land": "Deutschland",
         "WartezeitTage": 179
+      },
+      {
+        "Benutzername": "Daniel80",
+        "ProfilURL": "https://www.elroq-forum.de/user/2717-daniel80/",
+        "Land": "Deutschland",
+        "WartezeitTage": 181
       },
       {
         "Benutzername": "Valifrigg",
@@ -78465,12 +78471,6 @@
         "WartezeitTage": 263
       },
       {
-        "Benutzername": "Schmidt",
-        "ProfilURL": "https://www.elroq-forum.de/user/719-schmidt/",
-        "Land": "Deutschland",
-        "WartezeitTage": 254
-      },
-      {
         "Benutzername": "Sidewinder131",
         "ProfilURL": "https://www.elroq-forum.de/user/2408-sidewinder131/",
         "Land": "Deutschland",
@@ -78492,13 +78492,13 @@
     "CountryScoped": true,
     "PredictionUpdatedAt": 1786950606347,
     "PredictedP10Date": 1797552000000,
-    "PredictedP90Date": 1806105600000,
+    "PredictedP90Date": 1805673600000,
     "PredictedP2_5Date": 1797206400000,
-    "PredictedP97_5Date": 1807142400000,
+    "PredictedP97_5Date": 1806796800000,
     "PredictedP10Days": 148,
-    "PredictedP90Days": 247,
+    "PredictedP90Days": 242,
     "PredictedP2_5Days": 144,
-    "PredictedP97_5Days": 259,
+    "PredictedP97_5Days": 255,
     "OriginalPredictedDate": 1800655200000,
     "OriginalPredictedRangeLowDate": 1798063200000,
     "OriginalPredictedRangeHighDate": 1805493600000,
@@ -79619,21 +79619,21 @@
     "DeviationDays": null,
     "PredictedDate": 1792972800000,
     "PredictedRangeLowDate": 1791417600000,
-    "PredictedRangeHighDate": 1798848000000,
+    "PredictedRangeHighDate": 1797984000000,
     "PredictedP10Date": 1790899200000,
-    "PredictedP90Date": 1799625600000,
+    "PredictedP90Date": 1799193600000,
     "PredictedP2_5Date": 1789430400000,
-    "PredictedP97_5Date": 1800662400000,
+    "PredictedP97_5Date": 1800316800000,
     "PredictedMedianDays": 170,
     "PredictedRangeLowDays": 152,
-    "PredictedRangeHighDays": 238,
+    "PredictedRangeHighDays": 228,
     "PredictedP10Days": 146,
-    "PredictedP90Days": 247,
+    "PredictedP90Days": 242,
     "PredictedP2_5Days": 129,
-    "PredictedP97_5Days": 259,
+    "PredictedP97_5Days": 255,
     "ReferenceCount": 20,
     "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
-    "ReferenceEraFrom": 1753056000000,
+    "ReferenceEraFrom": 1753401600000,
     "ReferenceEraTo": 1772150400000,
     "References": [
       {
@@ -79673,6 +79673,12 @@
         "WartezeitTage": 246
       },
       {
+        "Benutzername": "Daniel80",
+        "ProfilURL": "https://www.elroq-forum.de/user/2717-daniel80/",
+        "Land": "Deutschland",
+        "WartezeitTage": 181
+      },
+      {
         "Benutzername": "Valifrigg",
         "ProfilURL": "https://www.elroq-forum.de/user/3198-valifrigg/",
         "Land": "Deutschland",
@@ -79701,12 +79707,6 @@
         "ProfilURL": "https://www.elroq-forum.de/user/1464-qorle/",
         "Land": "Deutschland",
         "WartezeitTage": 158
-      },
-      {
-        "Benutzername": "KDF",
-        "ProfilURL": "https://www.elroq-forum.de/user/1222-kdf/",
-        "Land": "Deutschland",
-        "WartezeitTage": 204
       }
     ],
     "CountryScoped": true,
@@ -79800,6 +79800,207 @@
         "ProfilURL": "https://www.elroq-forum.de/user/1222-kdf/",
         "Land": "Deutschland",
         "WartezeitTage": 204
+      }
+    ],
+    "OriginalCountryScoped": true
+  },
+  "1054": {
+    "ID": "1054",
+    "Benutzername": "ronne",
+    "ProfilURL": "https://www.elroq-forum.de/user/3675-ronne/",
+    "Modell": "Skoda Elroq 60 Essence",
+    "Modellgruppe": "Elroq 60",
+    "Bestelldatum": "6. Juni 2026",
+    "BestelldatumTS": 1780704000000,
+    "Status": "offen",
+    "LoggedAt": 1787034244631,
+    "ResolvedAt": null,
+    "ActualDate": null,
+    "ActualWaitDays": null,
+    "DeviationDays": null,
+    "PredictedDate": 1794700800000,
+    "PredictedRangeLowDate": 1788480000000,
+    "PredictedRangeHighDate": 1797379200000,
+    "PredictedP10Date": 1787443200000,
+    "PredictedP90Date": 1799452800000,
+    "PredictedP2_5Date": 1786060800000,
+    "PredictedP97_5Date": 1803254400000,
+    "PredictedMedianDays": 162,
+    "PredictedRangeLowDays": 90,
+    "PredictedRangeHighDays": 193,
+    "PredictedP10Days": 78,
+    "PredictedP90Days": 217,
+    "PredictedP2_5Days": 62,
+    "PredictedP97_5Days": 261,
+    "ReferenceCount": 18,
+    "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
+    "ReferenceEraFrom": 1754438400000,
+    "ReferenceEraTo": 1778198400000,
+    "References": [
+      {
+        "Benutzername": "Monsi",
+        "ProfilURL": "https://www.elroq-forum.de/user/2238-monsi/",
+        "Land": "Deutschland",
+        "WartezeitTage": 179
+      },
+      {
+        "Benutzername": "Palmwedel",
+        "ProfilURL": "https://www.elroq-forum.de/user/1928-palmwedel/",
+        "Land": "Deutschland",
+        "WartezeitTage": 176
+      },
+      {
+        "Benutzername": "meutene",
+        "ProfilURL": "https://www.elroq-forum.de/user/1281-meutene/",
+        "Land": "Deutschland",
+        "WartezeitTage": 203
+      },
+      {
+        "Benutzername": "Hermi_91",
+        "ProfilURL": "https://www.elroq-forum.de/user/3256-hermi-91/",
+        "Land": "Deutschland",
+        "WartezeitTage": 82
+      },
+      {
+        "Benutzername": "Veyronje",
+        "ProfilURL": "https://www.elroq-forum.de/user/1726-veyronje/",
+        "Land": "Deutschland",
+        "WartezeitTage": 191
+      },
+      {
+        "Benutzername": "Fanscher",
+        "ProfilURL": "https://www.elroq-forum.de/user/1581-fanscher/",
+        "Land": "Deutschland",
+        "WartezeitTage": 164
+      },
+      {
+        "Benutzername": "Blacknight",
+        "ProfilURL": "https://www.elroq-forum.de/user/3146-blacknight/",
+        "Land": "Deutschland",
+        "WartezeitTage": 80
+      },
+      {
+        "Benutzername": "tomber",
+        "ProfilURL": "https://www.elroq-forum.de/user/1998-tomber/",
+        "Land": "Deutschland",
+        "WartezeitTage": 85
+      },
+      {
+        "Benutzername": "Lenny26",
+        "ProfilURL": "https://www.elroq-forum.de/user/2891-lenny26/",
+        "Land": "Deutschland",
+        "WartezeitTage": 103
+      },
+      {
+        "Benutzername": "Monty",
+        "ProfilURL": "https://www.elroq-forum.de/user/2114-monty/",
+        "Land": "Deutschland",
+        "WartezeitTage": 128
+      },
+      {
+        "Benutzername": "Robert9593",
+        "ProfilURL": "https://www.elroq-forum.de/user/2946-robert9593/",
+        "Land": "Deutschland",
+        "WartezeitTage": 194
+      },
+      {
+        "Benutzername": "Ingo",
+        "ProfilURL": "https://www.elroq-forum.de/user/1574-ingo/",
+        "Land": "Deutschland",
+        "WartezeitTage": 160
+      }
+    ],
+    "CountryScoped": true,
+    "OriginalPredictedDate": 1794700800000,
+    "OriginalPredictedRangeLowDate": 1788480000000,
+    "OriginalPredictedRangeHighDate": 1797379200000,
+    "OriginalPredictedP10Date": 1787443200000,
+    "OriginalPredictedP90Date": 1799452800000,
+    "OriginalPredictedP2_5Date": 1786060800000,
+    "OriginalPredictedP97_5Date": 1803254400000,
+    "OriginalPredictedMedianDays": 162,
+    "OriginalPredictedRangeLowDays": 90,
+    "OriginalPredictedRangeHighDays": 193,
+    "OriginalPredictedP10Days": 78,
+    "OriginalPredictedP90Days": 217,
+    "OriginalPredictedP2_5Days": 62,
+    "OriginalPredictedP97_5Days": 261,
+    "OriginalReferenceCount": 18,
+    "OriginalReferenceQualityLabel": "sehr ähnliche Konfigurationen",
+    "OriginalReferenceEraFrom": 1754438400000,
+    "OriginalReferenceEraTo": 1778198400000,
+    "OriginalReferences": [
+      {
+        "Benutzername": "Monsi",
+        "ProfilURL": "https://www.elroq-forum.de/user/2238-monsi/",
+        "Land": "Deutschland",
+        "WartezeitTage": 179
+      },
+      {
+        "Benutzername": "Palmwedel",
+        "ProfilURL": "https://www.elroq-forum.de/user/1928-palmwedel/",
+        "Land": "Deutschland",
+        "WartezeitTage": 176
+      },
+      {
+        "Benutzername": "meutene",
+        "ProfilURL": "https://www.elroq-forum.de/user/1281-meutene/",
+        "Land": "Deutschland",
+        "WartezeitTage": 203
+      },
+      {
+        "Benutzername": "Hermi_91",
+        "ProfilURL": "https://www.elroq-forum.de/user/3256-hermi-91/",
+        "Land": "Deutschland",
+        "WartezeitTage": 82
+      },
+      {
+        "Benutzername": "Veyronje",
+        "ProfilURL": "https://www.elroq-forum.de/user/1726-veyronje/",
+        "Land": "Deutschland",
+        "WartezeitTage": 191
+      },
+      {
+        "Benutzername": "Fanscher",
+        "ProfilURL": "https://www.elroq-forum.de/user/1581-fanscher/",
+        "Land": "Deutschland",
+        "WartezeitTage": 164
+      },
+      {
+        "Benutzername": "Blacknight",
+        "ProfilURL": "https://www.elroq-forum.de/user/3146-blacknight/",
+        "Land": "Deutschland",
+        "WartezeitTage": 80
+      },
+      {
+        "Benutzername": "tomber",
+        "ProfilURL": "https://www.elroq-forum.de/user/1998-tomber/",
+        "Land": "Deutschland",
+        "WartezeitTage": 85
+      },
+      {
+        "Benutzername": "Lenny26",
+        "ProfilURL": "https://www.elroq-forum.de/user/2891-lenny26/",
+        "Land": "Deutschland",
+        "WartezeitTage": 103
+      },
+      {
+        "Benutzername": "Monty",
+        "ProfilURL": "https://www.elroq-forum.de/user/2114-monty/",
+        "Land": "Deutschland",
+        "WartezeitTage": 128
+      },
+      {
+        "Benutzername": "Robert9593",
+        "ProfilURL": "https://www.elroq-forum.de/user/2946-robert9593/",
+        "Land": "Deutschland",
+        "WartezeitTage": 194
+      },
+      {
+        "Benutzername": "Ingo",
+        "ProfilURL": "https://www.elroq-forum.de/user/1574-ingo/",
+        "Land": "Deutschland",
+        "WartezeitTage": 160
       }
     ],
     "OriginalCountryScoped": true
