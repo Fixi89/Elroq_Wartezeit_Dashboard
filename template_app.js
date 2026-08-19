@@ -890,10 +890,10 @@
     const bgArc = gaugeArcPath(GAUGE.startAngle, GAUGE.endAngle, GAUGE.r);
     card.innerHTML = `
       <svg viewBox="0 0 180 150" width="150" height="125" role="img" aria-label="Durchschnittliche Wartezeit als Tacho">
-        <path d="${bgArc}" fill="none" stroke="#2a352e" stroke-width="12" stroke-linecap="round"/>
-        <path id="gaugeValArc" fill="none" stroke="#9fe870" stroke-width="12" stroke-linecap="round"/>
-        <line id="gaugeNeedle" x1="${GAUGE.cx}" y1="${GAUGE.cy}" x2="${GAUGE.cx}" y2="${GAUGE.cy}" stroke="#f2a93b" stroke-width="3" stroke-linecap="round"/>
-        <circle cx="${GAUGE.cx}" cy="${GAUGE.cy}" r="5" fill="#f2a93b"/>
+        <path d="${bgArc}" fill="none" stroke="rgba(30,32,60,0.09)" stroke-width="12" stroke-linecap="round"/>
+        <path id="gaugeValArc" fill="none" stroke="#0ea968" stroke-width="12" stroke-linecap="round"/>
+        <line id="gaugeNeedle" x1="${GAUGE.cx}" y1="${GAUGE.cy}" x2="${GAUGE.cx}" y2="${GAUGE.cy}" stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/>
+        <circle cx="${GAUGE.cx}" cy="${GAUGE.cy}" r="5" fill="#f59e0b"/>
         <text id="gaugeValueText" x="${GAUGE.cx}" y="${GAUGE.cy+2}" text-anchor="middle" class="gauge-value" dy="34">–</text>
         <text x="${GAUGE.cx}" y="${GAUGE.cy+2}" text-anchor="middle" class="gauge-unit" dy="52">Tage Ø</text>
       </svg>
@@ -995,13 +995,13 @@
       const x = padL + i * bw;
       const y = padT + plotH - bh;
       const rangeFrom = i * binSize, rangeTo = rangeFrom + binSize - 1;
-      bars += `<rect x="${x+1.5}" y="${y}" width="${Math.max(bw-3,1)}" height="${Math.max(bh,1)}" fill="#9fe870" opacity="0.85" rx="2">
-        <title>${rangeFrom}–${rangeTo} Tage: ${c} Bestellung${c===1?'':'en'}</title>
-      </rect>`;
+      const label = `${rangeFrom}–${rangeTo} Tage: ${c} Bestellung${c===1?'':'en'}`;
+      bars += `<rect class="hist-bar" data-label="${escapeHtml(label)}"
+        x="${x+1.5}" y="${y}" width="${Math.max(bw-3,1)}" height="${Math.max(bh,1)}" fill="#0ea968" opacity="0.85" rx="4"/>`;
     });
 
     // axis line
-    let axis = `<line x1="${padL}" y1="${padT+plotH}" x2="${W-10}" y2="${padT+plotH}" stroke="#2a352e" stroke-width="1"/>`;
+    let axis = `<line x1="${padL}" y1="${padT+plotH}" x2="${W-10}" y2="${padT+plotH}" stroke="rgba(30,32,60,0.09)" stroke-width="1"/>`;
     // y-axis gridlines + labels (0 / half / max) so bar heights read as real
     // counts, not just relative shapes — the biggest legibility gap this
     // chart had before.
@@ -1009,8 +1009,8 @@
     let yGrid = '';
     [...new Set(yTicks)].forEach(v => {
       const y = padT + plotH - (v / maxCount) * plotH;
-      yGrid += `<line x1="${padL}" y1="${y.toFixed(1)}" x2="${W-10}" y2="${y.toFixed(1)}" stroke="#2a352e" stroke-width="1" opacity="${v===0?0:0.5}"/>`;
-      yGrid += `<text x="${padL-6}" y="${(y+3).toFixed(1)}" font-size="9.5" fill="#5f7266" text-anchor="end" font-family="IBM Plex Mono, monospace">${v}</text>`;
+      yGrid += `<line x1="${padL}" y1="${y.toFixed(1)}" x2="${W-10}" y2="${y.toFixed(1)}" stroke="rgba(30,32,60,0.09)" stroke-width="1" opacity="${v===0?0:0.5}"/>`;
+      yGrid += `<text x="${padL-6}" y="${(y+3).toFixed(1)}" font-size="9.5" fill="#9295ac" text-anchor="end" font-family="IBM Plex Mono, monospace">${v}</text>`;
     });
     // x labels, thinned out so they never collide on narrow screens
     let labels = '';
@@ -1018,12 +1018,12 @@
     const fs = isNarrow ? 11 : 9.5;
     for (let i=0; i<nBins; i+=step){
       const x = padL + i*bw;
-      labels += `<text x="${x}" y="${H-6}" font-size="${fs}" fill="#8fa090" font-family="IBM Plex Mono, monospace">${i*binSize}</text>`;
+      labels += `<text x="${x}" y="${H-6}" font-size="${fs}" fill="#5c5f78" font-family="IBM Plex Mono, monospace">${i*binSize}</text>`;
     }
 
     // avg marker (global) as reference
     const gAvgX = padL + Math.min(nBins-0.01, GLOBAL_STATS.avg/binSize) * bw;
-    const refLine = `<line x1="${gAvgX}" y1="${padT}" x2="${gAvgX}" y2="${padT+plotH}" stroke="#f2a93b" stroke-width="1.3" stroke-dasharray="4 3" opacity="0.85"/>`;
+    const refLine = `<line x1="${gAvgX}" y1="${padT}" x2="${gAvgX}" y2="${padT+plotH}" stroke="#f59e0b" stroke-width="1.3" stroke-dasharray="4 3" opacity="0.85"/>`;
 
     svg.innerHTML = yGrid + bars + axis + labels + refLine;
     svg.setAttribute('role', 'img');
@@ -1033,9 +1033,36 @@
         : 'Histogramm der Wartezeit: keine Bestellungen in der aktuellen Filterauswahl.'
     );
 
+    // Custom hover tooltip + bar highlight (native <title> replaced for a
+    // more interactive, on-brand hover state).
+    const histTooltip = document.getElementById('histTooltip');
+    const histWrap = document.getElementById('histChartWrap');
+    svg.querySelectorAll('.hist-bar').forEach(bar => {
+      bar.addEventListener('mouseenter', () => {
+        bar.setAttribute('opacity', '1');
+        bar.setAttribute('fill', '#059669');
+        if (!histTooltip) return;
+        histTooltip.hidden = false;
+        histTooltip.innerHTML = `<strong>${bar.dataset.label}</strong>`;
+        const bx = parseFloat(bar.getAttribute('x')) + parseFloat(bar.getAttribute('width')) / 2;
+        const by = parseFloat(bar.getAttribute('y'));
+        const svgRect = svg.getBoundingClientRect();
+        const wrapRect = histWrap.getBoundingClientRect();
+        const px = svgRect.left - wrapRect.left + (bx / W) * svgRect.width;
+        const py = svgRect.top - wrapRect.top + (by / H) * svgRect.height;
+        histTooltip.style.left = `${px}px`;
+        histTooltip.style.top = `${py}px`;
+      });
+      bar.addEventListener('mouseleave', () => {
+        bar.setAttribute('opacity', '0.85');
+        bar.setAttribute('fill', '#0ea968');
+        if (histTooltip) histTooltip.hidden = true;
+      });
+    });
+
     document.getElementById('chartLegend').innerHTML = `
-      <span><span class="legend-dot" style="background:#9fe870;"></span>Anzahl Bestellungen je Wartezeit-Bin (${binSize} Tage)</span>
-      <span><span class="legend-dot" style="background:#f2a93b;"></span>Ø Wartezeit gesamt: ${Math.round(GLOBAL_STATS.avg)} Tage</span>
+      <span><span class="legend-dot" style="background:#0ea968;"></span>Anzahl Bestellungen je Wartezeit-Bin (${binSize} Tage)</span>
+      <span><span class="legend-dot" style="background:#f59e0b;"></span>Ø Wartezeit gesamt: ${Math.round(GLOBAL_STATS.avg)} Tage</span>
     `;
   }
 
@@ -1049,11 +1076,31 @@
     return new Intl.DateTimeFormat('de-DE', { month: 'short', year: '2-digit' }).format(new Date(y, m, 1));
   }
 
+  // Simple ordinary-least-squares fit over (index, value) pairs — used to
+  // project the trend a few months forward. Returns null if not computable.
+  function linearRegression(points){
+    const n = points.length;
+    if (n < 2) return null;
+    let sumX = 0, sumY = 0, sumXY = 0, sumXX = 0;
+    points.forEach((p, i) => { sumX += i; sumY += p; sumXY += i * p; sumXX += i * i; });
+    const denom = n * sumXX - sumX * sumX;
+    if (denom === 0) return null;
+    const slope = (n * sumXY - sumX * sumY) / denom;
+    const intercept = (sumY - slope * sumX) / n;
+    const residuals = points.map((p, i) => p - (slope * i + intercept));
+    const rmse = Math.sqrt(residuals.reduce((a, r) => a + r * r, 0) / n);
+    return { slope, intercept, rmse };
+  }
+
+  const FORECAST_MONTHS = 3;
+
   function renderTrendChart(filtered){
     const svg = document.getElementById('trendChart');
     const isNarrow = window.matchMedia('(max-width: 980px)').matches;
     const W = isNarrow ? 420 : 800, H = 190, padL = isNarrow ? 30 : 36, padR = 10, padB = 26, padT = 14;
     svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    const verdictEl = document.getElementById('trendVerdict');
+    const tooltip = document.getElementById('trendTooltip');
 
     const byMonth = {};
     filtered.forEach(r => {
@@ -1068,6 +1115,8 @@
       svg.setAttribute('aria-label', 'Zu wenige unterschiedliche Bestellmonate für einen Trend in dieser Auswahl.');
       document.getElementById('trendLegend').innerHTML =
         `<span>Zu wenige unterschiedliche Bestellmonate für einen Trend in dieser Auswahl.</span>`;
+      if (verdictEl) verdictEl.innerHTML = '';
+      if (tooltip) tooltip.hidden = true;
       return;
     }
 
@@ -1076,17 +1125,43 @@
       return { k, avg: vals.reduce((a, b) => a + b, 0) / vals.length, n: vals.length };
     });
 
-    const maxAvg = Math.max(...points.map(p => p.avg));
-    const minAvg = Math.min(...points.map(p => p.avg));
+    // Fit the trend over the actual months, then project it forward — this
+    // is the "wird die Wartezeit höher oder niedriger?" answer the chart
+    // needs to give, not just a look-back line.
+    const reg = linearRegression(points.map(p => p.avg));
+    const lastKey = points[points.length - 1].k;
+    const forecastPoints = [];
+    if (reg){
+      for (let i = 1; i <= FORECAST_MONTHS; i++){
+        const idx = points.length - 1 + i;
+        const y = reg.slope * idx + reg.intercept;
+        const [ly, lm] = [Math.floor(lastKey / 100), (lastKey % 100) - 1];
+        const d = new Date(ly, lm + i, 1);
+        forecastPoints.push({ k: d.getFullYear() * 100 + (d.getMonth() + 1), avg: Math.max(0, y), forecast: true });
+      }
+    }
+
+    const allForRange = [...points.map(p => p.avg), ...forecastPoints.map(p => p.avg)];
+    const maxAvg = Math.max(...allForRange);
+    const minAvg = Math.min(...allForRange);
     const range = (maxAvg - minAvg) || 1;
     const plotW = W - padL - padR, plotH = H - padT - padB;
-    const stepX = points.length > 1 ? plotW / (points.length - 1) : 0;
+    const totalN = points.length + forecastPoints.length;
+    const stepX = totalN > 1 ? plotW / (totalN - 1) : 0;
 
-    const xy = points.map((p, i) => ({
+    const toXY = (p, i) => ({
       x: padL + i * stepX,
       y: padT + plotH - ((p.avg - minAvg) / range) * plotH,
       p,
-    }));
+    });
+    const xy = points.map(toXY);
+    const fxy = forecastPoints.map((p, i) => toXY(p, points.length + i));
+    // The forecast line starts from the last real point, so the dashed
+    // segment visibly continues the solid one.
+    const forecastPath = fxy.length
+      ? `M ${xy[xy.length-1].x.toFixed(1)} ${xy[xy.length-1].y.toFixed(1)} ` +
+        fxy.map(pt => `L ${pt.x.toFixed(1)} ${pt.y.toFixed(1)}`).join(' ')
+      : '';
 
     const path = xy.map((pt, i) => `${i === 0 ? 'M' : 'L'} ${pt.x.toFixed(1)} ${pt.y.toFixed(1)}`).join(' ');
     const areaPath = `${path} L ${xy[xy.length-1].x.toFixed(1)} ${padT+plotH} L ${xy[0].x.toFixed(1)} ${padT+plotH} Z`;
@@ -1095,45 +1170,115 @@
     // as authoritative as months backed by many orders.
     const maxN = Math.max(...points.map(p => p.n));
     const dots = xy.map(pt => {
-      const r = 2.2 + (pt.p.n / maxN) * 2.3;
-      return `<circle cx="${pt.x.toFixed(1)}" cy="${pt.y.toFixed(1)}" r="${r.toFixed(1)}" fill="#9fe870">
-        <title>${monthLabel(pt.p.k)}: Ø ${Math.round(pt.p.avg)} Tage (${pt.p.n} Bestellungen)</title>
-      </circle>`;
+      const r = 2.4 + (pt.p.n / maxN) * 2.6;
+      return `<circle class="trend-dot" data-i="${pt.p.__i ?? ''}" cx="${pt.x.toFixed(1)}" cy="${pt.y.toFixed(1)}" r="${r.toFixed(1)}" fill="#0ea968"/>`;
     }).join('');
+    const fdots = fxy.map(pt =>
+      `<circle class="trend-dot" cx="${pt.x.toFixed(1)}" cy="${pt.y.toFixed(1)}" r="3.4" fill="#f7f8fc" stroke="#8b5cf6" stroke-width="2"/>`
+    ).join('');
 
-    const axis = `<line x1="${padL}" y1="${padT+plotH}" x2="${W-padR}" y2="${padT+plotH}" stroke="#2a352e" stroke-width="1"/>`;
+    const axis = `<line x1="${padL}" y1="${padT+plotH}" x2="${W-padR}" y2="${padT+plotH}" stroke="rgba(30,32,60,0.09)" stroke-width="1"/>`;
+    // Divider marking where real data ends and the projection begins.
+    const divider = fxy.length
+      ? `<line x1="${xy[xy.length-1].x.toFixed(1)}" y1="${padT}" x2="${xy[xy.length-1].x.toFixed(1)}" y2="${padT+plotH}" stroke="#8b5cf6" stroke-width="1" stroke-dasharray="2 3" opacity="0.45"/>`
+      : '';
 
-    const labelStep = Math.max(1, Math.ceil(points.length / (isNarrow ? 4 : 9)));
+    const allPts = [...xy, ...fxy];
+    const labelStep = Math.max(1, Math.ceil(allPts.length / (isNarrow ? 4 : 9)));
     const fs = isNarrow ? 10.5 : 9.5;
     let labels = '';
-    xy.forEach((pt, i) => {
-      if (i % labelStep !== 0 && i !== xy.length - 1) return;
-      labels += `<text x="${pt.x.toFixed(1)}" y="${H-8}" font-size="${fs}" fill="#8fa090" text-anchor="middle" font-family="IBM Plex Mono, monospace">${monthLabel(pt.p.k)}</text>`;
+    allPts.forEach((pt, i) => {
+      if (i % labelStep !== 0 && i !== allPts.length - 1) return;
+      const dim = pt.p.forecast ? ' opacity="0.65"' : '';
+      labels += `<text x="${pt.x.toFixed(1)}" y="${H-8}" font-size="${fs}" fill="#5c5f78" text-anchor="middle" font-family="IBM Plex Mono, monospace"${dim}>${monthLabel(pt.p.k)}</text>`;
     });
 
-    // y-axis min/max labels keep the chart readable without a full grid
     const yLabels = `
-      <text x="${padL-6}" y="${padT+4}" font-size="9.5" fill="#5f7266" text-anchor="end" font-family="IBM Plex Mono, monospace">${Math.round(maxAvg)}</text>
-      <text x="${padL-6}" y="${padT+plotH}" font-size="9.5" fill="#5f7266" text-anchor="end" font-family="IBM Plex Mono, monospace">${Math.round(minAvg)}</text>
+      <text x="${padL-6}" y="${padT+4}" font-size="9.5" fill="#9295ac" text-anchor="end" font-family="IBM Plex Mono, monospace">${Math.round(maxAvg)}</text>
+      <text x="${padL-6}" y="${padT+plotH}" font-size="9.5" fill="#9295ac" text-anchor="end" font-family="IBM Plex Mono, monospace">${Math.round(minAvg)}</text>
     `;
 
+    // Invisible wide hit-columns for mouse/touch interaction — one per real
+    // + forecast point, so hovering anywhere near a point shows its tooltip
+    // (small dots alone are too fiddly a target).
+    const hitW = Math.max(10, stepX);
+    const hitCols = allPts.map((pt, i) => {
+      const label = pt.p.forecast
+        ? `Prognose ${monthLabel(pt.p.k)}: ~${Math.round(pt.p.avg)} Tage`
+        : `${monthLabel(pt.p.k)}: Ø ${Math.round(pt.p.avg)} Tage (${pt.p.n} Bestellung${pt.p.n===1?'':'en'})`;
+      return `<rect class="trend-hit" data-x="${pt.x.toFixed(1)}" data-y="${pt.y.toFixed(1)}" data-label="${escapeHtml(label)}"
+        x="${(pt.x - hitW/2).toFixed(1)}" y="${padT}" width="${hitW.toFixed(1)}" height="${plotH}" fill="transparent"/>`;
+    }).join('');
+
     svg.innerHTML = `
-      <path d="${areaPath}" fill="#9fe870" opacity="0.08"/>
-      <path d="${path}" fill="none" stroke="#9fe870" stroke-width="2"/>
-      ${dots}
+      <path d="${areaPath}" fill="#0ea968" opacity="0.08"/>
+      <path d="${path}" fill="none" stroke="#0ea968" stroke-width="2.2"/>
+      ${forecastPath ? `<path d="${forecastPath}" fill="none" stroke="#8b5cf6" stroke-width="2.2" stroke-dasharray="5 4"/>` : ''}
+      ${divider}
       ${axis}
+      ${dots}
+      ${fdots}
       ${labels}
       ${yLabels}
+      <line id="trendCrosshair" class="chart-crosshair" x1="0" y1="${padT}" x2="0" y2="${padT+plotH}" stroke="#171a2b" stroke-width="1" opacity="0" />
+      ${hitCols}
     `;
     svg.setAttribute('role', 'img');
     svg.setAttribute('aria-label',
       `Linienverlauf der durchschnittlichen Wartezeit über ${points.length} Monate, ` +
       `von ${monthLabel(points[0].k)} (${Math.round(points[0].avg)} Tage) bis ` +
-      `${monthLabel(points[points.length-1].k)} (${Math.round(points[points.length-1].avg)} Tage).`
+      `${monthLabel(points[points.length-1].k)} (${Math.round(points[points.length-1].avg)} Tage).` +
+      (forecastPoints.length ? ` Prognose für die nächsten ${forecastPoints.length} Monate auf Basis des linearen Trends.` : '')
     );
 
+    // ---- Interactive crosshair + tooltip ----
+    const crosshair = svg.querySelector('#trendCrosshair');
+    const wrap = document.getElementById('trendChartWrap');
+    svg.querySelectorAll('.trend-hit').forEach(hit => {
+      hit.addEventListener('mouseenter', () => {
+        const x = parseFloat(hit.dataset.x), y = parseFloat(hit.dataset.y);
+        crosshair.setAttribute('x1', x); crosshair.setAttribute('x2', x);
+        crosshair.setAttribute('opacity', '0.18');
+        if (!tooltip) return;
+        tooltip.hidden = false;
+        tooltip.innerHTML = `<strong>${hit.dataset.label}</strong>`;
+        const svgRect = svg.getBoundingClientRect();
+        const wrapRect = wrap.getBoundingClientRect();
+        let px = svgRect.left - wrapRect.left + (x / W) * svgRect.width;
+        const py = svgRect.top - wrapRect.top + (y / H) * svgRect.height;
+        px = Math.max(40, Math.min(wrapRect.width - 40, px));
+        tooltip.style.left = `${px}px`;
+        tooltip.style.top = `${py}px`;
+      });
+      hit.addEventListener('mouseleave', () => {
+        crosshair.setAttribute('opacity', '0');
+        if (tooltip) tooltip.hidden = true;
+      });
+    });
+
+    // ---- Plain-language verdict: is the wait getting longer or shorter? ----
+    if (verdictEl){
+      if (!reg || points.length < 3){
+        verdictEl.className = 'trend-verdict flat';
+        verdictEl.innerHTML = `<span class="arrow">→</span> Noch zu wenige Monate für eine verlässliche Trendaussage.`;
+      } else {
+        const perMonth = reg.slope;
+        const flat = Math.abs(perMonth) < 1;
+        const dir = flat ? 'flat' : (perMonth > 0 ? 'up' : 'down');
+        const arrow = flat ? '→' : (perMonth > 0 ? '↗' : '↘');
+        const word = flat ? 'bleibt in etwa stabil' : (perMonth > 0 ? 'steigt' : 'sinkt');
+        const projected = Math.round(reg.slope * (points.length - 1 + FORECAST_MONTHS) + reg.intercept);
+        verdictEl.className = `trend-verdict ${dir}`;
+        verdictEl.innerHTML = flat
+          ? `<span class="arrow">${arrow}</span> Die Wartezeit <b>${word}</b> (Trend über die letzten ${points.length} Monate).`
+          : `<span class="arrow">${arrow}</span> Die Wartezeit <b>${word}</b> aktuell um ca. <b>${Math.abs(Math.round(perMonth))} Tage pro Monat</b>.
+             Bei gleichbleibendem Trend liegt die Ø Wartezeit in ${FORECAST_MONTHS} Monaten bei etwa <b>${Math.max(0, projected)} Tagen</b>.`;
+      }
+    }
+
     document.getElementById('trendLegend').innerHTML = `
-      <span><span class="legend-dot" style="background:#9fe870;"></span>Ø Wartezeit je Bestellmonat, Punktgröße = Anzahl Bestellungen</span>
+      <span><span class="legend-dot" style="background:#0ea968;"></span>Ø Wartezeit je Bestellmonat, Punktgröße = Anzahl Bestellungen</span>
+      ${forecastPoints.length ? `<span><span class="legend-dot" style="background:#8b5cf6;"></span>Prognose (linearer Trend, nächste ${FORECAST_MONTHS} Monate)</span>` : ''}
       <span>${points.length} Monate im gewählten Zeitraum</span>
     `;
   }
@@ -1811,7 +1956,7 @@
     function band(fromTs, toTs, opacity){
       const x1 = xFor(fromTs), x2 = xFor(toTs);
       const w = Math.max(3, x2 - x1);
-      return `<rect x="${x1.toFixed(1)}" y="${barY}" width="${w.toFixed(1)}" height="${barH}" rx="${radius}" fill="#f2a93b" opacity="${opacity}"/>`;
+      return `<rect x="${x1.toFixed(1)}" y="${barY}" width="${w.toFixed(1)}" height="${barH}" rx="${radius}" fill="#f59e0b" opacity="${opacity}"/>`;
     }
 
     let bands = band(outerFrom, outerTo, 0.15);
@@ -1820,12 +1965,12 @@
 
     const medX = xFor(p.dateMedian);
     const marker = `
-      <line x1="${medX.toFixed(1)}" y1="${barY-7}" x2="${medX.toFixed(1)}" y2="${barY+barH+7}" stroke="#f2a93b" stroke-width="2.5"/>
-      <circle cx="${medX.toFixed(1)}" cy="${(barY+barH/2).toFixed(1)}" r="4.5" fill="#0f1512" stroke="#f2a93b" stroke-width="2.5"/>
+      <line x1="${medX.toFixed(1)}" y1="${barY-7}" x2="${medX.toFixed(1)}" y2="${barY+barH+7}" stroke="#f59e0b" stroke-width="2.5"/>
+      <circle cx="${medX.toFixed(1)}" cy="${(barY+barH/2).toFixed(1)}" r="4.5" fill="#eef1fb" stroke="#f59e0b" stroke-width="2.5"/>
     `;
 
     const label = (ts, x, anchor) =>
-      `<text x="${x.toFixed(1)}" y="${H-6}" font-size="10" fill="#8fa090" text-anchor="${anchor}" font-family="IBM Plex Mono, monospace">${fmtDate(ts)}</text>`;
+      `<text x="${x.toFixed(1)}" y="${H-6}" font-size="10" fill="#5c5f78" text-anchor="${anchor}" font-family="IBM Plex Mono, monospace">${fmtDate(ts)}</text>`;
 
     const ariaLabel = `Prognose-Unsicherheit: 50 Prozent Wahrscheinlichkeit zwischen ${fmtDate(p.dateEarly)} und ${fmtDate(p.dateLate)}` +
       (hasWide ? `, 95 Prozent zwischen ${fmtDate(outerFrom)} und ${fmtDate(outerTo)}` : '') + `. Median: ${fmtDate(p.dateMedian)}.`;
@@ -1834,7 +1979,7 @@
       <svg viewBox="0 0 ${W} ${H}" class="confidence-fan" role="img" aria-label="${ariaLabel}" preserveAspectRatio="xMidYMid meet">
         ${bands}
         ${marker}
-        <text x="${medX.toFixed(1)}" y="${barY-12}" font-size="11" fill="#f2a93b" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-weight="600">${fmtDate(p.dateMedian)}</text>
+        <text x="${medX.toFixed(1)}" y="${barY-12}" font-size="11" fill="#f59e0b" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-weight="600">${fmtDate(p.dateMedian)}</text>
         ${label(outerFrom, padX, 'start')}
         ${label(outerTo, W - padX, 'end')}
       </svg>
