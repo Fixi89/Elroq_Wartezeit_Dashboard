@@ -146,9 +146,11 @@ def parse_rows(soup):
         img = tds[3].find("img")
         land = img.get("alt", "") if img else clean(tds[3].get_text())
 
-        # Benutzername samt Profil-Link (das Forum verlinkt jeden Eintrag).
-        user_a = tds[4].find("a")
-        profil_url = user_a.get("href", "") if user_a else ""
+        # Datenminimierung (DSGVO Art. 5 Abs. 1 lit. c): Der Benutzername und
+        # der Profil-Link stehen zwar in der Forumstabelle, werden hier aber
+        # bewusst NICHT erfasst. Sie sind fuer Statistik und Prognose nicht
+        # erforderlich, wuerden aber personenbezogene Daten in einem oeffentlich
+        # publizierten Dashboard erzeugen. tds[4] wird daher komplett ignoriert.
 
         out.append({
             "ID": tr.get("data-object-id", ""),
@@ -156,8 +158,6 @@ def parse_rows(soup):
             "Bestelldatum": bestelldatum,
             "Lieferdatum": lieferdatum,
             "Land": land,
-            "Benutzername": clean(tds[4].get_text()),
-            "ProfilURL": profil_url,
             "Modell": clean(tds[5].get_text()),
             "Farbe": clean(tds[6].get_text()),
             "Ausstattung": clean(tds[7].get_text(" ")),
@@ -474,8 +474,8 @@ def _similarity_match(order, pool):
         "date_p2_5": date_for(p2_5), "date_p97_5": date_for(p97_5),
         "refs": [
             {
-                "Benutzername": x["d"].get("Benutzername", ""),
-                "ProfilURL": x["d"].get("ProfilURL", ""),
+                # Bewusst anonym: kein Benutzername/Profil-Link, nur die fuer die
+                # Prognose relevanten Merkmale (siehe Datenminimierung oben).
                 "Land": x["d"].get("Land", ""),
                 "WartezeitTage": x["d"]["WartezeitTage"],
             }
@@ -629,8 +629,6 @@ def update_prediction_log(log, delivered, open_orders, now_ts):
         if is_new:
             log[oid] = {
                 "ID": oid,
-                "Benutzername": order.get("Benutzername", ""),
-                "ProfilURL": order.get("ProfilURL", ""),
                 "Modell": order.get("Modell", ""),
                 "Modellgruppe": order.get("Modellgruppe", ""),
                 "Bestelldatum": order.get("Bestelldatum", ""),
@@ -652,7 +650,8 @@ def update_prediction_log(log, delivered, open_orders, now_ts):
         else:
             recalculated += 1
 
-    return new_logged, resolved_now, recalculated, original_migrated
+    personal_data_stripped = _migrate_strip_personal_data(log)
+    return new_logged, resolved_now, recalculated, original_migrated, personal_data_stripped
 
 
 def _migrate_add_original_snapshot(log):
@@ -675,6 +674,34 @@ def _migrate_add_original_snapshot(log):
             entry[f"Original{key}"] = entry.get(key)
         migrated += 1
     return migrated
+
+
+def _migrate_strip_personal_data(log):
+    """
+    Einmalige Migration (DSGVO-Nachbesserung): entfernt Benutzername und
+    Profil-Link aus alten Log-Eintraegen, die vor der Umstellung auf
+    Datenminimierung erfasst wurden — sowohl auf oberster Ebene als auch aus
+    den mitgeloggten Referenz-Bestellungen ("References"/"OriginalReferences").
+    Wird bei jedem Lauf aufgerufen, ist danach ein No-Op sobald alles bereinigt ist.
+    """
+    stripped = 0
+    personal_keys = ("Benutzername", "ProfilURL")
+    ref_list_keys = ("References", "OriginalReferences")
+    for entry in log.values():
+        hit = False
+        for key in personal_keys:
+            if key in entry:
+                del entry[key]
+                hit = True
+        for rk in ref_list_keys:
+            for ref in entry.get(rk) or []:
+                for key in personal_keys:
+                    if key in ref:
+                        del ref[key]
+                        hit = True
+        if hit:
+            stripped += 1
+    return stripped
 
 
 def merge_log_into_records(log, delivered, open_orders):
@@ -826,8 +853,6 @@ def main():
             "BestelldatumTS": int(datetime(order_date.year, order_date.month,
                                            order_date.day).timestamp() * 1000),
             "Land": r["Land"],
-            "Benutzername": r["Benutzername"],
-            "ProfilURL": r["ProfilURL"],
             "Modell": r["Modell"],
             "Modellgruppe": model_group(r["Modell"]),
             "Ausstattungslinie": trim_line(r["Modell"]),
@@ -869,7 +894,7 @@ def main():
     # inzwischen ausgelieferte werden mit dem tatsaechlichen Ergebnis aufgeloest.
     now_ts = int(datetime.now().timestamp() * 1000)
     log = load_log()
-    new_logged, resolved_now, recalculated, original_migrated = update_prediction_log(
+    new_logged, resolved_now, recalculated, original_migrated, personal_data_stripped = update_prediction_log(
         log, delivered, open_orders, now_ts)
     save_log(log)
     merge_log_into_records(log, delivered, open_orders)
@@ -882,6 +907,8 @@ def main():
     print(f"  Neu berechnete Prognosen (weiterhin offen): {recalculated}")
     if original_migrated:
         print(f"  Einmalig migriert (Original-Prognose nachgetragen): {original_migrated}")
+    if personal_data_stripped:
+        print(f"  Einmalig bereinigt (Benutzername/Profil-Link entfernt, DSGVO): {personal_data_stripped}")
     if resolved_all:
         mae = sum(abs(e["DeviationDays"]) for e in resolved_all) / len(resolved_all)
         within2w = sum(1 for e in resolved_all if abs(e["DeviationDays"]) <= 14) / len(resolved_all)

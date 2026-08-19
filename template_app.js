@@ -974,7 +974,7 @@
     // Narrower viewBox on phones keeps the chart from rendering as a flat strip,
     // since the SVG now scales proportionally rather than stretching.
     const isNarrow = window.matchMedia('(max-width: 980px)').matches;
-    const W = isNarrow ? 420 : 800, H = 190, padL = isNarrow ? 24 : 30, padB = 24, padT = 10;
+    const W = isNarrow ? 420 : 800, H = 190, padL = isNarrow ? 28 : 34, padB = 24, padT = 10;
     svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
     const binSize = 20;
     const maxDay = GLOBAL_STATS.max;
@@ -1002,6 +1002,16 @@
 
     // axis line
     let axis = `<line x1="${padL}" y1="${padT+plotH}" x2="${W-10}" y2="${padT+plotH}" stroke="#2a352e" stroke-width="1"/>`;
+    // y-axis gridlines + labels (0 / half / max) so bar heights read as real
+    // counts, not just relative shapes — the biggest legibility gap this
+    // chart had before.
+    const yTicks = [0, Math.round(maxCount/2), maxCount];
+    let yGrid = '';
+    [...new Set(yTicks)].forEach(v => {
+      const y = padT + plotH - (v / maxCount) * plotH;
+      yGrid += `<line x1="${padL}" y1="${y.toFixed(1)}" x2="${W-10}" y2="${y.toFixed(1)}" stroke="#2a352e" stroke-width="1" opacity="${v===0?0:0.5}"/>`;
+      yGrid += `<text x="${padL-6}" y="${(y+3).toFixed(1)}" font-size="9.5" fill="#5f7266" text-anchor="end" font-family="IBM Plex Mono, monospace">${v}</text>`;
+    });
     // x labels, thinned out so they never collide on narrow screens
     let labels = '';
     const step = Math.max(1, Math.round(nBins / (isNarrow ? 5 : 8)));
@@ -1015,7 +1025,7 @@
     const gAvgX = padL + Math.min(nBins-0.01, GLOBAL_STATS.avg/binSize) * bw;
     const refLine = `<line x1="${gAvgX}" y1="${padT}" x2="${gAvgX}" y2="${padT+plotH}" stroke="#f2a93b" stroke-width="1.3" stroke-dasharray="4 3" opacity="0.85"/>`;
 
-    svg.innerHTML = bars + axis + labels + refLine;
+    svg.innerHTML = yGrid + bars + axis + labels + refLine;
     svg.setAttribute('role', 'img');
     svg.setAttribute('aria-label',
       filtered.length
@@ -1255,7 +1265,6 @@
 
   function configLines(r){
     const lines = [
-      ['Benutzer', escapeHtml(r.Benutzername || '–')],
       ['Modell', escapeHtml(r.Modell || '–')],
       ['Farbe', escapeHtml(r.Farbe || '–')],
       ['Innenausstattung', escapeHtml(r.Innenausstattung_DesignSelection || '–')],
@@ -1335,14 +1344,14 @@
   }
 
   function userChip(r, missed){
-    const name = escapeHtml(r.Benutzername || 'unbekannt');
+    // Bewusst anonym: keine Benutzernamen/Profil-Links im Dashboard (Datenschutz).
+    // Ein Chip zeigt nur Land + Wartezeit — genug, um die eigene Bestellung im
+    // Vergleich einzuordnen, ohne eine andere Person identifizierbar zu machen.
     const diff = missed && missed.length
       ? `<span class="twin-diff">≠ ${missed.map(m => escapeHtml(m.label)).join(', ')}</span>`
       : '';
-    const inner = `${flagFor(r.Land)}<span>${name}</span><span class="days">${r.WartezeitTage} Tage</span>${diff}`;
-    return r.ProfilURL
-      ? `<a class="twin-user" href="${escapeHtml(r.ProfilURL)}" target="_blank" rel="noopener" title="${name} — Profil im Forum öffnen">${inner}</a>`
-      : `<span class="twin-user">${inner}</span>`;
+    const inner = `${flagFor(r.Land)}<span class="days">${r.WartezeitTage} Tage</span>${diff}`;
+    return `<span class="twin-user">${inner}</span>`;
   }
 
   function bucket(title, rows, cls, showDiff){
@@ -1380,13 +1389,13 @@
       .slice(0, 4);
 
     if (!top.length){
-      el.innerHTML = `<p class="twin-hint">Setze links Filter, um Benutzer mit passender Konfiguration zu finden.</p>`;
+      el.innerHTML = `<p class="twin-hint">Setze links Filter, um Bestellungen mit passender Konfiguration zu finden.</p>`;
       return;
     }
 
     el.innerHTML = `
       <p class="twin-hint" style="margin:0 0 12px;">
-        Setze links Filter, um Benutzer mit passender Konfiguration zu finden.
+        Setze links Filter, um Bestellungen mit passender Konfiguration zu finden.
         Ohne Filter siehst du hier die Konfigurationen, die mehrfach identisch bestellt wurden.
       </p>
       ${top.map(g => {
@@ -1468,16 +1477,12 @@
     const shown = sorted.slice(0, 150);
 
     let html = `<thead><tr>
-      <th>Benutzer</th><th>Modell</th><th>Farbe</th><th>Innenausst.</th><th>Felgen</th><th>Land</th><th>Wartezeit</th><th>Merkmale</th>
+      <th>Modell</th><th>Farbe</th><th>Innenausst.</th><th>Felgen</th><th>Land</th><th>Wartezeit</th><th>Merkmale</th>
     </tr></thead><tbody>`;
     shown.forEach(r => {
       const badges = RESULT_BADGE_FIELDS.filter(k => r[k] === 'Ja')
         .map(k => badgeHtml(k)).join('');
-      const user = r.ProfilURL
-        ? `<a href="${escapeHtml(r.ProfilURL)}" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:none;">${escapeHtml(r.Benutzername)}</a>`
-        : escapeHtml(r.Benutzername || '–');
       html += `<tr>
-        <td>${user}</td>
         <td>${escapeHtml(r.Modell||'')}</td>
         <td>${escapeHtml(r.Farbe||'')}</td>
         <td>${escapeHtml(r.Innenausstattung_DesignSelection||'–')}</td>
@@ -1714,11 +1719,8 @@
     const status = isOpen
       ? (r.PredictedDate ? `Prognose ${fmtDate(r.PredictedDate)}` : 'offen')
       : `${r.WartezeitTage} Tage`;
-    const inner = `${flagFor(r.Land)}<span>${escapeHtml(r.Benutzername)}</span>` +
-      `<span class="days${isOpen ? ' pending' : ''}">${status}</span>`;
-    return r.ProfilURL
-      ? `<a class="twin-user" href="${escapeHtml(r.ProfilURL)}" target="_blank" rel="noopener">${inner}</a>`
-      : `<span class="twin-user">${inner}</span>`;
+    const inner = `${flagFor(r.Land)}<span class="days${isOpen ? ' pending' : ''}">${status}</span>`;
+    return `<span class="twin-user">${inner}</span>`;
   }
 
   function sameConfigBlock(order){
@@ -1780,7 +1782,7 @@
     return `
       <div class="lk-card delivered">
         <div class="lk-head">
-          <span class="lk-user">${escapeHtml(r.Benutzername)}</span>
+          <span class="lk-user">Bestellung vom ${escapeHtml(r.Bestelldatum || '–')}</span>
           <span class="lk-status">Ausgeliefert</span>
         </div>
         <div class="lk-hero">
@@ -1847,7 +1849,7 @@
     const p = predictionFor(r);
     if (!p){
       return `<div class="lk-card open">
-        <div class="lk-head"><span class="lk-user">${escapeHtml(r.Benutzername)}</span>
+        <div class="lk-head"><span class="lk-user">Bestellung vom ${escapeHtml(r.Bestelldatum || '–')}</span>
         <span class="lk-status">Offen</span></div>
         <p class="lk-sub">Zu wenig Vergleichsdaten für eine Prognose.</p>
         ${configSummary(r)}</div>`;
@@ -1872,10 +1874,8 @@
     }
 
     const refChips = p.refs.slice(0, 12).map(d => {
-      const inner = `${flagFor(d.Land)}<span>${escapeHtml(d.Benutzername)}</span><span class="days">${d.WartezeitTage} Tage</span>`;
-      return d.ProfilURL
-        ? `<a class="twin-user" href="${escapeHtml(d.ProfilURL)}" target="_blank" rel="noopener">${inner}</a>`
-        : `<span class="twin-user">${inner}</span>`;
+      const inner = `${flagFor(d.Land)}<span class="days">${d.WartezeitTage} Tage</span>`;
+      return `<span class="twin-user">${inner}</span>`;
     }).join('');
 
     const loggedNote = p.logged
@@ -1885,7 +1885,7 @@
     return `
       <div class="lk-card open">
         <div class="lk-head">
-          <span class="lk-user">${escapeHtml(r.Benutzername)}</span>
+          <span class="lk-user">Bestellung vom ${escapeHtml(r.Bestelldatum || '–')}</span>
           <span class="lk-status">Auslieferung offen</span>
           <span class="lk-quality ${p.tier.quality}">${p.count} Referenzen</span>
         </div>
@@ -1911,56 +1911,81 @@
       </div>`;
   }
 
-  function runLookup(nameRaw){
+  const GERMAN_MONTHS = ['Januar','Februar','März','April','Mai','Juni','Juli',
+    'August','September','Oktober','November','Dezember'];
+
+  function runLookup(){
     const el = document.getElementById('lookupResult');
-    const name = (nameRaw || '').trim();
-    if (!name){
-      el.innerHTML = `<div class="lk-error">Bitte einen Benutzernamen eingeben.</div>`;
+    const modell = document.getElementById('lkModell').value;
+    const dateStr = document.getElementById('lkDate').value;
+    const farbe = document.getElementById('lkFarbe').value;
+
+    if (!modell || !dateStr){
+      el.innerHTML = `<div class="lk-error">Bitte mindestens Modell und Bestelldatum angeben.</div>`;
       return;
     }
 
-    const lower = name.toLowerCase();
-    const hits = ALL_ORDERS.filter(r => (r.Benutzername || '').toLowerCase() === lower);
+    // Match against the exact same German date string the data already uses
+    // (e.g. "8. Mai 2026") — avoids any timestamp/timezone arithmetic, which
+    // would otherwise depend on the visitor's browser timezone.
+    const [y, m, d] = dateStr.split('-').map(Number);
+    const targetLabel = `${d}. ${GERMAN_MONTHS[m - 1]} ${y}`;
+
+    let hits = ALL_ORDERS.filter(r => r.Modell === modell && r.Bestelldatum === targetLabel);
+    const beforeFarbe = hits.length;
+    if (farbe && hits.length > 1){
+      const narrowed = hits.filter(r => (r.Farbe || '') === farbe);
+      if (narrowed.length) hits = narrowed;
+    }
 
     if (!hits.length){
-      const near = [...new Set(ALL_ORDERS
-        .map(r => r.Benutzername)
-        .filter(u => u && u.toLowerCase().includes(lower)))].slice(0, 6);
       el.innerHTML = `
         <div class="lk-error">
-          Kein Eintrag für <strong>${escapeHtml(name)}</strong> gefunden.
-          ${near.length
-            ? 'Meintest du: ' + near.map(u =>
-                `<button class="lk-suggest" data-user="${escapeHtml(u)}">${escapeHtml(u)}</button>`).join(' ')
-            : 'Prüfe die Schreibweise — der Name muss exakt dem Forumsprofil entsprechen.'}
+          Keine Bestellung mit <strong>${escapeHtml(modell)}</strong> am
+          <strong>${escapeHtml(targetLabel)}</strong> gefunden.
+          Prüfe, ob Modell und Datum exakt stimmen — kleine Abweichungen beim Datum
+          (z.&nbsp;B. Bestellbestätigung vs. Konfigurator) sind eine häufige Ursache.
           ${OPEN_ORDERS.length === 0
             ? '<br><br>Hinweis: In dieser Datei sind nur ausgelieferte Bestellungen enthalten. Führe das Update-Skript erneut aus, damit auch offene Bestellungen nachschlagbar sind.'
             : ''}
         </div>`;
-      el.querySelectorAll('.lk-suggest').forEach(btn => {
-        btn.addEventListener('click', () => {
-          document.getElementById('userInput').value = btn.dataset.user;
-          runLookup(btn.dataset.user);
-        });
-      });
       return;
     }
 
-    // Newest order first — most people care about their current one.
+    let hint = '';
+    if (hits.length > 1){
+      hint = `<div class="lk-hint">${hits.length} Bestellungen mit dieser Kombination gefunden` +
+        (beforeFarbe > hits.length ? '' : ' — wähle oben zusätzlich eine Farbe, falls deine nicht dabei ist') +
+        `. Erkenne deine an Farbe/Ausstattung in der Karte.</div>`;
+    }
+
     hits.sort((a, b) => b.BestelldatumTS - a.BestelldatumTS);
-    el.innerHTML = hits.map(r => r.Ausgeliefert === false ? openCard(r) : deliveredCard(r)).join('');
+    el.innerHTML = hint + hits.map(r => r.Ausgeliefert === false ? openCard(r) : deliveredCard(r)).join('');
   }
 
   function initLookup(){
-    const list = document.getElementById('userList');
-    const names = [...new Set(ALL_ORDERS.map(r => r.Benutzername).filter(Boolean))]
-      .sort((a, b) => a.localeCompare(b, 'de'));
-    list.innerHTML = names.map(n => `<option value="${escapeHtml(n)}"></option>`).join('');
+    const modellSel = document.getElementById('lkModell');
+    const byGroup = {};
+    ALL_ORDERS.forEach(r => {
+      if (!r.Modell) return;
+      (byGroup[r.Modellgruppe] = byGroup[r.Modellgruppe] || new Set()).add(r.Modell);
+    });
+    const groupOrder = Object.entries(byGroup)
+      .sort((a, b) => b[1].size - a[1].size || a[0].localeCompare(b[0], 'de'));
+    modellSel.innerHTML = '<option value="">Modell wählen…</option>' + groupOrder.map(([group, models]) => `
+      <optgroup label="${escapeHtml(group)}">
+        ${[...models].sort((a, b) => a.localeCompare(b, 'de'))
+          .map(m => `<option value="${escapeHtml(m)}">${escapeHtml(m.replace(/^Skoda\s+/, ''))}</option>`).join('')}
+      </optgroup>`).join('');
 
-    const input = document.getElementById('userInput');
-    document.getElementById('lookupBtn').addEventListener('click', () => runLookup(input.value));
-    input.addEventListener('keydown', e => {
-      if (e.key === 'Enter') runLookup(input.value);
+    const farbeSel = document.getElementById('lkFarbe');
+    farbeSel.innerHTML = '<option value="">Farbe (optional, hilft bei mehreren Treffern)</option>' +
+      distinctValues('Farbe').filter(([val]) => val !== UNKNOWN)
+        .map(([val]) => `<option value="${escapeHtml(val)}">${escapeHtml(val)}</option>`).join('');
+
+    document.getElementById('lookupBtn').addEventListener('click', runLookup);
+    [modellSel, document.getElementById('lkDate'), farbeSel].forEach(elm => {
+      elm.addEventListener('keydown', e => { if (e.key === 'Enter') runLookup(); });
     });
   }
 
@@ -2075,10 +2100,8 @@
     }
 
     const refChips = p.refs.slice(0, 12).map(d => {
-      const inner = `${flagFor(d.Land)}<span>${escapeHtml(d.Benutzername)}</span><span class="days">${d.WartezeitTage} Tage</span>`;
-      return d.ProfilURL
-        ? `<a class="twin-user" href="${escapeHtml(d.ProfilURL)}" target="_blank" rel="noopener">${inner}</a>`
-        : `<span class="twin-user">${inner}</span>`;
+      const inner = `${flagFor(d.Land)}<span class="days">${d.WartezeitTage} Tage</span>`;
+      return `<span class="twin-user">${inner}</span>`;
     }).join('');
 
     const opts = BOOL_FIELDS.filter(f => order[f.key] === 'Ja')
@@ -2269,7 +2292,7 @@
 
   // ---- CSV export of the current filter selection ----
   const CSV_COLUMNS = [
-    'Benutzername', 'Modell', 'Ausstattungslinie', 'Farbe', 'Land',
+    'Modell', 'Ausstattungslinie', 'Farbe', 'Land',
     'Innenausstattung_DesignSelection', 'Felgenname', 'Felgengroesse_Zoll',
     'Bestelldatum', 'Lieferdatum', 'WartezeitTage',
     ...BOOL_FIELDS.map(f => f.key),

@@ -504,13 +504,16 @@
   .personal-panel{ border-color: rgba(159,232,112,0.18); }
   .lookup-intro{ font-size:12.5px; color:var(--text-muted); margin:0 0 14px; max-width:640px; line-height:1.55; }
   .lookup-row{ display:flex; gap:10px; flex-wrap:wrap; }
-  #userInput{
-    flex:1 1 260px; min-width:0; background:var(--surface-2); border:1px solid var(--border);
+  .lookup-row select, .lookup-row input[type="date"]{
+    flex:1 1 200px; min-width:0; background:var(--surface-2); border:1px solid var(--border);
     color:var(--text); border-radius:8px; padding:11px 14px; font-size:14px;
     font-family:'IBM Plex Sans',sans-serif; outline:none;
   }
-  #userInput:focus{ border-color:var(--accent); }
-  #userInput::placeholder{ color:var(--text-dim); }
+  .lookup-row select:focus, .lookup-row input[type="date"]:focus{ border-color:var(--accent); }
+  .lk-hint{
+    font-size:12.5px; color:var(--text-muted); background:var(--surface-2);
+    border:1px solid var(--border); border-radius:8px; padding:10px 14px; margin-top:14px;
+  }
   #lookupBtn{
     background:var(--accent); color:#0f1512; border:none; border-radius:8px;
     padding:11px 22px; font-size:14px; font-weight:600; cursor:pointer;
@@ -916,7 +919,7 @@
     </section>
 
     <section id="sec-community" class="panel">
-      <p class="section-title"><span class="dot"></span>Wer hat so bestellt? <span style="font-size:11px;color:var(--text-dim);font-weight:400;">(Benutzer, deren Konfiguration zur Filterauswahl passt)</span></p>
+      <p class="section-title"><span class="dot"></span>Wie oft wurde so bestellt? <span style="font-size:11px;color:var(--text-dim);font-weight:400;">(anonymisierte Bestellungen, deren Konfiguration zur Filterauswahl passt)</span></p>
       <div id="twinPanel"></div>
     </section>
 
@@ -929,11 +932,11 @@
       </div>
 
       <div class="tab-panel" data-tab-panel="lookup">
-        <p class="lookup-intro">Trage deinen Forums-Benutzernamen ein. Bei ausgelieferten Fahrzeugen siehst du das echte Lieferdatum, bei offenen Bestellungen eine Prognose auf Basis vergleichbarer Konfigurationen.</p>
+        <p class="lookup-intro">Wähle Modell und Bestelldatum deiner eigenen Bestellung — bei ausgelieferten Fahrzeugen siehst du das echte Lieferdatum, bei offenen Bestellungen eine Prognose auf Basis vergleichbarer Konfigurationen. <span style="color:var(--text-dim);">Bewusst ohne Benutzername: Das Dashboard speichert und zeigt keine personenbezogenen Forumsdaten.</span></p>
         <div class="lookup-row">
-          <input id="userInput" list="userList" type="text" autocomplete="off" spellcheck="false"
-                 placeholder="z. B. Norick" aria-label="Benutzername">
-          <datalist id="userList"></datalist>
+          <select id="lkModell" aria-label="Modell"></select>
+          <input id="lkDate" type="date" aria-label="Bestelldatum">
+          <select id="lkFarbe" aria-label="Farbe (optional)"></select>
           <button id="lookupBtn" type="button">Nachschlagen</button>
         </div>
         <div id="lookupResult"></div>
