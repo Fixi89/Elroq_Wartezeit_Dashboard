@@ -19975,17 +19975,21 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1782000000000,
-    "PredictedRangeLowDate": 1781395200000,
-    "PredictedRangeHighDate": 1783123200000,
-    "PredictedMedianDays": 72,
-    "PredictedRangeLowDays": 65,
-    "PredictedRangeHighDays": 85,
-    "ReferenceCount": 15,
+    "PredictedDate": 1782086400000,
+    "PredictedRangeLowDate": 1781481600000,
+    "PredictedRangeHighDate": 1783555200000,
+    "PredictedMedianDays": 73,
+    "PredictedRangeLowDays": 66,
+    "PredictedRangeHighDays": 90,
+    "ReferenceCount": 16,
     "ReferenceQualityLabel": "ähnliche Konfigurationen",
     "ReferenceEraFrom": 1731888000000,
-    "ReferenceEraTo": 1773360000000,
+    "ReferenceEraTo": 1774051200000,
     "References": [
+      {
+        "Land": "Österreich",
+        "WartezeitTage": 149
+      },
       {
         "Land": "Österreich",
         "WartezeitTage": 90
@@ -20029,22 +20033,18 @@
       {
         "Land": "Österreich",
         "WartezeitTage": 72
-      },
-      {
-        "Land": "Österreich",
-        "WartezeitTage": 80
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1781049600000,
-    "PredictedP90Date": 1783641600000,
+    "PredictedP10Date": 1781136000000,
+    "PredictedP90Date": 1785888000000,
     "PredictedP2_5Date": 1780704000000,
-    "PredictedP97_5Date": 1786579200000,
-    "PredictedP10Days": 61,
-    "PredictedP90Days": 91,
+    "PredictedP97_5Date": 1788480000000,
+    "PredictedP10Days": 62,
+    "PredictedP90Days": 117,
     "PredictedP2_5Days": 57,
-    "PredictedP97_5Days": 125,
+    "PredictedP97_5Days": 147,
     "OriginalPredictedDate": 1781992800000,
     "OriginalPredictedRangeLowDate": 1781388000000,
     "OriginalPredictedRangeHighDate": 1783116000000,
@@ -24497,12 +24497,12 @@
     "Modellgruppe": "Elroq 85x",
     "Bestelldatum": "21. März 2026",
     "BestelldatumTS": 1774047600000,
-    "Status": "offen",
+    "Status": "eingetroffen",
     "LoggedAt": 1786690916518,
-    "ResolvedAt": null,
-    "ActualDate": null,
-    "ActualWaitDays": null,
-    "DeviationDays": null,
+    "ResolvedAt": 1787207150507,
+    "ActualDate": "18. August 2026",
+    "ActualWaitDays": 149,
+    "DeviationDays": 72,
     "PredictedDate": 1780704000000,
     "PredictedRangeLowDate": 1780012800000,
     "PredictedRangeHighDate": 1782000000000,
@@ -60725,6 +60725,459 @@
       {
         "Land": "Deutschland",
         "WartezeitTage": 218
+      }
+    ],
+    "OriginalCountryScoped": true
+  },
+  "1061": {
+    "ID": "1061",
+    "Modell": "Skoda Elroq RS",
+    "Modellgruppe": "Elroq RS",
+    "Bestelldatum": "13. August 2026",
+    "BestelldatumTS": 1786579200000,
+    "Status": "offen",
+    "LoggedAt": 1787207150507,
+    "ResolvedAt": null,
+    "ActualDate": null,
+    "ActualWaitDays": null,
+    "DeviationDays": null,
+    "PredictedDate": 1801526400000,
+    "PredictedRangeLowDate": 1799884800000,
+    "PredictedRangeHighDate": 1804896000000,
+    "PredictedP10Date": 1799366400000,
+    "PredictedP90Date": 1807401600000,
+    "PredictedP2_5Date": 1799020800000,
+    "PredictedP97_5Date": 1808438400000,
+    "PredictedMedianDays": 173,
+    "PredictedRangeLowDays": 154,
+    "PredictedRangeHighDays": 212,
+    "PredictedP10Days": 148,
+    "PredictedP90Days": 241,
+    "PredictedP2_5Days": 144,
+    "PredictedP97_5Days": 253,
+    "ReferenceCount": 20,
+    "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
+    "ReferenceEraFrom": 1753401600000,
+    "ReferenceEraTo": 1772150400000,
+    "References": [
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 181
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 153
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 147
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 156
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 162
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 179
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 142
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 241
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 240
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 237
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 158
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 183
+      }
+    ],
+    "CountryScoped": true,
+    "OriginalPredictedDate": 1801526400000,
+    "OriginalPredictedRangeLowDate": 1799884800000,
+    "OriginalPredictedRangeHighDate": 1804896000000,
+    "OriginalPredictedP10Date": 1799366400000,
+    "OriginalPredictedP90Date": 1807401600000,
+    "OriginalPredictedP2_5Date": 1799020800000,
+    "OriginalPredictedP97_5Date": 1808438400000,
+    "OriginalPredictedMedianDays": 173,
+    "OriginalPredictedRangeLowDays": 154,
+    "OriginalPredictedRangeHighDays": 212,
+    "OriginalPredictedP10Days": 148,
+    "OriginalPredictedP90Days": 241,
+    "OriginalPredictedP2_5Days": 144,
+    "OriginalPredictedP97_5Days": 253,
+    "OriginalReferenceCount": 20,
+    "OriginalReferenceQualityLabel": "sehr ähnliche Konfigurationen",
+    "OriginalReferenceEraFrom": 1753401600000,
+    "OriginalReferenceEraTo": 1772150400000,
+    "OriginalReferences": [
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 181
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 153
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 147
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 156
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 162
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 179
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 142
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 241
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 240
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 237
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 158
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 183
+      }
+    ],
+    "OriginalCountryScoped": true
+  },
+  "1059": {
+    "ID": "1059",
+    "Modell": "Skoda Elroq 60 Selection",
+    "Modellgruppe": "Elroq 60",
+    "Bestelldatum": "11. August 2026",
+    "BestelldatumTS": 1786406400000,
+    "Status": "offen",
+    "LoggedAt": 1787207150507,
+    "ResolvedAt": null,
+    "ActualDate": null,
+    "ActualWaitDays": null,
+    "DeviationDays": null,
+    "PredictedDate": 1800576000000,
+    "PredictedRangeLowDate": 1795737600000,
+    "PredictedRangeHighDate": 1801612800000,
+    "PredictedP10Date": 1793404800000,
+    "PredictedP90Date": 1804291200000,
+    "PredictedP2_5Date": 1792022400000,
+    "PredictedP97_5Date": 1808611200000,
+    "PredictedMedianDays": 164,
+    "PredictedRangeLowDays": 108,
+    "PredictedRangeHighDays": 176,
+    "PredictedP10Days": 81,
+    "PredictedP90Days": 207,
+    "PredictedP2_5Days": 65,
+    "PredictedP97_5Days": 257,
+    "ReferenceCount": 25,
+    "ReferenceQualityLabel": "ähnliche Konfigurationen",
+    "ReferenceEraFrom": 1754697600000,
+    "ReferenceEraTo": 1778198400000,
+    "References": [
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 108
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 82
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 53
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 128
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 164
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 248
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 174
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 209
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 164
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 166
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 80
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 85
+      }
+    ],
+    "CountryScoped": true,
+    "OriginalPredictedDate": 1800576000000,
+    "OriginalPredictedRangeLowDate": 1795737600000,
+    "OriginalPredictedRangeHighDate": 1801612800000,
+    "OriginalPredictedP10Date": 1793404800000,
+    "OriginalPredictedP90Date": 1804291200000,
+    "OriginalPredictedP2_5Date": 1792022400000,
+    "OriginalPredictedP97_5Date": 1808611200000,
+    "OriginalPredictedMedianDays": 164,
+    "OriginalPredictedRangeLowDays": 108,
+    "OriginalPredictedRangeHighDays": 176,
+    "OriginalPredictedP10Days": 81,
+    "OriginalPredictedP90Days": 207,
+    "OriginalPredictedP2_5Days": 65,
+    "OriginalPredictedP97_5Days": 257,
+    "OriginalReferenceCount": 25,
+    "OriginalReferenceQualityLabel": "ähnliche Konfigurationen",
+    "OriginalReferenceEraFrom": 1754697600000,
+    "OriginalReferenceEraTo": 1778198400000,
+    "OriginalReferences": [
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 108
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 82
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 53
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 128
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 164
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 248
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 174
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 209
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 164
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 166
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 80
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 85
+      }
+    ],
+    "OriginalCountryScoped": true
+  },
+  "1058": {
+    "ID": "1058",
+    "Modell": "Skoda Elroq 60 Essence",
+    "Modellgruppe": "Elroq 60",
+    "Bestelldatum": "18. Mai 2026",
+    "BestelldatumTS": 1779062400000,
+    "Status": "offen",
+    "LoggedAt": 1787207150507,
+    "ResolvedAt": null,
+    "ActualDate": null,
+    "ActualWaitDays": null,
+    "DeviationDays": null,
+    "PredictedDate": 1793750400000,
+    "PredictedRangeLowDate": 1786924800000,
+    "PredictedRangeHighDate": 1795737600000,
+    "PredictedP10Date": 1786147200000,
+    "PredictedP90Date": 1796601600000,
+    "PredictedP2_5Date": 1785542400000,
+    "PredictedP97_5Date": 1799452800000,
+    "PredictedMedianDays": 170,
+    "PredictedRangeLowDays": 91,
+    "PredictedRangeHighDays": 193,
+    "PredictedP10Days": 82,
+    "PredictedP90Days": 203,
+    "PredictedP2_5Days": 75,
+    "PredictedP97_5Days": 236,
+    "ReferenceCount": 12,
+    "ReferenceQualityLabel": "sehr ähnliche Konfigurationen",
+    "ReferenceEraFrom": 1754438400000,
+    "ReferenceEraTo": 1778544000000,
+    "References": [
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 93
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 164
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 85
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 179
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 176
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 160
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 203
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 248
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 82
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 73
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 191
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 199
+      }
+    ],
+    "CountryScoped": true,
+    "OriginalPredictedDate": 1793750400000,
+    "OriginalPredictedRangeLowDate": 1786924800000,
+    "OriginalPredictedRangeHighDate": 1795737600000,
+    "OriginalPredictedP10Date": 1786147200000,
+    "OriginalPredictedP90Date": 1796601600000,
+    "OriginalPredictedP2_5Date": 1785542400000,
+    "OriginalPredictedP97_5Date": 1799452800000,
+    "OriginalPredictedMedianDays": 170,
+    "OriginalPredictedRangeLowDays": 91,
+    "OriginalPredictedRangeHighDays": 193,
+    "OriginalPredictedP10Days": 82,
+    "OriginalPredictedP90Days": 203,
+    "OriginalPredictedP2_5Days": 75,
+    "OriginalPredictedP97_5Days": 236,
+    "OriginalReferenceCount": 12,
+    "OriginalReferenceQualityLabel": "sehr ähnliche Konfigurationen",
+    "OriginalReferenceEraFrom": 1754438400000,
+    "OriginalReferenceEraTo": 1778544000000,
+    "OriginalReferences": [
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 93
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 164
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 85
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 179
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 176
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 160
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 203
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 248
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 82
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 73
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 191
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 199
       }
     ],
     "OriginalCountryScoped": true
