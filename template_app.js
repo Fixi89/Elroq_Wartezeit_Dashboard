@@ -864,7 +864,7 @@
     el._raf = requestAnimationFrame(tick);
   }
 
-  const GAUGE = { cx: 90, cy: 92, r: 68, startAngle: -210, endAngle: 30 };
+  const GAUGE = { cx: 90, cy: 78, r: 58, startAngle: -120, endAngle: 120 };
   let gaugeLastAvg = null;
 
   function gaugePolar(angDeg, r){
@@ -887,27 +887,44 @@
   function buildGaugeCard(){
     const card = document.createElement('div');
     card.className = 'kpi-card gauge-card';
-    const bgArc = gaugeArcPath(GAUGE.startAngle, GAUGE.endAngle, GAUGE.r);
+    const fullArc = gaugeArcPath(GAUGE.startAngle, GAUGE.endAngle, GAUGE.r);
+    const [minX, minY] = gaugePolar(GAUGE.startAngle, GAUGE.r + 15);
+    const [maxX, maxY] = gaugePolar(GAUGE.endAngle, GAUGE.r + 15);
+    const minAnchor = minX < GAUGE.cx - 4 ? 'end' : (minX > GAUGE.cx + 4 ? 'start' : 'middle');
+    const maxAnchor = maxX < GAUGE.cx - 4 ? 'end' : (maxX > GAUGE.cx + 4 ? 'start' : 'middle');
     card.innerHTML = `
       <svg viewBox="0 0 180 150" width="150" height="125" role="img" aria-label="Durchschnittliche Wartezeit als Tacho">
-        <path d="${bgArc}" fill="none" stroke="rgba(30,32,60,0.09)" stroke-width="12" stroke-linecap="round"/>
-        <path id="gaugeValArc" fill="none" stroke="#78faae" stroke-width="12" stroke-linecap="round"/>
-        <line id="gaugeNeedle" x1="${GAUGE.cx}" y1="${GAUGE.cy}" x2="${GAUGE.cx}" y2="${GAUGE.cy}" stroke="#f5b942" stroke-width="3" stroke-linecap="round"/>
-        <circle cx="${GAUGE.cx}" cy="${GAUGE.cy}" r="5" fill="#f5b942"/>
-        <text id="gaugeValueText" x="${GAUGE.cx}" y="${GAUGE.cy+2}" text-anchor="middle" class="gauge-value" dy="34">–</text>
-        <text x="${GAUGE.cx}" y="${GAUGE.cy+2}" text-anchor="middle" class="gauge-unit" dy="52">Tage Ø</text>
+        <defs>
+          <linearGradient id="gaugeGrad" x1="${GAUGE.cx-GAUGE.r}" y1="0" x2="${GAUGE.cx+GAUGE.r}" y2="0" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#78faae"/>
+            <stop offset="55%" stop-color="#f5b942"/>
+            <stop offset="100%" stop-color="#ff6b7a"/>
+          </linearGradient>
+        </defs>
+        <path d="${fullArc}" fill="none" stroke="${'#16281f'}" stroke-width="13" stroke-linecap="round"/>
+        <path d="${fullArc}" fill="none" stroke="url(#gaugeGrad)" stroke-width="9" stroke-linecap="round" opacity="0.92"/>
+        <text x="${minX}" y="${minY}" text-anchor="${minAnchor}" class="gauge-tick" id="gaugeMinTick">–</text>
+        <text x="${maxX}" y="${maxY}" text-anchor="${maxAnchor}" class="gauge-tick" id="gaugeMaxTick">–</text>
+        <line id="gaugeNeedle" x1="${GAUGE.cx}" y1="${GAUGE.cy}" x2="${GAUGE.cx}" y2="${GAUGE.cy}" stroke="#eaf5ee" stroke-width="2.5" stroke-linecap="round"/>
+        <circle cx="${GAUGE.cx}" cy="${GAUGE.cy}" r="6.5" fill="#0a1512" stroke="#eaf5ee" stroke-width="2"/>
+        <circle cx="${GAUGE.cx}" cy="${GAUGE.cy}" r="2" fill="#eaf5ee"/>
+        <text id="gaugeValueText" x="${GAUGE.cx}" y="${GAUGE.cy + 34}" text-anchor="middle" class="gauge-value">–</text>
+        <text x="${GAUGE.cx}" y="${GAUGE.cy + 50}" text-anchor="middle" class="gauge-unit">Tage Ø</text>
       </svg>
-      <div class="kpi-label" style="margin-top:2px;">Ø Wartezeit (gefiltert)</div>
+      <div class="kpi-label" style="margin-top:8px;">Ø Wartezeit (gefiltert)</div>
     `;
     return card;
   }
 
   function updateGauge(avg){
-    const svg = document.getElementById('gaugeValArc')?.closest('svg');
-    const valArc = document.getElementById('gaugeValArc');
+    const svg = document.getElementById('gaugeValArc')?.closest('svg') || document.getElementById('gaugeNeedle')?.closest('svg');
     const needle = document.getElementById('gaugeNeedle');
     const valueText = document.getElementById('gaugeValueText');
-    if (!valArc) return;
+    const minTick = document.getElementById('gaugeMinTick');
+    const maxTick = document.getElementById('gaugeMaxTick');
+    if (!needle) return;
+    if (minTick) minTick.textContent = Math.round(GLOBAL_STATS.min);
+    if (maxTick) maxTick.textContent = Math.round(GLOBAL_STATS.max);
 
     const hasValue = avg !== null && avg !== undefined && !Number.isNaN(avg) && avg > 0;
     const fromAvg = gaugeLastAvg === null ? (hasValue ? avg : GLOBAL_STATS.min) : gaugeLastAvg;
@@ -918,7 +935,7 @@
       ? `Durchschnittliche Wartezeit: ${Math.round(avg)} Tage. Skala von ${GLOBAL_STATS.min} bis ${GLOBAL_STATS.max} Tagen.`
       : 'Keine Bestellungen in der aktuellen Filterauswahl.');
 
-    if (valArc._raf) cancelAnimationFrame(valArc._raf);
+    if (needle._raf) cancelAnimationFrame(needle._raf);
     const duration = 450;
     const start = performance.now();
     function tick(now){
@@ -926,15 +943,14 @@
       const eased = 1 - Math.pow(1 - t, 3);
       const curAvg = fromAvg + (toAvg - fromAvg) * eased;
       const angle = gaugeAngleFor(curAvg);
-      valArc.setAttribute('d', gaugeArcPath(GAUGE.startAngle, angle, GAUGE.r));
-      const [nx, ny] = gaugePolar(angle, GAUGE.r - 12);
+      const [nx, ny] = gaugePolar(angle, GAUGE.r - 16);
       needle.setAttribute('x2', nx);
       needle.setAttribute('y2', ny);
       valueText.textContent = hasValue ? Math.round(curAvg) : '–';
-      if (t < 1){ valArc._raf = requestAnimationFrame(tick); }
-      else { valArc._raf = null; valueText.textContent = hasValue ? Math.round(avg) : '–'; }
+      if (t < 1){ needle._raf = requestAnimationFrame(tick); }
+      else { needle._raf = null; valueText.textContent = hasValue ? Math.round(avg) : '–'; }
     }
-    valArc._raf = requestAnimationFrame(tick);
+    needle._raf = requestAnimationFrame(tick);
   }
 
   // Built once on init; renderKPIs() below only updates the numbers inside.
@@ -1186,9 +1202,28 @@
     const allPts = [...xy, ...fxy];
     const labelStep = Math.max(1, Math.ceil(allPts.length / (isNarrow ? 4 : 9)));
     const fs = isNarrow ? 10.5 : 9.5;
-    let labels = '';
+    // Greedy de-cluttering: always keep the first and last point's label
+    // (the last is the most important — it's the forecast horizon), but
+    // drop any candidate that would land too close in pixels to the
+    // previously kept label, which is what caused overlapping text at the
+    // right edge before (a regular-interval tick landing 1-2px from the
+    // final, always-shown point).
+    const minGapPx = isNarrow ? 34 : 42;
+    const candidates = [];
     allPts.forEach((pt, i) => {
-      if (i % labelStep !== 0 && i !== allPts.length - 1) return;
+      if (i % labelStep === 0 || i === allPts.length - 1) candidates.push({ pt, i });
+    });
+    const kept = [];
+    candidates.forEach(c => {
+      const isLast = c.i === allPts.length - 1;
+      const prev = kept[kept.length - 1];
+      if (isLast && prev && (c.pt.x - prev.pt.x) < minGapPx){
+        kept.pop(); // the previous tick is too close to the final one — drop it, not the final one
+      }
+      kept.push(c);
+    });
+    let labels = '';
+    kept.forEach(({ pt }) => {
       const dim = pt.p.forecast ? ' opacity="0.65"' : '';
       labels += `<text x="${pt.x.toFixed(1)}" y="${H-8}" font-size="${fs}" fill="#93ab9f" text-anchor="middle" font-family="IBM Plex Mono, monospace"${dim}>${monthLabel(pt.p.k)}</text>`;
     });
@@ -1953,20 +1988,58 @@
     const span = Math.max(DAY_MS, outerTo - outerFrom);
     const xFor = ts => padX + ((ts - outerFrom) / span) * (W - padX * 2);
 
-    function band(fromTs, toTs, opacity){
+    // Non-overlapping segments (instead of stacked translucent rects, which
+    // compounded into near-identical colours) so each probability zone has
+    // a crisp, clearly distinct boundary and opacity step.
+    function seg(fromTs, toTs, opacity, roundLeft, roundRight){
       const x1 = xFor(fromTs), x2 = xFor(toTs);
-      const w = Math.max(3, x2 - x1);
-      return `<rect x="${x1.toFixed(1)}" y="${barY}" width="${w.toFixed(1)}" height="${barH}" rx="${radius}" fill="#f5b942" opacity="${opacity}"/>`;
+      const w = Math.max(1.5, x2 - x1);
+      const rx = radius;
+      // Manual path so only the requested corners are rounded — keeps
+      // adjoining segments flush against each other with no visual gap.
+      const y1 = barY, y2 = barY + barH;
+      const lTop = roundLeft ? `${x1+rx},${y1} ` : `${x1},${y1} `;
+      const rTop = roundRight ? `${x2-rx},${y1}` : `${x2},${y1}`;
+      const path = roundLeft || roundRight
+        ? `M ${x1+(roundLeft?rx:0)} ${y1} H ${x2-(roundRight?rx:0)} ` +
+          (roundRight ? `A ${rx} ${rx} 0 0 1 ${x2} ${y1+rx} ` : `L ${x2} ${y1} `) +
+          `V ${y2-(roundRight?rx:0)} ` +
+          (roundRight ? `A ${rx} ${rx} 0 0 1 ${x2-rx} ${y2} ` : `L ${x2} ${y2} `) +
+          `H ${x1+(roundLeft?rx:0)} ` +
+          (roundLeft ? `A ${rx} ${rx} 0 0 1 ${x1} ${y2-rx} ` : `L ${x1} ${y2} `) +
+          `V ${y1+(roundLeft?rx:0)} ` +
+          (roundLeft ? `A ${rx} ${rx} 0 0 1 ${x1+rx} ${y1} ` : `L ${x1} ${y1} `) + 'Z'
+        : `M ${x1} ${y1} H ${x2} V ${y2} H ${x1} Z`;
+      return `<path d="${path}" fill="#f5b942" opacity="${opacity}"/>`;
     }
 
-    let bands = band(outerFrom, outerTo, 0.15);
-    if (hasMid) bands += band(p.dateP10, p.dateP90, 0.32);
-    bands += band(p.dateEarly, p.dateLate, 0.68);
+    let bands = '';
+    if (hasWide && hasMid){
+      bands += seg(outerFrom, p.dateP10, 0.16, true, false);
+      bands += seg(p.dateP10, p.dateEarly, 0.38, false, false);
+      bands += seg(p.dateEarly, p.dateLate, 0.88, false, false);
+      bands += seg(p.dateLate, p.dateP90, 0.38, false, false);
+      bands += seg(p.dateP90, outerTo, 0.16, false, true);
+    } else if (hasMid){
+      bands += seg(outerFrom, p.dateEarly, 0.32, true, false);
+      bands += seg(p.dateEarly, p.dateLate, 0.88, false, false);
+      bands += seg(p.dateLate, outerTo, 0.32, false, true);
+    } else {
+      bands += seg(outerFrom, outerTo, 0.75, true, true);
+    }
+    // Thin separators so the eye can find each boundary even where the
+    // opacity step alone is subtle at a glance.
+    let dividers = '';
+    [p.dateP10, p.dateEarly, p.dateLate, p.dateP90].forEach(ts => {
+      if (ts == null) return;
+      const x = xFor(ts);
+      dividers += `<line x1="${x.toFixed(1)}" y1="${barY}" x2="${x.toFixed(1)}" y2="${barY+barH}" stroke="#0a1512" stroke-width="1" opacity="0.55"/>`;
+    });
 
     const medX = xFor(p.dateMedian);
     const marker = `
-      <line x1="${medX.toFixed(1)}" y1="${barY-7}" x2="${medX.toFixed(1)}" y2="${barY+barH+7}" stroke="#f5b942" stroke-width="2.5"/>
-      <circle cx="${medX.toFixed(1)}" cy="${(barY+barH/2).toFixed(1)}" r="4.5" fill="#10251d" stroke="#f5b942" stroke-width="2.5"/>
+      <line x1="${medX.toFixed(1)}" y1="${barY-7}" x2="${medX.toFixed(1)}" y2="${barY+barH+7}" stroke="#eaf5ee" stroke-width="2.5"/>
+      <circle cx="${medX.toFixed(1)}" cy="${(barY+barH/2).toFixed(1)}" r="4.5" fill="#0a1512" stroke="#eaf5ee" stroke-width="2.5"/>
     `;
 
     const label = (ts, x, anchor) =>
@@ -1978,15 +2051,16 @@
     return `
       <svg viewBox="0 0 ${W} ${H}" class="confidence-fan" role="img" aria-label="${ariaLabel}" preserveAspectRatio="xMidYMid meet">
         ${bands}
+        ${dividers}
         ${marker}
-        <text x="${medX.toFixed(1)}" y="${barY-12}" font-size="11" fill="#f5b942" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-weight="600">${fmtDate(p.dateMedian)}</text>
+        <text x="${medX.toFixed(1)}" y="${barY-12}" font-size="11" fill="#eaf5ee" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-weight="600">${fmtDate(p.dateMedian)}</text>
         ${label(outerFrom, padX, 'start')}
         ${label(outerTo, W - padX, 'end')}
       </svg>
       <div class="fan-legend">
-        <span><span class="fan-dot" style="opacity:.68"></span>50%</span>
-        ${hasMid ? '<span><span class="fan-dot" style="opacity:.32"></span>80%</span>' : ''}
-        ${hasWide ? '<span><span class="fan-dot" style="opacity:.15"></span>95%</span>' : ''}
+        <span><span class="fan-dot" style="opacity:.88"></span>50% (wahrscheinlichster Zeitraum)</span>
+        ${hasMid ? '<span><span class="fan-dot" style="opacity:.38"></span>80%</span>' : ''}
+        ${hasWide ? '<span><span class="fan-dot" style="opacity:.16"></span>95%</span>' : ''}
       </div>`;
   }
 
