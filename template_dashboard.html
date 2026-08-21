@@ -147,6 +147,18 @@
   #copyLinkBtn:hover{ border-color: var(--accent); color: var(--accent); }
   #copyLinkBtn svg{ width:14px; height:14px; flex:none; }
 
+  .lk-permalink{ margin-top:14px; }
+  .lk-copy-btn{
+    background: transparent; color: var(--text-muted);
+    border: 1px solid var(--border); border-radius: 999px;
+    padding: 8px 14px; font-size: 12px; cursor: pointer;
+    font-family:'IBM Plex Sans', sans-serif; font-weight:500;
+    display:flex; align-items:center; gap:7px;
+    transition: all 0.15s ease; white-space:nowrap;
+  }
+  .lk-copy-btn:hover{ border-color: var(--accent); color: var(--accent); }
+  .lk-copy-btn svg{ width:13px; height:13px; flex:none; }
+
   #donateBtn{
     background: transparent; color: var(--accent-2);
     border: 1px solid rgba(245,158,11,0.35); border-radius: 999px;
@@ -660,6 +672,28 @@
   .accuracy-stat .num{ font-family:'Space Grotesk',sans-serif; font-size:20px; font-weight:600; color:var(--text); }
   .accuracy-stat .lbl{ font-size:10.5px; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.05em; margin-top:2px; }
 
+  .methodik-intro{ font-size:13px; color:var(--text-muted); line-height:1.6; margin:0 0 14px; }
+  .methodik-intro-sub{ font-size:12px; color:var(--text-dim); margin:2px 0 16px; }
+  .methodik-subhead{ font-size:12.5px; font-weight:600; color:var(--text); margin:20px 0 8px; }
+  .methodik-table{ width:100%; border-collapse:collapse; font-size:12.5px; table-layout:fixed; }
+  .methodik-table th:nth-child(1), .methodik-table td:nth-child(1){ width:34%; }
+  .methodik-table th:nth-child(2), .methodik-table td:nth-child(2){ width:16%; }
+  .methodik-table th:nth-child(3), .methodik-table td:nth-child(3){ width:18%; }
+  .methodik-table th:nth-child(4), .methodik-table td:nth-child(4){ width:18%; }
+  .methodik-table th:nth-child(5), .methodik-table td:nth-child(5){ width:14%; }
+  .methodik-table th{
+    text-align:left; font-size:10.5px; text-transform:uppercase; letter-spacing:0.05em;
+    color:var(--text-dim); padding:6px 8px; border-bottom:1px solid var(--border);
+  }
+  .methodik-table td{ padding:7px 8px; border-bottom:1px solid var(--border); color:var(--text); }
+  .methodik-table td.good{ color:var(--accent); }
+  .methodik-table td.bad{ color:var(--danger); }
+  .methodik-caveat{
+    margin-top:18px; padding:12px 14px; border-radius:8px; font-size:12px; line-height:1.6;
+    background:var(--surface-2); border:1px solid var(--border-strong); color:var(--text-muted);
+  }
+  .methodik-caveat strong{ color:var(--text); }
+
   /* What-if calculator */
   /* .whatif-panel border merged into .personal-panel above; tabs render inline now */
   .whatif-form{ display:flex; flex-direction:column; gap:16px; }
@@ -913,6 +947,7 @@
   <a href="#sec-analyse">Analyse</a>
   <a href="#sec-extreme">Extremwerte</a>
   <a href="#sec-community">Community</a>
+  <a href="#sec-methodik">Methodik</a>
   <a href="#sec-persoenlich">Persönlich</a>
   <a href="#sec-tabelle">Tabelle</a>
 </nav>
@@ -992,6 +1027,11 @@
     <section id="sec-community" class="panel">
       <p class="section-title"><span class="dot"></span>Wie oft wurde so bestellt? <span style="font-size:11px;color:var(--text-dim);font-weight:400;">(anonymisierte Bestellungen, deren Konfiguration zur Filterauswahl passt)</span></p>
       <div id="twinPanel"></div>
+    </section>
+
+    <section id="sec-methodik" class="panel">
+      <p class="section-title"><span class="dot"></span>Methodik &amp; Prognose-Güte <span style="font-size:11px;color:var(--text-dim);font-weight:400;">(Rückblick-Test auf allen bisher ausgelieferten Bestellungen)</span></p>
+      <div id="methodikPanel"></div>
     </section>
 
     <section id="sec-persoenlich" class="panel personal-panel">
@@ -1076,6 +1116,10 @@
 
 <script id="dashboard-data" type="application/json">
 __DATA_JSON__
+</script>
+
+<script id="methodology-data" type="application/json">
+__METHODOLOGY_JSON__
 </script>
 
 <script>

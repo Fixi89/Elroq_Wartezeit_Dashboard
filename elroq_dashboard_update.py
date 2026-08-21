@@ -36,6 +36,8 @@ import time
 from datetime import date, datetime
 from pathlib import Path
 
+import backtest
+
 try:
     import requests
     from bs4 import BeautifulSoup
@@ -462,44 +464,11 @@ def _country_weight(same_country, country_pool_size):
     return 1.0 + credibility * _COUNTRY_BOOST
 
 
-def _trend_slope_per_day(delivered, now_ts, window_days=540):
-    """
-    Lineare Regression der monatlichen Ø-Wartezeit (dieselbe Grundidee wie
-    der "Entwicklung der Lieferzeit"-Chart im Dashboard), um die Prognose um
-    den aktuellen Trend zu korrigieren (Optimierung 1). Ohne diese Korrektur
-    schaetzt die Prognose rein aus dem historischen Median vergangener
-    Auslieferungen -- die wurden im Schnitt vor Monaten bestellt, als die
-    Wartezeit noch laenger (oder kuerzer) war, wodurch die Prognose dem
-    echten Trend systematisch hinterherhinkt. Nur Bestellungen der letzten
-    `window_days` fliessen ein, damit ein Trend von vor Jahren nicht mehr
-    mitzieht. Gibt (None, None) zurueck, wenn zu wenige Monate fuer eine
-    stabile Regression vorliegen.
-    """
-    cutoff = now_ts - window_days * DAY_MS
-    by_month = {}
-    for r in delivered:
-        ts = r["BestelldatumTS"]
-        if ts < cutoff:
-            continue
-        key = ts // (30 * DAY_MS)
-        by_month.setdefault(key, []).append(r["WartezeitTage"])
-    if len(by_month) < 4:
-        return None, None
-
-    keys = sorted(by_month)
-    avgs = [sum(by_month[k]) / len(by_month[k]) for k in keys]
-    n = len(keys)
-    idx = list(range(n))
-    mean_x = sum(idx) / n
-    mean_y = sum(avgs) / n
-    num = sum((idx[i] - mean_x) * (avgs[i] - mean_y) for i in range(n))
-    den = sum((idx[i] - mean_x) ** 2 for i in range(n))
-    if den == 0:
-        return None, None
-    slope_per_bucket = num / den
-    slope_per_day = slope_per_bucket / 30.0
-    ref_ts = sum(keys[i] * (30 * DAY_MS) for i in range(n)) / n
-    return slope_per_day, ref_ts
+# Frueher stand hier _trend_slope_per_day() fuer eine lineare Trend-
+# Korrektur ("Optimierung 1"). Der Rueckblick-Test (backtest.py) zeigte,
+# dass sie die Prognose ueber die volle Historie systematisch verschlechtert
+# (Boom-Bust-Verlauf der Wartezeit, siehe Kommentar in predict_delivery()) --
+# daher entfernt, nicht nur deaktiviert.
 
 
 def _queue_estimate(order, delivered, open_orders, now_ts,
@@ -616,18 +585,25 @@ def predict_delivery(order, delivered, open_orders, now_ts):
     p2_5 = weighted_quantile(vals_weights, 0.025)
     p97_5 = weighted_quantile(vals_weights, 0.975)
 
-    # ---- Optimierung 1: Trend-Korrektur ----
-    slope_per_day, _ref_ts = _trend_slope_per_day(delivered, now_ts)
-    trend_correction = 0.0
-    if slope_per_day is not None:
-        w_sum = sum(w for _, w, _ in weighted)
-        ref_avg_ts = sum(r["BestelldatumTS"] * w for _, w, r in weighted) / w_sum
-        trend_correction = slope_per_day * (order_ts - ref_avg_ts) / DAY_MS
-
-    median_tc = median + trend_correction
-    p25_tc, p75_tc = p25 + trend_correction, p75 + trend_correction
-    p10_tc, p90_tc = p10 + trend_correction, p90 + trend_correction
-    p2_5_tc, p97_5_tc = p2_5 + trend_correction, p97_5 + trend_correction
+    # ---- "Optimierung 1" (Trend-Korrektur) -- per Rueckblick-Test verworfen ----
+    # Eine fruehere Version dieser Funktion korrigierte den gewichteten Median
+    # um eine lineare Regression der monatlichen Ø-Wartezeit, um den Trend
+    # nachzuziehen. Der Rueckblick-Test (siehe backtest.py, run_backtest())
+    # zeigt aber eindeutig: ueber die volle Historie betrachtet macht JEDE
+    # Staerke dieser Korrektur die Prognose schlechter, nicht besser (MAE
+    # stieg von 63.9 auf bis zu 95.2 Tage, selbst mit Daempfung und Kappung).
+    # Grund: Die Wartezeit durchlief einen Boom-Bust-Zyklus (kurze Wartezeit
+    # zu Beginn -> Rueckstau-Aufbau -> Kapazitaets-Aufholung); eine rueckwaerts
+    # geschaetzte lineare Steigung liegt an solchen Trendwenden systematisch
+    # falsch, und diese Wenden lassen sich aus der Historie allein nicht
+    # zuverlaessig vorhersehen. Isoliert getestet lieferten Rezenz-Gewichtung
+    # + Land-Shrinkage + Warteschlangen-Schaetzung dagegen zuverlaessig gute
+    # bis leicht bessere Werte als der alte, hart geschnittene Ansatz. Die
+    # Trend-Korrektur bleibt deshalb bewusst ausgeschaltet.
+    median_tc = median
+    p25_tc, p75_tc = p25, p75
+    p10_tc, p90_tc = p10, p90
+    p2_5_tc, p97_5_tc = p2_5, p97_5
 
     # ---- Optimierung 2: Warteschlangen-Schaetzung als gedaempftes Zusatzsignal ----
     queue_eta, queue_conf = _queue_estimate(order, delivered, open_orders, now_ts)
@@ -911,7 +887,7 @@ def merge_log_into_records(log, delivered, open_orders):
 # 5. Dashboard bauen
 # --------------------------------------------------------------------------
 
-def build_dashboard(records, out_path, data_stand, delivered_count=None):
+def build_dashboard(records, out_path, data_stand, delivered_count=None, methodology=None):
     if not TEMPLATE_HTML.exists() or not TEMPLATE_JS.exists():
         sys.exit(
             f"Vorlagen fehlen. Erwartet werden:\n"
@@ -922,10 +898,12 @@ def build_dashboard(records, out_path, data_stand, delivered_count=None):
     html = TEMPLATE_HTML.read_text(encoding="utf-8")
     app_js = TEMPLATE_JS.read_text(encoding="utf-8")
     data_json = json.dumps(records, ensure_ascii=False)
+    methodology_json = json.dumps(methodology or {}, ensure_ascii=False)
 
     count = delivered_count if delivered_count is not None else len(records)
     html = (html
             .replace("__DATA_JSON__", data_json)
+            .replace("__METHODOLOGY_JSON__", methodology_json)
             .replace("__APP_JS__", app_js)
             .replace("__DATA_STAND__", data_stand)
             .replace("__COUNT__", str(count))
@@ -1079,10 +1057,49 @@ def main():
         print(f"  Mittlere Abweichung: {mae:.1f} Tage  ·  "
               f"Anteil innerhalb ±14 Tagen: {within2w*100:.0f}%")
 
+    # Rueckblick-Test: simuliert fuer jede ausgelieferte Bestellung, dass sie
+    # am eigenen Bestelldatum noch offen gewesen waere, und prognostiziert
+    # nur mit Daten, die zu dem Zeitpunkt verfuegbar waren. Gibt sofort
+    # belastbare Genauigkeits-Zahlen zur aktuellen Algorithmus-Version, ohne
+    # Monate auf neue echte Aufloesungen warten zu muessen.
+    print("\nRueckblick-Test (simulierte Prognosen fuer bereits ausgelieferte Bestellungen)...")
+    bt_results = backtest.run_backtest(delivered, predict_delivery, _BOOL_KEYS)
+    bt_summary = backtest.aggregate_backtest(bt_results)
+    if bt_summary["new"]:
+        print(f"  Getestet: {bt_summary['n_tested']} Bestellungen "
+              f"(davon {bt_summary['new']['n']} mit ausreichend historischem Datenstand)")
+        print(f"  Aktueller Algorithmus: MAE {bt_summary['new']['mae']} Tage, "
+              f"Bias {bt_summary['new']['bias']:+.1f} Tage, "
+              f"{bt_summary['new']['within14']*100:.0f}% innerhalb ±14 Tagen")
+        if bt_summary["old"]:
+            print(f"  Alte Baseline (Vergleich):  MAE {bt_summary['old']['mae']} Tage, "
+                  f"Bias {bt_summary['old']['bias']:+.1f} Tage, "
+                  f"{bt_summary['old']['within14']*100:.0f}% innerhalb ±14 Tagen")
+
+    # Daten-Guete: wie viele geloggte offene Bestellungen sind aus der
+    # Forumsliste verschwunden, ohne als ausgeliefert aufzutauchen (z.B.
+    # Stornos)? Das ist eine mögliche Quelle fuer einen leichten
+    # Optimismus-Bias in den Referenzdaten, siehe Methodik-Hinweis im
+    # Dashboard.
+    entfernt_count = sum(1 for e in log.values() if e.get("Status") == "entfernt")
+    eingetroffen_count = sum(1 for e in log.values() if e.get("Status") == "eingetroffen")
+    tracked_total = entfernt_count + eingetroffen_count
+    data_quality = {
+        "entfernt_count": entfernt_count,
+        "eingetroffen_count": eingetroffen_count,
+        "entfernt_rate": round(entfernt_count / tracked_total, 4) if tracked_total else None,
+    }
+    if tracked_total:
+        print(f"\nDaten-Guete: {entfernt_count} von {tracked_total} beobachteten offenen "
+              f"Bestellungen sind aus der Forumsliste verschwunden, ohne als ausgeliefert "
+              f"aufzutauchen ({data_quality['entfernt_rate']*100:.1f}%).")
+
+    methodology = {"backtest": bt_summary, "data_quality": data_quality}
+
     final = delivered + open_orders
     data_stand = date.today().strftime("%d.%m.%Y")
     out_path = Path(args.out).resolve()
-    build_dashboard(final, out_path, data_stand, len(delivered))
+    build_dashboard(final, out_path, data_stand, len(delivered), methodology=methodology)
 
     if args.csv:
         csv_path = Path(args.csv).resolve()

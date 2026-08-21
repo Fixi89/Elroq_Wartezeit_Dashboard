@@ -1,5 +1,10 @@
 (function(){
   const ALL_ORDERS = JSON.parse(document.getElementById('dashboard-data').textContent);
+  const METHODOLOGY = (() => {
+    const el = document.getElementById('methodology-data');
+    if (!el) return {};
+    try { return JSON.parse(el.textContent) || {}; } catch (e) { return {}; }
+  })();
 
   // Delivered orders are the statistical basis for every chart and filter.
   // Open orders are only used for the personal lookup — their "waiting time"
@@ -2180,6 +2185,37 @@
 
     hits.sort((a, b) => b.BestelldatumTS - a.BestelldatumTS);
     el.innerHTML = hint + hits.map(r => r.Ausgeliefert === false ? openCard(r) : deliveredCard(r)).join('');
+
+    // Permalink to exactly this lookup — appended once, after the cards, so
+    // it always reflects the combination actually searched for (not
+    // per-card, since farbe/modell/datum are shared across all shown hits).
+    const linkWrap = document.createElement('div');
+    linkWrap.className = 'lk-permalink';
+    linkWrap.innerHTML = `<button type="button" id="lkCopyLinkBtn" class="lk-copy-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007.07 0l2.83-2.83a5 5 0 00-7.07-7.07l-1.5 1.5"/><path d="M14 11a5 5 0 00-7.07 0L4.1 13.83a5 5 0 007.07 7.07l1.5-1.5"/></svg>
+      Link zu dieser Prognose kopieren
+    </button>`;
+    el.appendChild(linkWrap);
+    document.getElementById('lkCopyLinkBtn').addEventListener('click', () => {
+      const p = new URLSearchParams();
+      p.set('lk_modell', modell);
+      p.set('lk_datum', dateStr);
+      if (farbe) p.set('lk_farbe', farbe);
+      const url = `${location.origin}${location.pathname}${location.search}#${p.toString()}`;
+      const btn = document.getElementById('lkCopyLinkBtn');
+      const done = ok => {
+        const original = btn.innerHTML;
+        btn.innerHTML = ok
+          ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg> Link kopiert'
+          : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg> Kopieren fehlgeschlagen';
+        setTimeout(() => { btn.innerHTML = original; }, 1800);
+      };
+      if (navigator.clipboard && window.isSecureContext !== false){
+        navigator.clipboard.writeText(url).then(() => done(true)).catch(() => fallbackCopy(url, done));
+      } else {
+        fallbackCopy(url, done);
+      }
+    });
   }
 
   function initLookup(){
@@ -2206,6 +2242,29 @@
     [modellSel, document.getElementById('lkDate'), farbeSel].forEach(elm => {
       elm.addEventListener('keydown', e => { if (e.key === 'Enter') runLookup(); });
     });
+
+    // Deep-link: ?/#lk_modell=...&lk_datum=YYYY-MM-DD&lk_farbe=... pre-fills
+    // and auto-runs the lookup, so someone can share a link straight to
+    // their own prediction card (e.g. "schau, meine Prognose" im Forum)
+    // instead of asking the recipient to retype model/date/colour.
+    let hash;
+    try { hash = location.hash; } catch (e) { hash = ''; }
+    if (hash && hash.length > 1){
+      const p = new URLSearchParams(hash.slice(1));
+      const lkModell = p.get('lk_modell');
+      const lkDatum = p.get('lk_datum');
+      const lkFarbe = p.get('lk_farbe');
+      if (lkModell && lkDatum){
+        modellSel.value = lkModell;
+        document.getElementById('lkDate').value = lkDatum;
+        if (lkFarbe) farbeSel.value = lkFarbe;
+        document.querySelector('.tab-btn[data-tab="lookup"]')?.click();
+        runLookup();
+        setTimeout(() => {
+          document.getElementById('sec-persoenlich')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 60);
+      }
+    }
   }
 
   // ---- What-if calculator ----
@@ -2367,6 +2426,83 @@
     return hit ? hit.Modellgruppe : '';
   }
 
+  // ---- Methodik-Panel: Rueckblick-Test + Segment-Genauigkeit + Daten-Guete ----
+  function fmtPct(x){ return `${Math.round(x*100)}%`; }
+  function fmtSigned(x){ return `${x > 0 ? '+' : ''}${x.toFixed(1)}`; }
+
+  function segmentTable(rows, keyLabel){
+    if (!rows || !rows.length){
+      return `<p class="empty-state">Noch keine Segmente mit ausreichend Datengrundlage (mind. 12 Bestellungen).</p>`;
+    }
+    let html = `<table class="methodik-table"><thead><tr>
+      <th>${keyLabel}</th><th>Anzahl</th><th>MAE aktuell</th><th>MAE vorher</th><th>Bias aktuell</th>
+    </tr></thead><tbody>`;
+    rows.forEach(r => {
+      const better = r.old_mae != null && r.new_mae < r.old_mae;
+      const worse = r.old_mae != null && r.new_mae > r.old_mae;
+      html += `<tr>
+        <td>${escapeHtml(r.key)}</td>
+        <td class="mono">${r.n}</td>
+        <td class="mono ${better ? 'good' : (worse ? 'bad' : '')}">${r.new_mae} Tage</td>
+        <td class="mono" style="color:var(--text-dim);">${r.old_mae != null ? r.old_mae + ' Tage' : '–'}</td>
+        <td class="mono">${fmtSigned(r.new_bias)} Tage</td>
+      </tr>`;
+    });
+    html += `</tbody></table>`;
+    return html;
+  }
+
+  function renderMethodikPanel(){
+    const el = document.getElementById('methodikPanel');
+    if (!el) return;
+    const bt = METHODOLOGY.backtest;
+    const dq = METHODOLOGY.data_quality;
+
+    if (!bt || !bt.new){
+      el.innerHTML = `<p class="empty-state">Für den Rückblick-Test liegen noch nicht genug historische Daten vor.</p>`;
+      return;
+    }
+
+    const n = bt.new;
+    const o = bt.old;
+    const cmp = o ? `<p class="methodik-intro-sub">Zum Vergleich die vorherige Methode (feste Ähnlichkeits-Stufen, harte Cutoffs): MAE ${o.mae} Tage, ${fmtPct(o.within14)} innerhalb ±14 Tagen.</p>` : '';
+
+    el.innerHTML = `
+      <p class="methodik-intro">
+        Simuliert für jede der ${bt.n_tested} bisher ausgelieferten Bestellungen, dass sie am eigenen
+        Bestelldatum noch offen gewesen wäre — nur mit Daten, die zu diesem Zeitpunkt tatsächlich
+        verfügbar waren. So lässt sich die Prognosegüte sofort einschätzen, ohne Monate auf neue
+        echte Auflösungen zu warten. ${n.n} Bestellungen hatten genug historische Vergleichsdaten.
+      </p>
+      <div class="accuracy-stats" style="margin-bottom:4px;">
+        <div class="accuracy-stat"><div class="num mono">±${n.mae}</div><div class="lbl">Mittlere Abweichung (Tage)</div></div>
+        <div class="accuracy-stat"><div class="num mono">${fmtSigned(n.bias)}</div><div class="lbl">Systematische Tendenz (Tage)</div></div>
+        <div class="accuracy-stat"><div class="num mono">${fmtPct(n.within14)}</div><div class="lbl">Innerhalb ±14 Tagen</div></div>
+      </div>
+      ${cmp}
+
+      <p class="methodik-subhead">Genauigkeit nach Modell</p>
+      ${segmentTable(bt.segments.Modellgruppe, 'Modell')}
+
+      <p class="methodik-subhead">Genauigkeit nach Land</p>
+      ${segmentTable(bt.segments.Land, 'Land')}
+
+      ${dq && dq.entfernt_rate != null ? `
+      <div class="methodik-caveat">
+        <strong>Hinweis zur Datenqualität:</strong> ${dq.entfernt_count} von ${dq.entfernt_count + dq.eingetroffen_count}
+        beobachteten offenen Bestellungen (${fmtPct(dq.entfernt_rate)}) sind aus der Forumsliste verschwunden,
+        ohne als ausgeliefert aufzutauchen — vermutlich größtenteils Stornierungen. Falls das systematisch
+        eher besonders langsame Bestellungen betrifft, könnten die Referenzwerte oben leicht optimistisch
+        verzerrt sein. Diese Quote wird bei jedem Update neu berechnet; wir behalten sie im Auge.
+      </div>` : `
+      <div class="methodik-caveat">
+        <strong>Hinweis zur Datenqualität:</strong> Aktuell werden noch keine aus der Forumsliste
+        verschwundenen Bestellungen (z.&nbsp;B. Stornierungen) erfasst. Sollte sich das mit mehr
+        Datenpunkten ändern, erscheint hier automatisch eine Quote.
+      </div>`}
+    `;
+  }
+
   function renderAccuracyPanel(){
     const el = document.getElementById('accuracyPanel');
     const resolved = ALL_ORDERS.filter(r => r.DeviationDays !== undefined && r.DeviationDays !== null);
@@ -2378,18 +2514,21 @@
     const within2w = resolved.filter(r => Math.abs(r.DeviationDays) <= 14).length / resolved.length;
     const early = resolved.filter(r => r.DeviationDays < 0).length;
     const late = resolved.filter(r => r.DeviationDays > 0).length;
-    // Signed mean (not absolute) — reveals a *systematic* bias, e.g. predictions
-    // consistently running long because the underlying trend is falling faster
-    // than the historical-median approach can track. MAE alone hides this:
-    // a mix of "+20 / -20" days averages to the same MAE as "+20 / +20" but
-    // only the second is an actionable, correctable bias.
+    // Signed mean (not absolute) reveals a *systematic* bias rather than just
+    // scatter — but with only a handful of real resolved predictions so far,
+    // a single outlier can swing this a lot. We say so explicitly and point
+    // to the Methodik-Sektion's backtest (hundreds of simulated predictions)
+    // for a statistically meaningful picture instead of over-reading this.
     const meanSigned = resolved.reduce((a, r) => a + r.DeviationDays, 0) / resolved.length;
+    const lowN = resolved.length < 20;
     const biasNote = Math.abs(meanSigned) >= 5
       ? `<div class="accuracy-bias ${meanSigned > 0 ? 'over' : 'under'}">
            Systematische Tendenz: Prognosen liegen im Schnitt <strong>${Math.abs(Math.round(meanSigned))} Tage
-           ${meanSigned > 0 ? 'zu spät' : 'zu früh'}</strong> — ${meanSigned > 0
-             ? 'ein Hinweis, dass sich die Wartezeit gerade schneller verkürzt, als die Prognose auf Basis vergangener Auslieferungen erfasst.'
-             : 'ein Hinweis, dass sich die Wartezeit gerade schneller verlängert, als die Prognose erfasst.'}
+           ${meanSigned > 0 ? 'zu spät' : 'zu früh'}</strong> (${meanSigned > 0 ? 'Wartezeit tatsächlich länger' : 'Wartezeit tatsächlich kürzer'} als vorhergesagt).
+           ${lowN
+             ? `Bei nur ${resolved.length} bisher aufgelösten Prognose${resolved.length===1?'':'n'} ist das noch keine verlässliche Aussage —
+                der <a href="#sec-methodik">Rückblick-Test in der Methodik-Sektion</a> simuliert stattdessen hunderte Prognosen und ist dafür aussagekräftiger.`
+             : ''}
          </div>`
       : '';
 
@@ -2479,6 +2618,7 @@
   initWhatIf();
   initTabs();
   renderAccuracyPanel();
+  renderMethodikPanel();
 
   // ---- Mobile filter drawer ----
   const panelEl = document.getElementById('filterPanel');
