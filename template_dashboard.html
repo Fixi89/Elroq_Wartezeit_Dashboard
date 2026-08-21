@@ -8,43 +8,43 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    /* Light "spatial glass" theme — soft gradient canvas, frosted panels
-       floating above ambient colour blobs (Vision-Pro-style dashboard). */
-    --bg: #eef1fb;
-    --surface: rgba(255,255,255,0.68);
-    --surface-2: rgba(255,255,255,0.5);
-    --surface-solid: #ffffff;
-    --border: rgba(30,32,60,0.09);
-    --border-strong: rgba(30,32,60,0.16);
-    --text: #171a2b;
-    --text-muted: #5c5f78;
-    --text-dim: #9295ac;
-    --accent: #0ea968;
-    --accent-rgb: 14,169,104;
-    --accent-dim: #0a7e4e;
-    --accent-2: #f59e0b;
-    --accent-2-rgb: 245,158,11;
-    --accent-3: #6366f1;
-    --accent-3-rgb: 99,102,241;
-    --accent-purple: #8b5cf6;
-    --accent-purple-rgb: 139,92,246;
-    --danger: #f43f5e;
-    --danger-rgb: 244,63,94;
-    --radius: 20px;
-    --radius-sm: 12px;
-    --glass-blur: blur(24px) saturate(160%);
-    --shadow-card: 0 1px 1px rgba(30,32,60,0.03), 0 12px 32px -12px rgba(76,60,140,0.18);
-    --shadow-card-hover: 0 1px 1px rgba(30,32,60,0.04), 0 20px 46px -14px rgba(76,60,140,0.26);
+    /* Dark theme in official Škoda brand colours: Smaragdgrün (Emerald,
+       #0E3A2F) as the deep panel tone, Elektrogrün (Electric Green,
+       #78FAAE) as the bright accent, classic Škoda-Lime (#4AA92E) as the
+       supporting/secondary green. */
+    --bg: #0a1512;
+    --surface: #10251d;
+    --surface-2: #172f24;
+    --surface-solid: #10251d;
+    --border: rgba(120,250,174,0.12);
+    --border-strong: rgba(120,250,174,0.22);
+    --text: #eaf5ee;
+    --text-muted: #93ab9f;
+    --text-dim: #5a7268;
+    --accent: #78faae;
+    --accent-rgb: 120,250,174;
+    --accent-dim: #4aa92e;
+    --accent-2: #f5b942;
+    --accent-2-rgb: 245,185,66;
+    --accent-3: #6fd3c7;
+    --accent-3-rgb: 111,211,199;
+    --accent-purple: #c7d1cb;
+    --accent-purple-rgb: 199,209,203;
+    --danger: #ff6b7a;
+    --danger-rgb: 255,107,122;
+    --radius: 14px;
+    --radius-sm: 10px;
+    --glass-blur: blur(14px) saturate(140%);
+    --shadow-card: 0 1px 0 rgba(120,250,174,0.05) inset, 0 14px 30px -16px rgba(0,0,0,0.6);
+    --shadow-card-hover: 0 1px 0 rgba(120,250,174,0.08) inset, 0 18px 38px -16px rgba(0,0,0,0.7);
   }
   *{box-sizing:border-box;}
   html{ scroll-behavior: smooth; }
   html,body{margin:0;padding:0;}
   body{
     background:
-      radial-gradient(820px 560px at 4% -10%, rgba(99,102,241,0.26), transparent 60%),
-      radial-gradient(680px 520px at 100% 2%, rgba(14,169,104,0.22), transparent 55%),
-      radial-gradient(760px 620px at 30% 60%, rgba(245,158,11,0.14), transparent 60%),
-      radial-gradient(900px 640px at 88% 96%, rgba(139,92,246,0.16), transparent 58%),
+      radial-gradient(900px 620px at 8% -12%, rgba(14,58,47,0.9), transparent 60%),
+      radial-gradient(760px 560px at 100% 0%, rgba(120,250,174,0.08), transparent 55%),
       var(--bg);
     background-attachment: fixed;
     color: var(--text);
@@ -56,16 +56,12 @@
   .display{ font-family:'Space Grotesk', sans-serif; }
   .mono{ font-family:'IBM Plex Mono', monospace; }
 
-  /* Glass panels: frosted, elevated surfaces floating above the ambient
-     gradient blobs — the signature look of this theme. Nested elements
-     (inputs, badges, table headers) stay flat/translucent without their
-     own blur so the effect doesn't stack into mush. */
+  /* Panels: solid dark Emerald surfaces (no glass/translucency in this
+     theme) with a subtle inner highlight + soft drop shadow for depth. */
   .panel, .kpi-card, .vswitch-menu, .lk-card, .twin-cluster, .twin-bucket,
   #resultsTableOuter, .whatif-form, .chart-tooltip{
-    backdrop-filter: var(--glass-blur);
-    -webkit-backdrop-filter: var(--glass-blur);
     box-shadow: var(--shadow-card);
-    border: 1px solid rgba(255,255,255,0.75);
+    border: 1px solid var(--border);
     transition: box-shadow .2s ease, transform .2s ease;
   }
   .panel:hover, .kpi-card:hover{ box-shadow: var(--shadow-card-hover); }
@@ -315,20 +311,20 @@
   .chart-wrap{ margin-top: 4px; position: relative; }
   .chart-tooltip{
     position:absolute; pointer-events:none; z-index:20;
-    background: rgba(23,26,43,0.92); color:#f4f5fb; border-radius:10px;
+    background: #061a12; color:#eaf5ee; border-radius:10px;
     padding:8px 12px; font-size:12px; line-height:1.5; white-space:nowrap;
-    box-shadow: 0 10px 26px -8px rgba(23,26,43,0.45);
+    box-shadow: 0 10px 26px -8px rgba(0,0,0,0.6);
     transform: translate(-50%, -110%); transition: opacity .1s ease;
-    backdrop-filter: none !important; border: none;
+    backdrop-filter: none !important; border: 1px solid var(--border-strong);
     max-width: min(260px, calc(100% - 16px));
     white-space: normal;
   }
-  .chart-tooltip strong{ color:#fff; font-family:'Space Grotesk',sans-serif; }
+  .chart-tooltip strong{ color:#78faae; font-family:'Space Grotesk',sans-serif; }
   .chart-crosshair{ pointer-events:none; }
   .trend-verdict{
     display:flex; align-items:center; gap:10px; margin: 2px 0 16px;
     padding:12px 16px; border-radius: var(--radius-sm);
-    background: rgba(255,255,255,0.5); border:1px solid var(--border);
+    background: var(--surface-2); border:1px solid var(--border);
     font-size:13px; color:var(--text);
   }
   .trend-verdict .arrow{ font-size:18px; line-height:1; flex:none; }
@@ -573,7 +569,7 @@
     border:1px solid var(--border); border-radius:8px; padding:10px 14px; margin-top:14px;
   }
   #lookupBtn{
-    background:var(--accent); color:#eef1fb; border:none; border-radius:8px;
+    background:var(--accent); color:#08160f; border:none; border-radius:8px;
     padding:11px 22px; font-size:14px; font-weight:600; cursor:pointer;
     font-family:'IBM Plex Sans',sans-serif; flex:none;
   }
@@ -648,6 +644,13 @@
   .accuracy-stats{ display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
   @media (max-width:760px){ .accuracy-stats{ grid-template-columns:repeat(2,1fr); } }
   .accuracy-stat{ background:var(--surface-2); border:1px solid var(--border); border-radius:8px; padding:12px 14px; }
+  .accuracy-bias{
+    margin-top:12px; padding:10px 14px; border-radius:8px; font-size:12.5px; line-height:1.5;
+    background: var(--surface-2); border:1px solid var(--border-strong); color:var(--text-muted);
+  }
+  .accuracy-bias strong{ color:var(--text); }
+  .accuracy-bias.over{ border-color: rgba(255,107,122,0.35); }
+  .accuracy-bias.under{ border-color: rgba(120,250,174,0.35); }
   .accuracy-stat .num{ font-family:'Space Grotesk',sans-serif; font-size:20px; font-weight:600; color:var(--text); }
   .accuracy-stat .lbl{ font-size:10.5px; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.05em; margin-top:2px; }
 
@@ -719,19 +722,19 @@
       display:flex; align-items:center; justify-content:space-between; gap:12px;
       position: sticky; top: 0; z-index: 60;
       margin: 0 -14px 14px; padding: 10px 14px;
-      background: rgba(255,255,255,0.75);
+      background: rgba(16,37,29,0.92);
       backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
       border-bottom: 1px solid var(--border);
     }
     #openFiltersBtn{
       display:flex; align-items:center; gap:8px;
-      background: var(--accent); color: #eef1fb; border:none; border-radius:999px;
+      background: var(--accent); color: #08160f; border:none; border-radius:999px;
       padding: 11px 18px; font-size:13.5px; font-weight:600; cursor:pointer;
       font-family:'IBM Plex Sans',sans-serif;
     }
     #openFiltersBtn svg{ width:15px; height:15px; }
     .count-pill{
-      background:#eef1fb; color:var(--accent); border-radius:999px;
+      background:#08160f; color:var(--accent); border-radius:999px;
       padding:1px 7px; font-size:11px; font-family:'IBM Plex Mono',monospace;
     }
     #mobileResultCount{ font-size:12.5px; color:var(--text-muted); }
@@ -763,7 +766,7 @@
     }
     #applyFiltersBtn{
       display:block; width:100%; margin-top:16px;
-      background:var(--accent); color:#eef1fb; border:none; border-radius:8px;
+      background:var(--accent); color:#08160f; border:none; border-radius:8px;
       padding:13px; font-size:14px; font-weight:600; cursor:pointer;
       font-family:'IBM Plex Sans',sans-serif;
     }
@@ -811,7 +814,7 @@
       display:flex; gap:6px; flex-wrap:wrap;
       position:sticky; top:0; z-index:50;
       margin: 0 0 22px; padding:10px 4px;
-      background: rgba(255,255,255,0.55); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
+      background: rgba(16,37,29,0.85); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
       border-bottom:1px solid var(--border); border-radius: var(--radius-sm);
       box-shadow: var(--shadow-card);
     }

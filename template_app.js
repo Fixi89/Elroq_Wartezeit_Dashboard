@@ -891,9 +891,9 @@
     card.innerHTML = `
       <svg viewBox="0 0 180 150" width="150" height="125" role="img" aria-label="Durchschnittliche Wartezeit als Tacho">
         <path d="${bgArc}" fill="none" stroke="rgba(30,32,60,0.09)" stroke-width="12" stroke-linecap="round"/>
-        <path id="gaugeValArc" fill="none" stroke="#0ea968" stroke-width="12" stroke-linecap="round"/>
-        <line id="gaugeNeedle" x1="${GAUGE.cx}" y1="${GAUGE.cy}" x2="${GAUGE.cx}" y2="${GAUGE.cy}" stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/>
-        <circle cx="${GAUGE.cx}" cy="${GAUGE.cy}" r="5" fill="#f59e0b"/>
+        <path id="gaugeValArc" fill="none" stroke="#78faae" stroke-width="12" stroke-linecap="round"/>
+        <line id="gaugeNeedle" x1="${GAUGE.cx}" y1="${GAUGE.cy}" x2="${GAUGE.cx}" y2="${GAUGE.cy}" stroke="#f5b942" stroke-width="3" stroke-linecap="round"/>
+        <circle cx="${GAUGE.cx}" cy="${GAUGE.cy}" r="5" fill="#f5b942"/>
         <text id="gaugeValueText" x="${GAUGE.cx}" y="${GAUGE.cy+2}" text-anchor="middle" class="gauge-value" dy="34">–</text>
         <text x="${GAUGE.cx}" y="${GAUGE.cy+2}" text-anchor="middle" class="gauge-unit" dy="52">Tage Ø</text>
       </svg>
@@ -997,7 +997,7 @@
       const rangeFrom = i * binSize, rangeTo = rangeFrom + binSize - 1;
       const label = `${rangeFrom}–${rangeTo} Tage: ${c} Bestellung${c===1?'':'en'}`;
       bars += `<rect class="hist-bar" data-label="${escapeHtml(label)}"
-        x="${x+1.5}" y="${y}" width="${Math.max(bw-3,1)}" height="${Math.max(bh,1)}" fill="#0ea968" opacity="0.85" rx="4"/>`;
+        x="${x+1.5}" y="${y}" width="${Math.max(bw-3,1)}" height="${Math.max(bh,1)}" fill="#78faae" opacity="0.85" rx="4"/>`;
     });
 
     // axis line
@@ -1010,7 +1010,7 @@
     [...new Set(yTicks)].forEach(v => {
       const y = padT + plotH - (v / maxCount) * plotH;
       yGrid += `<line x1="${padL}" y1="${y.toFixed(1)}" x2="${W-10}" y2="${y.toFixed(1)}" stroke="rgba(30,32,60,0.09)" stroke-width="1" opacity="${v===0?0:0.5}"/>`;
-      yGrid += `<text x="${padL-6}" y="${(y+3).toFixed(1)}" font-size="9.5" fill="#9295ac" text-anchor="end" font-family="IBM Plex Mono, monospace">${v}</text>`;
+      yGrid += `<text x="${padL-6}" y="${(y+3).toFixed(1)}" font-size="9.5" fill="#5a7268" text-anchor="end" font-family="IBM Plex Mono, monospace">${v}</text>`;
     });
     // x labels, thinned out so they never collide on narrow screens
     let labels = '';
@@ -1018,12 +1018,12 @@
     const fs = isNarrow ? 11 : 9.5;
     for (let i=0; i<nBins; i+=step){
       const x = padL + i*bw;
-      labels += `<text x="${x}" y="${H-6}" font-size="${fs}" fill="#5c5f78" font-family="IBM Plex Mono, monospace">${i*binSize}</text>`;
+      labels += `<text x="${x}" y="${H-6}" font-size="${fs}" fill="#93ab9f" font-family="IBM Plex Mono, monospace">${i*binSize}</text>`;
     }
 
     // avg marker (global) as reference
     const gAvgX = padL + Math.min(nBins-0.01, GLOBAL_STATS.avg/binSize) * bw;
-    const refLine = `<line x1="${gAvgX}" y1="${padT}" x2="${gAvgX}" y2="${padT+plotH}" stroke="#f59e0b" stroke-width="1.3" stroke-dasharray="4 3" opacity="0.85"/>`;
+    const refLine = `<line x1="${gAvgX}" y1="${padT}" x2="${gAvgX}" y2="${padT+plotH}" stroke="#f5b942" stroke-width="1.3" stroke-dasharray="4 3" opacity="0.85"/>`;
 
     svg.innerHTML = yGrid + bars + axis + labels + refLine;
     svg.setAttribute('role', 'img');
@@ -1040,7 +1040,7 @@
     svg.querySelectorAll('.hist-bar').forEach(bar => {
       bar.addEventListener('mouseenter', () => {
         bar.setAttribute('opacity', '1');
-        bar.setAttribute('fill', '#059669');
+        bar.setAttribute('fill', '#4aa92e');
         if (!histTooltip) return;
         histTooltip.hidden = false;
         histTooltip.innerHTML = `<strong>${bar.dataset.label}</strong>`;
@@ -1055,14 +1055,14 @@
       });
       bar.addEventListener('mouseleave', () => {
         bar.setAttribute('opacity', '0.85');
-        bar.setAttribute('fill', '#0ea968');
+        bar.setAttribute('fill', '#78faae');
         if (histTooltip) histTooltip.hidden = true;
       });
     });
 
     document.getElementById('chartLegend').innerHTML = `
-      <span><span class="legend-dot" style="background:#0ea968;"></span>Anzahl Bestellungen je Wartezeit-Bin (${binSize} Tage)</span>
-      <span><span class="legend-dot" style="background:#f59e0b;"></span>Ø Wartezeit gesamt: ${Math.round(GLOBAL_STATS.avg)} Tage</span>
+      <span><span class="legend-dot" style="background:#78faae;"></span>Anzahl Bestellungen je Wartezeit-Bin (${binSize} Tage)</span>
+      <span><span class="legend-dot" style="background:#f5b942;"></span>Ø Wartezeit gesamt: ${Math.round(GLOBAL_STATS.avg)} Tage</span>
     `;
   }
 
@@ -1171,16 +1171,16 @@
     const maxN = Math.max(...points.map(p => p.n));
     const dots = xy.map(pt => {
       const r = 2.4 + (pt.p.n / maxN) * 2.6;
-      return `<circle class="trend-dot" data-i="${pt.p.__i ?? ''}" cx="${pt.x.toFixed(1)}" cy="${pt.y.toFixed(1)}" r="${r.toFixed(1)}" fill="#0ea968"/>`;
+      return `<circle class="trend-dot" data-i="${pt.p.__i ?? ''}" cx="${pt.x.toFixed(1)}" cy="${pt.y.toFixed(1)}" r="${r.toFixed(1)}" fill="#78faae"/>`;
     }).join('');
     const fdots = fxy.map(pt =>
-      `<circle class="trend-dot" cx="${pt.x.toFixed(1)}" cy="${pt.y.toFixed(1)}" r="3.4" fill="#f7f8fc" stroke="#8b5cf6" stroke-width="2"/>`
+      `<circle class="trend-dot" cx="${pt.x.toFixed(1)}" cy="${pt.y.toFixed(1)}" r="3.4" fill="#10251d" stroke="#c7d1cb" stroke-width="2"/>`
     ).join('');
 
     const axis = `<line x1="${padL}" y1="${padT+plotH}" x2="${W-padR}" y2="${padT+plotH}" stroke="rgba(30,32,60,0.09)" stroke-width="1"/>`;
     // Divider marking where real data ends and the projection begins.
     const divider = fxy.length
-      ? `<line x1="${xy[xy.length-1].x.toFixed(1)}" y1="${padT}" x2="${xy[xy.length-1].x.toFixed(1)}" y2="${padT+plotH}" stroke="#8b5cf6" stroke-width="1" stroke-dasharray="2 3" opacity="0.45"/>`
+      ? `<line x1="${xy[xy.length-1].x.toFixed(1)}" y1="${padT}" x2="${xy[xy.length-1].x.toFixed(1)}" y2="${padT+plotH}" stroke="#c7d1cb" stroke-width="1" stroke-dasharray="2 3" opacity="0.45"/>`
       : '';
 
     const allPts = [...xy, ...fxy];
@@ -1190,12 +1190,12 @@
     allPts.forEach((pt, i) => {
       if (i % labelStep !== 0 && i !== allPts.length - 1) return;
       const dim = pt.p.forecast ? ' opacity="0.65"' : '';
-      labels += `<text x="${pt.x.toFixed(1)}" y="${H-8}" font-size="${fs}" fill="#5c5f78" text-anchor="middle" font-family="IBM Plex Mono, monospace"${dim}>${monthLabel(pt.p.k)}</text>`;
+      labels += `<text x="${pt.x.toFixed(1)}" y="${H-8}" font-size="${fs}" fill="#93ab9f" text-anchor="middle" font-family="IBM Plex Mono, monospace"${dim}>${monthLabel(pt.p.k)}</text>`;
     });
 
     const yLabels = `
-      <text x="${padL-6}" y="${padT+4}" font-size="9.5" fill="#9295ac" text-anchor="end" font-family="IBM Plex Mono, monospace">${Math.round(maxAvg)}</text>
-      <text x="${padL-6}" y="${padT+plotH}" font-size="9.5" fill="#9295ac" text-anchor="end" font-family="IBM Plex Mono, monospace">${Math.round(minAvg)}</text>
+      <text x="${padL-6}" y="${padT+4}" font-size="9.5" fill="#5a7268" text-anchor="end" font-family="IBM Plex Mono, monospace">${Math.round(maxAvg)}</text>
+      <text x="${padL-6}" y="${padT+plotH}" font-size="9.5" fill="#5a7268" text-anchor="end" font-family="IBM Plex Mono, monospace">${Math.round(minAvg)}</text>
     `;
 
     // Invisible wide hit-columns for mouse/touch interaction — one per real
@@ -1211,16 +1211,16 @@
     }).join('');
 
     svg.innerHTML = `
-      <path d="${areaPath}" fill="#0ea968" opacity="0.08"/>
-      <path d="${path}" fill="none" stroke="#0ea968" stroke-width="2.2"/>
-      ${forecastPath ? `<path d="${forecastPath}" fill="none" stroke="#8b5cf6" stroke-width="2.2" stroke-dasharray="5 4"/>` : ''}
+      <path d="${areaPath}" fill="#78faae" opacity="0.08"/>
+      <path d="${path}" fill="none" stroke="#78faae" stroke-width="2.2"/>
+      ${forecastPath ? `<path d="${forecastPath}" fill="none" stroke="#c7d1cb" stroke-width="2.2" stroke-dasharray="5 4"/>` : ''}
       ${divider}
       ${axis}
       ${dots}
       ${fdots}
       ${labels}
       ${yLabels}
-      <line id="trendCrosshair" class="chart-crosshair" x1="0" y1="${padT}" x2="0" y2="${padT+plotH}" stroke="#171a2b" stroke-width="1" opacity="0" />
+      <line id="trendCrosshair" class="chart-crosshair" x1="0" y1="${padT}" x2="0" y2="${padT+plotH}" stroke="#eaf5ee" stroke-width="1" opacity="0" />
       ${hitCols}
     `;
     svg.setAttribute('role', 'img');
@@ -1277,8 +1277,8 @@
     }
 
     document.getElementById('trendLegend').innerHTML = `
-      <span><span class="legend-dot" style="background:#0ea968;"></span>Ø Wartezeit je Bestellmonat, Punktgröße = Anzahl Bestellungen</span>
-      ${forecastPoints.length ? `<span><span class="legend-dot" style="background:#8b5cf6;"></span>Prognose (linearer Trend, nächste ${FORECAST_MONTHS} Monate)</span>` : ''}
+      <span><span class="legend-dot" style="background:#78faae;"></span>Ø Wartezeit je Bestellmonat, Punktgröße = Anzahl Bestellungen</span>
+      ${forecastPoints.length ? `<span><span class="legend-dot" style="background:#c7d1cb;"></span>Prognose (linearer Trend, nächste ${FORECAST_MONTHS} Monate)</span>` : ''}
       <span>${points.length} Monate im gewählten Zeitraum</span>
     `;
   }
@@ -1956,7 +1956,7 @@
     function band(fromTs, toTs, opacity){
       const x1 = xFor(fromTs), x2 = xFor(toTs);
       const w = Math.max(3, x2 - x1);
-      return `<rect x="${x1.toFixed(1)}" y="${barY}" width="${w.toFixed(1)}" height="${barH}" rx="${radius}" fill="#f59e0b" opacity="${opacity}"/>`;
+      return `<rect x="${x1.toFixed(1)}" y="${barY}" width="${w.toFixed(1)}" height="${barH}" rx="${radius}" fill="#f5b942" opacity="${opacity}"/>`;
     }
 
     let bands = band(outerFrom, outerTo, 0.15);
@@ -1965,12 +1965,12 @@
 
     const medX = xFor(p.dateMedian);
     const marker = `
-      <line x1="${medX.toFixed(1)}" y1="${barY-7}" x2="${medX.toFixed(1)}" y2="${barY+barH+7}" stroke="#f59e0b" stroke-width="2.5"/>
-      <circle cx="${medX.toFixed(1)}" cy="${(barY+barH/2).toFixed(1)}" r="4.5" fill="#eef1fb" stroke="#f59e0b" stroke-width="2.5"/>
+      <line x1="${medX.toFixed(1)}" y1="${barY-7}" x2="${medX.toFixed(1)}" y2="${barY+barH+7}" stroke="#f5b942" stroke-width="2.5"/>
+      <circle cx="${medX.toFixed(1)}" cy="${(barY+barH/2).toFixed(1)}" r="4.5" fill="#10251d" stroke="#f5b942" stroke-width="2.5"/>
     `;
 
     const label = (ts, x, anchor) =>
-      `<text x="${x.toFixed(1)}" y="${H-6}" font-size="10" fill="#5c5f78" text-anchor="${anchor}" font-family="IBM Plex Mono, monospace">${fmtDate(ts)}</text>`;
+      `<text x="${x.toFixed(1)}" y="${H-6}" font-size="10" fill="#93ab9f" text-anchor="${anchor}" font-family="IBM Plex Mono, monospace">${fmtDate(ts)}</text>`;
 
     const ariaLabel = `Prognose-Unsicherheit: 50 Prozent Wahrscheinlichkeit zwischen ${fmtDate(p.dateEarly)} und ${fmtDate(p.dateLate)}` +
       (hasWide ? `, 95 Prozent zwischen ${fmtDate(outerFrom)} und ${fmtDate(outerTo)}` : '') + `. Median: ${fmtDate(p.dateMedian)}.`;
@@ -1979,7 +1979,7 @@
       <svg viewBox="0 0 ${W} ${H}" class="confidence-fan" role="img" aria-label="${ariaLabel}" preserveAspectRatio="xMidYMid meet">
         ${bands}
         ${marker}
-        <text x="${medX.toFixed(1)}" y="${barY-12}" font-size="11" fill="#f59e0b" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-weight="600">${fmtDate(p.dateMedian)}</text>
+        <text x="${medX.toFixed(1)}" y="${barY-12}" font-size="11" fill="#f5b942" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-weight="600">${fmtDate(p.dateMedian)}</text>
         ${label(outerFrom, padX, 'start')}
         ${label(outerTo, W - padX, 'end')}
       </svg>
@@ -2304,6 +2304,20 @@
     const within2w = resolved.filter(r => Math.abs(r.DeviationDays) <= 14).length / resolved.length;
     const early = resolved.filter(r => r.DeviationDays < 0).length;
     const late = resolved.filter(r => r.DeviationDays > 0).length;
+    // Signed mean (not absolute) — reveals a *systematic* bias, e.g. predictions
+    // consistently running long because the underlying trend is falling faster
+    // than the historical-median approach can track. MAE alone hides this:
+    // a mix of "+20 / -20" days averages to the same MAE as "+20 / +20" but
+    // only the second is an actionable, correctable bias.
+    const meanSigned = resolved.reduce((a, r) => a + r.DeviationDays, 0) / resolved.length;
+    const biasNote = Math.abs(meanSigned) >= 5
+      ? `<div class="accuracy-bias ${meanSigned > 0 ? 'over' : 'under'}">
+           Systematische Tendenz: Prognosen liegen im Schnitt <strong>${Math.abs(Math.round(meanSigned))} Tage
+           ${meanSigned > 0 ? 'zu spät' : 'zu früh'}</strong> — ${meanSigned > 0
+             ? 'ein Hinweis, dass sich die Wartezeit gerade schneller verkürzt, als die Prognose auf Basis vergangener Auslieferungen erfasst.'
+             : 'ein Hinweis, dass sich die Wartezeit gerade schneller verlängert, als die Prognose erfasst.'}
+         </div>`
+      : '';
 
     el.innerHTML = `
       <div class="accuracy-wrap">
@@ -2316,6 +2330,7 @@
           <div class="accuracy-stat"><div class="num mono">${Math.round(within2w*100)}%</div><div class="lbl">Innerhalb ±14 Tagen</div></div>
           <div class="accuracy-stat"><div class="num mono">${early} / ${late}</div><div class="lbl">Zu früh / zu spät</div></div>
         </div>
+        ${biasNote}
       </div>`;
   }
 
