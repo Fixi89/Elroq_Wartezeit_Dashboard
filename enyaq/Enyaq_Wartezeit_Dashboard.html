@@ -8,43 +8,43 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    /* Light "spatial glass" theme — soft gradient canvas, frosted panels
-       floating above ambient colour blobs (Vision-Pro-style dashboard). */
-    --bg: #eef1fb;
-    --surface: rgba(255,255,255,0.68);
-    --surface-2: rgba(255,255,255,0.5);
-    --surface-solid: #ffffff;
-    --border: rgba(30,32,60,0.09);
-    --border-strong: rgba(30,32,60,0.16);
-    --text: #171a2b;
-    --text-muted: #5c5f78;
-    --text-dim: #9295ac;
-    --accent: #0ea968;
-    --accent-rgb: 14,169,104;
-    --accent-dim: #0a7e4e;
-    --accent-2: #f59e0b;
-    --accent-2-rgb: 245,158,11;
-    --accent-3: #6366f1;
-    --accent-3-rgb: 99,102,241;
-    --accent-purple: #8b5cf6;
-    --accent-purple-rgb: 139,92,246;
-    --danger: #f43f5e;
-    --danger-rgb: 244,63,94;
-    --radius: 20px;
-    --radius-sm: 12px;
-    --glass-blur: blur(24px) saturate(160%);
-    --shadow-card: 0 1px 1px rgba(30,32,60,0.03), 0 12px 32px -12px rgba(76,60,140,0.18);
-    --shadow-card-hover: 0 1px 1px rgba(30,32,60,0.04), 0 20px 46px -14px rgba(76,60,140,0.26);
+    /* Dark theme in official Škoda brand colours: Smaragdgrün (Emerald,
+       #0E3A2F) as the deep panel tone, Elektrogrün (Electric Green,
+       #78FAAE) as the bright accent, classic Škoda-Lime (#4AA92E) as the
+       supporting/secondary green. */
+    --bg: #0a1512;
+    --surface: #10251d;
+    --surface-2: #172f24;
+    --surface-solid: #10251d;
+    --border: rgba(120,250,174,0.12);
+    --border-strong: rgba(120,250,174,0.22);
+    --text: #eaf5ee;
+    --text-muted: #93ab9f;
+    --text-dim: #5a7268;
+    --accent: #78faae;
+    --accent-rgb: 120,250,174;
+    --accent-dim: #4aa92e;
+    --accent-2: #f5b942;
+    --accent-2-rgb: 245,185,66;
+    --accent-3: #6fd3c7;
+    --accent-3-rgb: 111,211,199;
+    --accent-purple: #c7d1cb;
+    --accent-purple-rgb: 199,209,203;
+    --danger: #ff6b7a;
+    --danger-rgb: 255,107,122;
+    --radius: 14px;
+    --radius-sm: 10px;
+    --glass-blur: blur(14px) saturate(140%);
+    --shadow-card: 0 1px 0 rgba(120,250,174,0.05) inset, 0 14px 30px -16px rgba(0,0,0,0.6);
+    --shadow-card-hover: 0 1px 0 rgba(120,250,174,0.08) inset, 0 18px 38px -16px rgba(0,0,0,0.7);
   }
   *{box-sizing:border-box;}
   html{ scroll-behavior: smooth; }
   html,body{margin:0;padding:0;}
   body{
     background:
-      radial-gradient(820px 560px at 4% -10%, rgba(99,102,241,0.26), transparent 60%),
-      radial-gradient(680px 520px at 100% 2%, rgba(14,169,104,0.22), transparent 55%),
-      radial-gradient(760px 620px at 30% 60%, rgba(245,158,11,0.14), transparent 60%),
-      radial-gradient(900px 640px at 88% 96%, rgba(139,92,246,0.16), transparent 58%),
+      radial-gradient(900px 620px at 8% -12%, rgba(14,58,47,0.9), transparent 60%),
+      radial-gradient(760px 560px at 100% 0%, rgba(120,250,174,0.08), transparent 55%),
       var(--bg);
     background-attachment: fixed;
     color: var(--text);
@@ -56,16 +56,12 @@
   .display{ font-family:'Space Grotesk', sans-serif; }
   .mono{ font-family:'IBM Plex Mono', monospace; }
 
-  /* Glass panels: frosted, elevated surfaces floating above the ambient
-     gradient blobs — the signature look of this theme. Nested elements
-     (inputs, badges, table headers) stay flat/translucent without their
-     own blur so the effect doesn't stack into mush. */
+  /* Panels: solid dark Emerald surfaces (no glass/translucency in this
+     theme) with a subtle inner highlight + soft drop shadow for depth. */
   .panel, .kpi-card, .vswitch-menu, .lk-card, .twin-cluster, .twin-bucket,
   #resultsTableOuter, .whatif-form, .chart-tooltip{
-    backdrop-filter: var(--glass-blur);
-    -webkit-backdrop-filter: var(--glass-blur);
     box-shadow: var(--shadow-card);
-    border: 1px solid rgba(255,255,255,0.75);
+    border: 1px solid var(--border);
     transition: box-shadow .2s ease, transform .2s ease;
   }
   .panel:hover, .kpi-card:hover{ box-shadow: var(--shadow-card-hover); }
@@ -315,20 +311,20 @@
   .chart-wrap{ margin-top: 4px; position: relative; }
   .chart-tooltip{
     position:absolute; pointer-events:none; z-index:20;
-    background: rgba(23,26,43,0.92); color:#f4f5fb; border-radius:10px;
+    background: #061a12; color:#eaf5ee; border-radius:10px;
     padding:8px 12px; font-size:12px; line-height:1.5; white-space:nowrap;
-    box-shadow: 0 10px 26px -8px rgba(23,26,43,0.45);
+    box-shadow: 0 10px 26px -8px rgba(0,0,0,0.6);
     transform: translate(-50%, -110%); transition: opacity .1s ease;
-    backdrop-filter: none !important; border: none;
+    backdrop-filter: none !important; border: 1px solid var(--border-strong);
     max-width: min(260px, calc(100% - 16px));
     white-space: normal;
   }
-  .chart-tooltip strong{ color:#fff; font-family:'Space Grotesk',sans-serif; }
+  .chart-tooltip strong{ color:#78faae; font-family:'Space Grotesk',sans-serif; }
   .chart-crosshair{ pointer-events:none; }
   .trend-verdict{
     display:flex; align-items:center; gap:10px; margin: 2px 0 16px;
     padding:12px 16px; border-radius: var(--radius-sm);
-    background: rgba(255,255,255,0.5); border:1px solid var(--border);
+    background: var(--surface-2); border:1px solid var(--border);
     font-size:13px; color:var(--text);
   }
   .trend-verdict .arrow{ font-size:18px; line-height:1; flex:none; }
@@ -573,7 +569,7 @@
     border:1px solid var(--border); border-radius:8px; padding:10px 14px; margin-top:14px;
   }
   #lookupBtn{
-    background:var(--accent); color:#eef1fb; border:none; border-radius:8px;
+    background:var(--accent); color:#08160f; border:none; border-radius:8px;
     padding:11px 22px; font-size:14px; font-weight:600; cursor:pointer;
     font-family:'IBM Plex Sans',sans-serif; flex:none;
   }
@@ -648,6 +644,13 @@
   .accuracy-stats{ display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
   @media (max-width:760px){ .accuracy-stats{ grid-template-columns:repeat(2,1fr); } }
   .accuracy-stat{ background:var(--surface-2); border:1px solid var(--border); border-radius:8px; padding:12px 14px; }
+  .accuracy-bias{
+    margin-top:12px; padding:10px 14px; border-radius:8px; font-size:12.5px; line-height:1.5;
+    background: var(--surface-2); border:1px solid var(--border-strong); color:var(--text-muted);
+  }
+  .accuracy-bias strong{ color:var(--text); }
+  .accuracy-bias.over{ border-color: rgba(255,107,122,0.35); }
+  .accuracy-bias.under{ border-color: rgba(120,250,174,0.35); }
   .accuracy-stat .num{ font-family:'Space Grotesk',sans-serif; font-size:20px; font-weight:600; color:var(--text); }
   .accuracy-stat .lbl{ font-size:10.5px; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.05em; margin-top:2px; }
 
@@ -719,19 +722,19 @@
       display:flex; align-items:center; justify-content:space-between; gap:12px;
       position: sticky; top: 0; z-index: 60;
       margin: 0 -14px 14px; padding: 10px 14px;
-      background: rgba(255,255,255,0.75);
+      background: rgba(16,37,29,0.92);
       backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
       border-bottom: 1px solid var(--border);
     }
     #openFiltersBtn{
       display:flex; align-items:center; gap:8px;
-      background: var(--accent); color: #eef1fb; border:none; border-radius:999px;
+      background: var(--accent); color: #08160f; border:none; border-radius:999px;
       padding: 11px 18px; font-size:13.5px; font-weight:600; cursor:pointer;
       font-family:'IBM Plex Sans',sans-serif;
     }
     #openFiltersBtn svg{ width:15px; height:15px; }
     .count-pill{
-      background:#eef1fb; color:var(--accent); border-radius:999px;
+      background:#08160f; color:var(--accent); border-radius:999px;
       padding:1px 7px; font-size:11px; font-family:'IBM Plex Mono',monospace;
     }
     #mobileResultCount{ font-size:12.5px; color:var(--text-muted); }
@@ -763,7 +766,7 @@
     }
     #applyFiltersBtn{
       display:block; width:100%; margin-top:16px;
-      background:var(--accent); color:#eef1fb; border:none; border-radius:8px;
+      background:var(--accent); color:#08160f; border:none; border-radius:8px;
       padding:13px; font-size:14px; font-weight:600; cursor:pointer;
       font-family:'IBM Plex Sans',sans-serif;
     }
@@ -811,7 +814,7 @@
       display:flex; gap:6px; flex-wrap:wrap;
       position:sticky; top:0; z-index:50;
       margin: 0 0 22px; padding:10px 4px;
-      background: rgba(255,255,255,0.55); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
+      background: rgba(16,37,29,0.85); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
       border-bottom:1px solid var(--border); border-radius: var(--radius-sm);
       box-shadow: var(--shadow-card);
     }
@@ -1963,9 +1966,9 @@
     card.innerHTML = `
       <svg viewBox="0 0 180 150" width="150" height="125" role="img" aria-label="Durchschnittliche Wartezeit als Tacho">
         <path d="${bgArc}" fill="none" stroke="rgba(30,32,60,0.09)" stroke-width="12" stroke-linecap="round"/>
-        <path id="gaugeValArc" fill="none" stroke="#0ea968" stroke-width="12" stroke-linecap="round"/>
-        <line id="gaugeNeedle" x1="${GAUGE.cx}" y1="${GAUGE.cy}" x2="${GAUGE.cx}" y2="${GAUGE.cy}" stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/>
-        <circle cx="${GAUGE.cx}" cy="${GAUGE.cy}" r="5" fill="#f59e0b"/>
+        <path id="gaugeValArc" fill="none" stroke="#78faae" stroke-width="12" stroke-linecap="round"/>
+        <line id="gaugeNeedle" x1="${GAUGE.cx}" y1="${GAUGE.cy}" x2="${GAUGE.cx}" y2="${GAUGE.cy}" stroke="#f5b942" stroke-width="3" stroke-linecap="round"/>
+        <circle cx="${GAUGE.cx}" cy="${GAUGE.cy}" r="5" fill="#f5b942"/>
         <text id="gaugeValueText" x="${GAUGE.cx}" y="${GAUGE.cy+2}" text-anchor="middle" class="gauge-value" dy="34">–</text>
         <text x="${GAUGE.cx}" y="${GAUGE.cy+2}" text-anchor="middle" class="gauge-unit" dy="52">Tage Ø</text>
       </svg>
@@ -2069,7 +2072,7 @@
       const rangeFrom = i * binSize, rangeTo = rangeFrom + binSize - 1;
       const label = `${rangeFrom}–${rangeTo} Tage: ${c} Bestellung${c===1?'':'en'}`;
       bars += `<rect class="hist-bar" data-label="${escapeHtml(label)}"
-        x="${x+1.5}" y="${y}" width="${Math.max(bw-3,1)}" height="${Math.max(bh,1)}" fill="#0ea968" opacity="0.85" rx="4"/>`;
+        x="${x+1.5}" y="${y}" width="${Math.max(bw-3,1)}" height="${Math.max(bh,1)}" fill="#78faae" opacity="0.85" rx="4"/>`;
     });
 
     // axis line
@@ -2082,7 +2085,7 @@
     [...new Set(yTicks)].forEach(v => {
       const y = padT + plotH - (v / maxCount) * plotH;
       yGrid += `<line x1="${padL}" y1="${y.toFixed(1)}" x2="${W-10}" y2="${y.toFixed(1)}" stroke="rgba(30,32,60,0.09)" stroke-width="1" opacity="${v===0?0:0.5}"/>`;
-      yGrid += `<text x="${padL-6}" y="${(y+3).toFixed(1)}" font-size="9.5" fill="#9295ac" text-anchor="end" font-family="IBM Plex Mono, monospace">${v}</text>`;
+      yGrid += `<text x="${padL-6}" y="${(y+3).toFixed(1)}" font-size="9.5" fill="#5a7268" text-anchor="end" font-family="IBM Plex Mono, monospace">${v}</text>`;
     });
     // x labels, thinned out so they never collide on narrow screens
     let labels = '';
@@ -2090,12 +2093,12 @@
     const fs = isNarrow ? 11 : 9.5;
     for (let i=0; i<nBins; i+=step){
       const x = padL + i*bw;
-      labels += `<text x="${x}" y="${H-6}" font-size="${fs}" fill="#5c5f78" font-family="IBM Plex Mono, monospace">${i*binSize}</text>`;
+      labels += `<text x="${x}" y="${H-6}" font-size="${fs}" fill="#93ab9f" font-family="IBM Plex Mono, monospace">${i*binSize}</text>`;
     }
 
     // avg marker (global) as reference
     const gAvgX = padL + Math.min(nBins-0.01, GLOBAL_STATS.avg/binSize) * bw;
-    const refLine = `<line x1="${gAvgX}" y1="${padT}" x2="${gAvgX}" y2="${padT+plotH}" stroke="#f59e0b" stroke-width="1.3" stroke-dasharray="4 3" opacity="0.85"/>`;
+    const refLine = `<line x1="${gAvgX}" y1="${padT}" x2="${gAvgX}" y2="${padT+plotH}" stroke="#f5b942" stroke-width="1.3" stroke-dasharray="4 3" opacity="0.85"/>`;
 
     svg.innerHTML = yGrid + bars + axis + labels + refLine;
     svg.setAttribute('role', 'img');
@@ -2112,7 +2115,7 @@
     svg.querySelectorAll('.hist-bar').forEach(bar => {
       bar.addEventListener('mouseenter', () => {
         bar.setAttribute('opacity', '1');
-        bar.setAttribute('fill', '#059669');
+        bar.setAttribute('fill', '#4aa92e');
         if (!histTooltip) return;
         histTooltip.hidden = false;
         histTooltip.innerHTML = `<strong>${bar.dataset.label}</strong>`;
@@ -2127,14 +2130,14 @@
       });
       bar.addEventListener('mouseleave', () => {
         bar.setAttribute('opacity', '0.85');
-        bar.setAttribute('fill', '#0ea968');
+        bar.setAttribute('fill', '#78faae');
         if (histTooltip) histTooltip.hidden = true;
       });
     });
 
     document.getElementById('chartLegend').innerHTML = `
-      <span><span class="legend-dot" style="background:#0ea968;"></span>Anzahl Bestellungen je Wartezeit-Bin (${binSize} Tage)</span>
-      <span><span class="legend-dot" style="background:#f59e0b;"></span>Ø Wartezeit gesamt: ${Math.round(GLOBAL_STATS.avg)} Tage</span>
+      <span><span class="legend-dot" style="background:#78faae;"></span>Anzahl Bestellungen je Wartezeit-Bin (${binSize} Tage)</span>
+      <span><span class="legend-dot" style="background:#f5b942;"></span>Ø Wartezeit gesamt: ${Math.round(GLOBAL_STATS.avg)} Tage</span>
     `;
   }
 
@@ -2243,16 +2246,16 @@
     const maxN = Math.max(...points.map(p => p.n));
     const dots = xy.map(pt => {
       const r = 2.4 + (pt.p.n / maxN) * 2.6;
-      return `<circle class="trend-dot" data-i="${pt.p.__i ?? ''}" cx="${pt.x.toFixed(1)}" cy="${pt.y.toFixed(1)}" r="${r.toFixed(1)}" fill="#0ea968"/>`;
+      return `<circle class="trend-dot" data-i="${pt.p.__i ?? ''}" cx="${pt.x.toFixed(1)}" cy="${pt.y.toFixed(1)}" r="${r.toFixed(1)}" fill="#78faae"/>`;
     }).join('');
     const fdots = fxy.map(pt =>
-      `<circle class="trend-dot" cx="${pt.x.toFixed(1)}" cy="${pt.y.toFixed(1)}" r="3.4" fill="#f7f8fc" stroke="#8b5cf6" stroke-width="2"/>`
+      `<circle class="trend-dot" cx="${pt.x.toFixed(1)}" cy="${pt.y.toFixed(1)}" r="3.4" fill="#10251d" stroke="#c7d1cb" stroke-width="2"/>`
     ).join('');
 
     const axis = `<line x1="${padL}" y1="${padT+plotH}" x2="${W-padR}" y2="${padT+plotH}" stroke="rgba(30,32,60,0.09)" stroke-width="1"/>`;
     // Divider marking where real data ends and the projection begins.
     const divider = fxy.length
-      ? `<line x1="${xy[xy.length-1].x.toFixed(1)}" y1="${padT}" x2="${xy[xy.length-1].x.toFixed(1)}" y2="${padT+plotH}" stroke="#8b5cf6" stroke-width="1" stroke-dasharray="2 3" opacity="0.45"/>`
+      ? `<line x1="${xy[xy.length-1].x.toFixed(1)}" y1="${padT}" x2="${xy[xy.length-1].x.toFixed(1)}" y2="${padT+plotH}" stroke="#c7d1cb" stroke-width="1" stroke-dasharray="2 3" opacity="0.45"/>`
       : '';
 
     const allPts = [...xy, ...fxy];
@@ -2262,12 +2265,12 @@
     allPts.forEach((pt, i) => {
       if (i % labelStep !== 0 && i !== allPts.length - 1) return;
       const dim = pt.p.forecast ? ' opacity="0.65"' : '';
-      labels += `<text x="${pt.x.toFixed(1)}" y="${H-8}" font-size="${fs}" fill="#5c5f78" text-anchor="middle" font-family="IBM Plex Mono, monospace"${dim}>${monthLabel(pt.p.k)}</text>`;
+      labels += `<text x="${pt.x.toFixed(1)}" y="${H-8}" font-size="${fs}" fill="#93ab9f" text-anchor="middle" font-family="IBM Plex Mono, monospace"${dim}>${monthLabel(pt.p.k)}</text>`;
     });
 
     const yLabels = `
-      <text x="${padL-6}" y="${padT+4}" font-size="9.5" fill="#9295ac" text-anchor="end" font-family="IBM Plex Mono, monospace">${Math.round(maxAvg)}</text>
-      <text x="${padL-6}" y="${padT+plotH}" font-size="9.5" fill="#9295ac" text-anchor="end" font-family="IBM Plex Mono, monospace">${Math.round(minAvg)}</text>
+      <text x="${padL-6}" y="${padT+4}" font-size="9.5" fill="#5a7268" text-anchor="end" font-family="IBM Plex Mono, monospace">${Math.round(maxAvg)}</text>
+      <text x="${padL-6}" y="${padT+plotH}" font-size="9.5" fill="#5a7268" text-anchor="end" font-family="IBM Plex Mono, monospace">${Math.round(minAvg)}</text>
     `;
 
     // Invisible wide hit-columns for mouse/touch interaction — one per real
@@ -2283,16 +2286,16 @@
     }).join('');
 
     svg.innerHTML = `
-      <path d="${areaPath}" fill="#0ea968" opacity="0.08"/>
-      <path d="${path}" fill="none" stroke="#0ea968" stroke-width="2.2"/>
-      ${forecastPath ? `<path d="${forecastPath}" fill="none" stroke="#8b5cf6" stroke-width="2.2" stroke-dasharray="5 4"/>` : ''}
+      <path d="${areaPath}" fill="#78faae" opacity="0.08"/>
+      <path d="${path}" fill="none" stroke="#78faae" stroke-width="2.2"/>
+      ${forecastPath ? `<path d="${forecastPath}" fill="none" stroke="#c7d1cb" stroke-width="2.2" stroke-dasharray="5 4"/>` : ''}
       ${divider}
       ${axis}
       ${dots}
       ${fdots}
       ${labels}
       ${yLabels}
-      <line id="trendCrosshair" class="chart-crosshair" x1="0" y1="${padT}" x2="0" y2="${padT+plotH}" stroke="#171a2b" stroke-width="1" opacity="0" />
+      <line id="trendCrosshair" class="chart-crosshair" x1="0" y1="${padT}" x2="0" y2="${padT+plotH}" stroke="#eaf5ee" stroke-width="1" opacity="0" />
       ${hitCols}
     `;
     svg.setAttribute('role', 'img');
@@ -2349,8 +2352,8 @@
     }
 
     document.getElementById('trendLegend').innerHTML = `
-      <span><span class="legend-dot" style="background:#0ea968;"></span>Ø Wartezeit je Bestellmonat, Punktgröße = Anzahl Bestellungen</span>
-      ${forecastPoints.length ? `<span><span class="legend-dot" style="background:#8b5cf6;"></span>Prognose (linearer Trend, nächste ${FORECAST_MONTHS} Monate)</span>` : ''}
+      <span><span class="legend-dot" style="background:#78faae;"></span>Ø Wartezeit je Bestellmonat, Punktgröße = Anzahl Bestellungen</span>
+      ${forecastPoints.length ? `<span><span class="legend-dot" style="background:#c7d1cb;"></span>Prognose (linearer Trend, nächste ${FORECAST_MONTHS} Monate)</span>` : ''}
       <span>${points.length} Monate im gewählten Zeitraum</span>
     `;
   }
@@ -3028,7 +3031,7 @@
     function band(fromTs, toTs, opacity){
       const x1 = xFor(fromTs), x2 = xFor(toTs);
       const w = Math.max(3, x2 - x1);
-      return `<rect x="${x1.toFixed(1)}" y="${barY}" width="${w.toFixed(1)}" height="${barH}" rx="${radius}" fill="#f59e0b" opacity="${opacity}"/>`;
+      return `<rect x="${x1.toFixed(1)}" y="${barY}" width="${w.toFixed(1)}" height="${barH}" rx="${radius}" fill="#f5b942" opacity="${opacity}"/>`;
     }
 
     let bands = band(outerFrom, outerTo, 0.15);
@@ -3037,12 +3040,12 @@
 
     const medX = xFor(p.dateMedian);
     const marker = `
-      <line x1="${medX.toFixed(1)}" y1="${barY-7}" x2="${medX.toFixed(1)}" y2="${barY+barH+7}" stroke="#f59e0b" stroke-width="2.5"/>
-      <circle cx="${medX.toFixed(1)}" cy="${(barY+barH/2).toFixed(1)}" r="4.5" fill="#eef1fb" stroke="#f59e0b" stroke-width="2.5"/>
+      <line x1="${medX.toFixed(1)}" y1="${barY-7}" x2="${medX.toFixed(1)}" y2="${barY+barH+7}" stroke="#f5b942" stroke-width="2.5"/>
+      <circle cx="${medX.toFixed(1)}" cy="${(barY+barH/2).toFixed(1)}" r="4.5" fill="#10251d" stroke="#f5b942" stroke-width="2.5"/>
     `;
 
     const label = (ts, x, anchor) =>
-      `<text x="${x.toFixed(1)}" y="${H-6}" font-size="10" fill="#5c5f78" text-anchor="${anchor}" font-family="IBM Plex Mono, monospace">${fmtDate(ts)}</text>`;
+      `<text x="${x.toFixed(1)}" y="${H-6}" font-size="10" fill="#93ab9f" text-anchor="${anchor}" font-family="IBM Plex Mono, monospace">${fmtDate(ts)}</text>`;
 
     const ariaLabel = `Prognose-Unsicherheit: 50 Prozent Wahrscheinlichkeit zwischen ${fmtDate(p.dateEarly)} und ${fmtDate(p.dateLate)}` +
       (hasWide ? `, 95 Prozent zwischen ${fmtDate(outerFrom)} und ${fmtDate(outerTo)}` : '') + `. Median: ${fmtDate(p.dateMedian)}.`;
@@ -3051,7 +3054,7 @@
       <svg viewBox="0 0 ${W} ${H}" class="confidence-fan" role="img" aria-label="${ariaLabel}" preserveAspectRatio="xMidYMid meet">
         ${bands}
         ${marker}
-        <text x="${medX.toFixed(1)}" y="${barY-12}" font-size="11" fill="#f59e0b" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-weight="600">${fmtDate(p.dateMedian)}</text>
+        <text x="${medX.toFixed(1)}" y="${barY-12}" font-size="11" fill="#f5b942" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-weight="600">${fmtDate(p.dateMedian)}</text>
         ${label(outerFrom, padX, 'start')}
         ${label(outerTo, W - padX, 'end')}
       </svg>
@@ -3376,6 +3379,20 @@
     const within2w = resolved.filter(r => Math.abs(r.DeviationDays) <= 14).length / resolved.length;
     const early = resolved.filter(r => r.DeviationDays < 0).length;
     const late = resolved.filter(r => r.DeviationDays > 0).length;
+    // Signed mean (not absolute) — reveals a *systematic* bias, e.g. predictions
+    // consistently running long because the underlying trend is falling faster
+    // than the historical-median approach can track. MAE alone hides this:
+    // a mix of "+20 / -20" days averages to the same MAE as "+20 / +20" but
+    // only the second is an actionable, correctable bias.
+    const meanSigned = resolved.reduce((a, r) => a + r.DeviationDays, 0) / resolved.length;
+    const biasNote = Math.abs(meanSigned) >= 5
+      ? `<div class="accuracy-bias ${meanSigned > 0 ? 'over' : 'under'}">
+           Systematische Tendenz: Prognosen liegen im Schnitt <strong>${Math.abs(Math.round(meanSigned))} Tage
+           ${meanSigned > 0 ? 'zu spät' : 'zu früh'}</strong> — ${meanSigned > 0
+             ? 'ein Hinweis, dass sich die Wartezeit gerade schneller verkürzt, als die Prognose auf Basis vergangener Auslieferungen erfasst.'
+             : 'ein Hinweis, dass sich die Wartezeit gerade schneller verlängert, als die Prognose erfasst.'}
+         </div>`
+      : '';
 
     el.innerHTML = `
       <div class="accuracy-wrap">
@@ -3388,6 +3405,7 @@
           <div class="accuracy-stat"><div class="num mono">${Math.round(within2w*100)}%</div><div class="lbl">Innerhalb ±14 Tagen</div></div>
           <div class="accuracy-stat"><div class="num mono">${early} / ${late}</div><div class="lbl">Zu früh / zu spät</div></div>
         </div>
+        ${biasNote}
       </div>`;
   }
 
