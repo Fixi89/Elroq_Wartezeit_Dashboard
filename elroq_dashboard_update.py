@@ -368,22 +368,52 @@ def outlier_bounds(values):
 # 4b. Liefer-Prognose (Python-Gegenstueck zur Live-Berechnung im Dashboard)
 # --------------------------------------------------------------------------
 # Diese Funktion muss dieselbe Logik verwenden wie predict() in app.js, damit
-# eine geloggte Prognose spaeter nachvollziehbar bleibt: sie wird EINMAL beim
-# ersten Erfassen einer offenen Bestellung berechnet und danach nicht mehr
-# veraendert, auch wenn sich der Datenbestand seither vergroessert hat.
+# eine geloggte Prognose spaeter nachvollziehbar bleibt.
+
+def weighted_quantile(pairs, q):
+    """
+    Gewichtetes Perzentil nach der Midpoint-/Hazen-Methode: jeder Punkt
+    repraesentiert sein Gewicht, zentriert auf die Mitte seiner kumulativen
+    Gewichtsmasse. Bei gleichen Gewichten entspricht das Ergebnis exakt der
+    normalen (ungewichteten) Quantilberechnung von quantile() oben.
+    """
+    pairs = sorted(pairs, key=lambda p: p[0])
+    total = sum(w for _, w in pairs)
+    if total <= 0:
+        return 0.0
+    target = q * total
+    running = 0.0
+    midpoints = []
+    for v, w in pairs:
+        midpoints.append((running + w / 2, v))
+        running += w
+    if target <= midpoints[0][0]:
+        return midpoints[0][1]
+    if target >= midpoints[-1][0]:
+        return midpoints[-1][1]
+    for i in range(1, len(midpoints)):
+        m_prev, v_prev = midpoints[i - 1]
+        m_cur, v_cur = midpoints[i]
+        if target <= m_cur:
+            span = m_cur - m_prev
+            frac = (target - m_prev) / span if span > 0 else 0
+            return v_prev + (v_cur - v_prev) * frac
+    return midpoints[-1][1]
+
 
 _BOOL_KEYS = list(BOOL_PATTERNS.keys())
 
 
-def _similarity(a, b):
+def _base_similarity(a, b):
     """
-    0..1 Aehnlichkeit zweier Konfigurationen. Antrieb dominiert, weil er die
-    Produktionsplanung staerker beeinflusst als jede Einzeloption. Land zaehlt
-    ebenfalls kraeftig mit (die Auswertung "Was treibt die Wartezeit?" zeigt
-    Effekte von 50+ Tagen allein durchs Land) — in der Praxis wird Land aber
-    vor allem als harter Vorfilter in predict_delivery() gehandhabt; dieser
-    Score kommt nur zum Tragen, wenn dieser Vorfilter mangels Datenmenge auf
-    alle Laender ausweichen musste.
+    0..1 Aehnlichkeit zweier Konfigurationen INNERHALB derselben Modellgruppe
+    (die wird in predict_delivery() als harter Vorfilter behandelt, da
+    Wartezeiten zwischen z.B. Elroq 60 und Elroq RS kaum vergleichbar sind).
+    Land ist hier bewusst NICHT enthalten: das wird als eigener,
+    datenmengen-abhaengiger Gewichtungsfaktor behandelt, siehe
+    _country_weight() -- vorher war der Land-Abgleich ein harter Vorfilter
+    mit Cutoff bei 15 Bestellungen, was bei 14 vs. 15 Datenpunkten zu einem
+    abrupten Sprung in der Prognosebasis fuehrte (Optimierung 4).
     """
     score = max_score = 0.0
 
@@ -393,9 +423,7 @@ def _similarity(a, b):
         if ok:
             score += weight
 
-    add(4, a.get("Modellgruppe") == b.get("Modellgruppe"))
-    add(2, a.get("Modell") == b.get("Modell"))
-    add(3, (a.get("Land") or "") == (b.get("Land") or ""))
+    add(3, a.get("Modell") == b.get("Modell"))
     add(1, (a.get("Innenausstattung_DesignSelection") or "") ==
            (b.get("Innenausstattung_DesignSelection") or ""))
     add(1, (a.get("Felgenname") or "") == (b.get("Felgenname") or ""))
@@ -404,112 +432,247 @@ def _similarity(a, b):
     return score / max_score if max_score else 0.0
 
 
-# Referenzen werden nur aus Bestellungen aus einem aehnlichen Zeitfenster
-# gezogen, weil sich die Wartezeiten ueber die Jahre stark verschoben haben.
-_ERA_WINDOW = 180
-
-# Unterhalb dieser Anzahl gleicher-Land-Bestellungen ist ein reiner
-# Landes-Vergleich zu verrauscht; predict_delivery() weicht dann auf alle
-# Laender aus, statt aus wenigen Datenpunkten eine falsche Praezision
-# vorzugaukeln.
-_MIN_COUNTRY_POOL = 15
-
-_TIERS = [
-    {"min": 0.80, "take": 20, "label": "sehr ähnliche Konfigurationen", "group_only": False},
-    {"min": 0.65, "take": 25, "label": "ähnliche Konfigurationen", "group_only": False},
-    {"min": 0.00, "take": 30, "label": "grob vergleichbare Bestellungen", "group_only": True},
-]
+# Exponentieller Zerfall statt hartem 180-Bestellungen-Fenster (Optimierung 3):
+# eine Referenz von vor 120 Tagen zaehlt nur noch halb so stark wie eine von
+# heute, statt ab einer festen Position abrupt auf 0 zu fallen. Das macht die
+# Prognose weniger abhaengig davon, ob das Bestellvolumen gerade hoch oder
+# niedrig war (bei niedrigem Volumen deckte das alte 180er-Fenster teils
+# ueber ein Jahr ab, bei hohem Volumen nur wenige Wochen).
+_RECENCY_HALFLIFE_DAYS = 120.0
 
 
-def _similarity_match(order, pool):
-    """Kern-Matching (Zeitfenster + Aehnlichkeits-Stufen) gegen einen Pool."""
+def _recency_weight(delta_days):
+    return 0.5 ** (abs(delta_days) / _RECENCY_HALFLIFE_DAYS)
+
+
+# Weicher Shrinkage-Faktor statt hartem Cutoff bei 15 Bestellungen
+# (Optimierung 4): der Bonus fuer eine Landes-Uebereinstimmung waechst
+# graduell mit der verfuegbaren Datenmenge fuer dieses Land. Bei wenigen
+# Bestellungen aus einem Land ist der Bonus klein (zu wenig Beweiskraft),
+# bei vielen naehert er sich dem vollen Boost an -- kein Sprung mehr zwischen
+# 14 und 15 Bestellungen.
+_COUNTRY_CREDIBILITY_K = 15.0
+_COUNTRY_BOOST = 1.8
+
+
+def _country_weight(same_country, country_pool_size):
+    if not same_country:
+        return 1.0
+    credibility = country_pool_size / (country_pool_size + _COUNTRY_CREDIBILITY_K)
+    return 1.0 + credibility * _COUNTRY_BOOST
+
+
+def _trend_slope_per_day(delivered, now_ts, window_days=540):
+    """
+    Lineare Regression der monatlichen Ø-Wartezeit (dieselbe Grundidee wie
+    der "Entwicklung der Lieferzeit"-Chart im Dashboard), um die Prognose um
+    den aktuellen Trend zu korrigieren (Optimierung 1). Ohne diese Korrektur
+    schaetzt die Prognose rein aus dem historischen Median vergangener
+    Auslieferungen -- die wurden im Schnitt vor Monaten bestellt, als die
+    Wartezeit noch laenger (oder kuerzer) war, wodurch die Prognose dem
+    echten Trend systematisch hinterherhinkt. Nur Bestellungen der letzten
+    `window_days` fliessen ein, damit ein Trend von vor Jahren nicht mehr
+    mitzieht. Gibt (None, None) zurueck, wenn zu wenige Monate fuer eine
+    stabile Regression vorliegen.
+    """
+    cutoff = now_ts - window_days * DAY_MS
+    by_month = {}
+    for r in delivered:
+        ts = r["BestelldatumTS"]
+        if ts < cutoff:
+            continue
+        key = ts // (30 * DAY_MS)
+        by_month.setdefault(key, []).append(r["WartezeitTage"])
+    if len(by_month) < 4:
+        return None, None
+
+    keys = sorted(by_month)
+    avgs = [sum(by_month[k]) / len(by_month[k]) for k in keys]
+    n = len(keys)
+    idx = list(range(n))
+    mean_x = sum(idx) / n
+    mean_y = sum(avgs) / n
+    num = sum((idx[i] - mean_x) * (avgs[i] - mean_y) for i in range(n))
+    den = sum((idx[i] - mean_x) ** 2 for i in range(n))
+    if den == 0:
+        return None, None
+    slope_per_bucket = num / den
+    slope_per_day = slope_per_bucket / 30.0
+    ref_ts = sum(keys[i] * (30 * DAY_MS) for i in range(n)) / n
+    return slope_per_day, ref_ts
+
+
+def _queue_estimate(order, delivered, open_orders, now_ts,
+                     min_throughput_samples=6, throughput_window_days=60):
+    """
+    Warteschlangen-Tiefe / Durchsatz-Schaetzung (Optimierung 2): wie viele
+    Bestellungen derselben Modellgruppe waren zum Bestelldatum noch nicht
+    ausgeliefert ("vor" dieser Bestellung in der Schlange), und wie schnell
+    wird diese Schlange aktuell abgearbeitet? ETA = Tiefe / Durchsatz. Das
+    reagiert sofort auf Produktionsaenderungen, waehrend der Vergangenheits-
+    vergleich erst nachzieht, sobald genug neue Auslieferungen durch sind.
+    Gibt (eta_days, confidence) zurueck; confidence ist 0, wenn zu wenige
+    aktuelle Auslieferungen fuer eine verlaessliche Durchsatz-Schaetzung
+    vorliegen. confidence ist bewusst niedrig gedeckelt (siehe
+    predict_delivery()): Fahrzeugproduktion laeuft nicht strikt nach dem
+    Prinzip "frueher bestellt = frueher geliefert", daher ist dies nur ein
+    unterstuetzender Signal, kein Ersatz fuer den Vergleichsansatz.
+    """
+    order_ts = order["BestelldatumTS"]
+    group = order.get("Modellgruppe")
+    order_id = order.get("ID")
+
+    segment_delivered = [r for r in delivered if r.get("Modellgruppe") == group]
+    segment_open = [r for r in open_orders if r.get("Modellgruppe") == group]
+
+    queue_depth = 0
+    for r in segment_delivered:
+        if r.get("ID") == order_id:
+            continue
+        if r["BestelldatumTS"] >= order_ts:
+            continue
+        clear_ts = r["BestelldatumTS"] + r["WartezeitTage"] * DAY_MS
+        if clear_ts > order_ts:
+            queue_depth += 1
+    for r in segment_open:
+        if r.get("ID") == order_id:
+            continue
+        if r["BestelldatumTS"] < order_ts:
+            queue_depth += 1
+
+    window_start = now_ts - throughput_window_days * DAY_MS
+    recent_deliveries = [
+        r for r in segment_delivered
+        if window_start <= (r["BestelldatumTS"] + r["WartezeitTage"] * DAY_MS) <= now_ts
+    ]
+    n_recent = len(recent_deliveries)
+    if n_recent < min_throughput_samples:
+        return None, 0.0
+
+    throughput_per_day = n_recent / throughput_window_days
+    if throughput_per_day <= 0:
+        return None, 0.0
+
+    eta_days = queue_depth / throughput_per_day
+    confidence = min(0.25, n_recent / 60.0)
+    return eta_days, confidence
+
+
+def predict_delivery(order, delivered, open_orders, now_ts):
+    """
+    Schaetzt die Wartezeit einer offenen Bestellung. Kombiniert vier
+    Bausteine:
+      1. Gewichteter Quantil-Vergleich gegen aehnliche, ausgelieferte
+         Bestellungen derselben Modellgruppe (Gewicht = Konfigurations-
+         aehnlichkeit x Aktualitaet x Landes-Bonus, siehe _base_similarity/
+         _recency_weight/_country_weight) statt fester Tiers und hartem
+         Cutoff.
+      2. Trend-Korrektur auf Basis der linearen Regression der monatlichen
+         Ø-Wartezeit (Optimierung 1).
+      3. Weiche Aktualitaets-Gewichtung statt hartem 180er-Fenster
+         (Optimierung 3).
+      4. Weicher Landes-Bonus statt hartem Cutoff bei 15 Bestellungen
+         (Optimierung 4).
+      Plus als unterstuetzendes Signal: eine Warteschlangen-Schaetzung
+      (Optimierung 2), die nur eingemischt wird, wenn sie nicht drastisch
+      vom Vergleichswert abweicht (Produktion laeuft nicht strikt FIFO).
+    Gibt None zurueck, wenn selbst der Modellgruppen-Pool zu klein ist.
+    """
+    order_ts = order["BestelldatumTS"]
+    group = order.get("Modellgruppe")
+    order_land = order.get("Land") or ""
+
+    pool = [r for r in delivered if r.get("Modellgruppe") == group]
     if len(pool) < 5:
         return None
 
-    era = sorted(pool, key=lambda d: abs(d["BestelldatumTS"] - order["BestelldatumTS"]))
-    era = era[:min(_ERA_WINDOW, len(pool))]
-    scored = sorted(
-        ({"d": d, "sim": _similarity(order, d)} for d in era),
-        key=lambda x: -x["sim"],
-    )
+    country_pool_size = sum(1 for r in pool if (r.get("Land") or "") == order_land)
 
-    refs, tier = [], _TIERS[-1]
-    for t in _TIERS:
-        if t["group_only"]:
-            candidate = [x for x in scored if x["d"]["Modellgruppe"] == order.get("Modellgruppe")]
-        else:
-            candidate = [x for x in scored if x["sim"] >= t["min"]]
-        if len(candidate) >= 5:
-            refs, tier = candidate[:t["take"]], t
-            break
-    if len(refs) < 5:
-        refs, tier = scored[:30], _TIERS[-1]
-    if not refs:
+    weighted = []
+    for r in pool:
+        base = _base_similarity(order, r)
+        same_country = (r.get("Land") or "") == order_land
+        if base <= 0 and not same_country:
+            continue  # komplett unaehnliche Konfiguration UND anderes Land
+        rec_w = _recency_weight((order_ts - r["BestelldatumTS"]) / DAY_MS)
+        country_w = _country_weight(same_country, country_pool_size)
+        # Bodenwert 0.05: Modellgruppen-Zugehoerigkeit allein zaehlt schon
+        # etwas, auch wenn sonst nichts uebereinstimmt.
+        w = max(base, 0.05) * rec_w * country_w
+        weighted.append((r["WartezeitTage"], w, r))
+
+    if not weighted:
         return None
 
-    days = sorted(x["d"]["WartezeitTage"] for x in refs)
-    median = round(quantile(days, 0.5))
-    p25 = round(quantile(days, 0.25))
-    p75 = round(quantile(days, 0.75))
-    # Zusaetzliche Konfidenzstufen (80% und 95%) fuer die Unsicherheits-Visualisierung.
-    p10 = round(quantile(days, 0.10))
-    p90 = round(quantile(days, 0.90))
-    p2_5 = round(quantile(days, 0.025))
-    p97_5 = round(quantile(days, 0.975))
-    ref_dates = sorted(x["d"]["BestelldatumTS"] for x in refs)
+    vals_weights = [(v, w) for v, w, _ in weighted]
+    total_weight = sum(w for _, w in vals_weights)
+    eff_n = (total_weight ** 2) / sum(w * w for _, w in vals_weights) if vals_weights else 0
+
+    median = weighted_quantile(vals_weights, 0.5)
+    p25 = weighted_quantile(vals_weights, 0.25)
+    p75 = weighted_quantile(vals_weights, 0.75)
+    p10 = weighted_quantile(vals_weights, 0.10)
+    p90 = weighted_quantile(vals_weights, 0.90)
+    p2_5 = weighted_quantile(vals_weights, 0.025)
+    p97_5 = weighted_quantile(vals_weights, 0.975)
+
+    # ---- Optimierung 1: Trend-Korrektur ----
+    slope_per_day, _ref_ts = _trend_slope_per_day(delivered, now_ts)
+    trend_correction = 0.0
+    if slope_per_day is not None:
+        w_sum = sum(w for _, w, _ in weighted)
+        ref_avg_ts = sum(r["BestelldatumTS"] * w for _, w, r in weighted) / w_sum
+        trend_correction = slope_per_day * (order_ts - ref_avg_ts) / DAY_MS
+
+    median_tc = median + trend_correction
+    p25_tc, p75_tc = p25 + trend_correction, p75 + trend_correction
+    p10_tc, p90_tc = p10 + trend_correction, p90 + trend_correction
+    p2_5_tc, p97_5_tc = p2_5 + trend_correction, p97_5 + trend_correction
+
+    # ---- Optimierung 2: Warteschlangen-Schaetzung als gedaempftes Zusatzsignal ----
+    queue_eta, queue_conf = _queue_estimate(order, delivered, open_orders, now_ts)
+    if queue_eta is not None and queue_conf > 0:
+        relative_divergence = abs(queue_eta - median_tc) / max(median_tc, 1)
+        damped_conf = queue_conf / (1 + relative_divergence ** 2)
+        blend_delta = damped_conf * (queue_eta - median_tc)
+        median_tc += blend_delta
+        p25_tc += blend_delta; p75_tc += blend_delta
+        p10_tc += blend_delta; p90_tc += blend_delta
+        p2_5_tc += blend_delta; p97_5_tc += blend_delta
+
+    median_tc = max(0, median_tc)
 
     def date_for(d):
-        return order["BestelldatumTS"] + d * DAY_MS
+        return order_ts + d * DAY_MS
+
+    if country_pool_size >= _COUNTRY_CREDIBILITY_K:
+        tier_label = "gewichtete Referenzen (Land stark einbezogen)"
+    elif eff_n >= 20:
+        tier_label = "viele gewichtete Referenzen"
+    elif eff_n >= 8:
+        tier_label = "einige gewichtete Referenzen"
+    else:
+        tier_label = "wenige gewichtete Referenzen"
+
+    era_from = min(r["BestelldatumTS"] for _, _, r in weighted)
+    era_to = max(r["BestelldatumTS"] for _, _, r in weighted)
+    top_refs = sorted(weighted, key=lambda x: -x[1])[:12]
 
     return {
-        "median": median, "p25": p25, "p75": p75,
-        "p10": p10, "p90": p90, "p2_5": p2_5, "p97_5": p97_5,
-        "count": len(refs),
-        "tier_label": tier["label"],
-        "era_from": ref_dates[0],
-        "era_to": ref_dates[-1],
-        "date_median": date_for(median),
-        "date_early": date_for(p25), "date_late": date_for(p75),
-        "date_p10": date_for(p10), "date_p90": date_for(p90),
-        "date_p2_5": date_for(p2_5), "date_p97_5": date_for(p97_5),
-        "refs": [
-            {
-                # Bewusst anonym: kein Benutzername/Profil-Link, nur die fuer die
-                # Prognose relevanten Merkmale (siehe Datenminimierung oben).
-                "Land": x["d"].get("Land", ""),
-                "WartezeitTage": x["d"]["WartezeitTage"],
-            }
-            for x in refs[:12]
-        ],
+        "median": round(median_tc), "p25": round(max(0, p25_tc)), "p75": round(max(0, p75_tc)),
+        "p10": round(max(0, p10_tc)), "p90": round(max(0, p90_tc)),
+        "p2_5": round(max(0, p2_5_tc)), "p97_5": round(max(0, p97_5_tc)),
+        "count": len(weighted),
+        "tier_label": tier_label,
+        "era_from": era_from, "era_to": era_to,
+        "date_median": date_for(median_tc),
+        "date_early": date_for(p25_tc), "date_late": date_for(p75_tc),
+        "date_p10": date_for(p10_tc), "date_p90": date_for(p90_tc),
+        "date_p2_5": date_for(p2_5_tc), "date_p97_5": date_for(p97_5_tc),
+        "refs": [{"Land": r.get("Land", ""), "WartezeitTage": r["WartezeitTage"]} for _, _, r in top_refs],
+        "country_scoped": country_pool_size >= _COUNTRY_CREDIBILITY_K,
     }
 
-
-def predict_delivery(order, pool):
-    """
-    Schaetzt die Wartezeit einer offenen Bestellung. Vergleicht zuerst nur
-    gegen Bestellungen aus demselben Land (das staerkste Einzelmerkmal laut
-    Feature-Ranking) und weicht nur dann auf alle Laender aus, wenn dafuer
-    zu wenige Datenpunkte vorliegen. Gibt None zurueck, wenn selbst der
-    gesamte Pool zu klein ist.
-    """
-    country_pool = [d for d in pool if (d.get("Land") or "") == (order.get("Land") or "")]
-    try_country = len(country_pool) >= _MIN_COUNTRY_POOL
-
-    result = _similarity_match(order, country_pool) if try_country else None
-    country_scoped = try_country and result is not None
-
-    if result is None:
-        result = _similarity_match(order, pool)
-        country_scoped = False
-
-    if result is not None:
-        result["country_scoped"] = country_scoped
-    return result
-
-
-# --------------------------------------------------------------------------
-# 4c. Prognose-Log (persistiert zwischen Skript-Laeufen)
-# --------------------------------------------------------------------------
 
 def load_log():
     if not LOG_PATH.exists():
@@ -643,7 +806,7 @@ def update_prediction_log(log, delivered, open_orders, now_ts):
             new_logged += 1
         entry = log[oid]
 
-        p = predict_delivery(order, delivered)
+        p = predict_delivery(order, delivered, open_orders, now_ts)
         _apply_prediction(entry, p, prefix="")
         if is_new:
             _apply_prediction(entry, p, prefix="Original")
