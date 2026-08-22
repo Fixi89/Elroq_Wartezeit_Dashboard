@@ -7947,12 +7947,12 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1792327061907.1765,
-    "PredictedRangeLowDate": 1789815181182.599,
-    "PredictedRangeHighDate": 1794065191712.51,
+    "PredictedDate": 1792341093934.735,
+    "PredictedRangeLowDate": 1789877244831.6375,
+    "PredictedRangeHighDate": 1794047051472.6125,
     "PredictedMedianDays": 173,
-    "PredictedRangeLowDays": 143,
-    "PredictedRangeHighDays": 193,
+    "PredictedRangeLowDays": 144,
+    "PredictedRangeHighDays": 192,
     "ReferenceCount": 268,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1658448000000,
@@ -7972,15 +7972,7 @@
       },
       {
         "Land": "Deutschland",
-        "WartezeitTage": 149
-      },
-      {
-        "Land": "Deutschland",
         "WartezeitTage": 180
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 219
       },
       {
         "Land": "Deutschland",
@@ -7989,6 +7981,14 @@
       {
         "Land": "Deutschland",
         "WartezeitTage": 154
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 149
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 219
       },
       {
         "Land": "Deutschland",
@@ -8009,14 +8009,14 @@
     ],
     "CountryScoped": true,
     "PredictionUpdatedAt": 1786950640837,
-    "PredictedP10Date": 1786310818790.9175,
-    "PredictedP90Date": 1797872436325.9949,
-    "PredictedP2_5Date": 1785261175300.4407,
-    "PredictedP97_5Date": 1805202909808.7122,
+    "PredictedP10Date": 1786358854007.612,
+    "PredictedP90Date": 1797403319027.8438,
+    "PredictedP2_5Date": 1785262109948.8044,
+    "PredictedP97_5Date": 1805163166577.8906,
     "PredictedP10Days": 103,
-    "PredictedP90Days": 237,
+    "PredictedP90Days": 231,
     "PredictedP2_5Days": 91,
-    "PredictedP97_5Days": 322,
+    "PredictedP97_5Days": 321,
     "OriginalPredictedDate": 1788472800000,
     "OriginalPredictedRangeLowDate": 1785448800000,
     "OriginalPredictedRangeHighDate": 1792188000000,
