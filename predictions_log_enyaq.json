@@ -15428,16 +15428,24 @@
     "ActualWaitDays": null,
     "DeviationDays": null,
     "PredictedDate": 1786808727792.455,
-    "PredictedRangeLowDate": 1784364164055.065,
-    "PredictedRangeHighDate": 1788589336666.343,
+    "PredictedRangeLowDate": 1784391603724.868,
+    "PredictedRangeHighDate": 1788540951124.5579,
     "PredictedMedianDays": 173,
-    "PredictedRangeLowDays": 144,
+    "PredictedRangeLowDays": 145,
     "PredictedRangeHighDays": 193,
     "ReferenceCount": 268,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1658448000000,
     "ReferenceEraTo": 1770249600000,
     "References": [
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 154
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 149
+      },
       {
         "Land": "Deutschland",
         "WartezeitTage": 166
@@ -15452,27 +15460,7 @@
       },
       {
         "Land": "Deutschland",
-        "WartezeitTage": 154
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 149
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 180
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 219
-      },
-      {
-        "Land": "Deutschland",
         "WartezeitTage": 153
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 188
       },
       {
         "Land": "Deutschland",
@@ -15485,18 +15473,30 @@
       {
         "Land": "Deutschland",
         "WartezeitTage": 182
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 154
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 219
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 238
       }
     ],
     "CountryScoped": true,
     "PredictionUpdatedAt": 1786950640837,
-    "PredictedP10Date": 1780770040716.2566,
-    "PredictedP90Date": 1792528077590.2502,
-    "PredictedP2_5Date": 1779810327792.455,
-    "PredictedP97_5Date": 1799659595804.003,
-    "PredictedP10Days": 103,
-    "PredictedP90Days": 239,
+    "PredictedP10Date": 1780841540910.5461,
+    "PredictedP90Date": 1792640285303.12,
+    "PredictedP2_5Date": 1779821155458.074,
+    "PredictedP97_5Date": 1799682327792.455,
+    "PredictedP10Days": 104,
+    "PredictedP90Days": 240,
     "PredictedP2_5Days": 92,
-    "PredictedP97_5Days": 321,
+    "PredictedP97_5Days": 322,
     "OriginalPredictedDate": 1782082800000,
     "OriginalPredictedRangeLowDate": 1779922800000,
     "OriginalPredictedRangeHighDate": 1785538800000,
