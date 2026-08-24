@@ -12,6 +12,90 @@
   const DATA = ALL_ORDERS.filter(r => r.Ausgeliefert !== false);
   const OPEN_ORDERS = ALL_ORDERS.filter(r => r.Ausgeliefert === false);
 
+  // ---- Dynamic accent colour ("Gimmick") ----
+  // Default is Škoda Electric Green, but picking any paint colour in a
+  // filter checkbox or a Farbe dropdown retints the whole dashboard —
+  // buttons, checkboxes, and every chart — to that colour. Whichever
+  // colour was picked most recently wins; CSS-driven elements read the
+  // --accent custom property, JS-drawn SVG charts read the ACCENT/ACCENT_DIM
+  // variables below (re-rendered on every accent change so they pick it up).
+  const DEFAULT_ACCENT = '#78faae';
+  const DEFAULT_ACCENT_DIM = '#4aa92e';
+  let ACCENT = DEFAULT_ACCENT;
+  let ACCENT_DIM = DEFAULT_ACCENT_DIM;
+
+  // Known Škoda paint names first (most specific match wins), then a
+  // generic German colour-word fallback so names not explicitly listed
+  // (future paint options, other models) still resolve to something sane.
+  const KNOWN_PAINTS = [
+    ['Black-Magic', '#2a2d33'],
+    ['Smokey Diamond', '#aab0b8'],
+    ['Brillant-Silber', '#c7cdd3'], ['Brilliant-Silber', '#c7cdd3'],
+    ['Arctic-Silber', '#d6dbe0'],
+    ['Moon-Weiß', '#eef0f2'], ['Moon-Weiss', '#eef0f2'],
+    ['Energy-Blau', '#1f5fd1'],
+    ['Race-Blau', '#0a63c9'],
+    ['Graphite-Grau', '#494e55'],
+    ['Quarz-Grau', '#5b6067'],
+    ['Stahl-Grau', '#6b7280'],
+    ['Mamba-Grün', '#1f5c3a'],
+    ['Timiano-Grün', '#5a7a3a'],
+    ['Olibo-Grün', '#5f7a3f'],
+    ['Velvet-Rot', '#a8232f'],
+    ['Phoenix-Orange', '#df6a2a'],
+  ];
+  const COLOR_WORD_FALLBACK = [
+    ['Blau', '#2266d6'], ['Grün', '#3f9e5c'], ['Rot', '#c22b36'],
+    ['Grau', '#6b7280'], ['Schwarz', '#1c1e22'], ['Magic', '#2a2d33'],
+    ['Weiß', '#eef0f2'], ['Weiss', '#eef0f2'], ['Silber', '#c7cdd3'],
+    ['Gold', '#c9a544'], ['Gelb', '#e3c53a'], ['Orange', '#df6a2a'],
+    ['Braun', '#7a5230'], ['Beige', '#c9b892'],
+    ['Türkis', '#2fa8a0'], ['Petrol', '#1f6e6e'],
+    ['Lila', '#7c4fc9'], ['Violett', '#7c4fc9'],
+  ];
+
+  function carColorToAccent(name){
+    if (!name) return null;
+    for (const [needle, hex] of KNOWN_PAINTS){
+      if (name.includes(needle)) return hex;
+    }
+    for (const [needle, hex] of COLOR_WORD_FALLBACK){
+      if (name.includes(needle)) return hex;
+    }
+    return null;
+  }
+
+  function relativeLuminance(hex){
+    const n = hex.replace('#', '');
+    const r = parseInt(n.slice(0, 2), 16) / 255;
+    const g = parseInt(n.slice(2, 4), 16) / 255;
+    const b = parseInt(n.slice(4, 6), 16) / 255;
+    const lin = c => (c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4));
+    return 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b);
+  }
+
+  function darken(hex, amount){
+    const n = hex.replace('#', '');
+    const r = Math.round(parseInt(n.slice(0, 2), 16) * (1 - amount));
+    const g = Math.round(parseInt(n.slice(2, 4), 16) * (1 - amount));
+    const b = Math.round(parseInt(n.slice(4, 6), 16) * (1 - amount));
+    return '#' + [r, g, b].map(v => Math.max(0, v).toString(16).padStart(2, '0')).join('');
+  }
+
+  function setAccentColor(hex){
+    if (!hex || hex === ACCENT) return;
+    ACCENT = hex;
+    ACCENT_DIM = darken(hex, 0.32);
+    const root = document.documentElement.style;
+    const rgb = [0, 2, 4].map(i => parseInt(hex.slice(1 + i, 3 + i), 16)).join(',');
+    root.setProperty('--accent', ACCENT);
+    root.setProperty('--accent-rgb', rgb);
+    root.setProperty('--accent-dim', ACCENT_DIM);
+    root.setProperty('--accent-contrast', relativeLuminance(hex) > 0.45 ? '#05060f' : '#ffffff');
+    patchGaugeColors();
+    if (typeof render === 'function') render();
+  }
+
   // ---- Filter definitions ----
   // 'Modell' is rendered as a two-level tree (drivetrain group -> variant),
   // but the filter state stays a flat set of full model names.
@@ -326,6 +410,10 @@
         cb.addEventListener('change', () => {
           if (cb.checked) state[f.key].add(val);
           else state[f.key].delete(val);
+          if (f.key === 'Farbe' && cb.checked){
+            const hex = carColorToAccent(val);
+            if (hex) setAccentColor(hex);
+          }
           render();
         });
         const txt = document.createElement('span');
@@ -889,6 +977,17 @@
     return GAUGE.startAngle + frac * (GAUGE.endAngle - GAUGE.startAngle);
   }
 
+  function patchGaugeColors(){
+    // The gauge is built once at init (buildGaugeCard), not regenerated on
+    // every render() like the other charts, so an accent change needs to
+    // patch its already-inserted SVG directly instead of waiting for a
+    // redraw. Only the needle/pivot follow the accent — the track's light
+    // -> dark gradient encodes the wait-time scale itself and stays neutral.
+    document.getElementById('gaugeNeedleStroke')?.setAttribute('stroke', ACCENT);
+    document.getElementById('gaugePivotRing')?.setAttribute('stroke', ACCENT);
+    document.getElementById('gaugePivotDot')?.setAttribute('fill', ACCENT);
+  }
+
   function buildGaugeCard(){
     const card = document.createElement('div');
     card.className = 'kpi-card gauge-card';
@@ -901,18 +1000,18 @@
       <svg viewBox="0 0 180 150" width="150" height="125" role="img" aria-label="Durchschnittliche Wartezeit als Tacho">
         <defs>
           <linearGradient id="gaugeGrad" x1="${GAUGE.cx-GAUGE.r}" y1="0" x2="${GAUGE.cx+GAUGE.r}" y2="0" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stop-color="#78faae"/>
-            <stop offset="55%" stop-color="#f5b942"/>
-            <stop offset="100%" stop-color="#ff6b7a"/>
+            <stop offset="0%" stop-color="#d8ecf8"/>
+            <stop offset="55%" stop-color="#8fa6c9"/>
+            <stop offset="100%" stop-color="#4a5578"/>
           </linearGradient>
         </defs>
-        <path d="${fullArc}" fill="none" stroke="${'#16281f'}" stroke-width="13" stroke-linecap="round"/>
+        <path d="${fullArc}" fill="none" stroke="${'#0d0f1a'}" stroke-width="13" stroke-linecap="round"/>
         <path d="${fullArc}" fill="none" stroke="url(#gaugeGrad)" stroke-width="9" stroke-linecap="round" opacity="0.92"/>
         <text x="${minX}" y="${minY}" text-anchor="${minAnchor}" class="gauge-tick" id="gaugeMinTick">–</text>
         <text x="${maxX}" y="${maxY}" text-anchor="${maxAnchor}" class="gauge-tick" id="gaugeMaxTick">–</text>
-        <line id="gaugeNeedle" x1="${GAUGE.cx}" y1="${GAUGE.cy}" x2="${GAUGE.cx}" y2="${GAUGE.cy}" stroke="#eaf5ee" stroke-width="2.5" stroke-linecap="round"/>
-        <circle cx="${GAUGE.cx}" cy="${GAUGE.cy}" r="6.5" fill="#0a1512" stroke="#eaf5ee" stroke-width="2"/>
-        <circle cx="${GAUGE.cx}" cy="${GAUGE.cy}" r="2" fill="#eaf5ee"/>
+        <line id="gaugeNeedle" x1="${GAUGE.cx}" y1="${GAUGE.cy}" x2="${GAUGE.cx}" y2="${GAUGE.cy}" stroke="${ACCENT}" stroke-width="2.5" stroke-linecap="round" id="gaugeNeedleStroke"/>
+        <circle cx="${GAUGE.cx}" cy="${GAUGE.cy}" r="6.5" fill="#05060f" stroke="${ACCENT}" stroke-width="2" id="gaugePivotRing"/>
+        <circle cx="${GAUGE.cx}" cy="${GAUGE.cy}" r="2" fill="${ACCENT}" id="gaugePivotDot"/>
         <text id="gaugeValueText" x="${GAUGE.cx}" y="${GAUGE.cy + 34}" text-anchor="middle" class="gauge-value">–</text>
         <text x="${GAUGE.cx}" y="${GAUGE.cy + 50}" text-anchor="middle" class="gauge-unit">Tage Ø</text>
       </svg>
@@ -1018,11 +1117,11 @@
       const rangeFrom = i * binSize, rangeTo = rangeFrom + binSize - 1;
       const label = `${rangeFrom}–${rangeTo} Tage: ${c} Bestellung${c===1?'':'en'}`;
       bars += `<rect class="hist-bar" data-label="${escapeHtml(label)}"
-        x="${x+1.5}" y="${y}" width="${Math.max(bw-3,1)}" height="${Math.max(bh,1)}" fill="#78faae" opacity="0.85" rx="4"/>`;
+        x="${x+1.5}" y="${y}" width="${Math.max(bw-3,1)}" height="${Math.max(bh,1)}" fill="${ACCENT}" opacity="0.85" rx="4"/>`;
     });
 
     // axis line
-    let axis = `<line x1="${padL}" y1="${padT+plotH}" x2="${W-10}" y2="${padT+plotH}" stroke="rgba(30,32,60,0.09)" stroke-width="1"/>`;
+    let axis = `<line x1="${padL}" y1="${padT+plotH}" x2="${W-10}" y2="${padT+plotH}" stroke="rgba(199,211,234,0.09)" stroke-width="1"/>`;
     // y-axis gridlines + labels (0 / half / max) so bar heights read as real
     // counts, not just relative shapes — the biggest legibility gap this
     // chart had before.
@@ -1030,8 +1129,8 @@
     let yGrid = '';
     [...new Set(yTicks)].forEach(v => {
       const y = padT + plotH - (v / maxCount) * plotH;
-      yGrid += `<line x1="${padL}" y1="${y.toFixed(1)}" x2="${W-10}" y2="${y.toFixed(1)}" stroke="rgba(30,32,60,0.09)" stroke-width="1" opacity="${v===0?0:0.5}"/>`;
-      yGrid += `<text x="${padL-6}" y="${(y+3).toFixed(1)}" font-size="9.5" fill="#5a7268" text-anchor="end" font-family="IBM Plex Mono, monospace">${v}</text>`;
+      yGrid += `<line x1="${padL}" y1="${y.toFixed(1)}" x2="${W-10}" y2="${y.toFixed(1)}" stroke="rgba(199,211,234,0.09)" stroke-width="1" opacity="${v===0?0:0.5}"/>`;
+      yGrid += `<text x="${padL-6}" y="${(y+3).toFixed(1)}" font-size="9.5" fill="#9da7ba" text-anchor="end" font-family="JetBrains Mono, monospace">${v}</text>`;
     });
     // x labels, thinned out so they never collide on narrow screens
     let labels = '';
@@ -1039,12 +1138,12 @@
     const fs = isNarrow ? 11 : 9.5;
     for (let i=0; i<nBins; i+=step){
       const x = padL + i*bw;
-      labels += `<text x="${x}" y="${H-6}" font-size="${fs}" fill="#93ab9f" font-family="IBM Plex Mono, monospace">${i*binSize}</text>`;
+      labels += `<text x="${x}" y="${H-6}" font-size="${fs}" fill="#c7d3ea" font-family="JetBrains Mono, monospace">${i*binSize}</text>`;
     }
 
     // avg marker (global) as reference
     const gAvgX = padL + Math.min(nBins-0.01, GLOBAL_STATS.avg/binSize) * bw;
-    const refLine = `<line x1="${gAvgX}" y1="${padT}" x2="${gAvgX}" y2="${padT+plotH}" stroke="#f5b942" stroke-width="1.3" stroke-dasharray="4 3" opacity="0.85"/>`;
+    const refLine = `<line x1="${gAvgX}" y1="${padT}" x2="${gAvgX}" y2="${padT+plotH}" stroke="#b6d9fc" stroke-width="1.3" stroke-dasharray="4 3" opacity="0.85"/>`;
 
     svg.innerHTML = yGrid + bars + axis + labels + refLine;
     svg.setAttribute('role', 'img');
@@ -1061,7 +1160,7 @@
     svg.querySelectorAll('.hist-bar').forEach(bar => {
       bar.addEventListener('mouseenter', () => {
         bar.setAttribute('opacity', '1');
-        bar.setAttribute('fill', '#4aa92e');
+        bar.setAttribute('fill', ACCENT_DIM);
         if (!histTooltip) return;
         histTooltip.hidden = false;
         histTooltip.innerHTML = `<strong>${bar.dataset.label}</strong>`;
@@ -1076,14 +1175,14 @@
       });
       bar.addEventListener('mouseleave', () => {
         bar.setAttribute('opacity', '0.85');
-        bar.setAttribute('fill', '#78faae');
+        bar.setAttribute('fill', ACCENT);
         if (histTooltip) histTooltip.hidden = true;
       });
     });
 
     document.getElementById('chartLegend').innerHTML = `
-      <span><span class="legend-dot" style="background:#78faae;"></span>Anzahl Bestellungen je Wartezeit-Bin (${binSize} Tage)</span>
-      <span><span class="legend-dot" style="background:#f5b942;"></span>Ø Wartezeit gesamt: ${Math.round(GLOBAL_STATS.avg)} Tage</span>
+      <span><span class="legend-dot" style="background:${ACCENT};"></span>Anzahl Bestellungen je Wartezeit-Bin (${binSize} Tage)</span>
+      <span><span class="legend-dot" style="background:#b6d9fc;"></span>Ø Wartezeit gesamt: ${Math.round(GLOBAL_STATS.avg)} Tage</span>
     `;
   }
 
@@ -1192,16 +1291,16 @@
     const maxN = Math.max(...points.map(p => p.n));
     const dots = xy.map(pt => {
       const r = 2.4 + (pt.p.n / maxN) * 2.6;
-      return `<circle class="trend-dot" data-i="${pt.p.__i ?? ''}" cx="${pt.x.toFixed(1)}" cy="${pt.y.toFixed(1)}" r="${r.toFixed(1)}" fill="#78faae"/>`;
+      return `<circle class="trend-dot" data-i="${pt.p.__i ?? ''}" cx="${pt.x.toFixed(1)}" cy="${pt.y.toFixed(1)}" r="${r.toFixed(1)}" fill="${ACCENT}"/>`;
     }).join('');
     const fdots = fxy.map(pt =>
-      `<circle class="trend-dot" cx="${pt.x.toFixed(1)}" cy="${pt.y.toFixed(1)}" r="3.4" fill="#10251d" stroke="#c7d1cb" stroke-width="2"/>`
+      `<circle class="trend-dot" cx="${pt.x.toFixed(1)}" cy="${pt.y.toFixed(1)}" r="3.4" fill="#05060f" stroke="#9da7ba" stroke-width="2"/>`
     ).join('');
 
-    const axis = `<line x1="${padL}" y1="${padT+plotH}" x2="${W-padR}" y2="${padT+plotH}" stroke="rgba(30,32,60,0.09)" stroke-width="1"/>`;
+    const axis = `<line x1="${padL}" y1="${padT+plotH}" x2="${W-padR}" y2="${padT+plotH}" stroke="rgba(199,211,234,0.09)" stroke-width="1"/>`;
     // Divider marking where real data ends and the projection begins.
     const divider = fxy.length
-      ? `<line x1="${xy[xy.length-1].x.toFixed(1)}" y1="${padT}" x2="${xy[xy.length-1].x.toFixed(1)}" y2="${padT+plotH}" stroke="#c7d1cb" stroke-width="1" stroke-dasharray="2 3" opacity="0.45"/>`
+      ? `<line x1="${xy[xy.length-1].x.toFixed(1)}" y1="${padT}" x2="${xy[xy.length-1].x.toFixed(1)}" y2="${padT+plotH}" stroke="#9da7ba" stroke-width="1" stroke-dasharray="2 3" opacity="0.45"/>`
       : '';
 
     const allPts = [...xy, ...fxy];
@@ -1230,12 +1329,12 @@
     let labels = '';
     kept.forEach(({ pt }) => {
       const dim = pt.p.forecast ? ' opacity="0.65"' : '';
-      labels += `<text x="${pt.x.toFixed(1)}" y="${H-8}" font-size="${fs}" fill="#93ab9f" text-anchor="middle" font-family="IBM Plex Mono, monospace"${dim}>${monthLabel(pt.p.k)}</text>`;
+      labels += `<text x="${pt.x.toFixed(1)}" y="${H-8}" font-size="${fs}" fill="#c7d3ea" text-anchor="middle" font-family="JetBrains Mono, monospace"${dim}>${monthLabel(pt.p.k)}</text>`;
     });
 
     const yLabels = `
-      <text x="${padL-6}" y="${padT+4}" font-size="9.5" fill="#5a7268" text-anchor="end" font-family="IBM Plex Mono, monospace">${Math.round(maxAvg)}</text>
-      <text x="${padL-6}" y="${padT+plotH}" font-size="9.5" fill="#5a7268" text-anchor="end" font-family="IBM Plex Mono, monospace">${Math.round(minAvg)}</text>
+      <text x="${padL-6}" y="${padT+4}" font-size="9.5" fill="#9da7ba" text-anchor="end" font-family="JetBrains Mono, monospace">${Math.round(maxAvg)}</text>
+      <text x="${padL-6}" y="${padT+plotH}" font-size="9.5" fill="#9da7ba" text-anchor="end" font-family="JetBrains Mono, monospace">${Math.round(minAvg)}</text>
     `;
 
     // Invisible wide hit-columns for mouse/touch interaction — one per real
@@ -1251,16 +1350,16 @@
     }).join('');
 
     svg.innerHTML = `
-      <path d="${areaPath}" fill="#78faae" opacity="0.08"/>
-      <path d="${path}" fill="none" stroke="#78faae" stroke-width="2.2"/>
-      ${forecastPath ? `<path d="${forecastPath}" fill="none" stroke="#c7d1cb" stroke-width="2.2" stroke-dasharray="5 4"/>` : ''}
+      <path d="${areaPath}" fill="${ACCENT}" opacity="0.08"/>
+      <path d="${path}" fill="none" stroke="${ACCENT}" stroke-width="2.2"/>
+      ${forecastPath ? `<path d="${forecastPath}" fill="none" stroke="#9da7ba" stroke-width="2.2" stroke-dasharray="5 4"/>` : ''}
       ${divider}
       ${axis}
       ${dots}
       ${fdots}
       ${labels}
       ${yLabels}
-      <line id="trendCrosshair" class="chart-crosshair" x1="0" y1="${padT}" x2="0" y2="${padT+plotH}" stroke="#eaf5ee" stroke-width="1" opacity="0" />
+      <line id="trendCrosshair" class="chart-crosshair" x1="0" y1="${padT}" x2="0" y2="${padT+plotH}" stroke="#d8ecf8" stroke-width="1" opacity="0" />
       ${hitCols}
     `;
     svg.setAttribute('role', 'img');
@@ -1317,8 +1416,8 @@
     }
 
     document.getElementById('trendLegend').innerHTML = `
-      <span><span class="legend-dot" style="background:#78faae;"></span>Ø Wartezeit je Bestellmonat, Punktgröße = Anzahl Bestellungen</span>
-      ${forecastPoints.length ? `<span><span class="legend-dot" style="background:#c7d1cb;"></span>Prognose (linearer Trend, nächste ${FORECAST_MONTHS} Monate)</span>` : ''}
+      <span><span class="legend-dot" style="background:${ACCENT};"></span>Ø Wartezeit je Bestellmonat, Punktgröße = Anzahl Bestellungen</span>
+      ${forecastPoints.length ? `<span><span class="legend-dot" style="background:#9da7ba;"></span>Prognose (linearer Trend, nächste ${FORECAST_MONTHS} Monate)</span>` : ''}
       <span>${points.length} Monate im gewählten Zeitraum</span>
     `;
   }
@@ -1703,6 +1802,7 @@
     document.querySelectorAll('.multi-check input[type=checkbox], .model-variants input[type=checkbox]').forEach(cb => cb.checked = false);
     document.querySelectorAll('select.tri-select').forEach(sel => sel.value = 'alle');
     syncModelGroupBoxes();
+    if (ACCENT !== DEFAULT_ACCENT) setAccentColor(DEFAULT_ACCENT);
     render();
   });
 
@@ -2015,7 +2115,7 @@
           `V ${y1+(roundLeft?rx:0)} ` +
           (roundLeft ? `A ${rx} ${rx} 0 0 1 ${x1+rx} ${y1} ` : `L ${x1} ${y1} `) + 'Z'
         : `M ${x1} ${y1} H ${x2} V ${y2} H ${x1} Z`;
-      return `<path d="${path}" fill="#f5b942" opacity="${opacity}"/>`;
+      return `<path d="${path}" fill="#b6d9fc" opacity="${opacity}"/>`;
     }
 
     let bands = '';
@@ -2038,17 +2138,17 @@
     [p.dateP10, p.dateEarly, p.dateLate, p.dateP90].forEach(ts => {
       if (ts == null) return;
       const x = xFor(ts);
-      dividers += `<line x1="${x.toFixed(1)}" y1="${barY}" x2="${x.toFixed(1)}" y2="${barY+barH}" stroke="#0a1512" stroke-width="1" opacity="0.55"/>`;
+      dividers += `<line x1="${x.toFixed(1)}" y1="${barY}" x2="${x.toFixed(1)}" y2="${barY+barH}" stroke="#05060f" stroke-width="1" opacity="0.55"/>`;
     });
 
     const medX = xFor(p.dateMedian);
     const marker = `
-      <line x1="${medX.toFixed(1)}" y1="${barY-7}" x2="${medX.toFixed(1)}" y2="${barY+barH+7}" stroke="#eaf5ee" stroke-width="2.5"/>
-      <circle cx="${medX.toFixed(1)}" cy="${(barY+barH/2).toFixed(1)}" r="4.5" fill="#0a1512" stroke="#eaf5ee" stroke-width="2.5"/>
+      <line x1="${medX.toFixed(1)}" y1="${barY-7}" x2="${medX.toFixed(1)}" y2="${barY+barH+7}" stroke="#d8ecf8" stroke-width="2.5"/>
+      <circle cx="${medX.toFixed(1)}" cy="${(barY+barH/2).toFixed(1)}" r="4.5" fill="#05060f" stroke="#d8ecf8" stroke-width="2.5"/>
     `;
 
     const label = (ts, x, anchor) =>
-      `<text x="${x.toFixed(1)}" y="${H-6}" font-size="10" fill="#93ab9f" text-anchor="${anchor}" font-family="IBM Plex Mono, monospace">${fmtDate(ts)}</text>`;
+      `<text x="${x.toFixed(1)}" y="${H-6}" font-size="10" fill="#c7d3ea" text-anchor="${anchor}" font-family="JetBrains Mono, monospace">${fmtDate(ts)}</text>`;
 
     const ariaLabel = `Prognose-Unsicherheit: 50 Prozent Wahrscheinlichkeit zwischen ${fmtDate(p.dateEarly)} und ${fmtDate(p.dateLate)}` +
       (hasWide ? `, 95 Prozent zwischen ${fmtDate(outerFrom)} und ${fmtDate(outerTo)}` : '') + `. Median: ${fmtDate(p.dateMedian)}.`;
@@ -2058,7 +2158,7 @@
         ${bands}
         ${dividers}
         ${marker}
-        <text x="${medX.toFixed(1)}" y="${barY-12}" font-size="11" fill="#eaf5ee" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-weight="600">${fmtDate(p.dateMedian)}</text>
+        <text x="${medX.toFixed(1)}" y="${barY-12}" font-size="11" fill="#d8ecf8" text-anchor="middle" font-family="JetBrains Mono, monospace" font-weight="600">${fmtDate(p.dateMedian)}</text>
         ${label(outerFrom, padX, 'start')}
         ${label(outerTo, W - padX, 'end')}
       </svg>
@@ -2237,6 +2337,10 @@
     farbeSel.innerHTML = '<option value="">Farbe (optional, hilft bei mehreren Treffern)</option>' +
       distinctValues('Farbe').filter(([val]) => val !== UNKNOWN)
         .map(([val]) => `<option value="${escapeHtml(val)}">${escapeHtml(val)}</option>`).join('');
+    farbeSel.addEventListener('change', () => {
+      const hex = carColorToAccent(farbeSel.value);
+      if (hex) setAccentColor(hex);
+    });
 
     document.getElementById('lookupBtn').addEventListener('click', runLookup);
     [modellSel, document.getElementById('lkDate'), farbeSel].forEach(elm => {
@@ -2299,6 +2403,10 @@
       });
     };
     fillSelect('wiFarbe', 'Farbe', false);
+    document.getElementById('wiFarbe').addEventListener('change', (e) => {
+      const hex = carColorToAccent(e.target.value);
+      if (hex) setAccentColor(hex);
+    });
     fillSelect('wiInnen', 'Innenausstattung_DesignSelection', false);
     fillSelect('wiFelgen', 'Felgenname', false);
 
