@@ -62802,5 +62802,156 @@
       }
     ],
     "OriginalCountryScoped": true
+  },
+  "1876": {
+    "ID": "1876",
+    "Modell": "Skoda Enyaq RS iV",
+    "Modellgruppe": "Enyaq RS",
+    "Bestelldatum": "21. April 2026",
+    "BestelldatumTS": 1776729600000,
+    "Status": "offen",
+    "LoggedAt": 1787657771651,
+    "ResolvedAt": null,
+    "ActualDate": null,
+    "ActualWaitDays": null,
+    "DeviationDays": null,
+    "PredictedDate": 1791699196749.7437,
+    "PredictedRangeLowDate": 1788762275257.8962,
+    "PredictedRangeHighDate": 1793749411316.004,
+    "PredictedP10Date": 1786974209855.867,
+    "PredictedP90Date": 1796516157829.6506,
+    "PredictedP2_5Date": 1783728000000.0,
+    "PredictedP97_5Date": 1801792981390.349,
+    "PredictedMedianDays": 173,
+    "PredictedRangeLowDays": 139,
+    "PredictedRangeHighDays": 197,
+    "PredictedP10Days": 119,
+    "PredictedP90Days": 229,
+    "PredictedP2_5Days": 81,
+    "PredictedP97_5Days": 290,
+    "ReferenceCount": 119,
+    "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
+    "ReferenceEraFrom": 1673308800000,
+    "ReferenceEraTo": 1772150400000,
+    "References": [
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 196
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 145
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 167
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 189
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 179
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 202
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 209
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 102
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 200
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 174
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 175
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 190
+      }
+    ],
+    "CountryScoped": true,
+    "OriginalPredictedDate": 1791699196749.7437,
+    "OriginalPredictedRangeLowDate": 1788762275257.8962,
+    "OriginalPredictedRangeHighDate": 1793749411316.004,
+    "OriginalPredictedP10Date": 1786974209855.867,
+    "OriginalPredictedP90Date": 1796516157829.6506,
+    "OriginalPredictedP2_5Date": 1783728000000.0,
+    "OriginalPredictedP97_5Date": 1801792981390.349,
+    "OriginalPredictedMedianDays": 173,
+    "OriginalPredictedRangeLowDays": 139,
+    "OriginalPredictedRangeHighDays": 197,
+    "OriginalPredictedP10Days": 119,
+    "OriginalPredictedP90Days": 229,
+    "OriginalPredictedP2_5Days": 81,
+    "OriginalPredictedP97_5Days": 290,
+    "OriginalReferenceCount": 119,
+    "OriginalReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
+    "OriginalReferenceEraFrom": 1673308800000,
+    "OriginalReferenceEraTo": 1772150400000,
+    "OriginalReferences": [
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 196
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 145
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 167
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 189
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 179
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 202
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 209
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 102
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 200
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 174
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 175
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 190
+      }
+    ],
+    "OriginalCountryScoped": true
   }
 }
