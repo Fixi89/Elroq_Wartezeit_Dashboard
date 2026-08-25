@@ -407,6 +407,15 @@ def weighted_quantile(pairs, q):
 
 _BOOL_KEYS = list(BOOL_PATTERNS.keys())
 
+# See elroq_dashboard_update.py for the full rationale: a statistical pass
+# (t-test on delivered orders) found that only these two flags clear both a
+# significance and a minimum-sample bar; the other 17 add noise rather than
+# signal to the similarity/backtest match, so they're excluded here even
+# though BOOL_PATTERNS keeps parsing all 19 for data completeness. The same
+# two keys are used for Elroq to keep the shared frontend (template_app.js)
+# and the two vehicles' prediction logic consistent.
+_SIMILARITY_BOOL_KEYS = ["Paket_Jubilaeum130Jahre", "Waermepumpe"]
+
 
 def _base_similarity(a, b):
     """
@@ -431,7 +440,7 @@ def _base_similarity(a, b):
     add(1, (a.get("Innenausstattung_DesignSelection") or "") ==
            (b.get("Innenausstattung_DesignSelection") or ""))
     add(1, (a.get("Felgenname") or "") == (b.get("Felgenname") or ""))
-    for k in _BOOL_KEYS:
+    for k in _SIMILARITY_BOOL_KEYS:
         add(0.6, a.get(k) == b.get(k))
     return score / max_score if max_score else 0.0
 
@@ -1065,7 +1074,7 @@ def main():
     # belastbare Genauigkeits-Zahlen zur aktuellen Algorithmus-Version, ohne
     # Monate auf neue echte Aufloesungen warten zu muessen.
     print("\nRueckblick-Test (simulierte Prognosen fuer bereits ausgelieferte Bestellungen)...")
-    bt_results = backtest.run_backtest(delivered, predict_delivery, _BOOL_KEYS)
+    bt_results = backtest.run_backtest(delivered, predict_delivery, _SIMILARITY_BOOL_KEYS)
     bt_summary = backtest.aggregate_backtest(bt_results)
     if bt_summary["new"]:
         print(f"  Getestet: {bt_summary['n_tested']} Bestellungen "

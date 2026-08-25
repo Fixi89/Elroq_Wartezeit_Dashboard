@@ -405,6 +405,20 @@ def weighted_quantile(pairs, q):
 
 _BOOL_KEYS = list(BOOL_PATTERNS.keys())
 
+# _base_similarity() and the backtest baseline used to fold in ALL 19 parsed
+# config flags at equal weight. A statistical pass (two-sided t-test on
+# delivered orders, see Methodik-Panel) showed that 17 of them have no
+# significant effect on wait time (p >= 0.05) and/or occur too rarely
+# (n < 15) to carry real signal -- matching on "both don't have MatrixLED"
+# just adds noise that dilutes genuinely predictive matches (same model,
+# same trim) with near-tautological agreement on options nearly nobody has.
+# BOOL_PATTERNS itself stays untouched (full data fidelity, still exported),
+# only the similarity/backtest inputs are narrowed to the two flags that
+# actually clear both a significance and a minimum-sample bar:
+#   Paket_Jubilaeum130Jahre (n=37,  diff=+35.9 Tage, p<0.0001)
+#   Waermepumpe             (n=287, diff=+9.1 Tage,  p=0.036)
+_SIMILARITY_BOOL_KEYS = ["Paket_Jubilaeum130Jahre", "Waermepumpe"]
+
 
 def _base_similarity(a, b):
     """
@@ -429,7 +443,7 @@ def _base_similarity(a, b):
     add(1, (a.get("Innenausstattung_DesignSelection") or "") ==
            (b.get("Innenausstattung_DesignSelection") or ""))
     add(1, (a.get("Felgenname") or "") == (b.get("Felgenname") or ""))
-    for k in _BOOL_KEYS:
+    for k in _SIMILARITY_BOOL_KEYS:
         add(0.6, a.get(k) == b.get(k))
     return score / max_score if max_score else 0.0
 
@@ -1063,7 +1077,7 @@ def main():
     # belastbare Genauigkeits-Zahlen zur aktuellen Algorithmus-Version, ohne
     # Monate auf neue echte Aufloesungen warten zu muessen.
     print("\nRueckblick-Test (simulierte Prognosen fuer bereits ausgelieferte Bestellungen)...")
-    bt_results = backtest.run_backtest(delivered, predict_delivery, _BOOL_KEYS)
+    bt_results = backtest.run_backtest(delivered, predict_delivery, _SIMILARITY_BOOL_KEYS)
     bt_summary = backtest.aggregate_backtest(bt_results)
     if bt_summary["new"]:
         print(f"  Getestet: {bt_summary['n_tested']} Bestellungen "

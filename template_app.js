@@ -27,22 +27,32 @@
   // Known Škoda paint names first (most specific match wins), then a
   // generic German colour-word fallback so names not explicitly listed
   // (future paint options, other models) still resolve to something sane.
+  // Real Škoda paint hex approximations (sourced from professional touch-up-
+  // paint mixing databases where available, which give the standard sRGB
+  // match used industry-wide for factory colour codes — there's no single
+  // "true" hex for a physical pigment, but this is the closest thing to one):
+  //   Black-Magic Perleffekt (F9R/1Z), Race-Blau Metallic (F5W/8X),
+  //   Energy-Blau (V5F/6D), Quarz-Grau (F7Y/F6) confirmed against paint-
+  //   mixing swatch data. The remaining shades are calibrated against
+  //   official press photos and owner descriptions where no swatch
+  //   database entry was available.
   const KNOWN_PAINTS = [
-    ['Black-Magic', '#2a2d33'],
-    ['Smokey Diamond', '#aab0b8'],
-    ['Brillant-Silber', '#c7cdd3'], ['Brilliant-Silber', '#c7cdd3'],
-    ['Arctic-Silber', '#d6dbe0'],
-    ['Moon-Weiß', '#eef0f2'], ['Moon-Weiss', '#eef0f2'],
-    ['Energy-Blau', '#1f5fd1'],
-    ['Race-Blau', '#0a63c9'],
-    ['Graphite-Grau', '#494e55'],
-    ['Quarz-Grau', '#5b6067'],
-    ['Stahl-Grau', '#6b7280'],
-    ['Mamba-Grün', '#1f5c3a'],
-    ['Timiano-Grün', '#5a7a3a'],
-    ['Olibo-Grün', '#5f7a3f'],
-    ['Velvet-Rot', '#a8232f'],
-    ['Phoenix-Orange', '#df6a2a'],
+    ['Black-Magic', '#26282a'],
+    ['Smokey Diamond', '#8b8781'],
+    ['Brillant-Silber', '#c9ccce'], ['Brilliant-Silber', '#c9ccce'],
+    ['Arctic-Silber', '#d5ddd7'],
+    ['Moon-Weiß', '#eef0ee'], ['Moon-Weiss', '#eef0ee'],
+    ['Energy-Blau', '#274da2'],
+    ['Race-Blau', '#012750'],
+    ['Graphite-Grau Matt', '#45484c'],
+    ['Graphite-Grau', '#45484c'],
+    ['Quarz-Grau', '#435657'],
+    ['Stahl-Grau', '#75767a'],
+    ['Mamba-Grün', '#8f9c1e'],
+    ['Timiano-Grün', '#a9b39e'],
+    ['Olibo-Grün', '#4a5a3a'],
+    ['Velvet-Rot', '#6b1a28'],
+    ['Phoenix-Orange', '#c1501f'],
   ];
   const COLOR_WORD_FALLBACK = [
     ['Blau', '#2266d6'], ['Grün', '#3f9e5c'], ['Rot', '#c22b36'],
@@ -129,43 +139,41 @@
     const f = flagFor(land);
     return f ? `<span class="flag-cell">${f}${land}</span>` : land;
   }
+  // Boolean filter/option fields shown in the sidebar, as order-row badges,
+  // and folded into the prediction similarity score. This list used to carry
+  // all 19 parsed config flags, but a statistical pass (see backtest/
+  // Methodik) showed that most of them have no measurable effect on wait
+  // time in the cleaner Elroq dataset (p >= 0.05, two-sided t-test,
+  // delivered orders only) and several occur so rarely (n < 15 of 586) that
+  // they can't function as a useful filter anyway. Keeping them inflated the
+  // sidebar, diluted the prediction match score with near-tautological
+  // "both don't have it" matches, and cluttered every order's badge row
+  // without adding signal. Only the two fields that clear both a
+  // significance and a minimum-sample bar stay as filters/badges/similarity
+  // inputs; everything else remains in the underlying data (visible in the
+  // CSV export) but is no longer surfaced as a filter.
+  //   kept:    Paket_Jubilaeum130Jahre (n=37,  diff=+35.9d, p<0.0001)
+  //            Waermepumpe             (n=287, diff=+9.1d,  p=0.036)
+  //   dropped: Paket_Smart, Paket_Clever, Paket_Advanced, Paket_Maxx,
+  //            Paket_Plus, Paket_Sport, Paket_Winter, Paket_Transport,
+  //            Paket_Drive, Anhaengerkupplung_AHK, DCC_AdaptivesFahrwerk,
+  //            Dachkontrastlackierung, Gepaecknetztrennwand,
+  //            Ganzjahresreifen, MatrixLED, Garantieverlaengerung,
+  //            Vollausstattung_Selbstangabe (all p >= 0.05 and/or n < 15)
   const BOOL_FIELDS = [
-    { key: 'Paket_Smart', label: 'Paket Smart' },
-    { key: 'Paket_Clever', label: 'Paket Clever' },
-    { key: 'Paket_Advanced', label: 'Paket Advanced' },
-    { key: 'Paket_Maxx', label: 'Paket Maxx' },
-    { key: 'Paket_Plus', label: 'Paket Plus' },
-    { key: 'Paket_Sport', label: 'Paket Sport' },
-    { key: 'Paket_Winter', label: 'Paket Winter' },
-    { key: 'Paket_Transport', label: 'Paket Transport' },
-    { key: 'Paket_Drive', label: 'Paket Drive' },
     { key: 'Paket_Jubilaeum130Jahre', label: 'Jubiläumspaket 130 Jahre' },
-    { key: 'Anhaengerkupplung_AHK', label: 'Anhängerkupplung (AHK)' },
     { key: 'Waermepumpe', label: 'Wärmepumpe' },
-    { key: 'DCC_AdaptivesFahrwerk', label: 'DCC / Adaptives Fahrwerk' },
-    { key: 'Dachkontrastlackierung', label: 'Dachkontrastlackierung' },
-    { key: 'Gepaecknetztrennwand', label: 'Gepäcknetztrennwand' },
-    { key: 'Ganzjahresreifen', label: 'Ganzjahresreifen' },
-    { key: 'MatrixLED', label: 'Matrix-LED' },
-    { key: 'Garantieverlaengerung', label: 'Garantieverlängerung' },
-    { key: 'Vollausstattung_Selbstangabe', label: 'Vollausstattung (Selbstangabe)' },
   ];
 
   const BADGE_LABELS = {
-    Paket_Smart:'Smart', Paket_Clever:'Clever', Paket_Advanced:'Advanced', Paket_Maxx:'Maxx',
-    Paket_Plus:'Plus', Paket_Sport:'Sport', Paket_Winter:'Winter', Paket_Transport:'Transport',
-    Paket_Drive:'Drive', Paket_Jubilaeum130Jahre:'Jubiläum 130J', Anhaengerkupplung_AHK:'AHK',
-    Waermepumpe:'WP', DCC_AdaptivesFahrwerk:'DCC', Dachkontrastlackierung:'Dachkontrast',
-    Gepaecknetztrennwand:'Netztrennwand', Ganzjahresreifen:'Ganzjahresreifen', MatrixLED:'Matrix-LED',
-    Garantieverlaengerung:'Garantieverl.', Vollausstattung_Selbstangabe:'Vollausstattung'
+    Paket_Jubilaeum130Jahre:'Jubiläum 130J', Waermepumpe:'WP',
   };
 
   // Ausstattungspakete (bundled trim packages) vs. Einzeloptionen (individual
   // add-ons) get a slightly different badge tint so the two are visually
   // distinguishable at a glance, without adding a third clashing hue.
   const PAKET_KEYS = new Set([
-    'Paket_Smart','Paket_Clever','Paket_Advanced','Paket_Maxx','Paket_Plus','Paket_Sport',
-    'Paket_Winter','Paket_Transport','Paket_Drive','Paket_Jubilaeum130Jahre',
+    'Paket_Jubilaeum130Jahre',
   ]);
 
   function badgeHtml(key){
@@ -1399,7 +1407,7 @@
     if (verdictEl){
       if (!reg || points.length < 3){
         verdictEl.className = 'trend-verdict flat';
-        verdictEl.innerHTML = `<span class="arrow">→</span> Noch zu wenige Monate für eine verlässliche Trendaussage.`;
+        verdictEl.innerHTML = `<span class="arrow">→</span><span class="verdict-text">Noch zu wenige Monate für eine verlässliche Trendaussage.</span>`;
       } else {
         const perMonth = reg.slope;
         const flat = Math.abs(perMonth) < 1;
@@ -1409,9 +1417,9 @@
         const projected = Math.round(reg.slope * (points.length - 1 + FORECAST_MONTHS) + reg.intercept);
         verdictEl.className = `trend-verdict ${dir}`;
         verdictEl.innerHTML = flat
-          ? `<span class="arrow">${arrow}</span> Die Wartezeit <b>${word}</b> (Trend über die letzten ${points.length} Monate).`
-          : `<span class="arrow">${arrow}</span> Die Wartezeit <b>${word}</b> aktuell um ca. <b>${Math.abs(Math.round(perMonth))} Tage pro Monat</b>.
-             Bei gleichbleibendem Trend liegt die Ø Wartezeit in ${FORECAST_MONTHS} Monaten bei etwa <b>${Math.max(0, projected)} Tagen</b>.`;
+          ? `<span class="arrow">${arrow}</span><span class="verdict-text">Die Wartezeit <b>${word}</b> (Trend über die letzten ${points.length} Monate).</span>`
+          : `<span class="arrow">${arrow}</span><span class="verdict-text">Die Wartezeit <b>${word}</b> aktuell um ca. <b>${Math.abs(Math.round(perMonth))} Tage pro Monat</b>.
+             Bei gleichbleibendem Trend liegt die Ø Wartezeit in ${FORECAST_MONTHS} Monaten bei etwa <b>${Math.max(0, projected)} Tagen</b>.</span>`;
       }
     }
 
@@ -1746,7 +1754,9 @@
   }
 
   // ---- Results table ----
-  const RESULT_BADGE_FIELDS = ['Anhaengerkupplung_AHK','Waermepumpe','Paket_Maxx','Paket_Advanced','Paket_Winter','Paket_Sport','Paket_Transport'];
+  // Mirrors BOOL_FIELDS: only the two flags with a measurable wait-time
+  // effect are worth a "Merkmale" badge here.
+  const RESULT_BADGE_FIELDS = BOOL_FIELDS.map(f => f.key);
 
   function renderResults(filtered){
     const wrap = document.getElementById('resultsTable');
