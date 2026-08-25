@@ -12,99 +12,15 @@
   const DATA = ALL_ORDERS.filter(r => r.Ausgeliefert !== false);
   const OPEN_ORDERS = ALL_ORDERS.filter(r => r.Ausgeliefert === false);
 
-  // ---- Dynamic accent colour ("Gimmick") ----
-  // Default is Škoda Electric Green, but picking any paint colour in a
-  // filter checkbox or a Farbe dropdown retints the whole dashboard —
-  // buttons, checkboxes, and every chart — to that colour. Whichever
-  // colour was picked most recently wins; CSS-driven elements read the
-  // --accent custom property, JS-drawn SVG charts read the ACCENT/ACCENT_DIM
-  // variables below (re-rendered on every accent change so they pick it up).
-  const DEFAULT_ACCENT = '#78faae';
-  const DEFAULT_ACCENT_DIM = '#4aa92e';
-  let ACCENT = DEFAULT_ACCENT;
-  let ACCENT_DIM = DEFAULT_ACCENT_DIM;
-
-  // Known Škoda paint names first (most specific match wins), then a
-  // generic German colour-word fallback so names not explicitly listed
-  // (future paint options, other models) still resolve to something sane.
-  // Real Škoda paint hex approximations (sourced from professional touch-up-
-  // paint mixing databases where available, which give the standard sRGB
-  // match used industry-wide for factory colour codes — there's no single
-  // "true" hex for a physical pigment, but this is the closest thing to one):
-  //   Black-Magic Perleffekt (F9R/1Z), Race-Blau Metallic (F5W/8X),
-  //   Energy-Blau (V5F/6D), Quarz-Grau (F7Y/F6) confirmed against paint-
-  //   mixing swatch data. The remaining shades are calibrated against
-  //   official press photos and owner descriptions where no swatch
-  //   database entry was available.
-  const KNOWN_PAINTS = [
-    ['Black-Magic', '#26282a'],
-    ['Smokey Diamond', '#8b8781'],
-    ['Brillant-Silber', '#c9ccce'], ['Brilliant-Silber', '#c9ccce'],
-    ['Arctic-Silber', '#d5ddd7'],
-    ['Moon-Weiß', '#eef0ee'], ['Moon-Weiss', '#eef0ee'],
-    ['Energy-Blau', '#274da2'],
-    ['Race-Blau', '#012750'],
-    ['Graphite-Grau Matt', '#45484c'],
-    ['Graphite-Grau', '#45484c'],
-    ['Quarz-Grau', '#435657'],
-    ['Stahl-Grau', '#75767a'],
-    ['Mamba-Grün', '#8f9c1e'],
-    ['Timiano-Grün', '#a9b39e'],
-    ['Olibo-Grün', '#4a5a3a'],
-    ['Velvet-Rot', '#6b1a28'],
-    ['Phoenix-Orange', '#c1501f'],
-  ];
-  const COLOR_WORD_FALLBACK = [
-    ['Blau', '#2266d6'], ['Grün', '#3f9e5c'], ['Rot', '#c22b36'],
-    ['Grau', '#6b7280'], ['Schwarz', '#1c1e22'], ['Magic', '#2a2d33'],
-    ['Weiß', '#eef0f2'], ['Weiss', '#eef0f2'], ['Silber', '#c7cdd3'],
-    ['Gold', '#c9a544'], ['Gelb', '#e3c53a'], ['Orange', '#df6a2a'],
-    ['Braun', '#7a5230'], ['Beige', '#c9b892'],
-    ['Türkis', '#2fa8a0'], ['Petrol', '#1f6e6e'],
-    ['Lila', '#7c4fc9'], ['Violett', '#7c4fc9'],
-  ];
-
-  function carColorToAccent(name){
-    if (!name) return null;
-    for (const [needle, hex] of KNOWN_PAINTS){
-      if (name.includes(needle)) return hex;
-    }
-    for (const [needle, hex] of COLOR_WORD_FALLBACK){
-      if (name.includes(needle)) return hex;
-    }
-    return null;
-  }
-
-  function relativeLuminance(hex){
-    const n = hex.replace('#', '');
-    const r = parseInt(n.slice(0, 2), 16) / 255;
-    const g = parseInt(n.slice(2, 4), 16) / 255;
-    const b = parseInt(n.slice(4, 6), 16) / 255;
-    const lin = c => (c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4));
-    return 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b);
-  }
-
-  function darken(hex, amount){
-    const n = hex.replace('#', '');
-    const r = Math.round(parseInt(n.slice(0, 2), 16) * (1 - amount));
-    const g = Math.round(parseInt(n.slice(2, 4), 16) * (1 - amount));
-    const b = Math.round(parseInt(n.slice(4, 6), 16) * (1 - amount));
-    return '#' + [r, g, b].map(v => Math.max(0, v).toString(16).padStart(2, '0')).join('');
-  }
-
-  function setAccentColor(hex){
-    if (!hex || hex === ACCENT) return;
-    ACCENT = hex;
-    ACCENT_DIM = darken(hex, 0.32);
-    const root = document.documentElement.style;
-    const rgb = [0, 2, 4].map(i => parseInt(hex.slice(1 + i, 3 + i), 16)).join(',');
-    root.setProperty('--accent', ACCENT);
-    root.setProperty('--accent-rgb', rgb);
-    root.setProperty('--accent-dim', ACCENT_DIM);
-    root.setProperty('--accent-contrast', relativeLuminance(hex) > 0.45 ? '#05060f' : '#ffffff');
-    patchGaugeColors();
-    if (typeof render === 'function') render();
-  }
+  // Accent colour: static Škoda Electric Green. (A previous version retinted
+  // the whole dashboard to match whichever paint colour was selected in a
+  // filter/dropdown, but this caused real usability problems — e.g. light
+  // paint colours like Moon-Weiß pushed --accent-contrast to a dark value
+  // that made native <select> dropdowns render unreadably, since browsers
+  // partially theme form controls off the accent-color CSS property. Kept
+  // simple and predictable instead.)
+  const ACCENT = '#78faae';
+  const ACCENT_DIM = '#4aa92e';
 
   // ---- Filter definitions ----
   // 'Modell' is rendered as a two-level tree (drivetrain group -> variant),
@@ -418,10 +334,6 @@
         cb.addEventListener('change', () => {
           if (cb.checked) state[f.key].add(val);
           else state[f.key].delete(val);
-          if (f.key === 'Farbe' && cb.checked){
-            const hex = carColorToAccent(val);
-            if (hex) setAccentColor(hex);
-          }
           render();
         });
         const txt = document.createElement('span');
@@ -983,17 +895,6 @@
     const clamped = Math.max(GLOBAL_STATS.min, Math.min(GLOBAL_STATS.max, avg || GLOBAL_STATS.min));
     const frac = (clamped - GLOBAL_STATS.min) / range;
     return GAUGE.startAngle + frac * (GAUGE.endAngle - GAUGE.startAngle);
-  }
-
-  function patchGaugeColors(){
-    // The gauge is built once at init (buildGaugeCard), not regenerated on
-    // every render() like the other charts, so an accent change needs to
-    // patch its already-inserted SVG directly instead of waiting for a
-    // redraw. Only the needle/pivot follow the accent — the track's light
-    // -> dark gradient encodes the wait-time scale itself and stays neutral.
-    document.getElementById('gaugeNeedleStroke')?.setAttribute('stroke', ACCENT);
-    document.getElementById('gaugePivotRing')?.setAttribute('stroke', ACCENT);
-    document.getElementById('gaugePivotDot')?.setAttribute('fill', ACCENT);
   }
 
   function buildGaugeCard(){
@@ -1812,7 +1713,6 @@
     document.querySelectorAll('.multi-check input[type=checkbox], .model-variants input[type=checkbox]').forEach(cb => cb.checked = false);
     document.querySelectorAll('select.tri-select').forEach(sel => sel.value = 'alle');
     syncModelGroupBoxes();
-    if (ACCENT !== DEFAULT_ACCENT) setAccentColor(DEFAULT_ACCENT);
     render();
   });
 
@@ -2347,10 +2247,6 @@
     farbeSel.innerHTML = '<option value="">Farbe (optional, hilft bei mehreren Treffern)</option>' +
       distinctValues('Farbe').filter(([val]) => val !== UNKNOWN)
         .map(([val]) => `<option value="${escapeHtml(val)}">${escapeHtml(val)}</option>`).join('');
-    farbeSel.addEventListener('change', () => {
-      const hex = carColorToAccent(farbeSel.value);
-      if (hex) setAccentColor(hex);
-    });
 
     document.getElementById('lookupBtn').addEventListener('click', runLookup);
     [modellSel, document.getElementById('lkDate'), farbeSel].forEach(elm => {
@@ -2413,10 +2309,6 @@
       });
     };
     fillSelect('wiFarbe', 'Farbe', false);
-    document.getElementById('wiFarbe').addEventListener('change', (e) => {
-      const hex = carColorToAccent(e.target.value);
-      if (hex) setAccentColor(hex);
-    });
     fillSelect('wiInnen', 'Innenausstattung_DesignSelection', false);
     fillSelect('wiFelgen', 'Felgenname', false);
 

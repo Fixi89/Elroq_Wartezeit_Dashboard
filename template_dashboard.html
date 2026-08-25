@@ -17,12 +17,13 @@
        0.03 tint (a marketing hero can afford near-invisible glass; a dense
        data dashboard needs the card edges to actually read against a wall
        of numbers).
-       Accent: Škoda Elektrogrün (Electric Green) is the DEFAULT chromatic
-       accent instead of the reference's Void Violet — but it's a *live*
-       default, not fixed: picking any paint colour in a filter/dropdown
-       retints the whole UI to that colour (see setAccentColor() in
-       template_app.js). These custom properties are the single source of
-       truth both CSS and the JS-generated SVG charts read from. */
+       Accent: Škoda Elektrogrün (Electric Green), fixed. (An earlier
+       version retinted the whole UI to match whatever paint colour was
+       selected in a filter/dropdown, but that broke native <select>
+       readability when a light paint colour flipped --accent-contrast to
+       dark — reverted to a single static accent.) These custom properties
+       are the single source of truth both CSS and the JS-generated SVG
+       charts read from. */
     --bg: #05060f;
     --surface: rgba(186,214,247,0.05);
     --surface-2: rgba(199,211,234,0.035);
@@ -317,6 +318,12 @@
     width: 100%; background: var(--surface-2); border: 1px solid var(--border);
     color: var(--text); border-radius: 6px; padding: 8px 10px; font-size: 13px;
     font-family:'Inter', sans-serif; outline:none; cursor:pointer;
+    /* Without this, some browsers render the native open-dropdown option
+       list in a light theme regardless of the select's own dark background/
+       text colours (the closed box looks fine, but the popup list doesn't) —
+       this is what made dropdowns briefly unreadable while accent colour
+       was dynamic. Forcing dark here is a fixed, permanent guard. */
+    color-scheme: dark;
   }
   select:focus{ border-color: var(--accent); }
 
