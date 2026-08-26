@@ -14,13 +14,165 @@
 
   // Accent colour: static Škoda Electric Green. (A previous version retinted
   // the whole dashboard to match whichever paint colour was selected in a
-  // filter/dropdown, but this caused real usability problems — e.g. light
-  // paint colours like Moon-Weiß pushed --accent-contrast to a dark value
-  // that made native <select> dropdowns render unreadably, since browsers
-  // partially theme form controls off the accent-color CSS property. Kept
-  // simple and predictable instead.)
+  // filter/dropdown, but this caused real usability problems and was
+  // reverted. Kept simple and predictable instead.)
   const ACCENT = '#78faae';
   const ACCENT_DIM = '#4aa92e';
+
+  // ---- Custom dropdowns (.csel) ----
+  // Every <select> in the markup is kept in the DOM purely as a hidden data
+  // store (value + options + 'change' event) — all the existing code that
+  // reads .value, populates options/optgroups, or listens for 'change' on
+  // these elements keeps working completely unchanged. What the person
+  // actually sees and clicks is a custom-built trigger + listbox styled to
+  // match the dashboard, because native <select> popups can't be reliably
+  // reskinned across browsers (color-scheme:dark does NOT fix the open
+  // option list in every browser, notably Chrome/Edge on Windows with
+  // <optgroup>s, which is what made dropdowns unreadable before).
+  const CUSTOM_SELECTS = [];
+
+  function enhanceSelect(selectEl){
+    if (!selectEl || selectEl.dataset.cselEnhanced) return;
+    selectEl.dataset.cselEnhanced = '1';
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'csel';
+    selectEl.parentNode.insertBefore(wrapper, selectEl);
+
+    const trigger = document.createElement('button');
+    trigger.type = 'button';
+    trigger.className = 'csel-trigger';
+    if (selectEl.className) trigger.className += ' ' + selectEl.className;
+    trigger.setAttribute('aria-haspopup', 'listbox');
+    trigger.setAttribute('aria-expanded', 'false');
+    if (selectEl.getAttribute('aria-label')) trigger.setAttribute('aria-label', selectEl.getAttribute('aria-label'));
+
+    const valueSpan = document.createElement('span');
+    valueSpan.className = 'csel-value';
+    const chevron = document.createElement('span');
+    chevron.className = 'csel-chevron';
+    chevron.textContent = '▾';
+    chevron.setAttribute('aria-hidden', 'true');
+    trigger.appendChild(valueSpan);
+    trigger.appendChild(chevron);
+
+    const menu = document.createElement('div');
+    menu.className = 'csel-menu';
+    menu.setAttribute('role', 'listbox');
+    menu.hidden = true;
+    // Appended to <body> (not the wrapper) and positioned with fixed
+    // coordinates computed at open-time: the wrapper often sits inside a
+    // scrolling container (e.g. the sticky sidebar), and position:absolute
+    // there would get clipped by that container's overflow — position:fixed
+    // relative to the viewport, with coordinates read off the trigger's own
+    // getBoundingClientRect(), escapes that entirely.
+    document.body.appendChild(menu);
+
+    wrapper.appendChild(trigger);
+    wrapper.appendChild(selectEl);
+    selectEl.style.display = 'none';
+    selectEl.setAttribute('tabindex', '-1');
+
+    function syncLabel(){
+      const opt = selectEl.options[selectEl.selectedIndex];
+      const isPlaceholder = opt && opt.value === '' && selectEl.selectedIndex === 0;
+      valueSpan.textContent = opt ? opt.textContent : '';
+      valueSpan.classList.toggle('placeholder', !!isPlaceholder);
+    }
+
+    function makeOptionEl(opt, indented){
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.setAttribute('role', 'option');
+      btn.className = 'csel-option' + (indented ? ' indented' : '') + (opt.value === selectEl.value ? ' selected' : '');
+      btn.textContent = opt.textContent;
+      btn.addEventListener('click', () => {
+        selectEl.value = opt.value;
+        selectEl.dispatchEvent(new Event('change', { bubbles: true }));
+        syncLabel();
+        closeMenu();
+      });
+      return btn;
+    }
+
+    function buildMenu(){
+      menu.innerHTML = '';
+      Array.from(selectEl.children).forEach(child => {
+        if (child.tagName === 'OPTGROUP'){
+          const label = document.createElement('div');
+          label.className = 'csel-optgroup-label';
+          label.textContent = child.label;
+          menu.appendChild(label);
+          Array.from(child.children).forEach(opt => menu.appendChild(makeOptionEl(opt, true)));
+        } else if (child.tagName === 'OPTION'){
+          menu.appendChild(makeOptionEl(child, false));
+        }
+      });
+    }
+
+    function onDocMouseDown(e){
+      if (!wrapper.contains(e.target) && !menu.contains(e.target)) closeMenu();
+    }
+    function onKeyDown(e){
+      if (e.key === 'Escape') closeMenu();
+    }
+    function onScrollOrResize(){
+      // Simplest robust behaviour when the trigger moves out from under an
+      // already-open menu (page scroll, sidebar's own internal scroll,
+      // window resize): close it, rather than trying to track and
+      // reposition a fixed-position element on every scroll tick.
+      closeMenu();
+    }
+    function positionMenu(){
+      const r = trigger.getBoundingClientRect();
+      menu.style.left = r.left + 'px';
+      menu.style.width = r.width + 'px';
+      menu.style.top = (r.bottom + 6) + 'px';
+      menu.style.bottom = '';
+      // Flip above the trigger if there isn't enough room below.
+      const menuRect = menu.getBoundingClientRect();
+      if (r.bottom + menuRect.height + 6 > window.innerHeight && r.top - menuRect.height - 6 > 0){
+        menu.style.top = '';
+        menu.style.bottom = (window.innerHeight - r.top + 6) + 'px';
+      }
+    }
+    function openMenu(){
+      buildMenu();
+      menu.hidden = false;
+      positionMenu();
+      trigger.classList.add('open');
+      trigger.setAttribute('aria-expanded', 'true');
+      document.addEventListener('mousedown', onDocMouseDown, true);
+      document.addEventListener('keydown', onKeyDown, true);
+      window.addEventListener('scroll', onScrollOrResize, true);
+      window.addEventListener('resize', onScrollOrResize, true);
+    }
+    function closeMenu(){
+      menu.hidden = true;
+      trigger.classList.remove('open');
+      trigger.setAttribute('aria-expanded', 'false');
+      document.removeEventListener('mousedown', onDocMouseDown, true);
+      document.removeEventListener('keydown', onKeyDown, true);
+      window.removeEventListener('scroll', onScrollOrResize, true);
+      window.removeEventListener('resize', onScrollOrResize, true);
+    }
+
+    trigger.addEventListener('click', () => {
+      if (menu.hidden) openMenu(); else closeMenu();
+    });
+
+    syncLabel();
+    CUSTOM_SELECTS.push({ selectEl, syncLabel });
+  }
+
+  // Re-reads every enhanced select's current value into its visible trigger
+  // label. Called from render() (see below) so it self-heals after any
+  // programmatic `sel.value = ...` assignment anywhere in the app, without
+  // needing a MutationObserver on every select (setting .value via JS does
+  // not reliably mutate the DOM in a way observers can catch).
+  function syncCustomSelectLabels(){
+    CUSTOM_SELECTS.forEach(({ syncLabel }) => syncLabel());
+  }
 
   // ---- Filter definitions ----
   // 'Modell' is rendered as a two-level tree (drivetrain group -> variant),
@@ -396,6 +548,7 @@
       });
       sel.dataset.field = f.key;
       wrap.appendChild(sel);
+      enhanceSelect(sel);
       grid.appendChild(wrap);
     });
 
@@ -1721,117 +1874,210 @@
     { day: 'numeric', month: 'long', year: 'numeric' });
   const fmtLong = ts => longDateFmt.format(new Date(ts));
 
-  function qtile(sorted, q){
-    if (!sorted.length) return 0;
-    const pos = (sorted.length - 1) * q;
-    const lo = Math.floor(pos), hi = Math.min(lo + 1, sorted.length - 1);
-    return sorted[lo] + (sorted[hi] - sorted[lo]) * (pos - lo);
-  }
+  // ---- Prediction algorithm (ported 1:1 from predict_delivery() in
+  // elroq_dashboard_update.py / enyaq_dashboard_update.py) ----
+  // A previous version of this file had its own, older, simpler tiered-
+  // similarity implementation here that never got the refinements the
+  // Python backend picked up over several rounds of backtesting (recency
+  // weighting, soft country shrinkage, no trend correction, queue
+  // estimate). That meant "Eigene Bestellung nachschlagen" (which shows the
+  // Python-computed, logged prediction for a real open order) and the
+  // "Was-wäre-wenn-Rechner" (which always ran this JS copy fresh, since a
+  // hypothetical order was never logged) could show different numbers for
+  // the exact same configuration — same underlying data, two different
+  // algorithms. This block is now a faithful port of the Python side, kept
+  // in sync deliberately (see the matching comment in the .py files).
 
-  // Configuration similarity, 0..1. Drivetrain dominates because it drives
-  // production scheduling far more than any single option does. Land carries
-  // real weight too — the feature-ranking analysis shows country alone shifts
-  // waiting time by 50+ days, more than most single options — but in practice
-  // it's handled as a hard pre-filter below (predict()), not through this
-  // score, since predict() only falls back to cross-country comparisons when
-  // there isn't enough same-country data to work with.
-  function similarity(a, b){
+  // Weight: Modell dominates because drivetrain/trim drives production
+  // scheduling far more than any single option. Land is NOT part of this
+  // score — it's handled separately as a continuous weighting factor
+  // (_countryWeight below), not a similarity component, since a hard
+  // cutoff there previously caused a jump in the forecast right at the
+  // country-pool-size threshold.
+  function _baseSimilarity(a, b){
     let score = 0, max = 0;
     const add = (w, ok) => { max += w; if (ok) score += w; };
-    add(4, a.Modellgruppe === b.Modellgruppe);
-    add(2, a.Modell === b.Modell);
-    add(3, (a.Land || '') === (b.Land || ''));
+    add(3, a.Modell === b.Modell);
     add(1, (a.Innenausstattung_DesignSelection || '') === (b.Innenausstattung_DesignSelection || ''));
     add(1, (a.Felgenname || '') === (b.Felgenname || ''));
     BOOL_FIELDS.forEach(f => add(0.6, a[f.key] === b[f.key]));
     return max ? score / max : 0;
   }
 
-  // Waiting times shifted a lot over the two years covered here, so references
-  // are taken from orders placed around the same time. Without that window an
-  // order from 2026 would be predicted using the 2024 launch backlog.
-  const ERA_WINDOW = 180;
-
-  // Minimum number of same-country orders required before predict() trusts a
-  // country-only comparison pool. Below this, cross-country noise from a
-  // small sample would be worse than just widening to all countries.
-  const MIN_COUNTRY_POOL = 15;
-
-  // Core era + similarity-tier matching against a given comparison pool.
-  // Factored out of predict() so it can run once against a same-country pool
-  // and, only if that comes up short, a second time against all countries.
-  function similarityMatch(order, pool){
-    if (pool.length < 5) return null;
-
-    const era = pool
-      .map(d => ({ d, dt: Math.abs(d.BestelldatumTS - order.BestelldatumTS) }))
-      .sort((a, b) => a.dt - b.dt)
-      .slice(0, Math.min(ERA_WINDOW, pool.length))
-      .map(x => ({ d: x.d, sim: similarity(order, x.d) }))
-      .sort((a, b) => b.sim - a.sim);
-
-    const tiers = [
-      { min: 0.80, take: 20, label: 'sehr ähnliche Konfigurationen', quality: 'q-high' },
-      { min: 0.65, take: 25, label: 'ähnliche Konfigurationen', quality: 'q-mid' },
-      { min: 0.00, take: 30, label: 'grob vergleichbare Bestellungen', quality: 'q-low',
-        groupOnly: true },
-    ];
-
-    let refs = [], tier = tiers[tiers.length - 1];
-    for (const t of tiers){
-      const cand = t.groupOnly
-        ? era.filter(x => x.d.Modellgruppe === order.Modellgruppe)
-        : era.filter(x => x.sim >= t.min);
-      if (cand.length >= 5){ refs = cand.slice(0, t.take); tier = t; break; }
-    }
-    if (refs.length < 5){ refs = era.slice(0, 30); tier = tiers[tiers.length - 1]; }
-    if (!refs.length) return null;
-
-    const days = refs.map(x => x.d.WartezeitTage).sort((a, b) => a - b);
-    const median = Math.round(qtile(days, 0.5));
-    const p25 = Math.round(qtile(days, 0.25));
-    const p75 = Math.round(qtile(days, 0.75));
-    // Zusaetzliche Konfidenzstufen (80% und 95%) fuer die Unsicherheits-Visualisierung.
-    const p10 = Math.round(qtile(days, 0.10));
-    const p90 = Math.round(qtile(days, 0.90));
-    const p2_5 = Math.round(qtile(days, 0.025));
-    const p97_5 = Math.round(qtile(days, 0.975));
-
-    const refDates = refs.map(x => x.d.BestelldatumTS).sort((a, b) => a - b);
-    const dateFor = days => order.BestelldatumTS + days * DAY_MS;
-
-    return {
-      median, p25, p75, p10, p90, p2_5, p97_5, tier,
-      count: refs.length,
-      eraFrom: refDates[0],
-      eraTo: refDates[refDates.length - 1],
-      dateMedian: dateFor(median),
-      dateEarly: dateFor(p25), dateLate: dateFor(p75),
-      dateP10: dateFor(p10), dateP90: dateFor(p90),
-      dateP2_5: dateFor(p2_5), dateP97_5: dateFor(p97_5),
-      refs: refs.map(x => x.d),
-      logged: false,
-    };
+  const _RECENCY_HALFLIFE_DAYS = 120.0;
+  function _recencyWeight(deltaDays){
+    return Math.pow(0.5, Math.abs(deltaDays) / _RECENCY_HALFLIFE_DAYS);
   }
 
-  function predict(order){
-    if (DATA.length < 5) return null;
+  // Soft shrinkage instead of a hard cutoff at 15 orders: the country-match
+  // bonus grows gradually with how much same-country data exists, rather
+  // than jumping abruptly between e.g. 14 and 15 orders.
+  const _COUNTRY_CREDIBILITY_K = 15.0;
+  const _COUNTRY_BOOST = 1.8;
+  function _countryWeight(sameCountry, countryPoolSize){
+    if (!sameCountry) return 1.0;
+    const credibility = countryPoolSize / (countryPoolSize + _COUNTRY_CREDIBILITY_K);
+    return 1.0 + credibility * _COUNTRY_BOOST;
+  }
 
-    const countryPool = DATA.filter(d => (d.Land || '') === (order.Land || ''));
-    const tryCountry = countryPool.length >= MIN_COUNTRY_POOL;
-
-    let result = tryCountry ? similarityMatch(order, countryPool) : null;
-    let countryScoped = tryCountry && !!result;
-
-    // Same-country pool exists but was too thin for even the loosest tier
-    // (e.g. a rare configuration within a smaller country) — widen the net
-    // rather than returning nothing.
-    if (!result){
-      result = similarityMatch(order, DATA);
-      countryScoped = false;
+  // Weighted quantile via the midpoint/Hazen method: each point represents
+  // its weight, centred on the midpoint of its cumulative weight mass. With
+  // equal weights this is identical to the plain (unweighted) quantile.
+  function weightedQuantile(pairs, q){
+    const sorted = [...pairs].sort((a, b) => a[0] - b[0]);
+    const total = sorted.reduce((s, [, w]) => s + w, 0);
+    if (total <= 0) return 0;
+    const target = q * total;
+    let running = 0;
+    const midpoints = sorted.map(([v, w]) => {
+      const m = running + w / 2;
+      running += w;
+      return [m, v];
+    });
+    if (target <= midpoints[0][0]) return midpoints[0][1];
+    if (target >= midpoints[midpoints.length - 1][0]) return midpoints[midpoints.length - 1][1];
+    for (let i = 1; i < midpoints.length; i++){
+      const [mPrev, vPrev] = midpoints[i - 1];
+      const [mCur, vCur] = midpoints[i];
+      if (target <= mCur){
+        const span = mCur - mPrev;
+        const frac = span > 0 ? (target - mPrev) / span : 0;
+        return vPrev + (vCur - vPrev) * frac;
+      }
     }
-    if (result) result.countryScoped = countryScoped;
-    return result;
+    return midpoints[midpoints.length - 1][1];
+  }
+
+  // Queue-depth / throughput estimate (a supporting signal, not the main
+  // comparison): how many same-Modellgruppe orders were still undelivered
+  // ("ahead in the queue") as of the order date, and how fast is that queue
+  // currently being worked through? ETA = depth / throughput. This reacts
+  // immediately to production changes, whereas the historical comparison
+  // only catches up once enough new deliveries have happened.
+  function _queueEstimate(order, delivered, openOrders, nowTs,
+                           minThroughputSamples = 6, throughputWindowDays = 60){
+    const orderTs = order.BestelldatumTS;
+    const group = order.Modellgruppe;
+    const orderId = order.ID;
+
+    const segmentDelivered = delivered.filter(r => r.Modellgruppe === group);
+    const segmentOpen = openOrders.filter(r => r.Modellgruppe === group);
+
+    let queueDepth = 0;
+    for (const r of segmentDelivered){
+      if (orderId != null && r.ID === orderId) continue;
+      if (r.BestelldatumTS >= orderTs) continue;
+      const clearTs = r.BestelldatumTS + r.WartezeitTage * DAY_MS;
+      if (clearTs > orderTs) queueDepth++;
+    }
+    for (const r of segmentOpen){
+      if (orderId != null && r.ID === orderId) continue;
+      if (r.BestelldatumTS < orderTs) queueDepth++;
+    }
+
+    const windowStart = nowTs - throughputWindowDays * DAY_MS;
+    const recentDeliveries = segmentDelivered.filter(r => {
+      const deliveredTs = r.BestelldatumTS + r.WartezeitTage * DAY_MS;
+      return deliveredTs >= windowStart && deliveredTs <= nowTs;
+    });
+    const nRecent = recentDeliveries.length;
+    if (nRecent < minThroughputSamples) return { eta: null, confidence: 0 };
+
+    const throughputPerDay = nRecent / throughputWindowDays;
+    if (throughputPerDay <= 0) return { eta: null, confidence: 0 };
+
+    const eta = queueDepth / throughputPerDay;
+    const confidence = Math.min(0.25, nRecent / 60.0);
+    return { eta, confidence };
+  }
+
+  // Main entry point: combines the weighted quantile comparison (config
+  // similarity x recency x country bonus) with the queue-estimate signal.
+  // No trend correction (a backtest showed it reliably makes forecasts
+  // worse over the boom-bust wait-time history — see Methodik-Panel) and no
+  // hard era window or similarity tiers (a backtest showed continuous
+  // recency/country weighting outperforms hard cutoffs).
+  function predict(order){
+    const group = order.Modellgruppe;
+    const orderLand = order.Land || '';
+    const orderTs = order.BestelldatumTS;
+
+    const pool = DATA.filter(r => r.Modellgruppe === group);
+    if (pool.length < 5) return null;
+
+    const countryPoolSize = pool.filter(r => (r.Land || '') === orderLand).length;
+
+    const weighted = [];
+    for (const r of pool){
+      const base = _baseSimilarity(order, r);
+      const sameCountry = (r.Land || '') === orderLand;
+      if (base <= 0 && !sameCountry) continue;
+      const recW = _recencyWeight((orderTs - r.BestelldatumTS) / DAY_MS);
+      const countryW = _countryWeight(sameCountry, countryPoolSize);
+      // Floor of 0.05: belonging to the same Modellgruppe counts for
+      // something even if nothing else matches.
+      const w = Math.max(base, 0.05) * recW * countryW;
+      weighted.push([r.WartezeitTage, w, r]);
+    }
+    if (!weighted.length) return null;
+
+    const valsWeights = weighted.map(([v, w]) => [v, w]);
+    const totalWeight = valsWeights.reduce((s, [, w]) => s + w, 0);
+    const sumSqWeight = valsWeights.reduce((s, [, w]) => s + w * w, 0);
+    const effN = sumSqWeight > 0 ? (totalWeight * totalWeight) / sumSqWeight : 0;
+
+    let median = weightedQuantile(valsWeights, 0.5);
+    let p25 = weightedQuantile(valsWeights, 0.25);
+    let p75 = weightedQuantile(valsWeights, 0.75);
+    let p10 = weightedQuantile(valsWeights, 0.10);
+    let p90 = weightedQuantile(valsWeights, 0.90);
+    let p2_5 = weightedQuantile(valsWeights, 0.025);
+    let p97_5 = weightedQuantile(valsWeights, 0.975);
+
+    // Supporting queue-estimate signal, blended in only when it doesn't
+    // diverge wildly from the comparison-based estimate (production isn't
+    // strictly FIFO, so this is a nudge, not an override).
+    const nowTs = Date.now();
+    const { eta: queueEta, confidence: queueConf } = _queueEstimate(order, DATA, OPEN_ORDERS, nowTs);
+    if (queueEta !== null && queueConf > 0){
+      const relativeDivergence = Math.abs(queueEta - median) / Math.max(median, 1);
+      const dampedConf = queueConf / (1 + relativeDivergence * relativeDivergence);
+      const blendDelta = dampedConf * (queueEta - median);
+      median += blendDelta; p25 += blendDelta; p75 += blendDelta;
+      p10 += blendDelta; p90 += blendDelta; p2_5 += blendDelta; p97_5 += blendDelta;
+    }
+    median = Math.max(0, median);
+
+    let tierLabel;
+    if (countryPoolSize >= _COUNTRY_CREDIBILITY_K) tierLabel = 'gewichtete Referenzen (Land stark einbezogen)';
+    else if (effN >= 20) tierLabel = 'viele gewichtete Referenzen';
+    else if (effN >= 8) tierLabel = 'einige gewichtete Referenzen';
+    else tierLabel = 'wenige gewichtete Referenzen';
+
+    const eraFrom = Math.min(...weighted.map(([, , r]) => r.BestelldatumTS));
+    const eraTo = Math.max(...weighted.map(([, , r]) => r.BestelldatumTS));
+    const topRefs = [...weighted].sort((a, b) => b[1] - a[1]).slice(0, 12);
+    const countryScoped = countryPoolSize >= _COUNTRY_CREDIBILITY_K;
+
+    const dateFor = d => orderTs + d * DAY_MS;
+    const r25 = Math.max(0, p25), r75 = Math.max(0, p75);
+    const r10 = Math.max(0, p10), r90 = Math.max(0, p90);
+    const r2_5 = Math.max(0, p2_5), r97_5 = Math.max(0, p97_5);
+
+    return {
+      median: Math.round(median), p25: Math.round(r25), p75: Math.round(r75),
+      p10: Math.round(r10), p90: Math.round(r90), p2_5: Math.round(r2_5), p97_5: Math.round(r97_5),
+      count: weighted.length,
+      tier: { label: tierLabel, quality: qualityClass(effN) },
+      eraFrom, eraTo,
+      dateMedian: dateFor(median),
+      dateEarly: dateFor(r25), dateLate: dateFor(r75),
+      dateP10: dateFor(r10), dateP90: dateFor(r90),
+      dateP2_5: dateFor(r2_5), dateP97_5: dateFor(r97_5),
+      refs: topRefs.map(([, , r]) => r),
+      logged: false,
+      countryScoped,
+    };
   }
 
   // The dashboard-generator (Python) logs and recalculates predictions for open
@@ -1842,6 +2088,7 @@
   // orders, we show the original frozen prediction instead, matched against the
   // actual delivery date.
   function predictionFor(order){
+
     if (order.PredictedDate){
       return {
         median: order.PredictedMedianDays, p25: order.PredictedRangeLowDays,
@@ -2003,18 +2250,25 @@
     const span = Math.max(DAY_MS, outerTo - outerFrom);
     const xFor = ts => padX + ((ts - outerFrom) / span) * (W - padX * 2);
 
+    // Each order's waiting time in days-from-order, so the detail panel can
+    // show "X–Y Tage" alongside the actual calendar dates — the days-since-
+    // order framing is often the more intuitive one ("wartest du 5 statt 6
+    // Monate"), the dates are the more actionable one ("bis wann").
+    const daysFor = ts => Math.round((ts - p.dateMedian) / DAY_MS) + p.median;
+
     // Non-overlapping segments (instead of stacked translucent rects, which
     // compounded into near-identical colours) so each probability zone has
-    // a crisp, clearly distinct boundary and opacity step.
-    function seg(fromTs, toTs, opacity, roundLeft, roundRight){
+    // a crisp, clearly distinct boundary and opacity step. Each segment
+    // carries its own from/to as data attributes plus a <title> (native
+    // tooltip fallback) so hovering or tapping it — wired up in
+    // wireConfidenceFan() below — can show the exact date range and day
+    // span in the .fan-detail panel instead of only ever showing the two
+    // outermost dates and the median.
+    function seg(fromTs, toTs, opacity, roundLeft, roundRight, band, bandLabel){
       const x1 = xFor(fromTs), x2 = xFor(toTs);
       const w = Math.max(1.5, x2 - x1);
       const rx = radius;
-      // Manual path so only the requested corners are rounded — keeps
-      // adjoining segments flush against each other with no visual gap.
       const y1 = barY, y2 = barY + barH;
-      const lTop = roundLeft ? `${x1+rx},${y1} ` : `${x1},${y1} `;
-      const rTop = roundRight ? `${x2-rx},${y1}` : `${x2},${y1}`;
       const path = roundLeft || roundRight
         ? `M ${x1+(roundLeft?rx:0)} ${y1} H ${x2-(roundRight?rx:0)} ` +
           (roundRight ? `A ${rx} ${rx} 0 0 1 ${x2} ${y1+rx} ` : `L ${x2} ${y1} `) +
@@ -2025,33 +2279,67 @@
           `V ${y1+(roundLeft?rx:0)} ` +
           (roundLeft ? `A ${rx} ${rx} 0 0 1 ${x1+rx} ${y1} ` : `L ${x1} ${y1} `) + 'Z'
         : `M ${x1} ${y1} H ${x2} V ${y2} H ${x1} Z`;
-      return `<path d="${path}" fill="#b6d9fc" opacity="${opacity}"/>`;
+      const title = `${bandLabel}: ${fmtDate(fromTs)} – ${fmtDate(toTs)} (${daysFor(fromTs)}–${daysFor(toTs)} Tage)`;
+      return `<path class="fan-segment" d="${path}" fill="#b6d9fc" opacity="${opacity}"
+        data-band="${band}" data-from="${fromTs}" data-to="${toTs}"
+        data-from-days="${daysFor(fromTs)}" data-to-days="${daysFor(toTs)}"
+        data-label="${escapeHtml(bandLabel)}" tabindex="0" role="button" aria-label="${escapeHtml(title)}"
+        ><title>${escapeHtml(title)}</title></path>`;
     }
 
     let bands = '';
     if (hasWide && hasMid){
-      bands += seg(outerFrom, p.dateP10, 0.16, true, false);
-      bands += seg(p.dateP10, p.dateEarly, 0.38, false, false);
-      bands += seg(p.dateEarly, p.dateLate, 0.88, false, false);
-      bands += seg(p.dateLate, p.dateP90, 0.38, false, false);
-      bands += seg(p.dateP90, outerTo, 0.16, false, true);
+      bands += seg(outerFrom, p.dateP10, 0.16, true, false, '95-low', '95%-Korridor (unteres Ende)');
+      bands += seg(p.dateP10, p.dateEarly, 0.38, false, false, '80-low', '80%-Korridor (unteres Ende)');
+      bands += seg(p.dateEarly, p.dateLate, 0.88, false, false, '50', '50%-Korridor (wahrscheinlichster Zeitraum)');
+      bands += seg(p.dateLate, p.dateP90, 0.38, false, false, '80-high', '80%-Korridor (oberes Ende)');
+      bands += seg(p.dateP90, outerTo, 0.16, false, true, '95-high', '95%-Korridor (oberes Ende)');
     } else if (hasMid){
-      bands += seg(outerFrom, p.dateEarly, 0.32, true, false);
-      bands += seg(p.dateEarly, p.dateLate, 0.88, false, false);
-      bands += seg(p.dateLate, outerTo, 0.32, false, true);
+      bands += seg(outerFrom, p.dateEarly, 0.32, true, false, '80-low', '80%-Korridor (unteres Ende)');
+      bands += seg(p.dateEarly, p.dateLate, 0.88, false, false, '50', '50%-Korridor (wahrscheinlichster Zeitraum)');
+      bands += seg(p.dateLate, outerTo, 0.32, false, true, '80-high', '80%-Korridor (oberes Ende)');
     } else {
-      bands += seg(outerFrom, outerTo, 0.75, true, true);
+      bands += seg(outerFrom, outerTo, 0.75, true, true, '50', '50%-Korridor (wahrscheinlichster Zeitraum)');
     }
     // Thin separators so the eye can find each boundary even where the
-    // opacity step alone is subtle at a glance.
-    let dividers = '';
-    [p.dateP10, p.dateEarly, p.dateLate, p.dateP90].forEach(ts => {
-      if (ts == null) return;
+    // opacity step alone is subtle at a glance. Each also gets a small
+    // always-visible date tick label underneath — not just the two outer
+    // extremes as before — so the segment boundaries are readable without
+    // needing to hover at all; hovering/tapping a segment additionally
+    // shows the precise range (incl. day count) in the panel below.
+    let dividers = '', tickLabels = '';
+    const tickPositions = [p.dateP10, p.dateEarly, p.dateLate, p.dateP90].filter(ts => ts != null);
+    // Skip a tick label if it would sit too close to its neighbour or to
+    // the two outer end labels to stay legible. Distances are in SVG
+    // viewBox units (600 wide); a "D. Mon. YYYY" label at this font size
+    // needs roughly 70-80 units of clearance on each side, and the outer
+    // labels are edge-anchored (start/end) so their text extends inward —
+    // the dead zones below are deliberately generous rather than measuring
+    // exact glyph widths.
+    const edgeDeadZone = 135;
+    const minGap = 90;
+    const placed = [];
+    tickPositions.forEach(ts => {
       const x = xFor(ts);
       dividers += `<line x1="${x.toFixed(1)}" y1="${barY}" x2="${x.toFixed(1)}" y2="${barY+barH}" stroke="#05060f" stroke-width="1" opacity="0.55"/>`;
+      const nearEdge = x < padX + edgeDeadZone || x > (W - padX) - edgeDeadZone;
+      const tooCloseToOther = placed.some(px => Math.abs(px - x) < minGap);
+      if (!nearEdge && !tooCloseToOther){
+        placed.push(x);
+        tickLabels += `<line x1="${x.toFixed(1)}" y1="${barY+barH}" x2="${x.toFixed(1)}" y2="${barY+barH+4}" stroke="#9da7ba" stroke-width="1"/>`;
+        tickLabels += `<text x="${x.toFixed(1)}" y="${H-6}" font-size="9" fill="#9da7ba" text-anchor="middle" font-family="JetBrains Mono, monospace">${fmtDate(ts)}</text>`;
+      }
     });
 
     const medX = xFor(p.dateMedian);
+    // The median date label is centre-anchored on medX, which clips against
+    // the viewBox edge (and previously silently truncated the leading
+    // digit, e.g. "19." rendering as "9.") whenever the median sits close
+    // to one end of an asymmetric distribution. Switch to the same
+    // edge-anchoring the outer min/max labels already use instead of
+    // blindly centring near the boundary.
+    const medLabelAnchor = medX < 55 ? 'start' : (medX > W - 55 ? 'end' : 'middle');
+    const medLabelX = medLabelAnchor === 'start' ? padX : (medLabelAnchor === 'end' ? W - padX : medX);
     const marker = `
       <line x1="${medX.toFixed(1)}" y1="${barY-7}" x2="${medX.toFixed(1)}" y2="${barY+barH+7}" stroke="#d8ecf8" stroke-width="2.5"/>
       <circle cx="${medX.toFixed(1)}" cy="${(barY+barH/2).toFixed(1)}" r="4.5" fill="#05060f" stroke="#d8ecf8" stroke-width="2.5"/>
@@ -2063,21 +2351,100 @@
     const ariaLabel = `Prognose-Unsicherheit: 50 Prozent Wahrscheinlichkeit zwischen ${fmtDate(p.dateEarly)} und ${fmtDate(p.dateLate)}` +
       (hasWide ? `, 95 Prozent zwischen ${fmtDate(outerFrom)} und ${fmtDate(outerTo)}` : '') + `. Median: ${fmtDate(p.dateMedian)}.`;
 
+    const defaultDetail = `<span class="fan-detail-hint">Bereich antippen oder mit der Maus berühren, um die genaue Zeitspanne zu sehen — Median: <strong>${fmtDate(p.dateMedian)}</strong> (${p.median} Tage).</span>`;
+
     return `
       <svg viewBox="0 0 ${W} ${H}" class="confidence-fan" role="img" aria-label="${ariaLabel}" preserveAspectRatio="xMidYMid meet">
         ${bands}
         ${dividers}
         ${marker}
-        <text x="${medX.toFixed(1)}" y="${barY-12}" font-size="11" fill="#d8ecf8" text-anchor="middle" font-family="JetBrains Mono, monospace" font-weight="600">${fmtDate(p.dateMedian)}</text>
+        <text x="${medLabelX.toFixed(1)}" y="${barY-12}" font-size="11" fill="#d8ecf8" text-anchor="${medLabelAnchor}" font-family="JetBrains Mono, monospace" font-weight="600">${fmtDate(p.dateMedian)}</text>
         ${label(outerFrom, padX, 'start')}
         ${label(outerTo, W - padX, 'end')}
+        ${tickLabels}
       </svg>
       <div class="fan-legend">
-        <span><span class="fan-dot" style="opacity:.88"></span>50% (wahrscheinlichster Zeitraum)</span>
-        ${hasMid ? '<span><span class="fan-dot" style="opacity:.38"></span>80%</span>' : ''}
-        ${hasWide ? '<span><span class="fan-dot" style="opacity:.16"></span>95%</span>' : ''}
-      </div>`;
+        <span data-band="50"><span class="fan-dot" style="opacity:.88"></span>50% (wahrscheinlichster Zeitraum)</span>
+        ${hasMid ? '<span data-band="80"><span class="fan-dot" style="opacity:.38"></span>80%</span>' : ''}
+        ${hasWide ? '<span data-band="95"><span class="fan-dot" style="opacity:.16"></span>95%</span>' : ''}
+      </div>
+      <div class="fan-detail">${defaultDetail}</div>`;
   }
+
+  // Wires up hover/focus/click interactivity for every confidence-fan chart
+  // inside `container` (called once right after the HTML that contains one
+  // or more `.confidence-fan-wrap` blocks is inserted into the DOM — these
+  // are built as plain HTML strings via innerHTML, so listeners can't be
+  // attached until the elements actually exist). Hovering or tapping a
+  // segment (or its matching legend swatch) shows its exact date range and
+  // day span in the `.fan-detail` panel beneath the chart, and highlights
+  // both the segment and its boundary tick labels — this is what actually
+  // lets someone see what each of the 50/80/95% bands means, rather than
+  // only ever seeing the two outermost dates and the median.
+  function wireConfidenceFan(container){
+    container.querySelectorAll('.confidence-fan-wrap').forEach(wrap => {
+      const svg = wrap.querySelector('.confidence-fan');
+      const detail = wrap.querySelector('.fan-detail');
+      if (!svg || !detail) return;
+      const defaultHtml = detail.innerHTML;
+      const segments = Array.from(svg.querySelectorAll('.fan-segment'));
+
+      function clearActive(){
+        segments.forEach(s => s.classList.remove('active'));
+        wrap.querySelectorAll('.fan-legend span').forEach(s => s.classList.remove('active'));
+      }
+      function showSegment(seg){
+        clearActive();
+        seg.classList.add('active');
+        const from = Number(seg.dataset.from), to = Number(seg.dataset.to);
+        const fromDays = seg.dataset.fromDays, toDays = seg.dataset.toDays;
+        detail.innerHTML = `<strong>${escapeHtml(seg.dataset.label)}:</strong> ${fmtDate(from)} – ${fmtDate(to)} (${fromDays}–${toDays} Tage)`;
+      }
+      segments.forEach(seg => {
+        seg.addEventListener('mouseenter', () => showSegment(seg));
+        seg.addEventListener('focus', () => showSegment(seg));
+        seg.addEventListener('click', () => showSegment(seg));
+      });
+      svg.addEventListener('mouseleave', () => {
+        clearActive();
+        detail.innerHTML = defaultHtml;
+      });
+      svg.addEventListener('focusout', e => {
+        if (!svg.contains(e.relatedTarget)) { clearActive(); detail.innerHTML = defaultHtml; }
+      });
+
+      // Legend swatches (50%/80%/95%) highlight every segment belonging to
+      // that band — e.g. hovering "80%" highlights both the lower and
+      // upper 80% wings at once — and show the combined outer range.
+      wrap.querySelectorAll('.fan-legend span[data-band]').forEach(legendItem => {
+        const bandPrefix = legendItem.dataset.band;
+        const matching = () => segments.filter(s => s.dataset.band === bandPrefix || s.dataset.band.startsWith(bandPrefix + '-'));
+        const showBand = () => {
+          const segs = matching();
+          if (!segs.length) return;
+          clearActive();
+          legendItem.classList.add('active');
+          segs.forEach(s => s.classList.add('active'));
+          const froms = segs.map(s => Number(s.dataset.from));
+          const tos = segs.map(s => Number(s.dataset.to));
+          const fromDaysArr = segs.map(s => Number(s.dataset.fromDays));
+          const toDaysArr = segs.map(s => Number(s.dataset.toDays));
+          const from = Math.min(...froms), to = Math.max(...tos);
+          const fromDays = Math.min(...fromDaysArr, ...toDaysArr);
+          const toDays = Math.max(...fromDaysArr, ...toDaysArr);
+          detail.innerHTML = `<strong>${bandPrefix}%-Korridor:</strong> ${fmtDate(from)} – ${fmtDate(to)} (${fromDays}–${toDays} Tage)`;
+        };
+        legendItem.addEventListener('mouseenter', showBand);
+        legendItem.addEventListener('click', showBand);
+        legendItem.addEventListener('mouseleave', () => {
+          clearActive();
+          detail.innerHTML = defaultHtml;
+        });
+      });
+    });
+  }
+
+
 
   function openCard(r){
     const p = predictionFor(r);
@@ -2195,6 +2562,7 @@
 
     hits.sort((a, b) => b.BestelldatumTS - a.BestelldatumTS);
     el.innerHTML = hint + hits.map(r => r.Ausgeliefert === false ? openCard(r) : deliveredCard(r)).join('');
+    wireConfidenceFan(el);
 
     // Permalink to exactly this lookup — appended once, after the cards, so
     // it always reflects the combination actually searched for (not
@@ -2252,6 +2620,8 @@
     [modellSel, document.getElementById('lkDate'), farbeSel].forEach(elm => {
       elm.addEventListener('keydown', e => { if (e.key === 'Enter') runLookup(); });
     });
+    enhanceSelect(modellSel);
+    enhanceSelect(farbeSel);
 
     // Deep-link: ?/#lk_modell=...&lk_datum=YYYY-MM-DD&lk_farbe=... pre-fills
     // and auto-runs the lookup, so someone can share a link straight to
@@ -2268,6 +2638,7 @@
         modellSel.value = lkModell;
         document.getElementById('lkDate').value = lkDatum;
         if (lkFarbe) farbeSel.value = lkFarbe;
+        syncCustomSelectLabels();
         document.querySelector('.tab-btn[data-tab="lookup"]')?.click();
         runLookup();
         setTimeout(() => {
@@ -2319,6 +2690,9 @@
       o.value = val; o.textContent = val;
       landSel.appendChild(o);
     });
+
+    [modellSel, document.getElementById('wiFarbe'), document.getElementById('wiInnen'),
+     document.getElementById('wiFelgen'), landSel].forEach(enhanceSelect);
 
     const boolsWrap = document.getElementById('whatIfBools');
     BOOL_FIELDS.forEach(f => {
@@ -2429,6 +2803,7 @@
           <div class="lk-refs">${refChips}</div>
         </div>
       </div>`;
+    wireConfidenceFan(el);
   }
 
   function model_group_lookup(modell){
@@ -2723,6 +3098,12 @@
     renderExtremes(filtered);
     renderTwins();
     renderResults(filtered);
+    // Custom dropdowns (see enhanceSelect) mirror the hidden native <select>
+    // elements' current value in their own display box; render() runs after
+    // every filter change and is the one place guaranteed to fire after any
+    // programmatic sel.value = ... assignment, so re-syncing here keeps
+    // every dropdown's visible label correct without needing a MutationObserver.
+    syncCustomSelectLabels();
   }
 
   render();
