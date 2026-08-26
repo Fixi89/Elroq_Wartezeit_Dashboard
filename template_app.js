@@ -116,11 +116,15 @@
     function onKeyDown(e){
       if (e.key === 'Escape') closeMenu();
     }
-    function onScrollOrResize(){
-      // Simplest robust behaviour when the trigger moves out from under an
-      // already-open menu (page scroll, sidebar's own internal scroll,
-      // window resize): close it, rather than trying to track and
-      // reposition a fixed-position element on every scroll tick.
+    function onScrollOrResize(e){
+      // Capture-phase listener on window sees every scroll in the document,
+      // including scrolling *inside* the open menu itself (long option
+      // lists use overflow-y:auto) — closing on that made the list
+      // unscrollable, since the first scroll attempt immediately closed it.
+      // Only close for scrolling that happens outside the menu (page
+      // scroll, the sidebar's own scroll container moving the trigger out
+      // from under a fixed-position menu, window resize).
+      if (e && e.target && menu.contains(e.target)) return;
       closeMenu();
     }
     function positionMenu(){
@@ -2393,12 +2397,36 @@
         segments.forEach(s => s.classList.remove('active'));
         wrap.querySelectorAll('.fan-legend span').forEach(s => s.classList.remove('active'));
       }
-      function showSegment(seg){
+      // Shows the combined range of every segment sharing a band group
+      // (e.g. both the lower and upper wing of "80") in one go — hovering
+      // just the upper 80% wing still shows the full 80% corridor, not only
+      // the narrower half under the cursor, since "80%" is one probability
+      // band conceptually even though it's drawn as two segments either
+      // side of the median.
+      function showBandGroup(segs, bandPrefix, legendItem){
+        if (!segs.length) return;
         clearActive();
-        seg.classList.add('active');
-        const from = Number(seg.dataset.from), to = Number(seg.dataset.to);
-        const fromDays = seg.dataset.fromDays, toDays = seg.dataset.toDays;
-        detail.innerHTML = `<strong>${escapeHtml(seg.dataset.label)}:</strong> ${fmtDate(from)} – ${fmtDate(to)} (${fromDays}–${toDays} Tage)`;
+        segs.forEach(s => s.classList.add('active'));
+        if (legendItem) legendItem.classList.add('active');
+        const froms = segs.map(s => Number(s.dataset.from));
+        const tos = segs.map(s => Number(s.dataset.to));
+        const fromDaysArr = segs.map(s => Number(s.dataset.fromDays));
+        const toDaysArr = segs.map(s => Number(s.dataset.toDays));
+        const from = Math.min(...froms), to = Math.max(...tos);
+        const fromDays = Math.min(...fromDaysArr, ...toDaysArr);
+        const toDays = Math.max(...fromDaysArr, ...toDaysArr);
+        const label = segs.length > 1 ? `${bandPrefix}%-Korridor` : segs[0].dataset.label;
+        detail.innerHTML = `<strong>${escapeHtml(label)}:</strong> ${fmtDate(from)} – ${fmtDate(to)} (${fromDays}–${toDays} Tage)`;
+      }
+      function bandGroupOf(seg){
+        // "80-low"/"80-high" -> "80"; "50" (no wings) stays "50".
+        return seg.dataset.band.split('-')[0];
+      }
+      function showSegment(seg){
+        const bandPrefix = bandGroupOf(seg);
+        const segs = segments.filter(s => bandGroupOf(s) === bandPrefix);
+        const legendItem = wrap.querySelector(`.fan-legend span[data-band="${bandPrefix}"]`);
+        showBandGroup(segs, bandPrefix, legendItem);
       }
       segments.forEach(seg => {
         seg.addEventListener('mouseenter', () => showSegment(seg));
@@ -2413,27 +2441,11 @@
         if (!svg.contains(e.relatedTarget)) { clearActive(); detail.innerHTML = defaultHtml; }
       });
 
-      // Legend swatches (50%/80%/95%) highlight every segment belonging to
-      // that band — e.g. hovering "80%" highlights both the lower and
-      // upper 80% wings at once — and show the combined outer range.
+      // Legend swatches (50%/80%/95%) do the same combined lookup.
       wrap.querySelectorAll('.fan-legend span[data-band]').forEach(legendItem => {
         const bandPrefix = legendItem.dataset.band;
-        const matching = () => segments.filter(s => s.dataset.band === bandPrefix || s.dataset.band.startsWith(bandPrefix + '-'));
-        const showBand = () => {
-          const segs = matching();
-          if (!segs.length) return;
-          clearActive();
-          legendItem.classList.add('active');
-          segs.forEach(s => s.classList.add('active'));
-          const froms = segs.map(s => Number(s.dataset.from));
-          const tos = segs.map(s => Number(s.dataset.to));
-          const fromDaysArr = segs.map(s => Number(s.dataset.fromDays));
-          const toDaysArr = segs.map(s => Number(s.dataset.toDays));
-          const from = Math.min(...froms), to = Math.max(...tos);
-          const fromDays = Math.min(...fromDaysArr, ...toDaysArr);
-          const toDays = Math.max(...fromDaysArr, ...toDaysArr);
-          detail.innerHTML = `<strong>${bandPrefix}%-Korridor:</strong> ${fmtDate(from)} – ${fmtDate(to)} (${fromDays}–${toDays} Tage)`;
-        };
+        const matching = () => segments.filter(s => bandGroupOf(s) === bandPrefix);
+        const showBand = () => showBandGroup(matching(), bandPrefix, legendItem);
         legendItem.addEventListener('mouseenter', showBand);
         legendItem.addEventListener('click', showBand);
         legendItem.addEventListener('mouseleave', () => {
@@ -2820,7 +2832,7 @@
       return `<p class="empty-state">Noch keine Segmente mit ausreichend Datengrundlage (mind. 12 Bestellungen).</p>`;
     }
     let html = `<table class="methodik-table"><thead><tr>
-      <th>${keyLabel}</th><th>Anzahl</th><th>MAE aktuell</th><th>MAE vorher</th><th>Bias aktuell</th>
+      <th>${keyLabel}</th><th>Anzahl</th><th>Ø Abweichung</th><th>Vorherige Methode</th><th>Tendenz</th>
     </tr></thead><tbody>`;
     rows.forEach(r => {
       const better = r.old_mae != null && r.new_mae < r.old_mae;
@@ -2850,41 +2862,78 @@
 
     const n = bt.new;
     const o = bt.old;
-    const cmp = o ? `<p class="methodik-intro-sub">Zum Vergleich die vorherige Methode (feste Ähnlichkeits-Stufen, harte Cutoffs): MAE ${o.mae} Tage, ${fmtPct(o.within14)} innerhalb ±14 Tagen.</p>` : '';
+
+    // Plain-language framing of what used to be shown as a raw signed
+    // "Bias" number — most visitors have no reason to know that word, and
+    // "+40.7" on its own doesn't say whether that's good, bad, or which
+    // direction it even points in.
+    const absBias = Math.round(Math.abs(n.bias));
+    const biasSentence = absBias < 5
+      ? `Die Prognose schätzt im Schnitt weder spürbar zu kurz noch zu lang.`
+      : `Die Prognose schätzt im Schnitt <strong>${absBias} Tage zu ${n.bias > 0 ? 'kurz' : 'lang'}</strong> —
+         in der Praxis wartest du eher etwas ${n.bias > 0 ? 'länger' : 'kürzer'}, als angezeigt wird.`;
+
+    const dataQualityNote = dq && dq.entfernt_rate != null
+      ? `<p class="methodik-caveat-inline">
+           <strong>Kleiner Vorbehalt:</strong> ${fmtPct(dq.entfernt_rate)} der beobachteten offenen Bestellungen
+           (${dq.entfernt_count} von ${dq.entfernt_count + dq.eingetroffen_count}) sind ohne erkennbare Lieferung
+           aus der Forumsliste verschwunden — vermutlich meist Stornierungen. Falls davon eher besonders langsame
+           Bestellungen betroffen sind, könnten die Zahlen oben minimal zu optimistisch aussehen.
+         </p>`
+      : `<p class="methodik-caveat-inline">
+           <strong>Kleiner Vorbehalt:</strong> Aus der Forumsliste verschwundene Bestellungen (z.&nbsp;B. Stornierungen)
+           werden aktuell noch nicht separat erfasst. Sollte sich das mit mehr Datenpunkten ändern, erscheint hier
+           automatisch eine Einschätzung.
+         </p>`;
+
+    const oldComparisonNote = o
+      ? `<p class="methodik-intro-sub">Insgesamt lag die aktuelle Methode bei ${n.mae} Tagen Ø Abweichung
+           gegenüber ${o.mae} Tagen bei der alten Methode (${n.n} getestete Bestellungen) — der Hauptvorteil zeigt
+           sich aber weniger in dieser Gesamtzahl als darin, dass die alte Methode an Länder- und Datumsgrenzen
+           harte Sprünge in der Prognose verursachte, die die neue Methode vermeidet.</p>`
+      : '';
 
     el.innerHTML = `
       <p class="methodik-intro">
-        Simuliert für jede der ${bt.n_tested} bisher ausgelieferten Bestellungen, dass sie am eigenen
-        Bestelldatum noch offen gewesen wäre — nur mit Daten, die zu diesem Zeitpunkt tatsächlich
-        verfügbar waren. So lässt sich die Prognosegüte sofort einschätzen, ohne Monate auf neue
-        echte Auflösungen zu warten. ${n.n} Bestellungen hatten genug historische Vergleichsdaten.
+        Wir haben die Prognose an <strong>${bt.n_tested} bereits ausgelieferten Bestellungen</strong> im Nachhinein
+        getestet: so getan, als wäre jede davon an ihrem eigenen Bestelldatum noch offen gewesen — nur mit den Daten,
+        die zu diesem Zeitpunkt tatsächlich vorlagen — und verglichen, was die Prognose gesagt hätte mit dem, was
+        wirklich passiert ist.
       </p>
-      <div class="accuracy-stats" style="margin-bottom:4px;">
-        <div class="accuracy-stat"><div class="num mono">±${n.mae}</div><div class="lbl">Mittlere Abweichung (Tage)</div></div>
-        <div class="accuracy-stat"><div class="num mono">${fmtSigned(n.bias)}</div><div class="lbl">Systematische Tendenz (Tage)</div></div>
-        <div class="accuracy-stat"><div class="num mono">${fmtPct(n.within14)}</div><div class="lbl">Innerhalb ±14 Tagen</div></div>
+
+      <div class="methodik-headline">
+        <div class="methodik-headline-num">± ${n.mae} Tage</div>
+        <div class="methodik-headline-lbl">so weit liegt die Prognose typischerweise neben der tatsächlichen Wartezeit</div>
       </div>
-      ${cmp}
+      <p class="methodik-intro">
+        ${biasSentence} Bei Wartezeiten, die oft mehrere Monate dauern, ist das eine grobe Orientierung für die
+        Planung — keine Punktlandung. In <strong>${fmtPct(n.within14)}</strong> der getesteten Fälle lag die Prognose
+        sogar innerhalb von zwei Wochen der Wahrheit; bei einer typischen Wartezeit von mehreren Monaten ist ein so
+        enges Zwei-Wochen-Fenster allerdings ein strenger Maßstab, kein Bestehen-oder-Durchfallen-Kriterium.
+      </p>
 
-      <p class="methodik-subhead">Genauigkeit nach Modell</p>
-      ${segmentTable(bt.segments.Modellgruppe, 'Modell')}
+      <p class="methodik-subhead">So kommt die Prognose zustande</p>
+      <ul class="methodik-explainer">
+        <li>Wir suchen Bestellungen mit möglichst <strong>ähnlicher Konfiguration</strong> — vor allem gleiches Modell, dazu Innenausstattung und Felgen.</li>
+        <li>Bestellungen aus <strong>deinem Land</strong> zählen stärker, sobald genug davon vorliegen — das Land beeinflusst die Wartezeit oft mehr als jede einzelne Ausstattungsoption.</li>
+        <li><strong>Neuere</strong> Vergleichsbestellungen wiegen schwerer als sehr alte, weil sich Wartezeiten über die Zeit spürbar verschieben.</li>
+        <li>Aus den passendsten Vergleichsbestellungen berechnen wir den <strong>wahrscheinlichsten Wert</strong> plus eine Bandbreite für die Unsicherheit — zu sehen im Diagramm bei jeder Einzelprognose.</li>
+      </ul>
 
-      <p class="methodik-subhead">Genauigkeit nach Land</p>
-      ${segmentTable(bt.segments.Land, 'Land')}
+      ${dataQualityNote}
 
-      ${dq && dq.entfernt_rate != null ? `
-      <div class="methodik-caveat">
-        <strong>Hinweis zur Datenqualität:</strong> ${dq.entfernt_count} von ${dq.entfernt_count + dq.eingetroffen_count}
-        beobachteten offenen Bestellungen (${fmtPct(dq.entfernt_rate)}) sind aus der Forumsliste verschwunden,
-        ohne als ausgeliefert aufzutauchen — vermutlich größtenteils Stornierungen. Falls das systematisch
-        eher besonders langsame Bestellungen betrifft, könnten die Referenzwerte oben leicht optimistisch
-        verzerrt sein. Diese Quote wird bei jedem Update neu berechnet; wir behalten sie im Auge.
-      </div>` : `
-      <div class="methodik-caveat">
-        <strong>Hinweis zur Datenqualität:</strong> Aktuell werden noch keine aus der Forumsliste
-        verschwundenen Bestellungen (z.&nbsp;B. Stornierungen) erfasst. Sollte sich das mit mehr
-        Datenpunkten ändern, erscheint hier automatisch eine Quote.
-      </div>`}
+      <details class="methodik-details">
+        <summary>Technische Details &amp; Zahlen nach Modell/Land</summary>
+        <div class="methodik-details-body">
+          ${o ? `${oldComparisonNote}` : ''}
+
+          <p class="methodik-subhead">Genauigkeit nach Modell</p>
+          ${segmentTable(bt.segments.Modellgruppe, 'Modell')}
+
+          <p class="methodik-subhead">Genauigkeit nach Land</p>
+          ${segmentTable(bt.segments.Land, 'Land')}
+        </div>
+      </details>
     `;
   }
 

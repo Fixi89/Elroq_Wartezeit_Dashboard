@@ -788,6 +788,50 @@
   .methodik-intro{ font-size:13px; color:var(--text-muted); line-height:1.6; margin:0 0 14px; }
   .methodik-intro-sub{ font-size:12px; color:var(--text-dim); margin:2px 0 16px; }
   .methodik-subhead{ font-size:12.5px; font-weight:600; color:var(--text); margin:20px 0 8px; }
+
+  /* Plain-language headline stat: one big, unmissable number instead of a
+     row of equally-sized technical stat cards — this is the one figure a
+     casual visitor actually needs ("how far off can this be"), everything
+     else is supporting context or detail. */
+  .methodik-headline{
+    display:flex; align-items:baseline; gap:12px; flex-wrap:wrap;
+    background:var(--surface-2); border:1px solid var(--border); border-radius:10px;
+    padding:16px 18px; margin:0 0 12px;
+  }
+  .methodik-headline-num{
+    font-family:'Space Grotesk',sans-serif; font-size:32px; font-weight:600; color:var(--accent); line-height:1;
+  }
+  .methodik-headline-lbl{ font-size:13px; color:var(--text-muted); max-width:360px; line-height:1.4; }
+
+  .methodik-explainer{ margin:0 0 16px; padding-left:18px; font-size:13px; color:var(--text-muted); line-height:1.7; }
+  .methodik-explainer li{ margin-bottom:2px; }
+  .methodik-explainer li strong{ color:var(--text-body); font-weight:600; }
+
+  .methodik-caveat-inline{
+    font-size:12px; color:var(--text-dim); line-height:1.6; margin:0 0 16px;
+    padding:9px 12px; background:var(--surface-2); border:1px solid var(--border); border-radius:8px;
+  }
+  .methodik-caveat-inline strong{ color:var(--text-muted); }
+
+  /* Native <details> keeps the deep technical breakdown one click away
+     instead of always on screen — no JS needed, works everywhere, and the
+     disclosure triangle is a familiar enough affordance on its own. */
+  .methodik-details{
+    margin-top:6px; border-top:1px solid var(--border); padding-top:14px;
+  }
+  .methodik-details summary{
+    cursor:pointer; font-size:12.5px; font-weight:600; color:var(--accent-2);
+    list-style:none; display:flex; align-items:center; gap:6px; user-select:none;
+  }
+  .methodik-details summary::-webkit-details-marker{ display:none; }
+  .methodik-details summary::before{
+    content:'▸'; font-size:10px; color:var(--text-dim); transition: transform .15s ease;
+  }
+  .methodik-details[open] summary::before{ transform: rotate(90deg); }
+  .methodik-details summary:hover{ color:var(--accent); }
+  .methodik-details-body{ margin-top:14px; }
+  .methodik-details .methodik-intro-sub{ margin-top:0; }
+
   .methodik-table{ width:100%; border-collapse:collapse; font-size:12.5px; table-layout:fixed; }
   .methodik-table th:nth-child(1), .methodik-table td:nth-child(1){ width:34%; }
   .methodik-table th:nth-child(2), .methodik-table td:nth-child(2){ width:16%; }
