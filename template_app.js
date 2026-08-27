@@ -2262,213 +2262,223 @@
   // Renders the prediction uncertainty as three nested confidence bands
   // (50/80/95%) around the median — a compact "fan chart", the standard way
   // forecasters visualize widening uncertainty rather than a single number.
-  // ---- Confidence distribution curve ----
-  // Replaces an earlier flat segmented bar. That version stacked three rows
-  // of chrome under a thin block (tick labels, legend, detail box), most of
-  // its date ticks were dropped by collision-avoidance anyway, and a bar
-  // simply doesn't read as "probability" — it looked like a progress meter.
-  // This draws the actual distribution instead: a smooth density curve whose
-  // area is shaded by confidence band, so the likely window is visually the
-  // tall part and the tails visibly thin out. One chart, one axis, no legend
-  // needed — the shading is self-explanatory once you see the shape.
-  let _fanSeq = 0;
-
+  // ---- Confidence fan chart (50/80/95%) ----
+  // Restored after a density-curve rewrite that looked worse in practice:
+  // with only 7 known quantiles (p2.5/p10/p25/median/p75/p90/p97.5), a
+  // smoothed density estimate is too sparse to render a genuinely smooth
+  // bell shape and instead produced visible plateaus/kinks wherever
+  // adjacent quantile gaps differ a lot in width. This flat segmented bar
+  // has been through several rounds of testing (collision-safe boundary
+  // labels, edge-clamped median label, combined-band hover) and reads
+  // cleanly at a glance without needing that many real data points.
   function confidenceFanSVG(p){
     const hasWide = p.dateP2_5 != null && p.dateP97_5 != null;
     const hasMid = p.dateP10 != null && p.dateP90 != null;
     const outerFrom = hasWide ? p.dateP2_5 : p.dateEarly;
     const outerTo = hasWide ? p.dateP97_5 : p.dateLate;
 
-    const uid = 'fan' + (++_fanSeq);
-    const W = 640, H = 132;
-    const padX = 14, baseY = 96, peakY = 20;
+    const W = 600, H = 76, padX = 8, barY = 32, barH = 22, radius = 5;
     const span = Math.max(DAY_MS, outerTo - outerFrom);
     const xFor = ts => padX + ((ts - outerFrom) / span) * (W - padX * 2);
+
+    // Each order's waiting time in days-from-order, so the detail panel can
+    // show "X–Y Tage" alongside the actual calendar dates — the days-since-
+    // order framing is often the more intuitive one ("wartest du 5 statt 6
+    // Monate"), the dates are the more actionable one ("bis wann").
     const daysFor = ts => Math.round((ts - p.dateMedian) / DAY_MS) + p.median;
 
-    // Known points on the cumulative distribution. Density between any two
-    // is simply how much probability mass falls in that span divided by its
-    // width — a wide gap holding little probability is a flat tail, a narrow
-    // gap holding a lot is the peak.
-    const cdf = [];
-    const push = (ts, q) => { if (ts != null) cdf.push([ts, q]); };
-    push(hasWide ? p.dateP2_5 : null, 0.025);
-    push(hasMid ? p.dateP10 : null, 0.10);
-    push(p.dateEarly, 0.25);
-    push(p.dateMedian, 0.50);
-    push(p.dateLate, 0.75);
-    push(hasMid ? p.dateP90 : null, 0.90);
-    push(hasWide ? p.dateP97_5 : null, 0.975);
-    cdf.sort((a, b) => a[0] - b[0]);
-
-    // Density samples at interval midpoints, plus zero at both outer edges so
-    // the curve lands softly on the baseline instead of ending mid-air.
-    const pts = [[xFor(outerFrom), 0]];
-    for (let i = 1; i < cdf.length; i++){
-      const [x0, q0] = cdf[i - 1], [x1, q1] = cdf[i];
-      const width = Math.max(DAY_MS, x1 - x0);
-      pts.push([xFor((x0 + x1) / 2), (q1 - q0) / width]);
-    }
-    pts.push([xFor(outerTo), 0]);
-
-    const maxD = Math.max(...pts.map(pt => pt[1])) || 1;
-    const curve = pts.map(([x, d]) => [x, baseY - (d / maxD) * (baseY - peakY)]);
-
-    // Catmull-Rom through the density samples, converted to cubic beziers —
-    // gives a natural distribution silhouette rather than a jagged polyline.
-    // Control points are clamped to the span of the two samples they sit
-    // between: unclamped Catmull-Rom overshoots wherever the density changes
-    // sharply, which showed up as small bumps rising out of the tails just
-    // before each end — a curve implying probability the data doesn't have.
-    function smoothPath(points){
-      if (points.length < 2) return '';
-      const clamp = (v, a, b) => Math.max(Math.min(a, b), Math.min(Math.max(a, b), v));
-      let d = `M ${points[0][0].toFixed(1)} ${points[0][1].toFixed(1)}`;
-      for (let i = 0; i < points.length - 1; i++){
-        const p0 = points[i - 1] || points[i];
-        const p1 = points[i];
-        const p2 = points[i + 1];
-        const p3 = points[i + 2] || p2;
-        const c1x = p1[0] + (p2[0] - p0[0]) / 6;
-        const c2x = p2[0] - (p3[0] - p1[0]) / 6;
-        const c1y = clamp(p1[1] + (p2[1] - p0[1]) / 6, p1[1], p2[1]);
-        const c2y = clamp(p2[1] - (p3[1] - p1[1]) / 6, p1[1], p2[1]);
-        d += ` C ${c1x.toFixed(1)} ${c1y.toFixed(1)}, ${c2x.toFixed(1)} ${c2y.toFixed(1)}, ${p2[0].toFixed(1)} ${p2[1].toFixed(1)}`;
-      }
-      return d;
+    // Non-overlapping segments (instead of stacked translucent rects, which
+    // compounded into near-identical colours) so each probability zone has
+    // a crisp, clearly distinct boundary and opacity step. Each segment
+    // carries its own from/to as data attributes plus a <title> (native
+    // tooltip fallback) so hovering or tapping it — wired up in
+    // wireConfidenceFan() below — can show the exact date range and day
+    // span in the .fan-detail panel instead of only ever showing the two
+    // outermost dates and the median.
+    function seg(fromTs, toTs, opacity, roundLeft, roundRight, band, bandLabel){
+      const x1 = xFor(fromTs), x2 = xFor(toTs);
+      const w = Math.max(1.5, x2 - x1);
+      const rx = radius;
+      const y1 = barY, y2 = barY + barH;
+      const path = roundLeft || roundRight
+        ? `M ${x1+(roundLeft?rx:0)} ${y1} H ${x2-(roundRight?rx:0)} ` +
+          (roundRight ? `A ${rx} ${rx} 0 0 1 ${x2} ${y1+rx} ` : `L ${x2} ${y1} `) +
+          `V ${y2-(roundRight?rx:0)} ` +
+          (roundRight ? `A ${rx} ${rx} 0 0 1 ${x2-rx} ${y2} ` : `L ${x2} ${y2} `) +
+          `H ${x1+(roundLeft?rx:0)} ` +
+          (roundLeft ? `A ${rx} ${rx} 0 0 1 ${x1} ${y2-rx} ` : `L ${x1} ${y2} `) +
+          `V ${y1+(roundLeft?rx:0)} ` +
+          (roundLeft ? `A ${rx} ${rx} 0 0 1 ${x1+rx} ${y1} ` : `L ${x1} ${y1} `) + 'Z'
+        : `M ${x1} ${y1} H ${x2} V ${y2} H ${x1} Z`;
+      const title = `${bandLabel}: ${fmtDate(fromTs)} – ${fmtDate(toTs)} (${daysFor(fromTs)}–${daysFor(toTs)} Tage)`;
+      return `<path class="fan-segment" d="${path}" fill="#b6d9fc" opacity="${opacity}"
+        data-band="${band}" data-from="${fromTs}" data-to="${toTs}"
+        data-from-days="${daysFor(fromTs)}" data-to-days="${daysFor(toTs)}"
+        data-label="${escapeHtml(bandLabel)}" tabindex="0" role="button" aria-label="${escapeHtml(title)}"
+        ><title>${escapeHtml(title)}</title></path>`;
     }
 
-    const strokeD = smoothPath(curve);
-    const areaD = `${strokeD} L ${xFor(outerTo).toFixed(1)} ${baseY} L ${xFor(outerFrom).toFixed(1)} ${baseY} Z`;
-
-    // The same area is painted once per confidence band, each clipped to that
-    // band's x-range. Bands therefore differ only in opacity and share one
-    // continuous silhouette — no seams, no stacking artefacts.
-    const bands = [];
-    if (hasWide) bands.push({ band: '95', from: outerFrom, to: hasMid ? p.dateP10 : p.dateEarly, op: 0.18 });
-    if (hasMid) bands.push({ band: '80', from: p.dateP10, to: p.dateEarly, op: 0.40 });
-    bands.push({ band: '50', from: p.dateEarly, to: p.dateLate, op: 0.92 });
-    if (hasMid) bands.push({ band: '80', from: p.dateLate, to: p.dateP90, op: 0.40 });
-    if (hasWide) bands.push({ band: '95', from: hasMid ? p.dateP90 : p.dateLate, to: outerTo, op: 0.18 });
-
-    const bandLabels = {
-      '50': '50 % — wahrscheinlichster Zeitraum',
-      '80': '80 % — realistischer Rahmen',
-      '95': '95 % — nahezu sicherer Rahmen',
-    };
-    // Outer bounds per band, so hovering either tail of a band reports the
-    // whole band rather than just the half under the cursor.
-    const bandBounds = {};
-    bands.forEach(b => {
-      const cur = bandBounds[b.band] || [Infinity, -Infinity];
-      bandBounds[b.band] = [Math.min(cur[0], b.from), Math.max(cur[1], b.to)];
-    });
-
-    let clips = '', fills = '', hits = '';
-    bands.forEach((b, i) => {
-      const x1 = xFor(b.from), x2 = xFor(b.to);
-      const w = Math.max(0.5, x2 - x1);
-      clips += `<clipPath id="${uid}c${i}"><rect x="${x1.toFixed(1)}" y="0" width="${w.toFixed(1)}" height="${H}"/></clipPath>`;
-      fills += `<path class="fan-fill" data-band="${b.band}" data-base-op="${b.op}" d="${areaD}" fill="#b6d9fc" opacity="${b.op}" clip-path="url(#${uid}c${i})"/>`;
-      const [bf, bt] = bandBounds[b.band];
-      hits += `<rect class="fan-hit" x="${x1.toFixed(1)}" y="${peakY - 8}" width="${w.toFixed(1)}" height="${baseY - peakY + 20}"
-        fill="transparent" tabindex="0" role="button"
-        data-band="${b.band}" data-from="${bf}" data-to="${bt}"
-        data-from-days="${daysFor(bf)}" data-to-days="${daysFor(bt)}"
-        data-label="${escapeHtml(bandLabels[b.band])}"
-        aria-label="${escapeHtml(bandLabels[b.band] + ': ' + fmtDate(bf) + ' bis ' + fmtDate(bt))}"><title>${escapeHtml(bandLabels[b.band] + ': ' + fmtDate(bf) + ' – ' + fmtDate(bt))}</title></rect>`;
-    });
-
-    // Boundary ticks at the band edges. Only the 50 % edges are labelled by
-    // default — the previous version tried to label every boundary and its
-    // collision logic then silently dropped most of them, which looked
-    // arbitrary. The rest are quietly marked and named on hover instead.
-    let ticks = '';
-    [p.dateP10, p.dateEarly, p.dateLate, p.dateP90].forEach(ts => {
-      if (ts == null) return;
+    let bands = '';
+    if (hasWide && hasMid){
+      bands += seg(outerFrom, p.dateP10, 0.16, true, false, '95-low', '95%-Korridor (unteres Ende)');
+      bands += seg(p.dateP10, p.dateEarly, 0.38, false, false, '80-low', '80%-Korridor (unteres Ende)');
+      bands += seg(p.dateEarly, p.dateLate, 0.88, false, false, '50', '50%-Korridor (wahrscheinlichster Zeitraum)');
+      bands += seg(p.dateLate, p.dateP90, 0.38, false, false, '80-high', '80%-Korridor (oberes Ende)');
+      bands += seg(p.dateP90, outerTo, 0.16, false, true, '95-high', '95%-Korridor (oberes Ende)');
+    } else if (hasMid){
+      bands += seg(outerFrom, p.dateEarly, 0.32, true, false, '80-low', '80%-Korridor (unteres Ende)');
+      bands += seg(p.dateEarly, p.dateLate, 0.88, false, false, '50', '50%-Korridor (wahrscheinlichster Zeitraum)');
+      bands += seg(p.dateLate, outerTo, 0.32, false, true, '80-high', '80%-Korridor (oberes Ende)');
+    } else {
+      bands += seg(outerFrom, outerTo, 0.75, true, true, '50', '50%-Korridor (wahrscheinlichster Zeitraum)');
+    }
+    // Thin separators so the eye can find each boundary even where the
+    // opacity step alone is subtle at a glance. Each also gets a small
+    // always-visible date tick label underneath — not just the two outer
+    // extremes as before — so the segment boundaries are readable without
+    // needing to hover at all; hovering/tapping a segment additionally
+    // shows the precise range (incl. day count) in the panel below.
+    let dividers = '', tickLabels = '';
+    const tickPositions = [p.dateP10, p.dateEarly, p.dateLate, p.dateP90].filter(ts => ts != null);
+    // Skip a tick label if it would sit too close to its neighbour or to
+    // the two outer end labels to stay legible. Distances are in SVG
+    // viewBox units (600 wide); a "D. Mon. YYYY" label at this font size
+    // needs roughly 70-80 units of clearance on each side, and the outer
+    // labels are edge-anchored (start/end) so their text extends inward —
+    // the dead zones below are deliberately generous rather than measuring
+    // exact glyph widths.
+    const edgeDeadZone = 135;
+    const minGap = 90;
+    const placed = [];
+    tickPositions.forEach(ts => {
       const x = xFor(ts);
-      ticks += `<line x1="${x.toFixed(1)}" y1="${baseY - 4}" x2="${x.toFixed(1)}" y2="${baseY + 4}" stroke="#7e8ba3" stroke-width="1"/>`;
+      dividers += `<line x1="${x.toFixed(1)}" y1="${barY}" x2="${x.toFixed(1)}" y2="${barY+barH}" stroke="#05060f" stroke-width="1" opacity="0.55"/>`;
+      const nearEdge = x < padX + edgeDeadZone || x > (W - padX) - edgeDeadZone;
+      const tooCloseToOther = placed.some(px => Math.abs(px - x) < minGap);
+      if (!nearEdge && !tooCloseToOther){
+        placed.push(x);
+        tickLabels += `<line x1="${x.toFixed(1)}" y1="${barY+barH}" x2="${x.toFixed(1)}" y2="${barY+barH+4}" stroke="#9da7ba" stroke-width="1"/>`;
+        tickLabels += `<text x="${x.toFixed(1)}" y="${H-6}" font-size="9" fill="#9da7ba" text-anchor="middle" font-family="JetBrains Mono, monospace">${fmtDate(ts)}</text>`;
+      }
     });
 
     const medX = xFor(p.dateMedian);
-    const medTopY = curve.reduce((best, [x, y]) =>
-      Math.abs(x - medX) < Math.abs(best[0] - medX) ? [x, y] : best, curve[0])[1];
+    // The median date label is centre-anchored on medX, which clips against
+    // the viewBox edge (and previously silently truncated the leading
+    // digit, e.g. "19." rendering as "9.") whenever the median sits close
+    // to one end of an asymmetric distribution. Switch to the same
+    // edge-anchoring the outer min/max labels already use instead of
+    // blindly centring near the boundary.
+    const medLabelAnchor = medX < 55 ? 'start' : (medX > W - 55 ? 'end' : 'middle');
+    const medLabelX = medLabelAnchor === 'start' ? padX : (medLabelAnchor === 'end' ? W - padX : medX);
+    const marker = `
+      <line x1="${medX.toFixed(1)}" y1="${barY-7}" x2="${medX.toFixed(1)}" y2="${barY+barH+7}" stroke="#d8ecf8" stroke-width="2.5"/>
+      <circle cx="${medX.toFixed(1)}" cy="${(barY+barH/2).toFixed(1)}" r="4.5" fill="#05060f" stroke="#d8ecf8" stroke-width="2.5"/>
+    `;
 
-    const axis = `<line x1="${padX}" y1="${baseY}" x2="${(W - padX).toFixed(1)}" y2="${baseY}" stroke="#5b6478" stroke-width="1"/>`;
+    const label = (ts, x, anchor) =>
+      `<text x="${x.toFixed(1)}" y="${H-6}" font-size="10" fill="#c7d3ea" text-anchor="${anchor}" font-family="JetBrains Mono, monospace">${fmtDate(ts)}</text>`;
 
-    const edgeLabel = (ts, x, anchor) =>
-      `<text x="${x.toFixed(1)}" y="${baseY + 20}" font-size="10.5" fill="#9da7ba" text-anchor="${anchor}" font-family="JetBrains Mono, monospace">${fmtDate(ts)}</text>`;
+    const ariaLabel = `Prognose-Unsicherheit: 50 Prozent Wahrscheinlichkeit zwischen ${fmtDate(p.dateEarly)} und ${fmtDate(p.dateLate)}` +
+      (hasWide ? `, 95 Prozent zwischen ${fmtDate(outerFrom)} und ${fmtDate(outerTo)}` : '') + `. Median: ${fmtDate(p.dateMedian)}.`;
 
-    const ariaLabel = `Prognose-Verteilung. Wahrscheinlichster Zeitraum ${fmtDate(p.dateEarly)} bis ${fmtDate(p.dateLate)}`
-      + (hasWide ? `, äußerer Rahmen ${fmtDate(outerFrom)} bis ${fmtDate(outerTo)}` : '')
-      + `. Wahrscheinlichster Einzeltermin ${fmtDate(p.dateMedian)}.`;
+    const defaultDetail = `<span class="fan-detail-hint">Bereich antippen oder mit der Maus berühren, um die genaue Zeitspanne zu sehen — Median: <strong>${fmtDate(p.dateMedian)}</strong> (${p.median} Tage).</span>`;
 
     return `
       <svg viewBox="0 0 ${W} ${H}" class="confidence-fan" role="img" aria-label="${ariaLabel}" preserveAspectRatio="xMidYMid meet">
-        <defs>${clips}</defs>
-        ${fills}
-        <path d="${strokeD}" fill="none" stroke="#dceaf9" stroke-width="1.4" opacity="0.65"/>
-        ${axis}
-        ${ticks}
-        <line class="fan-median" x1="${medX.toFixed(1)}" y1="${medTopY.toFixed(1)}" x2="${medX.toFixed(1)}" y2="${baseY}" stroke="#eaf4ff" stroke-width="2"/>
-        <circle cx="${medX.toFixed(1)}" cy="${medTopY.toFixed(1)}" r="3.5" fill="#05060f" stroke="#eaf4ff" stroke-width="2"/>
-        ${edgeLabel(outerFrom, padX, 'start')}
-        ${edgeLabel(outerTo, W - padX, 'end')}
-        ${hits}
+        ${bands}
+        ${dividers}
+        ${marker}
+        <text x="${medLabelX.toFixed(1)}" y="${barY-12}" font-size="11" fill="#d8ecf8" text-anchor="${medLabelAnchor}" font-family="JetBrains Mono, monospace" font-weight="600">${fmtDate(p.dateMedian)}</text>
+        ${label(outerFrom, padX, 'start')}
+        ${label(outerTo, W - padX, 'end')}
+        ${tickLabels}
       </svg>
-      <div class="fan-caption">
-        <span class="fan-caption-main">Wahrscheinlichster Termin: <strong>${fmtDate(p.dateMedian)}</strong> · ${p.median} Tage</span>
-        <span class="fan-caption-hint">Bereich berühren für Details</span>
-      </div>`;
+      <div class="fan-legend">
+        <span data-band="50"><span class="fan-dot" style="opacity:.88"></span>50% (wahrscheinlichster Zeitraum)</span>
+        ${hasMid ? '<span data-band="80"><span class="fan-dot" style="opacity:.38"></span>80%</span>' : ''}
+        ${hasWide ? '<span data-band="95"><span class="fan-dot" style="opacity:.16"></span>95%</span>' : ''}
+      </div>
+      <div class="fan-detail">${defaultDetail}</div>`;
   }
 
-  // Wires up hover/focus interactivity for every confidence curve inside
-  // `container`. Called right after the containing HTML is inserted, since
-  // these charts are built as strings via innerHTML. Hovering or tapping any
-  // part of a band reports that band's full range — both tails together, not
-  // just the half under the cursor — in the caption line beneath the chart.
+  // Wires up hover/focus/click interactivity for every confidence-fan chart
+  // inside `container` (called once right after the HTML that contains one
+  // or more `.confidence-fan-wrap` blocks is inserted into the DOM — these
+  // are built as plain HTML strings via innerHTML, so listeners can't be
+  // attached until the elements actually exist). Hovering or tapping a
+  // segment (or its matching legend swatch) shows its exact date range and
+  // day span in the `.fan-detail` panel beneath the chart, and highlights
+  // both the segment and its boundary tick labels — this is what actually
+  // lets someone see what each of the 50/80/95% bands means, rather than
+  // only ever seeing the two outermost dates and the median.
   function wireConfidenceFan(container){
     container.querySelectorAll('.confidence-fan-wrap').forEach(wrap => {
       const svg = wrap.querySelector('.confidence-fan');
-      const caption = wrap.querySelector('.fan-caption');
-      if (!svg || !caption) return;
-      const defaultHtml = caption.innerHTML;
-      const hitAreas = Array.from(svg.querySelectorAll('.fan-hit'));
-
-      const fills = Array.from(svg.querySelectorAll('.fan-fill'));
+      const detail = wrap.querySelector('.fan-detail');
+      if (!svg || !detail) return;
+      const defaultHtml = detail.innerHTML;
+      const segments = Array.from(svg.querySelectorAll('.fan-segment'));
 
       function clearActive(){
-        hitAreas.forEach(h => h.classList.remove('active'));
-        // Restore each band's own base opacity.
-        fills.forEach(f => f.setAttribute('opacity', f.dataset.baseOp));
+        segments.forEach(s => s.classList.remove('active'));
+        wrap.querySelectorAll('.fan-legend span').forEach(s => s.classList.remove('active'));
       }
-
-      function show(hit){
+      // Shows the combined range of every segment sharing a band group
+      // (e.g. both the lower and upper wing of "80") in one go — hovering
+      // just the upper 80% wing still shows the full 80% corridor, not only
+      // the narrower half under the cursor, since "80%" is one probability
+      // band conceptually even though it's drawn as two segments either
+      // side of the median.
+      function showBandGroup(segs, bandPrefix, legendItem){
+        if (!segs.length) return;
         clearActive();
-        const band = hit.dataset.band;
-        hitAreas.filter(h => h.dataset.band === band).forEach(h => h.classList.add('active'));
-        // Lift the hovered band, mute the others, so the shape being
-        // described in the caption is unmistakable.
-        fills.forEach(f => {
-          const base = Number(f.dataset.baseOp);
-          f.setAttribute('opacity', f.dataset.band === band
-            ? Math.min(1, base + 0.25).toFixed(2)
-            : (base * 0.35).toFixed(2));
-        });
-        caption.innerHTML =
-          `<span class="fan-caption-main"><strong>${escapeHtml(hit.dataset.label)}</strong></span>` +
-          `<span class="fan-caption-range">${fmtDate(Number(hit.dataset.from))} – ${fmtDate(Number(hit.dataset.to))}` +
-          ` · ${hit.dataset.fromDays}–${hit.dataset.toDays} Tage</span>`;
+        segs.forEach(s => s.classList.add('active'));
+        if (legendItem) legendItem.classList.add('active');
+        const froms = segs.map(s => Number(s.dataset.from));
+        const tos = segs.map(s => Number(s.dataset.to));
+        const fromDaysArr = segs.map(s => Number(s.dataset.fromDays));
+        const toDaysArr = segs.map(s => Number(s.dataset.toDays));
+        const from = Math.min(...froms), to = Math.max(...tos);
+        const fromDays = Math.min(...fromDaysArr, ...toDaysArr);
+        const toDays = Math.max(...fromDaysArr, ...toDaysArr);
+        const label = segs.length > 1 ? `${bandPrefix}%-Korridor` : segs[0].dataset.label;
+        detail.innerHTML = `<strong>${escapeHtml(label)}:</strong> ${fmtDate(from)} – ${fmtDate(to)} (${fromDays}–${toDays} Tage)`;
       }
-
-      hitAreas.forEach(hit => {
-        hit.addEventListener('mouseenter', () => show(hit));
-        hit.addEventListener('focus', () => show(hit));
-        hit.addEventListener('click', () => show(hit));
+      function bandGroupOf(seg){
+        // "80-low"/"80-high" -> "80"; "50" (no wings) stays "50".
+        return seg.dataset.band.split('-')[0];
+      }
+      function showSegment(seg){
+        const bandPrefix = bandGroupOf(seg);
+        const segs = segments.filter(s => bandGroupOf(s) === bandPrefix);
+        const legendItem = wrap.querySelector(`.fan-legend span[data-band="${bandPrefix}"]`);
+        showBandGroup(segs, bandPrefix, legendItem);
+      }
+      segments.forEach(seg => {
+        seg.addEventListener('mouseenter', () => showSegment(seg));
+        seg.addEventListener('focus', () => showSegment(seg));
+        seg.addEventListener('click', () => showSegment(seg));
       });
-      svg.addEventListener('mouseleave', () => { clearActive(); caption.innerHTML = defaultHtml; });
+      svg.addEventListener('mouseleave', () => {
+        clearActive();
+        detail.innerHTML = defaultHtml;
+      });
       svg.addEventListener('focusout', e => {
-        if (!svg.contains(e.relatedTarget)){ clearActive(); caption.innerHTML = defaultHtml; }
+        if (!svg.contains(e.relatedTarget)) { clearActive(); detail.innerHTML = defaultHtml; }
+      });
+
+      // Legend swatches (50%/80%/95%) do the same combined lookup.
+      wrap.querySelectorAll('.fan-legend span[data-band]').forEach(legendItem => {
+        const bandPrefix = legendItem.dataset.band;
+        const matching = () => segments.filter(s => bandGroupOf(s) === bandPrefix);
+        const showBand = () => showBandGroup(matching(), bandPrefix, legendItem);
+        legendItem.addEventListener('mouseenter', showBand);
+        legendItem.addEventListener('click', showBand);
+        legendItem.addEventListener('mouseleave', () => {
+          clearActive();
+          detail.innerHTML = defaultHtml;
+        });
       });
     });
   }
