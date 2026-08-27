@@ -721,29 +721,27 @@
   .lk-config strong{ color:var(--text); font-weight:500; }
   .lk-badges{ display:flex; flex-wrap:wrap; gap:5px; margin-top:8px; }
 
-  /* Confidence fan chart (50/80/95%) */
-  .confidence-fan-wrap{ margin-top:12px; }
-  .confidence-fan{ width:100%; height:auto; display:block; }
-  .fan-legend{
-    display:flex; gap:14px; margin-top:2px; font-size:10.5px; color:var(--text-dim);
-    font-family:'JetBrains Mono',monospace;
+  /* Confidence distribution curve (50/80/95%) */
+  .confidence-fan-wrap{ margin-top:14px; }
+  .confidence-fan{ width:100%; height:auto; display:block; overflow:visible; }
+  /* Invisible hover targets sit over each band; the visual feedback is the
+     band's own brightness plus its boundary, so the target itself stays
+     fully transparent and only lends the cursor + focus ring. */
+  .fan-hit{ cursor:pointer; outline:none; }
+  .fan-hit:focus-visible{ stroke:#eaf4ff; stroke-width:1.5; }
+  /* Band emphasis is driven from JS (the base opacity is an SVG attribute,
+     which CSS opacity would otherwise fight with); this just animates it. */
+  .fan-fill{ transition:opacity .14s ease; }
+  .fan-median{ pointer-events:none; }
+
+  .fan-caption{
+    display:flex; align-items:baseline; justify-content:space-between; gap:12px;
+    flex-wrap:wrap; margin-top:2px; font-size:12px; color:var(--text-muted);
+    min-height:1.5em;
   }
-  .fan-legend span{ display:flex; align-items:center; gap:5px; cursor:pointer; padding:2px 0; }
-  .fan-legend span:hover, .fan-legend span.active{ color:var(--text-body); }
-  .fan-dot{ width:8px; height:8px; border-radius:2px; background:var(--accent-2); flex:none; }
-  .fan-segment{ cursor:pointer; transition: opacity .12s ease; }
-  .fan-segment:hover, .fan-segment:focus-visible, .fan-segment.active{
-    stroke: #f4f9ff; stroke-width:1.5; outline:none;
-  }
-  .fan-tick{ opacity:0; transition: opacity .12s ease; pointer-events:none; }
-  .fan-tick.active{ opacity:1; }
-  .fan-detail{
-    margin-top:8px; padding:8px 11px; background:var(--surface-2); border:1px solid var(--border);
-    border-radius:8px; font-size:11.5px; color:var(--text-muted); font-family:'JetBrains Mono',monospace;
-    min-height:1.6em;
-  }
-  .fan-detail strong{ color:var(--text-body); font-weight:600; font-family:'Inter',sans-serif; }
-  .fan-detail .fan-detail-hint{ color:var(--text-dim); font-family:'Inter',sans-serif; }
+  .fan-caption-main strong{ color:var(--text-body); font-weight:600; }
+  .fan-caption-range{ font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--text-muted); }
+  .fan-caption-hint{ font-size:11px; color:var(--text-dim); }
 
   .lk-method{
     font-size:11.5px; color:var(--text-dim); margin-top:12px; padding-top:10px;
@@ -1081,7 +1079,7 @@
       </span>
       Wartezeit-Dashboard
     </h1>
-    <p class="subtitle">Analysiere die durchschnittliche Wartezeit für beliebige Fahrzeug&shy;konfigurationen. Ohne Filter zeigt die Übersicht alle __COUNT__ ausgelieferten Bestellungen. Datenstand: __DATA_STAND__.</p>
+    <p class="subtitle">Analysiere die durchschnittliche Wartezeit für beliebige Fahrzeug&shy;konfigurationen. Die Übersicht startet mit Bestellungen ab September 2025 — ältere sind über den Zeitraum-Regler jederzeit zuschaltbar, stammen aber aus einer deutlich anderen Liefersituation. Datenstand: __DATA_STAND__.</p>
   </div>
   <div style="text-align:right;">
     <div class="header-actions">
