@@ -62953,5 +62953,156 @@
       }
     ],
     "OriginalCountryScoped": true
+  },
+  "1877": {
+    "ID": "1877",
+    "Modell": "Skoda Enyaq Coupe iV RS",
+    "Modellgruppe": "Enyaq Coupe RS",
+    "Bestelldatum": "26. August 2026",
+    "BestelldatumTS": 1787702400000,
+    "Status": "offen",
+    "LoggedAt": 1787809097144,
+    "ResolvedAt": null,
+    "ActualDate": null,
+    "ActualWaitDays": null,
+    "DeviationDays": null,
+    "PredictedDate": 1796169600000.0,
+    "PredictedRangeLowDate": 1795478400000.0,
+    "PredictedRangeHighDate": 1800291796297.7205,
+    "PredictedP10Date": 1795036426673.2334,
+    "PredictedP90Date": 1805480391716.2366,
+    "PredictedP2_5Date": 1794299266582.1895,
+    "PredictedP97_5Date": 1808691955571.0305,
+    "PredictedMedianDays": 98,
+    "PredictedRangeLowDays": 90,
+    "PredictedRangeHighDays": 146,
+    "PredictedP10Days": 85,
+    "PredictedP90Days": 206,
+    "PredictedP2_5Days": 76,
+    "PredictedP97_5Days": 243,
+    "ReferenceCount": 125,
+    "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
+    "ReferenceEraFrom": 1643846400000,
+    "ReferenceEraTo": 1777852800000,
+    "References": [
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 90
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 84
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 98
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 147
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 237
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 150
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 92
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 121
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 98
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 113
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 204
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 115
+      }
+    ],
+    "CountryScoped": true,
+    "OriginalPredictedDate": 1796169600000.0,
+    "OriginalPredictedRangeLowDate": 1795478400000.0,
+    "OriginalPredictedRangeHighDate": 1800291796297.7205,
+    "OriginalPredictedP10Date": 1795036426673.2334,
+    "OriginalPredictedP90Date": 1805480391716.2366,
+    "OriginalPredictedP2_5Date": 1794299266582.1895,
+    "OriginalPredictedP97_5Date": 1808691955571.0305,
+    "OriginalPredictedMedianDays": 98,
+    "OriginalPredictedRangeLowDays": 90,
+    "OriginalPredictedRangeHighDays": 146,
+    "OriginalPredictedP10Days": 85,
+    "OriginalPredictedP90Days": 206,
+    "OriginalPredictedP2_5Days": 76,
+    "OriginalPredictedP97_5Days": 243,
+    "OriginalReferenceCount": 125,
+    "OriginalReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
+    "OriginalReferenceEraFrom": 1643846400000,
+    "OriginalReferenceEraTo": 1777852800000,
+    "OriginalReferences": [
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 90
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 84
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 98
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 147
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 237
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 150
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 92
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 121
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 98
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 113
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 204
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 115
+      }
+    ],
+    "OriginalCountryScoped": true
   }
 }
