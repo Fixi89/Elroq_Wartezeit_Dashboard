@@ -1614,6 +1614,13 @@
         ? `left:50%; width:${pct.toFixed(1)}%;`
         : `right:50%; width:${pct.toFixed(1)}%;`;
       const sign = f.effect > 0 ? '+' : (f.effect < 0 ? '−' : '±');
+      // Pfeil zusätzlich zum Vorzeichen und zur Balkenseite: Rot/Grün allein
+      // ist für rot-grün-blinde Nutzer (häufigste Form der Farbenblindheit)
+      // nicht zuverlässig unterscheidbar. Das Vorzeichen und die Balkenseite
+      // (links/rechts der Nulllinie) codieren die Richtung zwar bereits
+      // unabhängig von der Farbe, ein Pfeil macht das aber auf einen Blick
+      // erkennbar, ohne erst das Vorzeichen lesen zu müssen.
+      const arrow = f.effect > 0 ? '▲' : (f.effect < 0 ? '▼' : '');
       return `
         <div class="rank-row">
           <div class="rank-label">${escapeHtml(f.label)}<span class="n">${f.nA} vs. ${f.nB}</span></div>
@@ -1621,14 +1628,14 @@
             <div class="rank-zero"></div>
             <div class="rank-bar ${dir}" style="${barStyle}"></div>
           </div>
-          <div class="rank-value ${dir}">${sign}${Math.round(Math.abs(f.effect))} Tage</div>
+          <div class="rank-value ${dir}"><span class="rank-arrow" aria-hidden="true">${arrow}</span>${sign}${Math.round(Math.abs(f.effect))} Tage</div>
         </div>`;
     }).join('');
 
     el.innerHTML = rows + `
       <div class="rank-legend">
-        <span><span class="legend-dot" style="background:var(--danger);"></span>Länger als der Rest</span>
-        <span><span class="legend-dot" style="background:var(--accent);"></span>Kürzer als der Rest</span>
+        <span><span class="legend-dot" style="background:var(--danger);"></span>▲ Länger als der Rest</span>
+        <span><span class="legend-dot" style="background:var(--accent);"></span>▼ Kürzer als der Rest</span>
       </div>`;
   }
 
@@ -2023,6 +2030,66 @@
   // worse over the boom-bust wait-time history — see Methodik-Panel) and no
   // hard era window or similarity tiers (a backtest showed continuous
   // recency/country weighting outperforms hard cutoffs).
+  // ---- Optimierung 5: Kaplan-Meier-Korrektur der Survivorship-Verzerrung ----
+  // 1:1-Portierung von km_median()/censoring_shift() aus backtest.py. Vorher
+  // steckte diese Korrektur nur in der Python-Prognose, nicht hier — genau
+  // die Art von Auseinanderdriften, die schon einmal zu unterschiedlichen
+  // Prognosen zwischen "Eigene Bestellung nachschlagen" und dem
+  // Was-wäre-wenn-Rechner geführt hat. Siehe dortige Kommentare für die volle
+  // Herleitung; hier nur die Kurzfassung: der Vergleichs-Pool enthält nur
+  // bereits ausgelieferte Bestellungen, die langsamen sind noch offen und
+  // fehlen damit systematisch — Kaplan-Meier rechnet sie korrekt als
+  // rechtszensierte Beobachtungen ein, statt sie zu ignorieren.
+  function _plainMedian(vals){
+    const s = [...vals].sort((a, b) => a - b);
+    const n = s.length;
+    if (n === 0) return 0;
+    const mid = Math.floor(n / 2);
+    return n % 2 ? s[mid] : (s[mid - 1] + s[mid]) / 2;
+  }
+
+  function kmMedian(observed, censored){
+    const events = [
+      ...observed.map(t => [t, 1]),
+      ...censored.map(t => [t, 0]),
+    ];
+    if (!events.length) return null;
+    events.sort((a, b) => a[0] - b[0]);
+    let nAtRisk = events.length;
+    let survival = 1.0;
+    let i = 0;
+    while (i < events.length){
+      const t = events[i][0];
+      let d = 0, c = 0, j = i;
+      while (j < events.length && events[j][0] === t){
+        if (events[j][1] === 1) d++; else c++;
+        j++;
+      }
+      if (nAtRisk > 0 && d > 0){
+        survival *= (1 - d / nAtRisk);
+        if (survival <= 0.5) return t;
+      }
+      nAtRisk -= (d + c);
+      i = j;
+    }
+    return null;
+  }
+
+  function censoringShift(poolDelivered, poolOpen, nowTs, capDays = 180){
+    const observed = poolDelivered
+      .map(r => r.WartezeitTage)
+      .filter(v => v !== null && v !== undefined);
+    if (!observed.length) return 0;
+    const censored = poolOpen.map(r => Math.max(0, (nowTs - r.BestelldatumTS) / DAY_MS));
+    const naive = _plainMedian(observed);
+    let km = kmMedian(observed, censored);
+    if (km === null){
+      const combined = observed.concat(censored);
+      km = combined.length ? Math.max(...combined) : naive;
+    }
+    return Math.max(-capDays, Math.min(capDays, km - naive));
+  }
+
   function predict(order){
     const group = order.Modellgruppe;
     const orderLand = order.Land || '';
@@ -2060,6 +2127,20 @@
     let p2_5 = weightedQuantile(valsWeights, 0.025);
     let p97_5 = weightedQuantile(valsWeights, 0.975);
 
+    // Ob die Korrektur aktiv ist, entscheidet dieselbe, bei jedem Python-
+    // Build neu gegen die jüngere Historie geprüfte Gate-Entscheidung
+    // (backtest.evaluate_censoring_correction) — nicht fest verdrahtet, da
+    // sie nicht für jeden Fahrzeug-Datenbestand ein Gewinn ist (bei Enyaq
+    // z.B. schadet sie, siehe Methodik-Panel).
+    const censoringOn = METHODOLOGY?.censoring_correction?.decision === 'an';
+    if (censoringOn && OPEN_ORDERS.length){
+      const shift = censoringShift(DATA, OPEN_ORDERS, Date.now());
+      if (shift){
+        median += shift; p25 += shift; p75 += shift;
+        p10 += shift; p90 += shift; p2_5 += shift; p97_5 += shift;
+      }
+    }
+
     // Supporting queue-estimate signal, blended in only when it doesn't
     // diverge wildly from the comparison-based estimate (production isn't
     // strictly FIFO, so this is a nudge, not an override).
@@ -2072,6 +2153,21 @@
       median += blendDelta; p25 += blendDelta; p75 += blendDelta;
       p10 += blendDelta; p90 += blendDelta; p2_5 += blendDelta; p97_5 += blendDelta;
     }
+    // ---- Konfidenzband-Kalibrierung ----
+    // Dieselben, bei jedem Python-Build per Rueckblick-Test bestimmten
+    // Faktoren wie im Backend (siehe backtest.calibrate_confidence_bands()
+    // und der ausfuehrliche Kommentar in predict_delivery()) — 1.0 heisst
+    // "keine Aenderung", ein Band wird nur aufgeweitet, wenn sich das auf
+    // nie gesehenen Daten nachweislich verbessert hat.
+    const bandFactors = METHODOLOGY?.band_calibration?.factors || {};
+    function widen(med, lo, hi, bandKey){
+      const scale = bandFactors[bandKey] || 1.0;
+      if (scale === 1.0) return [lo, hi];
+      return [med - (med - lo) * scale, med + (hi - med) * scale];
+    }
+    [p25, p75] = widen(median, p25, p75, '50');
+    [p10, p90] = widen(median, p10, p90, '80');
+    [p2_5, p97_5] = widen(median, p2_5, p97_5, '95');
     median = Math.max(0, median);
 
     let tierLabel;

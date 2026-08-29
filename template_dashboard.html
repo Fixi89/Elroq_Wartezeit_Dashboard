@@ -165,6 +165,20 @@
   .vswitch-item-desc{ font-size:11px; color: var(--text-dim); margin-top:1px; display:block; }
   .vswitch-item-check{ width:16px; height:16px; color: var(--accent); flex:none; opacity:0; }
   .vswitch-item.active .vswitch-item-check{ opacity:1; }
+  /* Enyaq switcher entry while that dashboard's daily rebuild is paused
+     (see publish.yml / PROJEKT_UEBERGABE.md) — kept visible so its
+     existence isn't hidden, but not a link, so nobody lands on a page that
+     stopped updating without any warning. Revert to the plain <a> version
+     (still in template history) once Enyaq is reactivated. */
+  .vswitch-item-disabled{
+    cursor:default; opacity:0.5;
+  }
+  .vswitch-item-disabled:hover{ background:none; }
+  .vswitch-item-pause-badge{
+    font-size:9.5px; font-weight:600; text-transform:uppercase; letter-spacing:0.04em;
+    color:var(--text-dim); background:var(--surface-2); border:1px solid var(--border);
+    border-radius:4px; padding:1px 5px; flex:none;
+  }
   #resetBtn{
     background: transparent; color: var(--text);
     border: 1px solid var(--border); border-radius: 999px;
@@ -484,6 +498,7 @@
   .rank-value{ font-family:'JetBrains Mono',monospace; font-size:12px; text-align:right; white-space:nowrap; }
   .rank-value.slower{ color:var(--danger); }
   .rank-value.faster{ color:var(--accent); }
+  .rank-arrow{ font-size:9px; margin-right:2px; display:inline-block; }
   .rank-legend{ display:flex; gap:18px; font-size:11px; color:var(--text-muted); margin-top:12px; font-family:'JetBrains Mono',monospace; }
   @media (max-width:760px){
     .rank-row{ grid-template-columns: 1fr; gap:4px; }
@@ -1082,14 +1097,14 @@
             </span>
             <svg class="vswitch-item-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg>
           </a>
-          <a class="vswitch-item __SWITCH_ENYAQ_ACTIVE__" href="__SWITCH_ENYAQ_HREF__" role="option">
+          <div class="vswitch-item vswitch-item-disabled" role="option" aria-disabled="true">
             <span class="vswitch-item-icon">EN</span>
             <span class="vswitch-item-body">
               <span class="vswitch-item-name">Enyaq</span>
               <span class="vswitch-item-desc">Wartezeit-Dashboard</span>
             </span>
-            <svg class="vswitch-item-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg>
-          </a>
+            <span class="vswitch-item-pause-badge">Pausiert</span>
+          </div>
         </div>
       </span>
       Wartezeit-Dashboard

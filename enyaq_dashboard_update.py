@@ -36,7 +36,9 @@ Benoetigt: requests, beautifulsoup4
 """
 
 import argparse
+import hashlib
 import json
+import os
 import re
 import sys
 import time
@@ -118,6 +120,40 @@ def clean(text):
     return re.sub(r"\s+", " ", (text or "")).strip()
 
 
+# --------------------------------------------------------------------------
+# ID-Hashing (Datenschutz)
+# --------------------------------------------------------------------------
+
+# Die interne Forums-Objekt-ID (data-object-id) landete bisher im Klartext im
+# veroeffentlichten JSON/CSV. Falls sich daraus eine Post-URL ableiten laesst,
+# fuehrt sie zurueck zum Originalpost samt Benutzername -- das wuerde die
+# Anonymisierung (kein Benutzername/Profil-Link wird gespeichert, siehe
+# parse_rows) aushebeln.
+#
+# WICHTIG: Ein Hash allein ist nur ein halber Schutz, wenn die IDs kleine,
+# fortlaufende Ganzzahlen sind (typisch fuer Forums-Objekt-IDs) -- ohne
+# geheimes Salt koennte jemand einfach alle plausiblen IDs (z.B. 1 bis
+# 1.000.000) durchhashen und mit den veroeffentlichten Hashes abgleichen
+# ("Rainbow Table" fuer einen kleinen Zahlenraum ist trivial). Deshalb wird
+# hier ein Salt aus der Umgebungsvariable ID_HASH_SALT gelesen -- als
+# GitHub-Actions-Repository-Secret gesetzt, taucht es NIE im oeffentlichen
+# Repo auf (siehe publish.yml). Ohne gesetztes Secret greift ein fester
+# Standard-Salt: besser als Klartext (verhindert zufaelliges Wiedererkennen/
+# Verlinken), schuetzt aber nicht vor einem gezielten Angriff. Fuer echten
+# Schutz das Secret in den Repo-Einstellungen anlegen.
+_ID_SALT = os.environ.get("ID_HASH_SALT") or "elroq-enyaq-dashboard-bitte-eigenes-secret-setzen"
+
+
+def hash_id(raw_id):
+    """Verwandelt eine rohe Forums-ID in einen nicht umkehrbaren Bezeichner.
+    Deterministisch -- interne Vergleiche (Duplikat-Erkennung, Selbst-
+    Ausschluss in der Aehnlichkeitsberechnung) funktionieren unveraendert
+    weiter, da dieselbe rohe ID immer denselben Hash ergibt."""
+    if not raw_id:
+        return raw_id
+    return hashlib.sha256(f"{_ID_SALT}:{raw_id}".encode("utf-8")).hexdigest()[:16]
+
+
 def parse_rows(soup):
     """
     Liest die Bestellzeilen einer Seite.
@@ -168,7 +204,7 @@ def parse_rows(soup):
         # publizierten Dashboard erzeugen. tds[4] wird daher komplett ignoriert.
 
         out.append({
-            "ID": tr.get("data-object-id", ""),
+            "ID": hash_id(tr.get("data-object-id", "")),
             "Ausgeliefert": delivered,
             "Storniert": storniert,
             "Bestelldatum": bestelldatum,
@@ -432,6 +468,13 @@ _SIMILARITY_BOOL_KEYS = ["Waermepumpe"]
 # (Details siehe predict_delivery() und backtest.py).
 _CENSORING_CORRECTION = False
 
+# Wird bei jedem Build von backtest.calibrate_confidence_bands() gesetzt:
+# Aufweitungsfaktor je Konfidenzband (50/80/95%), nur wenn per Rueckblick-Test
+# auf nie gesehenen Daten bestaetigt (siehe predict_delivery()). 1.0 = keine
+# Aenderung. Als Dict statt Einzelwert, da jedes Band unabhaengig getestet
+# und aktiviert/verworfen wird.
+_BAND_CALIBRATION = {"50": 1.0, "80": 1.0, "95": 1.0}
+
 
 def _base_similarity(a, b):
     """
@@ -671,6 +714,27 @@ def predict_delivery(order, delivered, open_orders, now_ts):
         p10_tc += blend_delta; p90_tc += blend_delta
         p2_5_tc += blend_delta; p97_5_tc += blend_delta
 
+    # ---- Konfidenzband-Kalibrierung ----
+    # Per Rueckblick-Test gemessen: das 50%-Band traf die tatsaechliche
+    # Wartezeit nur in ~34-45% statt der versprochenen 50% -- unabhaengig
+    # vom Median-Fehler, ein eigenstaendiges Genauigkeitsproblem (falsche
+    # Sicherheit statt falscher Punktwert). _BAND_CALIBRATION wird bei jedem
+    # Build von backtest.calibrate_confidence_bands() neu bestimmt und nur
+    # je Band aktiviert, wenn die Aufweitung sich auf nie gesehenen Daten
+    # nachweislich verbessert (siehe dortiger Kommentar) -- bei einer
+    # Bisektion auf der aelteren Historie zeigte sich fuer 50%/80% echte
+    # zeitliche Instabilitaet: der gefittete Faktor verschlechterte die
+    # Kalibrierung auf juengeren Daten, wurde also zurecht verworfen.
+    def _widen(median, lo, hi, band_key):
+        scale = _BAND_CALIBRATION.get(band_key, 1.0)
+        if scale == 1.0:
+            return lo, hi
+        return median - (median - lo) * scale, median + (hi - median) * scale
+
+    p25_tc, p75_tc = _widen(median_tc, p25_tc, p75_tc, "50")
+    p10_tc, p90_tc = _widen(median_tc, p10_tc, p90_tc, "80")
+    p2_5_tc, p97_5_tc = _widen(median_tc, p2_5_tc, p97_5_tc, "95")
+
     median_tc = max(0, median_tc)
 
     def date_for(d):
@@ -804,7 +868,10 @@ def update_prediction_log(log, delivered, open_orders, cancelled, now_ts):
 
     new_logged = resolved_now = 0
 
-    # Einmalige Migration: alten Eintraegen die "Original*"-Felder nachtragen.
+    # Einmalige Migrationen: rohe IDs auf den gehashten Schluessel umziehen
+    # (siehe hash_id()), danach alten Eintraegen die "Original*"-Felder
+    # nachtragen.
+    ids_migrated = _migrate_hash_ids(log)
     original_migrated = _migrate_add_original_snapshot(log)
 
     # Bereits offene Log-Eintraege pruefen: ausgeliefert, storniert oder
@@ -882,7 +949,7 @@ def update_prediction_log(log, delivered, open_orders, cancelled, now_ts):
             recalculated += 1
 
     personal_data_stripped = _migrate_strip_personal_data(log)
-    return new_logged, resolved_now, recalculated, original_migrated, personal_data_stripped
+    return new_logged, resolved_now, recalculated, original_migrated, personal_data_stripped, ids_migrated
 
 
 def _migrate_add_original_snapshot(log):
@@ -933,6 +1000,30 @@ def _migrate_strip_personal_data(log):
         if hit:
             stripped += 1
     return stripped
+
+
+def _migrate_hash_ids(log):
+    """
+    Einmalige Migration: bestehende Log-Eintraege waren unter der rohen
+    Forums-ID (z.B. "12345") indiziert, da hash_id() erst nachtraeglich
+    eingefuehrt wurde. Ordnet sie auf den gehashten Schluessel um, ohne
+    Historie (eingefrorene Original-Prognosen, Aufloesungs-Status) zu
+    verlieren. Heuristik: eine rohe Forums-ID besteht nur aus Ziffern, ein
+    Hash (Hex-String) enthaelt mit hoher Wahrscheinlichkeit auch Buchstaben
+    -- daher ist diese Migration nach einmaligem Durchlauf ein No-Op.
+    """
+    migrated = 0
+    for old_key in list(log.keys()):
+        if not old_key.isdigit():
+            continue
+        new_key = hash_id(old_key)
+        if new_key == old_key or new_key in log:
+            continue
+        entry = log.pop(old_key)
+        entry["ID"] = new_key
+        log[new_key] = entry
+        migrated += 1
+    return migrated
 
 
 def merge_log_into_records(log, delivered, open_orders):
@@ -1137,7 +1228,7 @@ def main():
     # inzwischen ausgelieferte werden mit dem tatsaechlichen Ergebnis aufgeloest.
     now_ts = int(datetime.now().timestamp() * 1000)
     log = load_log()
-    new_logged, resolved_now, recalculated, original_migrated, personal_data_stripped = update_prediction_log(
+    new_logged, resolved_now, recalculated, original_migrated, personal_data_stripped, ids_migrated = update_prediction_log(
         log, delivered, open_orders, cancelled, now_ts)
     save_log(log)
     merge_log_into_records(log, delivered, open_orders)
@@ -1152,6 +1243,8 @@ def main():
         print(f"  Einmalig migriert (Original-Prognose nachgetragen): {original_migrated}")
     if personal_data_stripped:
         print(f"  Einmalig bereinigt (Benutzername/Profil-Link entfernt, DSGVO): {personal_data_stripped}")
+    if ids_migrated:
+        print(f"  Einmalig migriert (rohe ID durch Hash ersetzt, Datenschutz): {ids_migrated}")
     if resolved_all:
         mae = sum(abs(e["DeviationDays"]) for e in resolved_all) / len(resolved_all)
         within2w = sum(1 for e in resolved_all if abs(e["DeviationDays"]) <= 14) / len(resolved_all)
@@ -1190,6 +1283,15 @@ def main():
         print(f"  mit  Korrektur: MAE {_r_on['mae']} Tage, Bias {_r_on['bias']:+.1f}")
     print(f"  -> Korrektur {censoring_report['decision']} "
           f"({censoring_report['reason']})")
+
+    print("\nKalibriere Konfidenzbaender (50/80/95%) gegen nie gesehene Daten...")
+    global _BAND_CALIBRATION
+    _BAND_CALIBRATION, band_report = backtest.calibrate_confidence_bands(
+        delivered, open_orders, predict_delivery)
+    for _bk, _bv in band_report.items():
+        _status = f"aktiv, x{_bv['scale']}" if _bv["enabled"] else "inaktiv"
+        print(f"  {_bk}%-Band: Trefferquote {_bv['coverage_before']*100:.1f}% "
+              f"-> {_bv['coverage_after']*100:.1f}% (Ziel {int(_bv['target']*100)}%) — {_status}")
 
     print("\nRueckblick-Test (simulierte Prognosen fuer bereits ausgelieferte Bestellungen)...")
     bt_results = backtest.run_backtest(delivered, predict_delivery, _SIMILARITY_BOOL_KEYS,
@@ -1233,7 +1335,8 @@ def main():
               f"({data_quality['entfernt_rate']*100:.1f}%).")
 
     methodology = {"backtest": bt_summary, "data_quality": data_quality,
-                   "censoring_correction": censoring_report}
+                   "censoring_correction": censoring_report,
+                   "band_calibration": {"factors": _BAND_CALIBRATION, "report": band_report}}
 
     final = delivered + open_orders
     data_stand = date.today().strftime("%d.%m.%Y")

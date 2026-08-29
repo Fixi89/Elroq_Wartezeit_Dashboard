@@ -37,4 +37,15 @@ jobs:
       - name: Dashboards bauen und veröffentlichen
         # Nur Elroq, bis Enyaq wieder aufgenommen wird (siehe PROJEKT_UEBERGABE.md).
         # Reaktivieren: einfach wieder auf "--vehicle both" ändern.
+        #
+        # ID_HASH_SALT: geheimes Salt fürs Hashen der internen Forums-ID vor
+        # der Veröffentlichung (siehe hash_id() in elroq_dashboard_update.py).
+        # Als Repository-Secret anlegen (Settings → Secrets and variables →
+        # Actions → "New repository secret", Name ID_HASH_SALT, ein beliebiger
+        # langer Zufallswert) — taucht dadurch nie im öffentlichen Repo auf.
+        # Ohne gesetztes Secret greift ein fest einprogrammierter Standard-
+        # Salt: besser als Klartext-IDs, aber kein Schutz gegen einen
+        # gezielten Angriff.
+        env:
+          ID_HASH_SALT: ${{ secrets.ID_HASH_SALT }}
         run: python3 publish.py --vehicle elroq
