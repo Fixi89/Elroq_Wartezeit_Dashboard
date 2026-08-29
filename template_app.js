@@ -2904,18 +2904,38 @@
       : `Die Prognose schätzt im Schnitt <strong>${absBias} Tage zu ${n.bias > 0 ? 'kurz' : 'lang'}</strong> —
          in der Praxis wartest du eher etwas ${n.bias > 0 ? 'länger' : 'kürzer'}, als angezeigt wird.`;
 
-    const dataQualityNote = dq && dq.entfernt_rate != null
+    // Cancellations used to be an inferred guess (orders vanishing from the
+    // log without a delivered flag) — now the forum's own cancellation
+    // marker (carOrderCanceled) is captured directly, so "storniert" is a
+    // confirmed count, not an assumption. Older, already-resolved log
+    // entries from before this change stay in the historical "entfernt"
+    // (unknown reason) bucket forever, since their true cause can't be
+    // reconstructed retroactively — only entries resolved from now on get
+    // the precise classification, so this bucket should shrink over time
+    // without ever fully reaching zero.
+    const hasStorniert = dq && dq.storniert_count != null;
+    const tracked = dq ? (dq.storniert_count || 0) + (dq.entfernt_count || 0) + (dq.eingetroffen_count || 0) : 0;
+    const dataQualityNote = hasStorniert && tracked
+      ? `<p class="methodik-caveat-inline">
+           <strong>Kleiner Vorbehalt:</strong> ${fmtPct(dq.storniert_rate)} der beobachteten offenen Bestellungen
+           (${dq.storniert_count} von ${tracked}) wurden nachweislich storniert — direkt am Forum erkannt,
+           keine Vermutung mehr. Falls davon eher besonders langsame Bestellungen betroffen sind, könnten die
+           Zahlen oben minimal zu optimistisch aussehen.
+           ${dq.entfernt_count ? ` Weitere ${dq.entfernt_count} sind aus der Zeit vor dieser genauen Erfassung
+           noch ohne bekannten Grund als „verschwunden“ vermerkt.` : ''}
+         </p>`
+      : (dq && dq.entfernt_rate != null
       ? `<p class="methodik-caveat-inline">
            <strong>Kleiner Vorbehalt:</strong> ${fmtPct(dq.entfernt_rate)} der beobachteten offenen Bestellungen
            (${dq.entfernt_count} von ${dq.entfernt_count + dq.eingetroffen_count}) sind ohne erkennbare Lieferung
-           aus der Forumsliste verschwunden — vermutlich meist Stornierungen. Falls davon eher besonders langsame
-           Bestellungen betroffen sind, könnten die Zahlen oben minimal zu optimistisch aussehen.
+           aus der Forumsliste verschwunden — vermutlich meist Stornierungen. Stornierungen werden ab jetzt direkt
+           erkannt statt vermutet; diese Einschätzung wird mit jedem Update präziser.
          </p>`
       : `<p class="methodik-caveat-inline">
            <strong>Kleiner Vorbehalt:</strong> Aus der Forumsliste verschwundene Bestellungen (z.&nbsp;B. Stornierungen)
            werden aktuell noch nicht separat erfasst. Sollte sich das mit mehr Datenpunkten ändern, erscheint hier
            automatisch eine Einschätzung.
-         </p>`;
+         </p>`);
 
     // Status der Survivorship-Korrektur: wird bei jedem Build neu gegen die
     // juengere Historie geprueft, statt fest ein- oder ausgeschaltet zu sein.

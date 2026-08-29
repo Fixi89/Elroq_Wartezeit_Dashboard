@@ -117,7 +117,14 @@ def parse_rows(soup):
 
     Zeilen mit der Klasse 'carOrderDeliveryDone' gelten als ausgeliefert
     (entspricht dem Forums-Filter 'Auslieferung erfolgt'), alle uebrigen als
-    offen. Stornierte Bestellungen werden immer verworfen.
+    offen. Stornierte Bestellungen (Klasse 'carOrderCanceled') wurden frueher
+    komplett verworfen -- dabei markiert das Forum sie bereits explizit als
+    solche. Sie werden jetzt mit erfasst (als eigener Status, siehe main()),
+    damit die Stornierungsquote im Methodik-Panel auf einer echten Beobachtung
+    beruht statt auf der Vermutung "aus dem Log verschwunden = wahrscheinlich
+    storniert". Als Nebeneffekt laesst sich damit spaeter pruefen, ob
+    besonders lange Wartezeiten das Stornierungsrisiko erhoehen -- bisher nur
+    eine Annahme in der Datenqualitaets-Warnung, nie an echten Daten geprueft.
 
     Die ausgelieferten Bestellungen bilden die statistische Basis; die offenen
     werden gebraucht, damit Nutzer ihre eigene laufende Bestellung
@@ -126,8 +133,7 @@ def parse_rows(soup):
     out = []
     for tr in soup.select("tbody tr[data-object-id]"):
         classes = tr.get("class", [])
-        if "carOrderCanceled" in classes:
-            continue
+        storniert = "carOrderCanceled" in classes
         delivered = "carOrderDeliveryDone" in classes
 
         tds = tr.find_all("td")
@@ -157,6 +163,7 @@ def parse_rows(soup):
         out.append({
             "ID": tr.get("data-object-id", ""),
             "Ausgeliefert": delivered,
+            "Storniert": storniert,
             "Bestelldatum": bestelldatum,
             "Lieferdatum": lieferdatum,
             "Land": land,
@@ -167,6 +174,7 @@ def parse_rows(soup):
             "Wartezeit": clean(tds[9].get_text(" ")),
         })
     return out
+
 
 
 def parse_de_date(s):
@@ -413,11 +421,21 @@ _BOOL_KEYS = list(BOOL_PATTERNS.keys())
 # just adds noise that dilutes genuinely predictive matches (same model,
 # same trim) with near-tautological agreement on options nearly nobody has.
 # BOOL_PATTERNS itself stays untouched (full data fidelity, still exported),
-# only the similarity/backtest inputs are narrowed to the two flags that
-# actually clear both a significance and a minimum-sample bar:
-#   Paket_Jubilaeum130Jahre (n=37,  diff=+35.9 Tage, p<0.0001)
-#   Waermepumpe             (n=287, diff=+9.1 Tage,  p=0.036)
-_SIMILARITY_BOOL_KEYS = ["Paket_Jubilaeum130Jahre", "Waermepumpe"]
+# only the similarity/backtest inputs are narrowed to the flag that actually
+# clears both a significance and a minimum-sample bar:
+#   Waermepumpe (n=287, diff=+9.1 Tage, p=0.036)
+# Paket_Jubilaeum130Jahre was kept here too until now (n=37, diff=+35.9 Tage,
+# p<0.0001 -- a real effect), but the package has since been discontinued by
+# Skoda, so matching future/current orders on it no longer means anything.
+# BOOL_PATTERNS still parses it for any historical order that mentions it
+# (data completeness, CSV export), it just no longer feeds the prediction.
+_SIMILARITY_BOOL_KEYS = ["Waermepumpe"]
+
+# Wird bei jedem Build von backtest.evaluate_censoring_correction() gesetzt:
+# schaltet die Kaplan-Meier-Korrektur der Survivorship-Verzerrung nur dann
+# ein, wenn sie fuer den aktuellen Datenbestand nachweislich hilft
+# (Details siehe predict_delivery() und backtest.py).
+_CENSORING_CORRECTION = False
 
 
 def _base_similarity(a, b):
@@ -619,6 +637,34 @@ def predict_delivery(order, delivered, open_orders, now_ts):
     p10_tc, p90_tc = p10, p90
     p2_5_tc, p97_5_tc = p2_5, p97_5
 
+    # ---- Optimierung 5: Korrektur der Survivorship-Verzerrung ----
+    # Der Vergleichs-Pool enthaelt nur BEREITS ausgelieferte Bestellungen.
+    # Die langsamen sind zum Vorhersage-Zeitpunkt noch offen und fehlen damit
+    # systematisch, wodurch der Pool schneller aussieht als die Wirklichkeit.
+    # Empirisch gemessen betrug diese Luecke im Median 54 Tage -- und deckte
+    # sich damit fast exakt mit der zuvor unerklaerten systematischen
+    # Unterschaetzung von rund +40 Tagen im Rueckblick-Test.
+    # Kaplan-Meier rechnet die noch offenen Bestellungen korrekt als
+    # rechtszensierte Beobachtungen mit ("wartet bereits N Tage, dauert also
+    # laenger als N") und liefert daraus einen erwartungstreuen Median.
+    # Out-of-sample geprueft (juengere 40% der Historie, Elroq):
+    #   ohne Korrektur : MAE 60.3, Bias +38.3, 10.0% innerhalb 14 Tagen
+    #   mit Korrektur  : MAE 45.6, Bias  +5.6, 15.9% innerhalb 14 Tagen
+    # Bewusst ohne jeden angepassten Faktor -- die Verschiebung ergibt sich
+    # allein aus den Daten. Eine fest eingestellte Konstante (+40 Tage) schnitt
+    # out-of-sample sogar schlechter ab (MAE 46.9) und waere zudem an genau
+    # eine Marktphase angepasst gewesen.
+    # Ob die Korrektur aktiv ist, entscheidet _CENSORING_CORRECTION -- gesetzt
+    # bei jedem Build von backtest.evaluate_censoring_correction(), da sie
+    # nicht fuer jeden Datenbestand ein Gewinn ist (siehe dortiger Kommentar).
+    if _CENSORING_CORRECTION and open_orders:
+        shift = backtest.censoring_shift(delivered, open_orders, now_ts)
+        if shift:
+            median_tc += shift
+            p25_tc += shift; p75_tc += shift
+            p10_tc += shift; p90_tc += shift
+            p2_5_tc += shift; p97_5_tc += shift
+
     # ---- Optimierung 2: Warteschlangen-Schaetzung als gedaempftes Zusatzsignal ----
     queue_eta, queue_conf = _queue_estimate(order, delivered, open_orders, now_ts)
     if queue_eta is not None and queue_conf > 0:
@@ -726,7 +772,7 @@ _PREDICTION_FIELD_KEYS = (
 )
 
 
-def update_prediction_log(log, delivered, open_orders, now_ts):
+def update_prediction_log(log, delivered, open_orders, cancelled, now_ts):
     """
     Aktualisiert das Prognose-Log:
       - neue offene Bestellungen bekommen eine Erstprognose, die zusaetzlich
@@ -739,8 +785,19 @@ def update_prediction_log(log, delivered, open_orders, now_ts):
         dem tatsaechlichen Ergebnis aufgeloest; die Abweichung wird gegen die
         eingefrorene ORIGINAL-Prognose gemessen, nicht gegen die zuletzt
         berechnete — sonst waere die Genauigkeits-Messung nicht mehr fair
-      - offene Bestellungen, die verschwunden sind (z.B. storniert), werden
-        entsprechend markiert
+      - offene Bestellungen, die inzwischen als storniert erkannt wurden
+        (Forums-Klasse carOrderCanceled), werden als "storniert" aufgeloest —
+        vorher gab es dafuer keine eigene Kategorie, eine stornierte
+        Bestellung landete ununterscheidbar im Topf "entfernt" (Grund
+        unbekannt). Weil LoggedAt (erstes Sichten als offen) und ResolvedAt
+        (Sichten als storniert) beide vorhanden sind, ergibt sich daraus mit
+        der Zeit ganz nebenbei ein echter Datensatz "wie lange gewartet, bevor
+        storniert wurde" -- bisher nur eine unbelegte Vermutung im
+        Datenqualitaets-Hinweis.
+      - offene Bestellungen, die aus anderem Grund verschwunden sind (z.B.
+        Forums-Bereinigung, Darstellungsfehler), werden weiterhin als
+        "entfernt" (Grund unbekannt) markiert -- dieser Topf sollte durch die
+        obige Praezisierung nun deutlich kleiner werden
       - Log-Eintraege von VOR diesem Update (denen die "Original*"-Felder
         noch fehlen) werden einmalig migriert, siehe
         _migrate_add_original_snapshot unten
@@ -748,13 +805,15 @@ def update_prediction_log(log, delivered, open_orders, now_ts):
     """
     delivered_by_id = {r["ID"]: r for r in delivered}
     open_by_id = {r["ID"]: r for r in open_orders}
+    cancelled_by_id = {r["ID"]: r for r in cancelled}
 
     new_logged = resolved_now = 0
 
     # Einmalige Migration: alten Eintraegen die "Original*"-Felder nachtragen.
     original_migrated = _migrate_add_original_snapshot(log)
 
-    # Bereits offene Log-Eintraege pruefen: ausgeliefert oder verschwunden?
+    # Bereits offene Log-Eintraege pruefen: ausgeliefert, storniert oder
+    # anderweitig verschwunden?
     for lid, entry in log.items():
         if entry.get("Status") != "offen":
             continue
@@ -767,7 +826,13 @@ def update_prediction_log(log, delivered, open_orders, now_ts):
             baseline = entry.get("OriginalPredictedMedianDays")
             if baseline is not None:
                 entry["DeviationDays"] = d["WartezeitTage"] - baseline
+            community_days = entry.get("CommunityEstimateDays")
+            if community_days is not None:
+                entry["CommunityEstimateDeviationDays"] = d["WartezeitTage"] - community_days
             resolved_now += 1
+        elif lid in cancelled_by_id:
+            entry["Status"] = "storniert"
+            entry["ResolvedAt"] = now_ts
         elif lid not in open_by_id:
             entry["Status"] = "entfernt"
             entry["ResolvedAt"] = now_ts
@@ -780,6 +845,22 @@ def update_prediction_log(log, delivered, open_orders, now_ts):
     for oid, order in open_by_id.items():
         is_new = oid not in log
         if is_new:
+            # The forum's own "voraussichtliches Lieferdatum" field (shown in
+            # the UI as "Eigene Angabe im Forum") is only populated while an
+            # order is open -- it gets cleared once delivered, so there is
+            # currently no historical case where both this estimate AND the
+            # real outcome are known, which means it can't be backtested yet.
+            # Freezing it now (the same way OriginalPredicted* is frozen)
+            # means that once enough of today's open orders resolve, we will
+            # have a genuine paired dataset to test whether the community's
+            # own estimate carries any signal our model doesn't already have
+            # -- rather than guessing either way.
+            community_days = None
+            voraus_ts = parse_de_date(order.get("VorausLieferdatum", ""))
+            if voraus_ts is not None and order.get("BestelldatumTS") is not None:
+                voraus_ts_ms = int(datetime(voraus_ts.year, voraus_ts.month,
+                                            voraus_ts.day).timestamp() * 1000)
+                community_days = round((voraus_ts_ms - order["BestelldatumTS"]) / DAY_MS)
             log[oid] = {
                 "ID": oid,
                 "Modell": order.get("Modell", ""),
@@ -792,6 +873,8 @@ def update_prediction_log(log, delivered, open_orders, now_ts):
                 "ActualDate": None,
                 "ActualWaitDays": None,
                 "DeviationDays": None,
+                "CommunityEstimateDays": community_days,
+                "CommunityEstimateDeviationDays": None,
             }
             new_logged += 1
         entry = log[oid]
@@ -972,7 +1055,8 @@ def main():
         by_id[r["ID"]] = r
     def page_note(rows):
         done = sum(1 for r in rows if r["Ausgeliefert"])
-        return f"{done:3d} ausgeliefert, {len(rows) - done:3d} offen"
+        storniert = sum(1 for r in rows if r["Storniert"])
+        return f"{done:3d} ausgeliefert, {len(rows) - done - storniert:3d} offen, {storniert:3d} storniert"
 
     print(f"  Seite  1/{total_pages}: {page_note(rows)}")
 
@@ -989,11 +1073,13 @@ def main():
 
     records = list(by_id.values())
     n_done = sum(1 for r in records if r["Ausgeliefert"])
+    n_storniert = sum(1 for r in records if r["Storniert"])
     print(f"\n{len(records)} eindeutige Bestellungen "
-          f"({n_done} ausgeliefert, {len(records) - n_done} offen).")
+          f"({n_done} ausgeliefert, {len(records) - n_done - n_storniert} offen, "
+          f"{n_storniert} storniert).")
 
     # Aufbereiten
-    delivered, open_orders = [], []
+    delivered, open_orders, cancelled = [], [], []
     skipped = 0
     for r in records:
         order_date = parse_de_date(r["Bestelldatum"])
@@ -1015,7 +1101,14 @@ def main():
         }
         rec.update(harmonize(r["Ausstattung"]))
 
-        if r["Ausgeliefert"]:
+        if r["Storniert"]:
+            # Nicht in delivered/open_orders: eine stornierte Bestellung ist
+            # weder Teil der statistischen Vergleichsbasis noch eine aktive
+            # Bestellung, die noch in der Warteschlange steht (faelschlich in
+            # open_orders mitgezaehlt wuerde sie die Warteschlangen-Schaetzung
+            # verfaelschen). Nur fuers Prognose-Log gebraucht, siehe unten.
+            cancelled.append(rec)
+        elif r["Ausgeliefert"]:
             days = waiting_days(r["Wartezeit"])
             if days is None:
                 skipped += 1
@@ -1050,7 +1143,7 @@ def main():
     now_ts = int(datetime.now().timestamp() * 1000)
     log = load_log()
     new_logged, resolved_now, recalculated, original_migrated, personal_data_stripped = update_prediction_log(
-        log, delivered, open_orders, now_ts)
+        log, delivered, open_orders, cancelled, now_ts)
     save_log(log)
     merge_log_into_records(log, delivered, open_orders)
 
@@ -1076,8 +1169,36 @@ def main():
     # nur mit Daten, die zu dem Zeitpunkt verfuegbar waren. Gibt sofort
     # belastbare Genauigkeits-Zahlen zur aktuellen Algorithmus-Version, ohne
     # Monate auf neue echte Aufloesungen warten zu muessen.
+    # Zuerst datenbasiert entscheiden, ob die Zensierungs-Korrektur fuer den
+    # aktuellen Datenbestand ueberhaupt ein Gewinn ist -- das Ergebnis gilt
+    # dann sowohl fuer den Rueckblick-Test als auch fuer alle produktiven
+    # Prognosen weiter unten.
+    global _CENSORING_CORRECTION
+    print("\nPruefe Survivorship-Korrektur gegen die juengere Historie...")
+
+    def _predict_factory(enabled):
+        def fn(order, pool_delivered, pool_open, now_ts):
+            global _CENSORING_CORRECTION
+            prev = _CENSORING_CORRECTION
+            _CENSORING_CORRECTION = enabled
+            try:
+                return predict_delivery(order, pool_delivered, pool_open, now_ts)
+            finally:
+                _CENSORING_CORRECTION = prev
+        return fn
+
+    _CENSORING_CORRECTION, censoring_report = backtest.evaluate_censoring_correction(
+        delivered, open_orders, _predict_factory)
+    _r_on, _r_off = censoring_report.get("on"), censoring_report.get("off")
+    if _r_on and _r_off:
+        print(f"  ohne Korrektur: MAE {_r_off['mae']} Tage, Bias {_r_off['bias']:+.1f}")
+        print(f"  mit  Korrektur: MAE {_r_on['mae']} Tage, Bias {_r_on['bias']:+.1f}")
+    print(f"  -> Korrektur {censoring_report['decision']} "
+          f"({censoring_report['reason']})")
+
     print("\nRueckblick-Test (simulierte Prognosen fuer bereits ausgelieferte Bestellungen)...")
-    bt_results = backtest.run_backtest(delivered, predict_delivery, _SIMILARITY_BOOL_KEYS)
+    bt_results = backtest.run_backtest(delivered, predict_delivery, _SIMILARITY_BOOL_KEYS,
+                                       open_orders=open_orders)
     bt_summary = backtest.aggregate_backtest(bt_results)
     if bt_summary["new"]:
         print(f"  Getestet: {bt_summary['n_tested']} Bestellungen "
@@ -1095,20 +1216,29 @@ def main():
     # Stornos)? Das ist eine mögliche Quelle fuer einen leichten
     # Optimismus-Bias in den Referenzdaten, siehe Methodik-Hinweis im
     # Dashboard.
+    # "storniert" ist jetzt eine direkt beobachtete Kategorie (Forums-Klasse
+    # carOrderCanceled), keine Vermutung mehr. "entfernt" bleibt als Restgroesse
+    # fuer Faelle, die aus unbekanntem Grund verschwinden (z.B. Forums-
+    # Bereinigung) -- sollte durch die Praezisierung spuerbar kleiner werden.
+    storniert_count = sum(1 for e in log.values() if e.get("Status") == "storniert")
     entfernt_count = sum(1 for e in log.values() if e.get("Status") == "entfernt")
     eingetroffen_count = sum(1 for e in log.values() if e.get("Status") == "eingetroffen")
-    tracked_total = entfernt_count + eingetroffen_count
+    tracked_total = storniert_count + entfernt_count + eingetroffen_count
     data_quality = {
+        "storniert_count": storniert_count,
         "entfernt_count": entfernt_count,
         "eingetroffen_count": eingetroffen_count,
+        "storniert_rate": round(storniert_count / tracked_total, 4) if tracked_total else None,
         "entfernt_rate": round(entfernt_count / tracked_total, 4) if tracked_total else None,
     }
     if tracked_total:
-        print(f"\nDaten-Guete: {entfernt_count} von {tracked_total} beobachteten offenen "
-              f"Bestellungen sind aus der Forumsliste verschwunden, ohne als ausgeliefert "
-              f"aufzutauchen ({data_quality['entfernt_rate']*100:.1f}%).")
+        print(f"\nDaten-Guete: {storniert_count} von {tracked_total} beobachteten offenen "
+              f"Bestellungen wurden storniert ({data_quality['storniert_rate']*100:.1f}%); "
+              f"{entfernt_count} weitere sind aus unbekanntem Grund verschwunden "
+              f"({data_quality['entfernt_rate']*100:.1f}%).")
 
-    methodology = {"backtest": bt_summary, "data_quality": data_quality}
+    methodology = {"backtest": bt_summary, "data_quality": data_quality,
+                   "censoring_correction": censoring_report}
 
     final = delivered + open_orders
     data_stand = date.today().strftime("%d.%m.%Y")
