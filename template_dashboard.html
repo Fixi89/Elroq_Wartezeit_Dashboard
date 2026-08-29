@@ -213,17 +213,6 @@
   .lk-copy-btn:hover{ border-color: var(--accent); color: var(--accent); }
   .lk-copy-btn svg{ width:13px; height:13px; flex:none; }
 
-  #donateBtn{
-    background: transparent; color: var(--accent-2);
-    border: 1px solid rgba(182,217,252,0.35); border-radius: 999px;
-    padding: 10px 18px; font-size: 13px; cursor: pointer; text-decoration:none;
-    font-family:'Inter', sans-serif; font-weight:500;
-    display:flex; align-items:center; gap:8px;
-    transition: all 0.15s ease; white-space:nowrap;
-  }
-  #donateBtn:hover{ border-color: var(--accent-2); background: rgba(182,217,252,0.08); }
-  #donateBtn svg{ width:14px; height:14px; flex:none; }
-
   #filterStatus{
     font-size: 12px; color: var(--text-dim); margin-top: 6px; text-align:right;
   }
@@ -938,7 +927,6 @@
     .subtitle{ font-size:13px; }
     #resetBtn{ padding:9px 15px; font-size:12.5px; }
     #copyLinkBtn{ padding:9px 15px; font-size:12.5px; }
-    #donateBtn{ padding:9px 15px; font-size:12.5px; }
     .header-actions{ justify-content:flex-start; flex-wrap:wrap; }
     #filterStatus{ text-align:left; }
 
@@ -1113,10 +1101,6 @@
   </div>
   <div style="text-align:right;">
     <div class="header-actions">
-      <a id="donateBtn" href="https://www.paypal.com/paypalme/jschliemann" target="_blank" rel="noopener" title="Dieses Dashboard freiwillig unterstützen">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
-        Projekt unterstützen
-      </a>
       <button id="copyLinkBtn" type="button" title="Aktuelle Filteransicht als Link kopieren">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.07 0l2.83-2.83a5 5 0 0 0-7.07-7.07l-1.42 1.42"/><path d="M14 11a5 5 0 0 0-7.07 0L4.1 13.83a5 5 0 0 0 7.07 7.07l1.42-1.42"/></svg>
         Link kopieren
