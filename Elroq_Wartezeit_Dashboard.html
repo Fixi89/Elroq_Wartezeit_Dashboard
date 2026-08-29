@@ -213,17 +213,6 @@
   .lk-copy-btn:hover{ border-color: var(--accent); color: var(--accent); }
   .lk-copy-btn svg{ width:13px; height:13px; flex:none; }
 
-  #donateBtn{
-    background: transparent; color: var(--accent-2);
-    border: 1px solid rgba(182,217,252,0.35); border-radius: 999px;
-    padding: 10px 18px; font-size: 13px; cursor: pointer; text-decoration:none;
-    font-family:'Inter', sans-serif; font-weight:500;
-    display:flex; align-items:center; gap:8px;
-    transition: all 0.15s ease; white-space:nowrap;
-  }
-  #donateBtn:hover{ border-color: var(--accent-2); background: rgba(182,217,252,0.08); }
-  #donateBtn svg{ width:14px; height:14px; flex:none; }
-
   #filterStatus{
     font-size: 12px; color: var(--text-dim); margin-top: 6px; text-align:right;
   }
@@ -938,7 +927,6 @@
     .subtitle{ font-size:13px; }
     #resetBtn{ padding:9px 15px; font-size:12.5px; }
     #copyLinkBtn{ padding:9px 15px; font-size:12.5px; }
-    #donateBtn{ padding:9px 15px; font-size:12.5px; }
     .header-actions{ justify-content:flex-start; flex-wrap:wrap; }
     #filterStatus{ text-align:left; }
 
@@ -1113,10 +1101,6 @@
   </div>
   <div style="text-align:right;">
     <div class="header-actions">
-      <a id="donateBtn" href="https://www.paypal.com/paypalme/jschliemann" target="_blank" rel="noopener" title="Dieses Dashboard freiwillig unterstützen">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
-        Projekt unterstützen
-      </a>
       <button id="copyLinkBtn" type="button" title="Aktuelle Filteransicht als Link kopieren">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.07 0l2.83-2.83a5 5 0 0 0-7.07-7.07l-1.42 1.42"/><path d="M14 11a5 5 0 0 0-7.07 0L4.1 13.83a5 5 0 0 0 7.07 7.07l1.42-1.42"/></svg>
         Link kopieren
@@ -1323,7 +1307,7 @@
 </script>
 
 <script id="methodology-data" type="application/json">
-{"backtest": {"generated_at": 1788014026443, "n_tested": 424, "new": {"n": 353, "mae": 48.6, "bias": 4.0, "within14": 0.144}, "old": {"n": 424, "mae": 59.7, "bias": 39.1, "within14": 0.118}, "segments": {"Modellgruppe": [{"key": "Elroq 85", "n": 234, "new_mae": 50.0, "new_bias": 6.5, "old_mae": 63.2, "old_bias": 40.5}, {"key": "Elroq RS", "n": 56, "new_mae": 39.1, "new_bias": -2.0, "old_mae": 54.0, "old_bias": 48.4}, {"key": "Elroq 60", "n": 48, "new_mae": 59.2, "new_bias": -1.3, "old_mae": 68.4, "old_bias": 29.9}, {"key": "Elroq 50", "n": 13, "new_mae": 29.0, "new_bias": 3.8, "old_mae": 33.8, "old_bias": 15.2}], "Land": [{"key": "Deutschland", "n": 314, "new_mae": 45.9, "new_bias": 13.0, "old_mae": 63.8, "old_bias": 46.8}, {"key": "Österreich", "n": 26, "new_mae": 72.3, "new_bias": -69.3, "old_mae": 31.9, "old_bias": -21.0}, {"key": "Schweiz", "n": 13, "new_mae": 66.2, "new_bias": -66.2, "old_mae": 29.7, "old_bias": -5.0}]}}, "data_quality": {"storniert_count": 0, "entfernt_count": 0, "eingetroffen_count": 20, "storniert_rate": 0.0, "entfernt_rate": 0.0}, "censoring_correction": {"decision": "an", "reason": "verbessert die mittlere Abweichung", "off": {"n": 210, "mae": 56.7, "bias": 31.7, "within14": 0.129}, "on": {"n": 210, "mae": 44.7, "bias": -0.0, "within14": 0.181}}, "band_calibration": {"factors": {"50": 1.0, "80": 1.0, "95": 3.0}, "report": {"50": {"target": 0.5, "scale": 1.0, "enabled": false, "n_fit": 185, "n_val": 168, "coverage_before": 0.452, "coverage_after": 0.452}, "80": {"target": 0.8, "scale": 1.0, "enabled": false, "n_fit": 185, "n_val": 168, "coverage_before": 0.738, "coverage_after": 0.738}, "95": {"target": 0.95, "scale": 3.0, "enabled": true, "n_fit": 185, "n_val": 168, "coverage_before": 0.833, "coverage_after": 1.0}}}}
+{"backtest": {"generated_at": 1788016381598, "n_tested": 424, "new": {"n": 353, "mae": 48.6, "bias": 4.0, "within14": 0.144}, "old": {"n": 424, "mae": 59.7, "bias": 39.1, "within14": 0.118}, "segments": {"Modellgruppe": [{"key": "Elroq 85", "n": 234, "new_mae": 50.0, "new_bias": 6.5, "old_mae": 63.2, "old_bias": 40.5}, {"key": "Elroq RS", "n": 56, "new_mae": 39.1, "new_bias": -2.0, "old_mae": 54.0, "old_bias": 48.4}, {"key": "Elroq 60", "n": 48, "new_mae": 59.2, "new_bias": -1.3, "old_mae": 68.4, "old_bias": 29.9}, {"key": "Elroq 50", "n": 13, "new_mae": 29.0, "new_bias": 3.8, "old_mae": 33.8, "old_bias": 15.2}], "Land": [{"key": "Deutschland", "n": 314, "new_mae": 45.9, "new_bias": 13.0, "old_mae": 63.8, "old_bias": 46.8}, {"key": "Österreich", "n": 26, "new_mae": 72.3, "new_bias": -69.3, "old_mae": 31.9, "old_bias": -21.0}, {"key": "Schweiz", "n": 13, "new_mae": 66.2, "new_bias": -66.2, "old_mae": 29.7, "old_bias": -5.0}]}}, "data_quality": {"storniert_count": 0, "entfernt_count": 0, "eingetroffen_count": 20, "storniert_rate": 0.0, "entfernt_rate": 0.0}, "censoring_correction": {"decision": "an", "reason": "verbessert die mittlere Abweichung", "off": {"n": 210, "mae": 56.7, "bias": 31.7, "within14": 0.129}, "on": {"n": 210, "mae": 44.7, "bias": -0.0, "within14": 0.181}}, "band_calibration": {"factors": {"50": 1.0, "80": 1.0, "95": 3.0}, "report": {"50": {"target": 0.5, "scale": 1.0, "enabled": false, "n_fit": 185, "n_val": 168, "coverage_before": 0.452, "coverage_after": 0.452}, "80": {"target": 0.8, "scale": 1.0, "enabled": false, "n_fit": 185, "n_val": 168, "coverage_before": 0.738, "coverage_after": 0.738}, "95": {"target": 0.95, "scale": 3.0, "enabled": true, "n_fit": 185, "n_val": 168, "coverage_before": 0.833, "coverage_after": 1.0}}}}
 </script>
 
 <script>

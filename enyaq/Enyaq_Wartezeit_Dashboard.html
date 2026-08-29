@@ -213,17 +213,6 @@
   .lk-copy-btn:hover{ border-color: var(--accent); color: var(--accent); }
   .lk-copy-btn svg{ width:13px; height:13px; flex:none; }
 
-  #donateBtn{
-    background: transparent; color: var(--accent-2);
-    border: 1px solid rgba(182,217,252,0.35); border-radius: 999px;
-    padding: 10px 18px; font-size: 13px; cursor: pointer; text-decoration:none;
-    font-family:'Inter', sans-serif; font-weight:500;
-    display:flex; align-items:center; gap:8px;
-    transition: all 0.15s ease; white-space:nowrap;
-  }
-  #donateBtn:hover{ border-color: var(--accent-2); background: rgba(182,217,252,0.08); }
-  #donateBtn svg{ width:14px; height:14px; flex:none; }
-
   #filterStatus{
     font-size: 12px; color: var(--text-dim); margin-top: 6px; text-align:right;
   }
@@ -938,7 +927,6 @@
     .subtitle{ font-size:13px; }
     #resetBtn{ padding:9px 15px; font-size:12.5px; }
     #copyLinkBtn{ padding:9px 15px; font-size:12.5px; }
-    #donateBtn{ padding:9px 15px; font-size:12.5px; }
     .header-actions{ justify-content:flex-start; flex-wrap:wrap; }
     #filterStatus{ text-align:left; }
 
@@ -1113,10 +1101,6 @@
   </div>
   <div style="text-align:right;">
     <div class="header-actions">
-      <a id="donateBtn" href="https://www.paypal.com/paypalme/jschliemann" target="_blank" rel="noopener" title="Dieses Dashboard freiwillig unterstützen">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
-        Projekt unterstützen
-      </a>
       <button id="copyLinkBtn" type="button" title="Aktuelle Filteransicht als Link kopieren">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.07 0l2.83-2.83a5 5 0 0 0-7.07-7.07l-1.42 1.42"/><path d="M14 11a5 5 0 0 0-7.07 0L4.1 13.83a5 5 0 0 0 7.07 7.07l1.42-1.42"/></svg>
         Link kopieren
@@ -1323,7 +1307,7 @@
 </script>
 
 <script id="methodology-data" type="application/json">
-{"backtest": {"generated_at": 1788014063853, "n_tested": 1238, "new": {"n": 772, "mae": 207.6, "bias": 117.1, "within14": 0.04}, "old": {"n": 1238, "mae": 220.2, "bias": 110.5, "within14": 0.044}, "segments": {"Modellgruppe": [{"key": "Enyaq 80", "n": 280, "new_mae": 302.0, "new_bias": 269.8, "old_mae": 290.7, "old_bias": 252.5}, {"key": "Enyaq 85", "n": 166, "new_mae": 93.1, "new_bias": -6.7, "old_mae": 108.7, "old_bias": -28.2}, {"key": "Enyaq 60", "n": 102, "new_mae": 313.2, "new_bias": 256.3, "old_mae": 332.6, "old_bias": 232.7}, {"key": "Enyaq RS", "n": 85, "new_mae": 79.9, "new_bias": 18.7, "old_mae": 86.7, "old_bias": -38.1}, {"key": "Enyaq Coupe RS", "n": 46, "new_mae": 104.5, "new_bias": -84.8, "old_mae": 192.8, "old_bias": 100.2}, {"key": "Enyaq 85x", "n": 36, "new_mae": 114.8, "new_bias": -86.1, "old_mae": 150.2, "old_bias": -21.9}, {"key": "Enyaq 80x", "n": 29, "new_mae": 196.6, "new_bias": 50.7, "old_mae": 356.6, "old_bias": 327.6}, {"key": "Enyaq 50", "n": 14, "new_mae": 439.5, "new_bias": -406.5, "old_mae": 332.5, "old_bias": -231.6}], "Land": [{"key": "Deutschland", "n": 704, "new_mae": 213.8, "new_bias": 129.8, "old_mae": 223.3, "old_bias": 121.4}, {"key": "Österreich", "n": 34, "new_mae": 165.9, "new_bias": 33.6, "old_mae": 234.3, "old_bias": 40.7}, {"key": "Schweiz", "n": 23, "new_mae": 114.1, "new_bias": -38.1, "old_mae": 160.0, "old_bias": 10.3}]}}, "data_quality": {"storniert_count": 0, "entfernt_count": 0, "eingetroffen_count": 6, "storniert_rate": 0.0, "entfernt_rate": 0.0}, "censoring_correction": {"decision": "aus", "reason": "verbessert die mittlere Abweichung nicht", "off": {"n": 373, "mae": 92.3, "bias": -25.0, "within14": 0.064}, "on": {"n": 373, "mae": 108.3, "bias": -80.6, "within14": 0.064}}, "band_calibration": {"factors": {"50": 1.0, "80": 1.0, "95": 1.0}, "report": {"50": {"target": 0.5, "scale": 1.0, "enabled": false, "n_fit": 427, "n_val": 345, "coverage_before": 0.423, "coverage_after": 0.423}, "80": {"target": 0.8, "scale": 1.0, "enabled": false, "n_fit": 427, "n_val": 345, "coverage_before": 0.826, "coverage_after": 0.826}, "95": {"target": 0.95, "scale": 1.0, "enabled": false, "n_fit": 427, "n_val": 345, "coverage_before": 0.925, "coverage_after": 0.925}}}}
+{"backtest": {"generated_at": 1788016421022, "n_tested": 1238, "new": {"n": 772, "mae": 207.6, "bias": 117.1, "within14": 0.04}, "old": {"n": 1238, "mae": 220.2, "bias": 110.5, "within14": 0.044}, "segments": {"Modellgruppe": [{"key": "Enyaq 80", "n": 280, "new_mae": 302.0, "new_bias": 269.8, "old_mae": 290.7, "old_bias": 252.5}, {"key": "Enyaq 85", "n": 166, "new_mae": 93.1, "new_bias": -6.7, "old_mae": 108.7, "old_bias": -28.2}, {"key": "Enyaq 60", "n": 102, "new_mae": 313.2, "new_bias": 256.3, "old_mae": 332.6, "old_bias": 232.7}, {"key": "Enyaq RS", "n": 85, "new_mae": 79.9, "new_bias": 18.7, "old_mae": 86.7, "old_bias": -38.1}, {"key": "Enyaq Coupe RS", "n": 46, "new_mae": 104.5, "new_bias": -84.8, "old_mae": 192.8, "old_bias": 100.2}, {"key": "Enyaq 85x", "n": 36, "new_mae": 114.8, "new_bias": -86.1, "old_mae": 150.2, "old_bias": -21.9}, {"key": "Enyaq 80x", "n": 29, "new_mae": 196.6, "new_bias": 50.7, "old_mae": 356.6, "old_bias": 327.6}, {"key": "Enyaq 50", "n": 14, "new_mae": 439.5, "new_bias": -406.5, "old_mae": 332.5, "old_bias": -231.6}], "Land": [{"key": "Deutschland", "n": 704, "new_mae": 213.8, "new_bias": 129.8, "old_mae": 223.3, "old_bias": 121.4}, {"key": "Österreich", "n": 34, "new_mae": 165.9, "new_bias": 33.6, "old_mae": 234.3, "old_bias": 40.7}, {"key": "Schweiz", "n": 23, "new_mae": 114.1, "new_bias": -38.1, "old_mae": 160.0, "old_bias": 10.3}]}}, "data_quality": {"storniert_count": 0, "entfernt_count": 0, "eingetroffen_count": 6, "storniert_rate": 0.0, "entfernt_rate": 0.0}, "censoring_correction": {"decision": "aus", "reason": "verbessert die mittlere Abweichung nicht", "off": {"n": 373, "mae": 92.3, "bias": -25.0, "within14": 0.064}, "on": {"n": 373, "mae": 108.3, "bias": -80.6, "within14": 0.064}}, "band_calibration": {"factors": {"50": 1.0, "80": 1.0, "95": 1.0}, "report": {"50": {"target": 0.5, "scale": 1.0, "enabled": false, "n_fit": 427, "n_val": 345, "coverage_before": 0.423, "coverage_after": 0.423}, "80": {"target": 0.8, "scale": 1.0, "enabled": false, "n_fit": 427, "n_val": 345, "coverage_before": 0.826, "coverage_after": 0.826}, "95": {"target": 0.95, "scale": 1.0, "enabled": false, "n_fit": 427, "n_val": 345, "coverage_before": 0.925, "coverage_after": 0.925}}}}
 </script>
 
 <script>
