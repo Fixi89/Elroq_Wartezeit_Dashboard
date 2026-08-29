@@ -534,6 +534,19 @@
   .section-title .dot{ width:7px; height:7px; border-radius:50%; background:var(--accent); }
   .stack{ display:flex; flex-direction:column; gap:20px; }
 
+  /* Several previously separate top-level sections (each holding just one
+     small widget — a single table, a single chart) were merged into fewer,
+     thematically grouped sections to cut down the nav from 10 items to 7.
+     Each merged widget keeps its own smaller heading + a divider, so the
+     content is still clearly separated, just without the overhead of a full
+     nav entry and card wrapper per widget. */
+  .subsection-title{
+    font-family:'Space Grotesk',sans-serif; font-size:14px; font-weight:600; color:var(--text-body);
+    margin: 0 0 10px;
+  }
+  .subsection-note{ font-size:11px; color:var(--text-dim); font-weight:400; }
+  .section-divider{ height:1px; background:var(--border); margin:24px 0; }
+
   /* Extremes */
   .extremes-grid{ display:grid; grid-template-columns: 1fr 1fr; gap:16px; }
   @media (max-width: 700px){ .extremes-grid{ grid-template-columns: 1fr; } }
@@ -1104,14 +1117,11 @@
 
 <nav class="quicknav" aria-label="Sprungnavigation">
   <a href="#sec-overview">Übersicht</a>
-  <a href="#sec-verteilung">Verteilung</a>
-  <a href="#sec-trend">Verlauf</a>
-  <a href="#sec-modelle">Modelle</a>
-  <a href="#sec-analyse">Analyse</a>
-  <a href="#sec-extreme">Extremwerte</a>
+  <a href="#sec-persoenlich">Persönlich</a>
+  <a href="#sec-verlauf">Verlauf</a>
+  <a href="#sec-vergleich">Vergleich</a>
   <a href="#sec-community">Community</a>
   <a href="#sec-methodik">Methodik</a>
-  <a href="#sec-persoenlich">Persönlich</a>
   <a href="#sec-tabelle">Tabelle</a>
 </nav>
 
@@ -1150,53 +1160,9 @@
       <div class="kpi-row" id="kpiRow"></div>
     </section>
 
-    <section id="sec-verteilung" class="panel">
-      <p class="section-title"><span class="dot"></span>Verteilung der Wartezeit</p>
-      <div class="chart-wrap" id="histChartWrap">
-        <svg id="histChart" viewBox="0 0 800 190" preserveAspectRatio="xMidYMid meet"></svg>
-        <div class="chart-tooltip" id="histTooltip" hidden></div>
-      </div>
-      <div class="chart-legend" id="chartLegend"></div>
-    </section>
-
-    <section id="sec-trend" class="panel">
-      <p class="section-title"><span class="dot"></span>Entwicklung der Lieferzeit <span style="font-size:11px;color:var(--text-dim);font-weight:400;">(Ø Wartezeit je Bestellmonat, mit Trend &amp; Prognose)</span></p>
-      <div id="trendVerdict" class="trend-verdict"></div>
-      <div class="chart-wrap" id="trendChartWrap">
-        <svg id="trendChart" viewBox="0 0 800 190" preserveAspectRatio="xMidYMid meet"></svg>
-        <div class="chart-tooltip" id="trendTooltip" hidden></div>
-      </div>
-      <div class="chart-legend" id="trendLegend"></div>
-    </section>
-
-    <section id="sec-modelle" class="panel">
-      <p class="section-title"><span class="dot"></span>Ø Wartezeit nach Modell <span style="font-size:11px;color:var(--text-dim);font-weight:400;">(innerhalb aktueller Filterauswahl)</span></p>
-      <div class="breakdown-wrap">
-        <table class="breakdown-table" id="breakdownTable"></table>
-      </div>
-    </section>
-
-    <section id="sec-analyse" class="panel">
-      <p class="section-title"><span class="dot"></span>Was treibt die Wartezeit? <span style="font-size:11px;color:var(--text-dim);font-weight:400;">(stärkste Effekte innerhalb aktueller Filterauswahl)</span></p>
-      <p class="rank-intro">Vergleicht für jedes Merkmal die Ø Wartezeit von Bestellungen <em>mit</em> diesem Merkmal gegen alle <em>anderen</em>. Zeigt Zusammenhänge, keine Ursachen — ein Merkmal kann z.&nbsp;B. nur deshalb auffallen, weil es oft zusammen mit einem bestimmten Modell bestellt wird.</p>
-      <div id="featureRankPanel"></div>
-    </section>
-
-    <section id="sec-extreme" class="panel">
-      <p class="section-title"><span class="dot"></span>Extremwerte <span style="font-size:11px;color:var(--text-dim);font-weight:400;">(kürzeste &amp; längste Wartezeit innerhalb aktueller Filterauswahl)</span></p>
-      <div class="extremes-grid" id="extremesGrid"></div>
-    </section>
-
-    <section id="sec-community" class="panel">
-      <p class="section-title"><span class="dot"></span>Wie oft wurde so bestellt? <span style="font-size:11px;color:var(--text-dim);font-weight:400;">(anonymisierte Bestellungen, deren Konfiguration zur Filterauswahl passt)</span></p>
-      <div id="twinPanel"></div>
-    </section>
-
-    <section id="sec-methodik" class="panel">
-      <p class="section-title"><span class="dot"></span>Methodik &amp; Prognose-Güte <span style="font-size:11px;color:var(--text-dim);font-weight:400;">(Rückblick-Test auf allen bisher ausgelieferten Bestellungen)</span></p>
-      <div id="methodikPanel"></div>
-    </section>
-
+    <!-- Moved to the front: this is what most people actually come for
+         ("when will MY car arrive"), not a generic stats page. It used to
+         sit second-to-last, right before the raw data table. -->
     <section id="sec-persoenlich" class="panel personal-panel">
       <p class="section-title"><span class="dot"></span>Persönlicher Bereich</p>
 
@@ -1257,6 +1223,66 @@
       </div>
     </section>
 
+    <!-- Histogram + trend used to be two separate top-level sections; both
+         describe "the overall wait-time picture" (shape of the distribution
+         vs. how it moves over time), so they now share one nav entry. -->
+    <section id="sec-verlauf" class="panel">
+      <p class="section-title"><span class="dot"></span>Verteilung &amp; Verlauf der Wartezeit</p>
+
+      <p class="subsection-title">Verteilung <span class="subsection-note">(Anzahl Bestellungen je Wartezeit-Bin)</span></p>
+      <div class="chart-wrap" id="histChartWrap">
+        <svg id="histChart" viewBox="0 0 800 190" preserveAspectRatio="xMidYMid meet"></svg>
+        <div class="chart-tooltip" id="histTooltip" hidden></div>
+      </div>
+      <div class="chart-legend" id="chartLegend"></div>
+
+      <div class="section-divider"></div>
+
+      <p class="subsection-title">Entwicklung über die Zeit <span class="subsection-note">(Ø Wartezeit je Bestellmonat, mit Trend &amp; Prognose)</span></p>
+      <div id="trendVerdict" class="trend-verdict"></div>
+      <div class="chart-wrap" id="trendChartWrap">
+        <svg id="trendChart" viewBox="0 0 800 190" preserveAspectRatio="xMidYMid meet"></svg>
+        <div class="chart-tooltip" id="trendTooltip" hidden></div>
+      </div>
+      <div class="chart-legend" id="trendLegend"></div>
+    </section>
+
+    <!-- Per-model table + feature ranking are both "what factors correlate
+         with wait time", just two different lenses on the same question. -->
+    <section id="sec-vergleich" class="panel">
+      <p class="section-title"><span class="dot"></span>Vergleich nach Merkmalen</p>
+
+      <p class="subsection-title">Ø Wartezeit nach Modell <span class="subsection-note">(innerhalb aktueller Filterauswahl)</span></p>
+      <div class="breakdown-wrap">
+        <table class="breakdown-table" id="breakdownTable"></table>
+      </div>
+
+      <div class="section-divider"></div>
+
+      <p class="subsection-title">Was treibt die Wartezeit? <span class="subsection-note">(stärkste Effekte innerhalb aktueller Filterauswahl)</span></p>
+      <p class="rank-intro">Vergleicht für jedes Merkmal die Ø Wartezeit von Bestellungen <em>mit</em> diesem Merkmal gegen alle <em>anderen</em>. Zeigt Zusammenhänge, keine Ursachen — ein Merkmal kann z.&nbsp;B. nur deshalb auffallen, weil es oft zusammen mit einem bestimmten Modell bestellt wird.</p>
+      <div id="featureRankPanel"></div>
+    </section>
+
+    <!-- Extremes + twins are both "concrete real examples" — the two most
+         extreme single orders, and orders that share a configuration. -->
+    <section id="sec-community" class="panel">
+      <p class="section-title"><span class="dot"></span>Community</p>
+
+      <p class="subsection-title">Extremwerte <span class="subsection-note">(kürzeste &amp; längste Wartezeit innerhalb aktueller Filterauswahl)</span></p>
+      <div class="extremes-grid" id="extremesGrid"></div>
+
+      <div class="section-divider"></div>
+
+      <p class="subsection-title">Wie oft wurde so bestellt? <span class="subsection-note">(anonymisierte Bestellungen, deren Konfiguration zur Filterauswahl passt)</span></p>
+      <div id="twinPanel"></div>
+    </section>
+
+    <section id="sec-methodik" class="panel">
+      <p class="section-title"><span class="dot"></span>Methodik &amp; Prognose-Güte <span style="font-size:11px;color:var(--text-dim);font-weight:400;">(Rückblick-Test auf allen bisher ausgelieferten Bestellungen)</span></p>
+      <div id="methodikPanel"></div>
+    </section>
+
     <section id="sec-tabelle" class="panel">
       <div class="results-header">
         <p class="section-title" style="margin:0;"><span class="dot"></span>Passende Bestellungen</p>
@@ -1282,7 +1308,7 @@
 </script>
 
 <script id="methodology-data" type="application/json">
-{"backtest": {"generated_at": 1788004529947, "n_tested": 423, "new": {"n": 352, "mae": 60.7, "bias": 39.7, "within14": 0.088}, "old": {"n": 423, "mae": 59.7, "bias": 39.3, "within14": 0.121}, "segments": {"Modellgruppe": [{"key": "Elroq 85", "n": 234, "new_mae": 62.5, "new_bias": 41.6, "old_mae": 63.3, "old_bias": 40.5}, {"key": "Elroq RS", "n": 55, "new_mae": 50.5, "new_bias": 36.1, "old_mae": 54.2, "old_bias": 49.3}, {"key": "Elroq 60", "n": 48, "new_mae": 69.2, "new_bias": 35.0, "old_mae": 68.1, "old_bias": 29.7}, {"key": "Elroq 50", "n": 13, "new_mae": 43.8, "new_bias": 37.5, "old_mae": 33.6, "old_bias": 15.1}], "Land": [{"key": "Deutschland", "n": 313, "new_mae": 63.3, "new_bias": 48.9, "old_mae": 63.8, "old_bias": 47.0}, {"key": "Österreich", "n": 26, "new_mae": 40.5, "new_bias": -35.5, "old_mae": 31.9, "old_bias": -21.0}, {"key": "Schweiz", "n": 13, "new_mae": 37.5, "new_bias": -32.6, "old_mae": 29.7, "old_bias": -5.0}]}}, "data_quality": {"entfernt_count": 0, "eingetroffen_count": 20, "entfernt_rate": 0.0}}
+{"backtest": {"generated_at": 1788009285329, "n_tested": 423, "new": {"n": 352, "mae": 60.7, "bias": 39.7, "within14": 0.088}, "old": {"n": 423, "mae": 59.7, "bias": 39.3, "within14": 0.121}, "segments": {"Modellgruppe": [{"key": "Elroq 85", "n": 234, "new_mae": 62.5, "new_bias": 41.6, "old_mae": 63.3, "old_bias": 40.5}, {"key": "Elroq RS", "n": 55, "new_mae": 50.5, "new_bias": 36.1, "old_mae": 54.2, "old_bias": 49.3}, {"key": "Elroq 60", "n": 48, "new_mae": 69.2, "new_bias": 35.0, "old_mae": 68.1, "old_bias": 29.7}, {"key": "Elroq 50", "n": 13, "new_mae": 43.8, "new_bias": 37.5, "old_mae": 33.6, "old_bias": 15.1}], "Land": [{"key": "Deutschland", "n": 313, "new_mae": 63.3, "new_bias": 48.9, "old_mae": 63.8, "old_bias": 47.0}, {"key": "Österreich", "n": 26, "new_mae": 40.5, "new_bias": -35.5, "old_mae": 31.9, "old_bias": -21.0}, {"key": "Schweiz", "n": 13, "new_mae": 37.5, "new_bias": -32.6, "old_mae": 29.7, "old_bias": -5.0}]}}, "data_quality": {"entfernt_count": 0, "eingetroffen_count": 20, "entfernt_rate": 0.0}}
 </script>
 
 <script>
@@ -2877,7 +2903,11 @@
     });
 
     factors.sort((a, b) => Math.abs(b.effect) - Math.abs(a.effect));
-    return factors.slice(0, 12);
+    // Capped at 6 (was 12) as part of a general pass to make the dashboard
+    // leaner — the strongest handful of effects makes the point; a long
+    // tail of progressively weaker, less certain correlations mostly added
+    // scrolling, not insight.
+    return factors.slice(0, 6);
   }
 
   function renderFeatureRanking(filtered){
