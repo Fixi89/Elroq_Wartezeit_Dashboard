@@ -1589,7 +1589,11 @@
     });
 
     factors.sort((a, b) => Math.abs(b.effect) - Math.abs(a.effect));
-    return factors.slice(0, 12);
+    // Capped at 6 (was 12) as part of a general pass to make the dashboard
+    // leaner — the strongest handful of effects makes the point; a long
+    // tail of progressively weaker, less certain correlations mostly added
+    // scrolling, not insight.
+    return factors.slice(0, 6);
   }
 
   function renderFeatureRanking(filtered){
