@@ -3132,6 +3132,41 @@
          </div>`
       : '';
 
+    // Einzelfall-Liste: die aggregierten Kennzahlen oben sagen nichts darüber,
+    // WIE die Prognosen daneben lagen. Nach Abweichung sortiert (größte
+    // zuerst), damit sofort sichtbar ist, wo es klemmt — und weil eine reine
+    // Zahl wie "±21 Tage" ohne konkrete Fälle schwer einzuordnen ist.
+    const sorted = [...resolved].sort((a, b) => Math.abs(b.DeviationDays) - Math.abs(a.DeviationDays));
+    const rows = sorted.map(r => {
+      const dev = r.DeviationDays;
+      const cls = Math.abs(dev) <= 14 ? 'good' : (Math.abs(dev) <= 30 ? '' : 'bad');
+      const arrow = dev > 0 ? '▲' : (dev < 0 ? '▼' : '');
+      const cfgParts = [r.Modell, r.Farbe, r.Innenausstattung_DesignSelection, r.Felgenname]
+        .filter(v => v && v !== UNKNOWN);
+      return `<tr>
+        <td>${escapeHtml(cfgParts.join(' · '))}<span class="resolved-meta">${escapeHtml(r.Land || '')} · bestellt ${escapeHtml(r.Bestelldatum || '')}</span></td>
+        <td class="mono">${r.PredictedMedianDays != null ? r.PredictedMedianDays + ' Tage' : '–'}</td>
+        <td class="mono">${r.ActualWaitDays != null ? r.ActualWaitDays + ' Tage' : '–'}</td>
+        <td class="mono ${cls}"><span class="resolved-arrow" aria-hidden="true">${arrow}</span>${dev > 0 ? '+' : (dev < 0 ? '−' : '±')}${Math.abs(Math.round(dev))} Tage</td>
+      </tr>`;
+    }).join('');
+
+    const resolvedList = `
+      <details class="resolved-details">
+        <summary>Alle ${resolved.length} aufgelöste${resolved.length === 1 ? ' Prognose' : 'n Prognosen'} im Einzelnen ansehen</summary>
+        <div class="resolved-body">
+          <p class="resolved-hint">Was ursprünglich prognostiziert wurde, verglichen mit der tatsächlichen Wartezeit.
+            Sortiert nach Abweichung, größte zuerst. <strong>▲</strong> = hat länger gedauert als vorhergesagt,
+            <strong>▼</strong> = ging schneller.</p>
+          <div class="resolved-wrap">
+            <table class="resolved-table">
+              <thead><tr><th>Konfiguration</th><th>Prognose</th><th>Tatsächlich</th><th>Abweichung</th></tr></thead>
+              <tbody>${rows}</tbody>
+            </table>
+          </div>
+        </div>
+      </details>`;
+
     el.innerHTML = `
       <div class="accuracy-wrap">
         <div class="accuracy-head">
@@ -3144,6 +3179,7 @@
           <div class="accuracy-stat"><div class="num mono">${early} / ${late}</div><div class="lbl">Zu früh / zu spät</div></div>
         </div>
         ${biasNote}
+        ${resolvedList}
       </div>`;
   }
 
