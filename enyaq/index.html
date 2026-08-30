@@ -802,6 +802,43 @@
   .accuracy-stat .num{ font-family:'Space Grotesk',sans-serif; font-size:20px; font-weight:600; color:var(--text); }
   .accuracy-stat .lbl{ font-size:10.5px; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.05em; margin-top:2px; }
 
+  /* Einzelfall-Liste der aufgelösten Prognosen — standardmäßig zugeklappt,
+     damit die Kennzahlen oben die Übersicht behalten, aber einen Klick
+     entfernt für alle, die die konkreten Fälle nachvollziehen wollen. */
+  .resolved-details{ margin-top:14px; border-top:1px solid var(--border); padding-top:12px; }
+  .resolved-details summary{
+    cursor:pointer; font-size:12.5px; font-weight:600; color:var(--accent-2);
+    list-style:none; display:flex; align-items:center; gap:6px; user-select:none;
+  }
+  .resolved-details summary::-webkit-details-marker{ display:none; }
+  .resolved-details summary::before{
+    content:'▸'; font-size:10px; color:var(--text-dim); transition: transform .15s ease;
+  }
+  .resolved-details[open] summary::before{ transform: rotate(90deg); }
+  .resolved-details summary:hover{ color:var(--accent); }
+  .resolved-body{ margin-top:12px; }
+  .resolved-hint{ font-size:11.5px; color:var(--text-dim); line-height:1.6; margin:0 0 10px; }
+  .resolved-hint strong{ color:var(--text-muted); }
+  /* Waagerecht scrollbar statt umbrechend: die Konfigurationsspalte kann
+     lang werden, und ein Umbruch in jeder Zeile macht die Tabelle unlesbar. */
+  .resolved-wrap{ overflow-x:auto; }
+  .resolved-table{ width:100%; border-collapse:collapse; font-size:12px; }
+  .resolved-table th{
+    text-align:left; font-size:10px; text-transform:uppercase; letter-spacing:0.05em;
+    color:var(--text-dim); font-weight:600; padding:6px 10px 6px 0; border-bottom:1px solid var(--border);
+    white-space:nowrap;
+  }
+  .resolved-table td{
+    padding:8px 10px 8px 0; border-bottom:1px solid var(--border); color:var(--text-muted);
+    vertical-align:top;
+  }
+  .resolved-table tr:last-child td{ border-bottom:none; }
+  .resolved-table td.mono{ font-family:'JetBrains Mono',monospace; white-space:nowrap; }
+  .resolved-table td.good{ color:var(--accent); }
+  .resolved-table td.bad{ color:var(--danger); }
+  .resolved-arrow{ font-size:9px; margin-right:3px; }
+  .resolved-meta{ display:block; font-size:10.5px; color:var(--text-dim); margin-top:2px; }
+
   .methodik-intro{ font-size:13px; color:var(--text-muted); line-height:1.6; margin:0 0 14px; }
   .methodik-intro-sub{ font-size:12px; color:var(--text-dim); margin:2px 0 16px; }
   .methodik-subhead{ font-size:12.5px; font-weight:600; color:var(--text); margin:20px 0 8px; }
@@ -1307,7 +1344,7 @@
 </script>
 
 <script id="methodology-data" type="application/json">
-{"backtest": {"generated_at": 1788087196552, "n_tested": 1155, "new": {"n": 708, "mae": 213.9, "bias": 118.4, "within14": 0.031}, "old": {"n": 1155, "mae": 224.8, "bias": 110.3, "within14": 0.044}, "segments": {"Modellgruppe": [{"key": "Enyaq 80", "n": 259, "new_mae": 302.9, "new_bias": 269.5, "old_mae": 290.1, "old_bias": 250.0}, {"key": "Enyaq 85", "n": 155, "new_mae": 96.5, "new_bias": -10.3, "old_mae": 108.0, "old_bias": -36.9}, {"key": "Enyaq 60", "n": 97, "new_mae": 322.6, "new_bias": 269.6, "old_mae": 341.6, "old_bias": 241.2}, {"key": "Enyaq RS", "n": 80, "new_mae": 83.3, "new_bias": 19.1, "old_mae": 89.3, "old_bias": -38.8}, {"key": "Enyaq Coupe RS", "n": 39, "new_mae": 108.1, "new_bias": -87.6, "old_mae": 198.9, "old_bias": 103.8}, {"key": "Enyaq 85x", "n": 31, "new_mae": 124.2, "new_bias": -109.2, "old_mae": 157.4, "old_bias": -26.9}, {"key": "Enyaq 80x", "n": 22, "new_mae": 232.9, "new_bias": 42.5, "old_mae": 368.6, "old_bias": 338.5}, {"key": "Enyaq 50", "n": 14, "new_mae": 439.5, "new_bias": -406.5, "old_mae": 332.5, "old_bias": -231.6}], "Land": [{"key": "Deutschland", "n": 647, "new_mae": 220.7, "new_bias": 130.9, "old_mae": 227.8, "old_bias": 120.8}, {"key": "Österreich", "n": 31, "new_mae": 164.6, "new_bias": 19.4, "old_mae": 237.7, "old_bias": 37.4}, {"key": "Schweiz", "n": 21, "new_mae": 115.9, "new_bias": -32.7, "old_mae": 169.3, "old_bias": 14.0}]}}, "data_quality": {"storniert_count": 0, "entfernt_count": 0, "eingetroffen_count": 7, "storniert_rate": 0.0, "entfernt_rate": 0.0}, "censoring_correction": {"decision": "aus", "reason": "verbessert die mittlere Abweichung nicht", "off": {"n": 373, "mae": 92.3, "bias": -24.7, "within14": 0.064}, "on": {"n": 373, "mae": 108.1, "bias": -80.4, "within14": 0.064}}, "band_calibration": {"factors": {"50": 1.0, "80": 1.0, "95": 1.0}, "report": {"50": {"target": 0.5, "scale": 1.0, "enabled": false, "n_fit": 427, "n_val": 346, "coverage_before": 0.425, "coverage_after": 0.425}, "80": {"target": 0.8, "scale": 1.0, "enabled": false, "n_fit": 427, "n_val": 346, "coverage_before": 0.827, "coverage_after": 0.827}, "95": {"target": 0.95, "scale": 1.0, "enabled": false, "n_fit": 427, "n_val": 346, "coverage_before": 0.925, "coverage_after": 0.925}}}}
+{"backtest": {"generated_at": 1788109168469, "n_tested": 1155, "new": {"n": 708, "mae": 213.9, "bias": 118.4, "within14": 0.031}, "old": {"n": 1155, "mae": 224.8, "bias": 110.3, "within14": 0.044}, "segments": {"Modellgruppe": [{"key": "Enyaq 80", "n": 259, "new_mae": 302.9, "new_bias": 269.5, "old_mae": 290.1, "old_bias": 250.0}, {"key": "Enyaq 85", "n": 155, "new_mae": 96.5, "new_bias": -10.3, "old_mae": 108.0, "old_bias": -36.9}, {"key": "Enyaq 60", "n": 97, "new_mae": 322.6, "new_bias": 269.6, "old_mae": 341.6, "old_bias": 241.2}, {"key": "Enyaq RS", "n": 80, "new_mae": 83.3, "new_bias": 19.1, "old_mae": 89.3, "old_bias": -38.8}, {"key": "Enyaq Coupe RS", "n": 39, "new_mae": 108.1, "new_bias": -87.6, "old_mae": 198.9, "old_bias": 103.8}, {"key": "Enyaq 85x", "n": 31, "new_mae": 124.2, "new_bias": -109.2, "old_mae": 157.4, "old_bias": -26.9}, {"key": "Enyaq 80x", "n": 22, "new_mae": 232.9, "new_bias": 42.5, "old_mae": 368.6, "old_bias": 338.5}, {"key": "Enyaq 50", "n": 14, "new_mae": 439.5, "new_bias": -406.5, "old_mae": 332.5, "old_bias": -231.6}], "Land": [{"key": "Deutschland", "n": 647, "new_mae": 220.7, "new_bias": 130.9, "old_mae": 227.8, "old_bias": 120.8}, {"key": "Österreich", "n": 31, "new_mae": 164.6, "new_bias": 19.4, "old_mae": 237.7, "old_bias": 37.4}, {"key": "Schweiz", "n": 21, "new_mae": 115.9, "new_bias": -32.7, "old_mae": 169.3, "old_bias": 14.0}]}}, "data_quality": {"storniert_count": 0, "entfernt_count": 0, "eingetroffen_count": 7, "storniert_rate": 0.0, "entfernt_rate": 0.0}, "censoring_correction": {"decision": "aus", "reason": "verbessert die mittlere Abweichung nicht", "off": {"n": 373, "mae": 92.3, "bias": -24.7, "within14": 0.064}, "on": {"n": 373, "mae": 108.1, "bias": -80.4, "within14": 0.064}}, "band_calibration": {"factors": {"50": 1.0, "80": 1.0, "95": 1.0}, "report": {"50": {"target": 0.5, "scale": 1.0, "enabled": false, "n_fit": 427, "n_val": 346, "coverage_before": 0.425, "coverage_after": 0.425}, "80": {"target": 0.8, "scale": 1.0, "enabled": false, "n_fit": 427, "n_val": 346, "coverage_before": 0.827, "coverage_after": 0.827}, "95": {"target": 0.95, "scale": 1.0, "enabled": false, "n_fit": 427, "n_val": 346, "coverage_before": 0.925, "coverage_after": 0.925}}}}
 </script>
 
 <script>
@@ -4445,6 +4482,41 @@
          </div>`
       : '';
 
+    // Einzelfall-Liste: die aggregierten Kennzahlen oben sagen nichts darüber,
+    // WIE die Prognosen daneben lagen. Nach Abweichung sortiert (größte
+    // zuerst), damit sofort sichtbar ist, wo es klemmt — und weil eine reine
+    // Zahl wie "±21 Tage" ohne konkrete Fälle schwer einzuordnen ist.
+    const sorted = [...resolved].sort((a, b) => Math.abs(b.DeviationDays) - Math.abs(a.DeviationDays));
+    const rows = sorted.map(r => {
+      const dev = r.DeviationDays;
+      const cls = Math.abs(dev) <= 14 ? 'good' : (Math.abs(dev) <= 30 ? '' : 'bad');
+      const arrow = dev > 0 ? '▲' : (dev < 0 ? '▼' : '');
+      const cfgParts = [r.Modell, r.Farbe, r.Innenausstattung_DesignSelection, r.Felgenname]
+        .filter(v => v && v !== UNKNOWN);
+      return `<tr>
+        <td>${escapeHtml(cfgParts.join(' · '))}<span class="resolved-meta">${escapeHtml(r.Land || '')} · bestellt ${escapeHtml(r.Bestelldatum || '')}</span></td>
+        <td class="mono">${r.PredictedMedianDays != null ? r.PredictedMedianDays + ' Tage' : '–'}</td>
+        <td class="mono">${r.ActualWaitDays != null ? r.ActualWaitDays + ' Tage' : '–'}</td>
+        <td class="mono ${cls}"><span class="resolved-arrow" aria-hidden="true">${arrow}</span>${dev > 0 ? '+' : (dev < 0 ? '−' : '±')}${Math.abs(Math.round(dev))} Tage</td>
+      </tr>`;
+    }).join('');
+
+    const resolvedList = `
+      <details class="resolved-details">
+        <summary>Alle ${resolved.length} aufgelöste${resolved.length === 1 ? ' Prognose' : 'n Prognosen'} im Einzelnen ansehen</summary>
+        <div class="resolved-body">
+          <p class="resolved-hint">Was ursprünglich prognostiziert wurde, verglichen mit der tatsächlichen Wartezeit.
+            Sortiert nach Abweichung, größte zuerst. <strong>▲</strong> = hat länger gedauert als vorhergesagt,
+            <strong>▼</strong> = ging schneller.</p>
+          <div class="resolved-wrap">
+            <table class="resolved-table">
+              <thead><tr><th>Konfiguration</th><th>Prognose</th><th>Tatsächlich</th><th>Abweichung</th></tr></thead>
+              <tbody>${rows}</tbody>
+            </table>
+          </div>
+        </div>
+      </details>`;
+
     el.innerHTML = `
       <div class="accuracy-wrap">
         <div class="accuracy-head">
@@ -4457,6 +4529,7 @@
           <div class="accuracy-stat"><div class="num mono">${early} / ${late}</div><div class="lbl">Zu früh / zu spät</div></div>
         </div>
         ${biasNote}
+        ${resolvedList}
       </div>`;
   }
 
