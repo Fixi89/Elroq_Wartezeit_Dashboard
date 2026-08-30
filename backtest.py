@@ -18,6 +18,12 @@ from datetime import datetime
 
 DAY_MS = 86400000
 MIN_BACKTEST_POOL = 5
+
+# Mindest-Aufloesungsquote eines Bestellmonats, damit er in die Genauigkeits-
+# messung eingeht. Bei 70% liegt genug echte Wahrheit vor, um die Prognose
+# fair zu bewerten; darunter dominieren die schnellsten Auslieferungen die
+# Stichprobe (siehe cohort_resolution_rates).
+MIN_COHORT_RESOLUTION = 0.70
 MIN_SEGMENT_N = 12  # unterhalb dieser Groesse wird ein Segment nicht einzeln ausgewiesen (zu verrauscht)
 
 
@@ -218,14 +224,53 @@ def _reconstruct_pool_as_of(delivered, order, open_orders=None):
     return pool_delivered, pool_open
 
 
+def cohort_resolution_rates(delivered, open_orders, bucket_days=30):
+    """
+    Anteil bereits ausgelieferter Bestellungen je Bestellmonat.
+
+    Hintergrund: Bei jungen Bestellmonaten sind erst wenige Bestellungen
+    ausgeliefert -- und zwar systematisch die SCHNELLSTEN. Im Maerz 2026 etwa
+    waren nur 15% ausgeliefert (mit im Schnitt 118 Tagen Wartezeit), waehrend
+    die noch offenen Bestellungen desselben Monats zu dem Zeitpunkt bereits
+    145 Tage warteten -- also laenger als die vermeintliche "Durchschnitts-
+    Wartezeit". Wer die Prognose gegen solche Monate misst, misst gegen eine
+    verzerrte Wahrheit und bekommt zwangslaeufig heraus, die Prognose habe
+    "zu lang" geschaetzt.
+    """
+    counts = {}
+    for r in delivered:
+        b = r["BestelldatumTS"] // (bucket_days * DAY_MS)
+        counts.setdefault(b, [0, 0])[0] += 1
+    for r in open_orders or []:
+        b = r["BestelldatumTS"] // (bucket_days * DAY_MS)
+        counts.setdefault(b, [0, 0])[1] += 1
+    return {b: (d / (d + o) if (d + o) else 0.0) for b, (d, o) in counts.items()}
+
+
 def run_backtest(delivered, predict_fn, bool_keys, min_pool=MIN_BACKTEST_POOL,
-                 open_orders=None):
+                 open_orders=None, min_resolution=MIN_COHORT_RESOLUTION,
+                 bucket_days=30):
     """
     predict_fn: die produktive predict_delivery(order, delivered, open_orders, now_ts)
     Gibt eine Liste von Ergebnis-Dicts zurueck (eines pro getesteter Bestellung).
+
+    Bewertet werden nur Bestellungen aus ausreichend aufgeloesten
+    Bestellmonaten (min_resolution, siehe cohort_resolution_rates). Ohne
+    diesen Filter mischen sich zwei GEGENLAEUFIGE Verzerrungen, die sich
+    zufaellig teilweise aufheben und die ausgewiesene Genauigkeit
+    verfaelschen: auf gut aufgeloesten Monaten unterschaetzte die Prognose
+    im Schnitt um rund 28 Tage, auf jungen Monaten schien sie zu
+    ueberschaetzen -- nur weil dort ausschliesslich die schnellsten
+    Auslieferungen als "Wahrheit" vorlagen. Das Ergebnis war eine Zahl, die
+    weder das eine noch das andere ehrlich abbildet.
     """
+    resolution = cohort_resolution_rates(delivered, open_orders, bucket_days)
     results = []
     for order in delivered:
+        bucket = order["BestelldatumTS"] // (bucket_days * DAY_MS)
+        if resolution.get(bucket, 0.0) < min_resolution:
+            continue
+
         pool_delivered, pool_open = _reconstruct_pool_as_of(
             delivered, order, open_orders)
         if len(pool_delivered) < min_pool:
@@ -247,7 +292,6 @@ def run_backtest(delivered, predict_fn, bool_keys, min_pool=MIN_BACKTEST_POOL,
             "old_pred": p_old,
         })
     return results
-
 
 def _agg(devs):
     n = len(devs)

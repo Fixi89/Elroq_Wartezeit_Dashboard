@@ -3061,7 +3061,9 @@
         Wir haben die Prognose an <strong>${bt.n_tested} bereits ausgelieferten Bestellungen</strong> im Nachhinein
         getestet: so getan, als wäre jede davon an ihrem eigenen Bestelldatum noch offen gewesen — nur mit den Daten,
         die zu diesem Zeitpunkt tatsächlich vorlagen — und verglichen, was die Prognose gesagt hätte mit dem, was
-        wirklich passiert ist.
+        wirklich passiert ist. Bewusst ausgeklammert sind dabei die jüngsten Bestellmonate: Dort ist erst ein
+        kleiner Teil ausgeliefert, und zwar systematisch die schnellsten Fahrzeuge. Würde man dagegen messen,
+        sähe die Prognose künstlich zu pessimistisch aus.
       </p>
 
       <div class="methodik-headline">
