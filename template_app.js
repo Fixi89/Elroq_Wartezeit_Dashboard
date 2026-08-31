@@ -280,6 +280,11 @@
   // state: multi fields -> Set of selected values (empty set = all)
   // bool fields -> 'alle' | 'Ja' | 'Nein'
   const state = {};
+
+  // Sortierstand der Ergebnistabelle — eigener State statt Teil von `state`,
+  // damit er beim Filter-Reset erhalten bleibt (Sortierung ist eine reine
+  // Anzeigeeinstellung, kein Filter). Persistiert über Re-Renders hinweg.
+  let resultsSort = { key: 'WartezeitTage', dir: 'asc' };
   MULTI_FIELDS.forEach(f => state[f.key] = new Set());
   BOOL_FIELDS.forEach(f => state[f.key] = 'alle');
 
@@ -1845,6 +1850,44 @@
   // effect are worth a "Merkmale" badge here.
   const RESULT_BADGE_FIELDS = BOOL_FIELDS.map(f => f.key);
 
+  // Spaltendefinition der Ergebnistabelle: ein Ort für Label, Sortierschlüssel
+  // (welches Feld tatsächlich verglichen wird — bei Bestelldatum der
+  // Zeitstempel, nicht der angezeigte Text, sonst würde "8. Juni 2026" als
+  // String vor "8. Januar 2026" einsortiert) und wie die Zelle dargestellt
+  // wird. `sortKey: null` markiert eine nicht sortierbare Spalte (Merkmale).
+  const RESULTS_COLUMNS = [
+    { key: 'Modell', label: 'Modell', sortKey: 'Modell', type: 'text',
+      render: r => escapeHtml(r.Modell || '') },
+    { key: 'Farbe', label: 'Farbe', sortKey: 'Farbe', type: 'text',
+      render: r => escapeHtml(r.Farbe || '') },
+    { key: 'Innenausstattung_DesignSelection', label: 'Innenausst.', sortKey: 'Innenausstattung_DesignSelection', type: 'text',
+      render: r => escapeHtml(r.Innenausstattung_DesignSelection || '–') },
+    { key: 'Felgenname', label: 'Felgen', sortKey: 'Felgenname', type: 'text',
+      render: r => escapeHtml(felgenLabel(r)) },
+    { key: 'Land', label: 'Land', sortKey: 'Land', type: 'text',
+      render: r => landCell(r.Land) },
+    { key: 'Bestelldatum', label: 'Bestelldatum', sortKey: 'BestelldatumTS', type: 'number',
+      render: r => escapeHtml(r.Bestelldatum || '–') },
+    { key: 'WartezeitTage', label: 'Wartezeit', sortKey: 'WartezeitTage', type: 'number',
+      render: r => `${r.WartezeitTage} Tage` },
+    { key: 'Merkmale', label: 'Merkmale', sortKey: null, type: null,
+      render: r => RESULT_BADGE_FIELDS.filter(k => r[k] === 'Ja').map(k => badgeHtml(k)).join('') || '<span class="badge">–</span>' },
+  ];
+
+  function compareForSort(a, b, col){
+    if (col.type === 'text'){
+      const av = (a[col.sortKey] || '').toString();
+      const bv = (b[col.sortKey] || '').toString();
+      return av.localeCompare(bv, 'de');
+    }
+    // Zahlen/Zeitstempel: fehlende Werte ans Ende, unabhängig von der Richtung.
+    const av = a[col.sortKey], bv = b[col.sortKey];
+    if (av == null && bv == null) return 0;
+    if (av == null) return 1;
+    if (bv == null) return -1;
+    return av - bv;
+  }
+
   function renderResults(filtered){
     const wrap = document.getElementById('resultsTable');
     document.getElementById('resultsCount').textContent = `${filtered.length} Treffer`;
@@ -1854,34 +1897,47 @@
       return;
     }
 
-    const sorted = [...filtered].sort((a,b)=> a.WartezeitTage - b.WartezeitTage);
+    const sortCol = RESULTS_COLUMNS.find(c => c.sortKey === resultsSort.key) || RESULTS_COLUMNS[6];
+    const dirMul = resultsSort.dir === 'desc' ? -1 : 1;
+    const sorted = [...filtered].sort((a, b) => compareForSort(a, b, sortCol) * dirMul);
     const shown = sorted.slice(0, 150);
 
-    let html = `<thead><tr>
-      <th>Modell</th><th>Farbe</th><th>Innenausst.</th><th>Felgen</th><th>Land</th><th>Wartezeit</th><th>Merkmale</th>
-    </tr></thead><tbody>`;
+    const headCells = RESULTS_COLUMNS.map(col => {
+      if (!col.sortKey){
+        return `<th>${escapeHtml(col.label)}</th>`;
+      }
+      const active = resultsSort.key === col.sortKey;
+      const arrow = active ? (resultsSort.dir === 'desc' ? ' ▾' : ' ▴') : '';
+      return `<th class="sortable-col${active ? ' active' : ''}" data-sort-key="${escapeHtml(col.sortKey)}" role="button" tabindex="0">${escapeHtml(col.label)}${arrow}</th>`;
+    }).join('');
+
+    let html = `<thead><tr>${headCells}</tr></thead><tbody>`;
     shown.forEach(r => {
-      const badges = RESULT_BADGE_FIELDS.filter(k => r[k] === 'Ja')
-        .map(k => badgeHtml(k)).join('');
-      html += `<tr>
-        <td>${escapeHtml(r.Modell||'')}</td>
-        <td>${escapeHtml(r.Farbe||'')}</td>
-        <td>${escapeHtml(r.Innenausstattung_DesignSelection||'–')}</td>
-        <td>${escapeHtml(felgenLabel(r))}</td>
-        <td>${landCell(r.Land)}</td>
-        <td class="mono">${r.WartezeitTage} Tage</td>
-        <td>${badges||'<span class="badge">–</span>'}</td>
-      </tr>`;
+      html += `<tr>${RESULTS_COLUMNS.map(col => `<td${col.type === 'number' ? ' class="mono"' : ''}>${col.render(r)}</td>`).join('')}</tr>`;
     });
     html += `</tbody>`;
     wrap.innerHTML = html;
     if (filtered.length > 150){
-      wrap.innerHTML += '';
+      const sortDesc = RESULTS_COLUMNS.find(c => c.sortKey === resultsSort.key)?.label || 'Wartezeit';
       const note = document.createElement('div');
       note.className = 'empty-state';
-      note.textContent = `… und ${filtered.length-150} weitere (nach kürzester Wartezeit sortiert, erste 150 angezeigt)`;
+      note.textContent = `… und ${filtered.length-150} weitere (nach ${sortDesc} sortiert, erste 150 angezeigt)`;
       document.getElementById('resultsTable').parentElement.appendChild(note);
     }
+
+    wrap.querySelectorAll('th.sortable-col').forEach(th => {
+      const activate = () => {
+        const key = th.dataset.sortKey;
+        if (resultsSort.key === key){
+          resultsSort.dir = resultsSort.dir === 'asc' ? 'desc' : 'asc';
+        } else {
+          resultsSort = { key, dir: 'asc' };
+        }
+        renderResults(filtered);
+      };
+      th.addEventListener('click', activate);
+      th.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); activate(); } });
+    });
 
     // Toggle the right-edge fade only when the table actually overflows —
     // otherwise it would hint at hidden content that isn't there.
