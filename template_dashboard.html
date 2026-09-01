@@ -1474,14 +1474,20 @@ __METHODOLOGY_JSON__
 </script>
 
 <script>
-  /* Light/Dark mode toggle. Deliberately kept separate from __APP_JS__
-     (the generated dashboard logic) since this is pure page-chrome that
-     never changes between report builds. Every visual difference between
-     the two themes lives in the CSS custom properties on :root /
-     html[data-theme="light"] — this script only ever flips the attribute
-     and persists the choice, it never touches colors directly. That means
-     it stays correct even if the chart-drawing code in __APP_JS__ changes,
-     since that code reads the same var(--...) tokens either way. */
+  /* Light/Dark mode toggle. Deliberately kept separate from the generated
+     dashboard logic (the big app-script block below) since this is pure
+     page-chrome that never changes between report builds. Every visual
+     difference between the two themes lives in the CSS custom properties
+     on :root / html[data-theme="light"] — this script only ever flips the
+     attribute and persists the choice, it never touches colors directly.
+     That means it stays correct even if the chart-drawing code below
+     changes, since that code reads the same var(--...) tokens either way.
+     Note: this comment intentionally avoids spelling out the literal
+     placeholder tokens (double underscores around an all-caps name) used
+     elsewhere in this file — the build step does a plain string replace of
+     those tokens across the whole template, so writing one out here would
+     get it replaced too and splice unrelated content straight into this
+     comment. */
   (function () {
     var THEME_KEY = 'elroq-theme';
     var root = document.documentElement;
