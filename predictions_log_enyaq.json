@@ -63710,5 +63710,158 @@
       }
     ],
     "OriginalCountryScoped": true
+  },
+  "886534d60a16c08e": {
+    "ID": "886534d60a16c08e",
+    "Modell": "Skoda Enyaq iV 85 Selection",
+    "Modellgruppe": "Enyaq 85",
+    "Bestelldatum": "28. August 2026",
+    "BestelldatumTS": 1787875200000,
+    "Status": "offen",
+    "LoggedAt": 1788259411068,
+    "ResolvedAt": null,
+    "ActualDate": null,
+    "ActualWaitDays": null,
+    "DeviationDays": null,
+    "CommunityEstimateDays": 230,
+    "CommunityEstimateDeviationDays": null,
+    "PredictedDate": 1802495729428.653,
+    "PredictedRangeLowDate": 1800973318396.6438,
+    "PredictedRangeHighDate": 1804115567183.2908,
+    "PredictedP10Date": 1796669568208.4504,
+    "PredictedP90Date": 1807453318396.6438,
+    "PredictedP2_5Date": 1795530118396.6438,
+    "PredictedP97_5Date": 1815402118396.6438,
+    "PredictedMedianDays": 169,
+    "PredictedRangeLowDays": 152,
+    "PredictedRangeHighDays": 188,
+    "PredictedP10Days": 102,
+    "PredictedP90Days": 227,
+    "PredictedP2_5Days": 89,
+    "PredictedP97_5Days": 319,
+    "ReferenceCount": 268,
+    "ReferenceQualityLabel": "viele gewichtete Referenzen",
+    "ReferenceEraFrom": 1658448000000,
+    "ReferenceEraTo": 1771372800000,
+    "References": [
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 154
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 166
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 149
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 170
+      },
+      {
+        "Land": "Österreich",
+        "WartezeitTage": 166
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 153
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 161
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 191
+      },
+      {
+        "Land": "Österreich",
+        "WartezeitTage": 148
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 154
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 180
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 207
+      }
+    ],
+    "CountryScoped": false,
+    "OriginalPredictedDate": 1802495729428.653,
+    "OriginalPredictedRangeLowDate": 1800973318396.6438,
+    "OriginalPredictedRangeHighDate": 1804115567183.2908,
+    "OriginalPredictedP10Date": 1796669568208.4504,
+    "OriginalPredictedP90Date": 1807453318396.6438,
+    "OriginalPredictedP2_5Date": 1795530118396.6438,
+    "OriginalPredictedP97_5Date": 1815402118396.6438,
+    "OriginalPredictedMedianDays": 169,
+    "OriginalPredictedRangeLowDays": 152,
+    "OriginalPredictedRangeHighDays": 188,
+    "OriginalPredictedP10Days": 102,
+    "OriginalPredictedP90Days": 227,
+    "OriginalPredictedP2_5Days": 89,
+    "OriginalPredictedP97_5Days": 319,
+    "OriginalReferenceCount": 268,
+    "OriginalReferenceQualityLabel": "viele gewichtete Referenzen",
+    "OriginalReferenceEraFrom": 1658448000000,
+    "OriginalReferenceEraTo": 1771372800000,
+    "OriginalReferences": [
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 154
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 166
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 149
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 170
+      },
+      {
+        "Land": "Österreich",
+        "WartezeitTage": 166
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 153
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 161
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 191
+      },
+      {
+        "Land": "Österreich",
+        "WartezeitTage": 148
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 154
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 180
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 207
+      }
+    ],
+    "OriginalCountryScoped": false
   }
 }
