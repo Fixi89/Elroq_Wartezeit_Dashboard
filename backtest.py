@@ -18,12 +18,6 @@ from datetime import datetime
 
 DAY_MS = 86400000
 MIN_BACKTEST_POOL = 5
-
-# Mindest-Aufloesungsquote eines Bestellmonats, damit er in die Genauigkeits-
-# messung eingeht. Bei 70% liegt genug echte Wahrheit vor, um die Prognose
-# fair zu bewerten; darunter dominieren die schnellsten Auslieferungen die
-# Stichprobe (siehe cohort_resolution_rates).
-MIN_COHORT_RESOLUTION = 0.70
 MIN_SEGMENT_N = 12  # unterhalb dieser Groesse wird ein Segment nicht einzeln ausgewiesen (zu verrauscht)
 
 
@@ -224,53 +218,14 @@ def _reconstruct_pool_as_of(delivered, order, open_orders=None):
     return pool_delivered, pool_open
 
 
-def cohort_resolution_rates(delivered, open_orders, bucket_days=30):
-    """
-    Anteil bereits ausgelieferter Bestellungen je Bestellmonat.
-
-    Hintergrund: Bei jungen Bestellmonaten sind erst wenige Bestellungen
-    ausgeliefert -- und zwar systematisch die SCHNELLSTEN. Im Maerz 2026 etwa
-    waren nur 15% ausgeliefert (mit im Schnitt 118 Tagen Wartezeit), waehrend
-    die noch offenen Bestellungen desselben Monats zu dem Zeitpunkt bereits
-    145 Tage warteten -- also laenger als die vermeintliche "Durchschnitts-
-    Wartezeit". Wer die Prognose gegen solche Monate misst, misst gegen eine
-    verzerrte Wahrheit und bekommt zwangslaeufig heraus, die Prognose habe
-    "zu lang" geschaetzt.
-    """
-    counts = {}
-    for r in delivered:
-        b = r["BestelldatumTS"] // (bucket_days * DAY_MS)
-        counts.setdefault(b, [0, 0])[0] += 1
-    for r in open_orders or []:
-        b = r["BestelldatumTS"] // (bucket_days * DAY_MS)
-        counts.setdefault(b, [0, 0])[1] += 1
-    return {b: (d / (d + o) if (d + o) else 0.0) for b, (d, o) in counts.items()}
-
-
 def run_backtest(delivered, predict_fn, bool_keys, min_pool=MIN_BACKTEST_POOL,
-                 open_orders=None, min_resolution=MIN_COHORT_RESOLUTION,
-                 bucket_days=30):
+                 open_orders=None):
     """
     predict_fn: die produktive predict_delivery(order, delivered, open_orders, now_ts)
     Gibt eine Liste von Ergebnis-Dicts zurueck (eines pro getesteter Bestellung).
-
-    Bewertet werden nur Bestellungen aus ausreichend aufgeloesten
-    Bestellmonaten (min_resolution, siehe cohort_resolution_rates). Ohne
-    diesen Filter mischen sich zwei GEGENLAEUFIGE Verzerrungen, die sich
-    zufaellig teilweise aufheben und die ausgewiesene Genauigkeit
-    verfaelschen: auf gut aufgeloesten Monaten unterschaetzte die Prognose
-    im Schnitt um rund 28 Tage, auf jungen Monaten schien sie zu
-    ueberschaetzen -- nur weil dort ausschliesslich die schnellsten
-    Auslieferungen als "Wahrheit" vorlagen. Das Ergebnis war eine Zahl, die
-    weder das eine noch das andere ehrlich abbildet.
     """
-    resolution = cohort_resolution_rates(delivered, open_orders, bucket_days)
     results = []
     for order in delivered:
-        bucket = order["BestelldatumTS"] // (bucket_days * DAY_MS)
-        if resolution.get(bucket, 0.0) < min_resolution:
-            continue
-
         pool_delivered, pool_open = _reconstruct_pool_as_of(
             delivered, order, open_orders)
         if len(pool_delivered) < min_pool:
@@ -293,6 +248,7 @@ def run_backtest(delivered, predict_fn, bool_keys, min_pool=MIN_BACKTEST_POOL,
         })
     return results
 
+
 def _agg(devs):
     n = len(devs)
     if n == 0:
@@ -300,7 +256,17 @@ def _agg(devs):
     mae = sum(abs(d) for d in devs) / n
     bias = sum(devs) / n
     within14 = sum(1 for d in devs if abs(d) <= 14) / n
-    return {"n": n, "mae": round(mae, 1), "bias": round(bias, 1), "within14": round(within14, 3)}
+    # Median des ABSOLUTEN Fehlers (nicht zu verwechseln mit "bias" oben, das
+    # ist der Mittelwert der VORZEICHENBEHAFTETEN Abweichung). Der MAE wird
+    # von wenigen sehr weit danebenliegenden Prognosen stark nach oben
+    # gezogen; der Median ist robuster und oft die ehrlichere "typische
+    # Abweichung" fuer eine Nutzer-Anzeige (siehe Offener Punkt 3 in der
+    # Projektuebergabe).
+    abs_devs = sorted(abs(d) for d in devs)
+    mid = n // 2
+    median_ae = abs_devs[mid] if n % 2 else (abs_devs[mid - 1] + abs_devs[mid]) / 2
+    return {"n": n, "mae": round(mae, 1), "median_ae": round(median_ae, 1),
+            "bias": round(bias, 1), "within14": round(within14, 3)}
 
 
 def aggregate_backtest(results, segment_keys=("Modellgruppe", "Land")):
@@ -413,116 +379,3 @@ def evaluate_censoring_correction(delivered, open_orders, predict_factory,
                    if enabled else "verbessert die mittlere Abweichung nicht"),
         "off": off, "on": on,
     }
-
-
-# ---------------------------------------------------------------------------
-# Kalibrierung der Konfidenzbaender (50/80/95%)
-# ---------------------------------------------------------------------------
-
-_BAND_DEFS = (("50", 0.50, "p25", "p75"),
-              ("80", 0.80, "p10", "p90"),
-              ("95", 0.95, "p2_5", "p97_5"))
-
-
-def _pooled_coverage(predictions, scale, lo_key, hi_key):
-    n = hit = 0
-    for actual, p in predictions:
-        med = p["median"]
-        lo = med - (med - p[lo_key]) * scale
-        hi = med + (p[hi_key] - med) * scale
-        n += 1
-        if lo <= actual <= hi:
-            hit += 1
-    return (hit / n, n) if n else (None, 0)
-
-
-def _solve_scale(predictions, target, lo_key, hi_key, scale_range=(1.0, 3.0),
-                 tolerance=0.005, max_iter=40):
-    """Bisektion: Trefferquote waechst monoton mit dem Aufweitungsfaktor,
-    daher reicht eine einfache Intervallhalbierung statt eines Gradienten-
-    verfahrens."""
-    lo_scale, hi_scale = scale_range
-    cov_lo, _ = _pooled_coverage(predictions, lo_scale, lo_key, hi_key)
-    cov_hi, _ = _pooled_coverage(predictions, hi_scale, lo_key, hi_key)
-    if cov_lo is None:
-        return 1.0
-    if cov_lo >= target:
-        return lo_scale  # schon ohne Aufweitung breit genug
-    if cov_hi < target:
-        return hi_scale  # selbst der maximale Faktor reicht nicht -- kappen
-    for _ in range(max_iter):
-        mid = (lo_scale + hi_scale) / 2
-        cov_mid, _ = _pooled_coverage(predictions, mid, lo_key, hi_key)
-        if abs(cov_mid - target) < tolerance:
-            return round(mid, 3)
-        if cov_mid < target:
-            lo_scale = mid
-        else:
-            hi_scale = mid
-    return round((lo_scale + hi_scale) / 2, 3)
-
-
-def calibrate_confidence_bands(delivered, open_orders, predict_fn,
-                               min_pool=MIN_BACKTEST_POOL, fit_frac=0.7,
-                               min_improvement=0.03):
-    """
-    Findet je Konfidenzband (50/80/95%) einen Aufweitungsfaktor, der die
-    tatsaechliche Trefferquote an die Zielquote angleicht -- die Baender
-    waren nachweislich zu eng (das 50%-Band traf die Wahrheit nur in
-    ~34-45% der Faelle statt 50%, siehe Methodik-Panel).
-
-    Ein einzelner Zeit-Split zeigte hier stark schwankende ideale Faktoren
-    zwischen verschiedenen Zeitfenstern (z.B. Faktor ~2.3 auf einem
-    Fenster, ~1.3 auf einem anderen) -- bei nur ~100-140 Bestellungen pro
-    Fenster ueberwiegend Stichprobenrauschen, kein echter Zeitversatz.
-    Deshalb: Faktoren auf den AELTEREN fit_frac der Historie bestimmen
-    (voller Datenbestand dieses Abschnitts statt eines schmalen Fensters),
-    auf der juengeren, nie gesehenen Restmenge validieren. Ein Band wird nur
-    aufgeweitet, wenn sich die Kalibrierung dort um mindestens
-    min_improvement verbessert -- sonst bleibt der Faktor bei 1.0 (keine
-    Aenderung), um nicht auf Stichprobenrauschen zu reagieren.
-
-    Rueckgabe: (factors: dict, report: dict)
-    """
-    by_date = sorted(delivered, key=lambda r: r["BestelldatumTS"])
-    cut = int(len(by_date) * fit_frac)
-    fit_id_set = {r["ID"] for r in by_date[:cut]}
-
-    all_preds = []
-    for order in delivered:
-        pool_delivered, pool_open = _reconstruct_pool_as_of(delivered, order, open_orders)
-        if len(pool_delivered) < min_pool:
-            continue
-        p = predict_fn(order, pool_delivered, pool_open, order["BestelldatumTS"])
-        if p is None:
-            continue
-        all_preds.append((order["WartezeitTage"], order["ID"], p))
-
-    fit_preds = [(a, p) for a, oid, p in all_preds if oid in fit_id_set]
-    val_preds = [(a, p) for a, oid, p in all_preds if oid not in fit_id_set]
-
-    factors, report = {}, {}
-    for band_key, target, lo_key, hi_key in _BAND_DEFS:
-        scale = _solve_scale(fit_preds, target, lo_key, hi_key)
-
-        cov_val_before, n_val = _pooled_coverage(val_preds, 1.0, lo_key, hi_key)
-        cov_val_after, _ = _pooled_coverage(val_preds, scale, lo_key, hi_key)
-        _, n_fit = _pooled_coverage(fit_preds, 1.0, lo_key, hi_key)
-
-        improves = (cov_val_before is not None and cov_val_after is not None
-                   and abs(cov_val_after - target) < abs(cov_val_before - target) - min_improvement)
-        final_scale = round(scale, 2) if improves else 1.0
-        # Bei Ablehnung durch das Gate zeigt der Report die Trefferquote OHNE
-        # Aufweitung (also identisch zu "davor") -- nicht die des versuchsweise
-        # gefitteten, aber verworfenen Faktors. Sonst saehe es so aus, als
-        # waere eine Verbesserung angewendet worden, obwohl final_scale=1.0 ist.
-        reported_after = cov_val_after if improves else cov_val_before
-
-        factors[band_key] = final_scale
-        report[band_key] = {
-            "target": target, "scale": final_scale, "enabled": improves,
-            "n_fit": n_fit, "n_val": n_val,
-            "coverage_before": round(cov_val_before, 3) if cov_val_before is not None else None,
-            "coverage_after": round(reported_after, 3) if reported_after is not None else None,
-        }
-    return factors, report

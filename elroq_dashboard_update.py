@@ -29,9 +29,7 @@ Benoetigt: requests, beautifulsoup4
 """
 
 import argparse
-import hashlib
 import json
-import os
 import re
 import sys
 import time
@@ -113,54 +111,13 @@ def clean(text):
     return re.sub(r"\s+", " ", (text or "")).strip()
 
 
-# --------------------------------------------------------------------------
-# ID-Hashing (Datenschutz)
-# --------------------------------------------------------------------------
-
-# Die interne Forums-Objekt-ID (data-object-id) landete bisher im Klartext im
-# veroeffentlichten JSON/CSV. Falls sich daraus eine Post-URL ableiten laesst,
-# fuehrt sie zurueck zum Originalpost samt Benutzername -- das wuerde die
-# Anonymisierung (kein Benutzername/Profil-Link wird gespeichert, siehe
-# parse_rows) aushebeln.
-#
-# WICHTIG: Ein Hash allein ist nur ein halber Schutz, wenn die IDs kleine,
-# fortlaufende Ganzzahlen sind (typisch fuer Forums-Objekt-IDs) -- ohne
-# geheimes Salt koennte jemand einfach alle plausiblen IDs (z.B. 1 bis
-# 1.000.000) durchhashen und mit den veroeffentlichten Hashes abgleichen
-# ("Rainbow Table" fuer einen kleinen Zahlenraum ist trivial). Deshalb wird
-# hier ein Salt aus der Umgebungsvariable ID_HASH_SALT gelesen -- als
-# GitHub-Actions-Repository-Secret gesetzt, taucht es NIE im oeffentlichen
-# Repo auf (siehe publish.yml). Ohne gesetztes Secret greift ein fester
-# Standard-Salt: besser als Klartext (verhindert zufaelliges Wiedererkennen/
-# Verlinken), schuetzt aber nicht vor einem gezielten Angriff. Fuer echten
-# Schutz das Secret in den Repo-Einstellungen anlegen.
-_ID_SALT = os.environ.get("ID_HASH_SALT") or "elroq-enyaq-dashboard-bitte-eigenes-secret-setzen"
-
-
-def hash_id(raw_id):
-    """Verwandelt eine rohe Forums-ID in einen nicht umkehrbaren Bezeichner.
-    Deterministisch -- interne Vergleiche (Duplikat-Erkennung, Selbst-
-    Ausschluss in der Aehnlichkeitsberechnung) funktionieren unveraendert
-    weiter, da dieselbe rohe ID immer denselben Hash ergibt."""
-    if not raw_id:
-        return raw_id
-    return hashlib.sha256(f"{_ID_SALT}:{raw_id}".encode("utf-8")).hexdigest()[:16]
-
-
 def parse_rows(soup):
     """
     Liest die Bestellzeilen einer Seite.
 
     Zeilen mit der Klasse 'carOrderDeliveryDone' gelten als ausgeliefert
     (entspricht dem Forums-Filter 'Auslieferung erfolgt'), alle uebrigen als
-    offen. Stornierte Bestellungen (Klasse 'carOrderCanceled') wurden frueher
-    komplett verworfen -- dabei markiert das Forum sie bereits explizit als
-    solche. Sie werden jetzt mit erfasst (als eigener Status, siehe main()),
-    damit die Stornierungsquote im Methodik-Panel auf einer echten Beobachtung
-    beruht statt auf der Vermutung "aus dem Log verschwunden = wahrscheinlich
-    storniert". Als Nebeneffekt laesst sich damit spaeter pruefen, ob
-    besonders lange Wartezeiten das Stornierungsrisiko erhoehen -- bisher nur
-    eine Annahme in der Datenqualitaets-Warnung, nie an echten Daten geprueft.
+    offen. Stornierte Bestellungen werden immer verworfen.
 
     Die ausgelieferten Bestellungen bilden die statistische Basis; die offenen
     werden gebraucht, damit Nutzer ihre eigene laufende Bestellung
@@ -169,7 +126,8 @@ def parse_rows(soup):
     out = []
     for tr in soup.select("tbody tr[data-object-id]"):
         classes = tr.get("class", [])
-        storniert = "carOrderCanceled" in classes
+        if "carOrderCanceled" in classes:
+            continue
         delivered = "carOrderDeliveryDone" in classes
 
         tds = tr.find_all("td")
@@ -197,9 +155,8 @@ def parse_rows(soup):
         # publizierten Dashboard erzeugen. tds[4] wird daher komplett ignoriert.
 
         out.append({
-            "ID": hash_id(tr.get("data-object-id", "")),
+            "ID": tr.get("data-object-id", ""),
             "Ausgeliefert": delivered,
-            "Storniert": storniert,
             "Bestelldatum": bestelldatum,
             "Lieferdatum": lieferdatum,
             "Land": land,
@@ -210,7 +167,6 @@ def parse_rows(soup):
             "Wartezeit": clean(tds[9].get_text(" ")),
         })
     return out
-
 
 
 def parse_de_date(s):
@@ -473,13 +429,6 @@ _SIMILARITY_BOOL_KEYS = ["Waermepumpe"]
 # (Details siehe predict_delivery() und backtest.py).
 _CENSORING_CORRECTION = False
 
-# Wird bei jedem Build von backtest.calibrate_confidence_bands() gesetzt:
-# Aufweitungsfaktor je Konfidenzband (50/80/95%), nur wenn per Rueckblick-Test
-# auf nie gesehenen Daten bestaetigt (siehe predict_delivery()). 1.0 = keine
-# Aenderung. Als Dict statt Einzelwert, da jedes Band unabhaengig getestet
-# und aktiviert/verworfen wird.
-_BAND_CALIBRATION = {"50": 1.0, "80": 1.0, "95": 1.0}
-
 
 def _base_similarity(a, b):
     """
@@ -719,27 +668,6 @@ def predict_delivery(order, delivered, open_orders, now_ts):
         p10_tc += blend_delta; p90_tc += blend_delta
         p2_5_tc += blend_delta; p97_5_tc += blend_delta
 
-    # ---- Konfidenzband-Kalibrierung ----
-    # Per Rueckblick-Test gemessen: das 50%-Band traf die tatsaechliche
-    # Wartezeit nur in ~34-45% statt der versprochenen 50% -- unabhaengig
-    # vom Median-Fehler, ein eigenstaendiges Genauigkeitsproblem (falsche
-    # Sicherheit statt falscher Punktwert). _BAND_CALIBRATION wird bei jedem
-    # Build von backtest.calibrate_confidence_bands() neu bestimmt und nur
-    # je Band aktiviert, wenn die Aufweitung sich auf nie gesehenen Daten
-    # nachweislich verbessert (siehe dortiger Kommentar) -- bei einer
-    # Bisektion auf der aelteren Historie zeigte sich fuer 50%/80% echte
-    # zeitliche Instabilitaet: der gefittete Faktor verschlechterte die
-    # Kalibrierung auf juengeren Daten, wurde also zurecht verworfen.
-    def _widen(median, lo, hi, band_key):
-        scale = _BAND_CALIBRATION.get(band_key, 1.0)
-        if scale == 1.0:
-            return lo, hi
-        return median - (median - lo) * scale, median + (hi - median) * scale
-
-    p25_tc, p75_tc = _widen(median_tc, p25_tc, p75_tc, "50")
-    p10_tc, p90_tc = _widen(median_tc, p10_tc, p90_tc, "80")
-    p2_5_tc, p97_5_tc = _widen(median_tc, p2_5_tc, p97_5_tc, "95")
-
     median_tc = max(0, median_tc)
 
     def date_for(d):
@@ -836,7 +764,7 @@ _PREDICTION_FIELD_KEYS = (
 )
 
 
-def update_prediction_log(log, delivered, open_orders, cancelled, now_ts):
+def update_prediction_log(log, delivered, open_orders, now_ts):
     """
     Aktualisiert das Prognose-Log:
       - neue offene Bestellungen bekommen eine Erstprognose, die zusaetzlich
@@ -849,19 +777,8 @@ def update_prediction_log(log, delivered, open_orders, cancelled, now_ts):
         dem tatsaechlichen Ergebnis aufgeloest; die Abweichung wird gegen die
         eingefrorene ORIGINAL-Prognose gemessen, nicht gegen die zuletzt
         berechnete — sonst waere die Genauigkeits-Messung nicht mehr fair
-      - offene Bestellungen, die inzwischen als storniert erkannt wurden
-        (Forums-Klasse carOrderCanceled), werden als "storniert" aufgeloest —
-        vorher gab es dafuer keine eigene Kategorie, eine stornierte
-        Bestellung landete ununterscheidbar im Topf "entfernt" (Grund
-        unbekannt). Weil LoggedAt (erstes Sichten als offen) und ResolvedAt
-        (Sichten als storniert) beide vorhanden sind, ergibt sich daraus mit
-        der Zeit ganz nebenbei ein echter Datensatz "wie lange gewartet, bevor
-        storniert wurde" -- bisher nur eine unbelegte Vermutung im
-        Datenqualitaets-Hinweis.
-      - offene Bestellungen, die aus anderem Grund verschwunden sind (z.B.
-        Forums-Bereinigung, Darstellungsfehler), werden weiterhin als
-        "entfernt" (Grund unbekannt) markiert -- dieser Topf sollte durch die
-        obige Praezisierung nun deutlich kleiner werden
+      - offene Bestellungen, die verschwunden sind (z.B. storniert), werden
+        entsprechend markiert
       - Log-Eintraege von VOR diesem Update (denen die "Original*"-Felder
         noch fehlen) werden einmalig migriert, siehe
         _migrate_add_original_snapshot unten
@@ -869,18 +786,13 @@ def update_prediction_log(log, delivered, open_orders, cancelled, now_ts):
     """
     delivered_by_id = {r["ID"]: r for r in delivered}
     open_by_id = {r["ID"]: r for r in open_orders}
-    cancelled_by_id = {r["ID"]: r for r in cancelled}
 
     new_logged = resolved_now = 0
 
-    # Einmalige Migrationen: rohe IDs auf den gehashten Schluessel umziehen
-    # (siehe hash_id()), danach alten Eintraegen die "Original*"-Felder
-    # nachtragen.
-    ids_migrated = _migrate_hash_ids(log)
+    # Einmalige Migration: alten Eintraegen die "Original*"-Felder nachtragen.
     original_migrated = _migrate_add_original_snapshot(log)
 
-    # Bereits offene Log-Eintraege pruefen: ausgeliefert, storniert oder
-    # anderweitig verschwunden?
+    # Bereits offene Log-Eintraege pruefen: ausgeliefert oder verschwunden?
     for lid, entry in log.items():
         if entry.get("Status") != "offen":
             continue
@@ -893,13 +805,16 @@ def update_prediction_log(log, delivered, open_orders, cancelled, now_ts):
             baseline = entry.get("OriginalPredictedMedianDays")
             if baseline is not None:
                 entry["DeviationDays"] = d["WartezeitTage"] - baseline
-            community_days = entry.get("CommunityEstimateDays")
-            if community_days is not None:
-                entry["CommunityEstimateDeviationDays"] = d["WartezeitTage"] - community_days
+            # Vergleich gegen die Forums-eigene "voraussichtliches Lieferdatum"-
+            # Angabe (CommunityEstimateDays), sofern beim erstmaligen Erfassen
+            # eine lesbare Angabe vorlag (siehe unten, is_new-Zweig). Nur dann
+            # ist der Vergleich fair -- die Forums-Angabe wird wie unsere
+            # eigene Original-Prognose eingefroren, nicht nachtraeglich neu
+            # bewertet.
+            community_baseline = entry.get("CommunityEstimateDays")
+            if community_baseline is not None:
+                entry["CommunityDeviationDays"] = d["WartezeitTage"] - community_baseline
             resolved_now += 1
-        elif lid in cancelled_by_id:
-            entry["Status"] = "storniert"
-            entry["ResolvedAt"] = now_ts
         elif lid not in open_by_id:
             entry["Status"] = "entfernt"
             entry["ResolvedAt"] = now_ts
@@ -912,22 +827,6 @@ def update_prediction_log(log, delivered, open_orders, cancelled, now_ts):
     for oid, order in open_by_id.items():
         is_new = oid not in log
         if is_new:
-            # The forum's own "voraussichtliches Lieferdatum" field (shown in
-            # the UI as "Eigene Angabe im Forum") is only populated while an
-            # order is open -- it gets cleared once delivered, so there is
-            # currently no historical case where both this estimate AND the
-            # real outcome are known, which means it can't be backtested yet.
-            # Freezing it now (the same way OriginalPredicted* is frozen)
-            # means that once enough of today's open orders resolve, we will
-            # have a genuine paired dataset to test whether the community's
-            # own estimate carries any signal our model doesn't already have
-            # -- rather than guessing either way.
-            community_days = None
-            voraus_ts = parse_de_date(order.get("VorausLieferdatum", ""))
-            if voraus_ts is not None and order.get("BestelldatumTS") is not None:
-                voraus_ts_ms = int(datetime(voraus_ts.year, voraus_ts.month,
-                                            voraus_ts.day).timestamp() * 1000)
-                community_days = round((voraus_ts_ms - order["BestelldatumTS"]) / DAY_MS)
             log[oid] = {
                 "ID": oid,
                 "Modell": order.get("Modell", ""),
@@ -940,9 +839,20 @@ def update_prediction_log(log, delivered, open_orders, cancelled, now_ts):
                 "ActualDate": None,
                 "ActualWaitDays": None,
                 "DeviationDays": None,
-                "CommunityEstimateDays": community_days,
-                "CommunityEstimateDeviationDays": None,
             }
+            # Community-Schätzung (Offener Punkt 5 der Projektübergabe): die
+            # Forums-eigene "voraussichtliches Lieferdatum"-Angabe wird beim
+            # ERSTEN Erfassen einer Bestellung eingefroren, genau wie unsere
+            # eigene Original-Prognose. Ohne Einfrieren würde ein späterer
+            # Vergleich unfair: die Forums-Angabe könnte der Nutzer selbst
+            # laufend nachjustiert haben, während sich die Wartezeit schon
+            # abzeichnete -- das wäre kein Vorab-Vergleich mehr.
+            voraus_str = order.get("VorausLieferdatum")
+            order_date = parse_de_date(order.get("Bestelldatum"))
+            voraus_date = parse_de_date(voraus_str) if voraus_str else None
+            if order_date and voraus_date:
+                log[oid]["CommunityEstimateDate"] = voraus_str
+                log[oid]["CommunityEstimateDays"] = (voraus_date - order_date).days
             new_logged += 1
         entry = log[oid]
 
@@ -954,7 +864,7 @@ def update_prediction_log(log, delivered, open_orders, cancelled, now_ts):
             recalculated += 1
 
     personal_data_stripped = _migrate_strip_personal_data(log)
-    return new_logged, resolved_now, recalculated, original_migrated, personal_data_stripped, ids_migrated
+    return new_logged, resolved_now, recalculated, original_migrated, personal_data_stripped
 
 
 def _migrate_add_original_snapshot(log):
@@ -1007,30 +917,6 @@ def _migrate_strip_personal_data(log):
     return stripped
 
 
-def _migrate_hash_ids(log):
-    """
-    Einmalige Migration: bestehende Log-Eintraege waren unter der rohen
-    Forums-ID (z.B. "12345") indiziert, da hash_id() erst nachtraeglich
-    eingefuehrt wurde. Ordnet sie auf den gehashten Schluessel um, ohne
-    Historie (eingefrorene Original-Prognosen, Aufloesungs-Status) zu
-    verlieren. Heuristik: eine rohe Forums-ID besteht nur aus Ziffern, ein
-    Hash (Hex-String) enthaelt mit hoher Wahrscheinlichkeit auch Buchstaben
-    -- daher ist diese Migration nach einmaligem Durchlauf ein No-Op.
-    """
-    migrated = 0
-    for old_key in list(log.keys()):
-        if not old_key.isdigit():
-            continue
-        new_key = hash_id(old_key)
-        if new_key == old_key or new_key in log:
-            continue
-        entry = log.pop(old_key)
-        entry["ID"] = new_key
-        log[new_key] = entry
-        migrated += 1
-    return migrated
-
-
 def merge_log_into_records(log, delivered, open_orders):
     """
     Reichert die Ausgabe-Datensaetze mit den geloggten Prognosefeldern an.
@@ -1055,7 +941,8 @@ def merge_log_into_records(log, delivered, open_orders):
         if "LoggedAt" in entry:
             r["LoggedAt"] = entry["LoggedAt"]
 
-    resolved_extra = ("DeviationDays", "ResolvedAt", "ActualDate", "ActualWaitDays")
+    resolved_extra = ("DeviationDays", "ResolvedAt", "ActualDate", "ActualWaitDays",
+                      "CommunityEstimateDays", "CommunityEstimateDate", "CommunityDeviationDays")
     for r in delivered:
         entry = log.get(r["ID"])
         if not entry or entry.get("Status") != "eingetroffen":
@@ -1146,8 +1033,7 @@ def main():
         by_id[r["ID"]] = r
     def page_note(rows):
         done = sum(1 for r in rows if r["Ausgeliefert"])
-        storniert = sum(1 for r in rows if r["Storniert"])
-        return f"{done:3d} ausgeliefert, {len(rows) - done - storniert:3d} offen, {storniert:3d} storniert"
+        return f"{done:3d} ausgeliefert, {len(rows) - done:3d} offen"
 
     print(f"  Seite  1/{total_pages}: {page_note(rows)}")
 
@@ -1164,13 +1050,11 @@ def main():
 
     records = list(by_id.values())
     n_done = sum(1 for r in records if r["Ausgeliefert"])
-    n_storniert = sum(1 for r in records if r["Storniert"])
     print(f"\n{len(records)} eindeutige Bestellungen "
-          f"({n_done} ausgeliefert, {len(records) - n_done - n_storniert} offen, "
-          f"{n_storniert} storniert).")
+          f"({n_done} ausgeliefert, {len(records) - n_done} offen).")
 
     # Aufbereiten
-    delivered, open_orders, cancelled = [], [], []
+    delivered, open_orders = [], []
     skipped = 0
     for r in records:
         order_date = parse_de_date(r["Bestelldatum"])
@@ -1192,14 +1076,7 @@ def main():
         }
         rec.update(harmonize(r["Ausstattung"]))
 
-        if r["Storniert"]:
-            # Nicht in delivered/open_orders: eine stornierte Bestellung ist
-            # weder Teil der statistischen Vergleichsbasis noch eine aktive
-            # Bestellung, die noch in der Warteschlange steht (faelschlich in
-            # open_orders mitgezaehlt wuerde sie die Warteschlangen-Schaetzung
-            # verfaelschen). Nur fuers Prognose-Log gebraucht, siehe unten.
-            cancelled.append(rec)
-        elif r["Ausgeliefert"]:
+        if r["Ausgeliefert"]:
             days = waiting_days(r["Wartezeit"])
             if days is None:
                 skipped += 1
@@ -1233,8 +1110,8 @@ def main():
     # inzwischen ausgelieferte werden mit dem tatsaechlichen Ergebnis aufgeloest.
     now_ts = int(datetime.now().timestamp() * 1000)
     log = load_log()
-    new_logged, resolved_now, recalculated, original_migrated, personal_data_stripped, ids_migrated = update_prediction_log(
-        log, delivered, open_orders, cancelled, now_ts)
+    new_logged, resolved_now, recalculated, original_migrated, personal_data_stripped = update_prediction_log(
+        log, delivered, open_orders, now_ts)
     save_log(log)
     merge_log_into_records(log, delivered, open_orders)
 
@@ -1248,8 +1125,6 @@ def main():
         print(f"  Einmalig migriert (Original-Prognose nachgetragen): {original_migrated}")
     if personal_data_stripped:
         print(f"  Einmalig bereinigt (Benutzername/Profil-Link entfernt, DSGVO): {personal_data_stripped}")
-    if ids_migrated:
-        print(f"  Einmalig migriert (rohe ID durch Hash ersetzt, Datenschutz): {ids_migrated}")
     if resolved_all:
         mae = sum(abs(e["DeviationDays"]) for e in resolved_all) / len(resolved_all)
         within2w = sum(1 for e in resolved_all if abs(e["DeviationDays"]) <= 14) / len(resolved_all)
@@ -1289,15 +1164,6 @@ def main():
     print(f"  -> Korrektur {censoring_report['decision']} "
           f"({censoring_report['reason']})")
 
-    print("\nKalibriere Konfidenzbaender (50/80/95%) gegen nie gesehene Daten...")
-    global _BAND_CALIBRATION
-    _BAND_CALIBRATION, band_report = backtest.calibrate_confidence_bands(
-        delivered, open_orders, predict_delivery)
-    for _bk, _bv in band_report.items():
-        _status = f"aktiv, x{_bv['scale']}" if _bv["enabled"] else "inaktiv"
-        print(f"  {_bk}%-Band: Trefferquote {_bv['coverage_before']*100:.1f}% "
-              f"-> {_bv['coverage_after']*100:.1f}% (Ziel {int(_bv['target']*100)}%) — {_status}")
-
     print("\nRueckblick-Test (simulierte Prognosen fuer bereits ausgelieferte Bestellungen)...")
     bt_results = backtest.run_backtest(delivered, predict_delivery, _SIMILARITY_BOOL_KEYS,
                                        open_orders=open_orders)
@@ -1318,30 +1184,21 @@ def main():
     # Stornos)? Das ist eine mögliche Quelle fuer einen leichten
     # Optimismus-Bias in den Referenzdaten, siehe Methodik-Hinweis im
     # Dashboard.
-    # "storniert" ist jetzt eine direkt beobachtete Kategorie (Forums-Klasse
-    # carOrderCanceled), keine Vermutung mehr. "entfernt" bleibt als Restgroesse
-    # fuer Faelle, die aus unbekanntem Grund verschwinden (z.B. Forums-
-    # Bereinigung) -- sollte durch die Praezisierung spuerbar kleiner werden.
-    storniert_count = sum(1 for e in log.values() if e.get("Status") == "storniert")
     entfernt_count = sum(1 for e in log.values() if e.get("Status") == "entfernt")
     eingetroffen_count = sum(1 for e in log.values() if e.get("Status") == "eingetroffen")
-    tracked_total = storniert_count + entfernt_count + eingetroffen_count
+    tracked_total = entfernt_count + eingetroffen_count
     data_quality = {
-        "storniert_count": storniert_count,
         "entfernt_count": entfernt_count,
         "eingetroffen_count": eingetroffen_count,
-        "storniert_rate": round(storniert_count / tracked_total, 4) if tracked_total else None,
         "entfernt_rate": round(entfernt_count / tracked_total, 4) if tracked_total else None,
     }
     if tracked_total:
-        print(f"\nDaten-Guete: {storniert_count} von {tracked_total} beobachteten offenen "
-              f"Bestellungen wurden storniert ({data_quality['storniert_rate']*100:.1f}%); "
-              f"{entfernt_count} weitere sind aus unbekanntem Grund verschwunden "
-              f"({data_quality['entfernt_rate']*100:.1f}%).")
+        print(f"\nDaten-Guete: {entfernt_count} von {tracked_total} beobachteten offenen "
+              f"Bestellungen sind aus der Forumsliste verschwunden, ohne als ausgeliefert "
+              f"aufzutauchen ({data_quality['entfernt_rate']*100:.1f}%).")
 
     methodology = {"backtest": bt_summary, "data_quality": data_quality,
-                   "censoring_correction": censoring_report,
-                   "band_calibration": {"factors": _BAND_CALIBRATION, "report": band_report}}
+                   "censoring_correction": censoring_report}
 
     final = delivered + open_orders
     data_stand = date.today().strftime("%d.%m.%Y")

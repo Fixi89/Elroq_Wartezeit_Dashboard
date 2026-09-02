@@ -1303,6 +1303,59 @@
 
   const FORECAST_MONTHS = 3;
 
+  // ---- Trend-Warnhinweis für die persönliche Prognose ----
+  // Die Verlauf-Sektion zeigt den Trend schon in einem eigenen Diagramm, aber
+  // nur wer dort hinscrollt, sieht ihn. Wer direkt nach seiner persönlichen
+  // Prognose sucht, sieht sonst nur eine nackte Zahl, obwohl unser
+  // Algorithmus (siehe Methodik) rückwärtsblickend ist und Trendwenden
+  // zwangsläufig hinterherhinkt. Deshalb hier ein zweiter, unabhängig vom
+  // aktuellen Filter berechneter Trend-Check auf der GESAMTEN Historie, der
+  // bei klar steigender Tendenz eine kurze Warnung direkt bei der
+  // Einzelprognose einblendet.
+  // Bewusst einfacher als der Rückblick-Test/das Kohorten-Verfahren in
+  // backtest.py: hier geht es nur um ein grobes "Vorsicht, aktuell steigend"-
+  // Signal, nicht um eine weitere Prognose-Komponente.
+  const TREND_WARNING_THRESHOLD_DAYS_PER_MONTH = 3;
+  const TREND_WARNING_SKIP_RECENT_MONTHS = 2; // juengste Monate: Survivorship (siehe Methodik)
+
+  function computeRecentTrendWarning(){
+    const byMonth = {};
+    DATA.forEach(r => {
+      const k = monthKey(r.BestelldatumTS);
+      (byMonth[k] = byMonth[k] || []).push(r.WartezeitTage);
+    });
+    let keys = Object.keys(byMonth).map(Number).sort((a, b) => a - b);
+    // Juengste Monate abschneiden: dort ist erst ein kleiner, systematisch
+    // schnellerer Teil ausgeliefert (siehe Methodik-Panel) -- ohne das
+    // wuerde der Trend hier faelschlich zu niedrig bzw. fallend aussehen.
+    keys = keys.slice(0, Math.max(0, keys.length - TREND_WARNING_SKIP_RECENT_MONTHS));
+    // Nur auf den letzten Monaten fitten -- ein alter Boom-Bust-Zyklus soll
+    // eine aktuelle Trendwende nicht verdecken (siehe Kommentar in
+    // predict_delivery() zur verworfenen Trend-Korrektur).
+    const RECENT_WINDOW = 6;
+    keys = keys.slice(-RECENT_WINDOW);
+    if (keys.length < 3) return null;
+    const avgs = keys.map(k => {
+      const vals = byMonth[k];
+      return vals.reduce((a, b) => a + b, 0) / vals.length;
+    });
+    const reg = linearRegression(avgs);
+    if (!reg) return null;
+    return { slopePerMonth: reg.slope, months: keys.length };
+  }
+
+  const RECENT_TREND = computeRecentTrendWarning();
+
+  function trendWarningHtml(){
+    if (!RECENT_TREND || RECENT_TREND.slopePerMonth < TREND_WARNING_THRESHOLD_DAYS_PER_MONTH) return '';
+    return `<div class="lk-trend-warning">
+      ⚠️ Die Wartezeiten sind in den letzten ${RECENT_TREND.months} Bestellmonaten spürbar gestiegen
+      (ca. ${Math.round(RECENT_TREND.slopePerMonth)} Tage pro Monat). Unsere Prognose blickt auf vergangene
+      Bestellungen zurück und kann einer solchen Entwicklung etwas hinterherhinken — plane lieber mit dem
+      oberen Ende des Korridors.
+    </div>`;
+  }
+
   function renderTrendChart(filtered){
     const svg = document.getElementById('trendChart');
     const isNarrow = window.matchMedia('(max-width: 980px)').matches;
@@ -1549,7 +1602,59 @@
     table.innerHTML = html;
   }
 
-  // ---- Feature ranking: which attributes correlate most with wait time ----
+  // ---- Breakdown by Land (Region-Vergleich) ----
+  // Gleiche Bauweise wie renderBreakdown() oben, nur nach Land statt Modell
+  // gruppiert. Eine Mindestgröße pro Land blendet Länder mit nur 1-2
+  // Bestellungen aus -- deren "Durchschnitt" wäre nur Rauschen und würde in
+  // der Balkengrafik eine falsche Präzision vorgaukeln.
+  const LAND_BREAKDOWN_MIN_N = 8;
+
+  function renderLandBreakdown(filtered){
+    const table = document.getElementById('landBreakdownTable');
+    if (!table) return;
+    if (filtered.length === 0){
+      table.innerHTML = `<tr><td class="empty-state">Keine Bestellungen für diese Filterkombination.</td></tr>`;
+      return;
+    }
+    const groups = {};
+    filtered.forEach(r => {
+      const key = r.Land || 'Unbekannt';
+      if (!groups[key]) groups[key] = [];
+      groups[key].push(r.WartezeitTage);
+    });
+    const rows = Object.entries(groups)
+      .filter(([, times]) => times.length >= LAND_BREAKDOWN_MIN_N)
+      .map(([land, times]) => {
+        const n = times.length;
+        const avg = times.reduce((a,b)=>a+b,0)/n;
+        return { land, n, avg };
+      }).sort((a,b) => b.avg - a.avg);
+
+    if (!rows.length){
+      table.innerHTML = `<tr><td class="empty-state">Noch keine Länder mit ausreichend Datengrundlage (mind. ${LAND_BREAKDOWN_MIN_N} Bestellungen) in dieser Auswahl.</td></tr>`;
+      return;
+    }
+
+    const maxAvg = Math.max(...rows.map(r=>r.avg));
+
+    let html = `<thead><tr><th>Land</th><th>Anzahl</th><th>Ø Wartezeit</th><th></th></tr></thead><tbody>`;
+    rows.forEach(r => {
+      html += `<tr>
+        <td>${landCell(r.land)}</td>
+        <td class="mono">${r.n}</td>
+        <td class="mono">${Math.round(r.avg)} Tage</td>
+        <td>
+          <div class="bar-cell">
+            <div class="bar-track"><div class="bar-fill" style="width:${(r.avg/maxAvg*100).toFixed(0)}%"></div></div>
+          </div>
+        </td>
+      </tr>`;
+    });
+    html += `</tbody>`;
+    table.innerHTML = html;
+  }
+
+
   // Compares the average wait of orders WITH a given attribute against all
   // OTHERS, for every boolean option and every category of the relevant
   // categorical fields. This is a correlation view, not a causal model — the
@@ -2293,6 +2398,23 @@
     return 'q-low';
   }
 
+  // Vertrauens-Indikator: das Badge zeigte bisher nur "N Referenzen" in
+  // einer Farbe — die Farbe allein sagt niemandem ohne Vorwissen, ob N gut
+  // oder schlecht ist. Ein kurzes Klartext-Label plus Tooltip macht explizit,
+  // wie belastbar diese eine Prognose ist, statt das nur über Grün/Gelb/Rot
+  // zu codieren (das zusätzlich für Farbenblinde unklar bliebe).
+  const QUALITY_INFO = {
+    'q-high': { label: 'hohe Verlässlichkeit', hint: 'Viele ähnliche, aktuelle Vergleichsbestellungen — die Prognose steht auf breiter Datenbasis.' },
+    'q-mid': { label: 'mittlere Verlässlichkeit', hint: 'Eine brauchbare, aber überschaubare Anzahl an Vergleichsbestellungen — die Prognose kann noch spürbar wackeln.' },
+    'q-low': { label: 'geringe Verlässlichkeit', hint: 'Nur wenige vergleichbare Bestellungen bisher — diese Prognose ist mit deutlicher Vorsicht zu genießen und kann sich mit mehr Daten noch stark verschieben.' },
+  };
+
+  function qualityBadge(p){
+    const q = p.tier.quality;
+    const info = QUALITY_INFO[q] || QUALITY_INFO['q-low'];
+    return `<span class="lk-quality ${q}" title="${escapeHtml(info.hint)}">${p.count} Referenzen · ${info.label}</span>`;
+  }
+
   // Country turned out to be the single strongest factor in the
   // feature-ranking analysis, so predictions are scoped to same-country
   // orders whenever there's enough data — this note makes that visible
@@ -2683,7 +2805,7 @@
         <div class="lk-head">
           <span class="lk-user">Bestellung vom ${escapeHtml(r.Bestelldatum || '–')}</span>
           <span class="lk-status">Auslieferung offen</span>
-          <span class="lk-quality ${p.tier.quality}">${p.count} Referenzen</span>
+          ${qualityBadge(p)}
         </div>
         <div class="lk-hero">
           <span class="lk-date">${fmtLong(p.dateMedian)}</span>
@@ -2694,6 +2816,7 @@
           &nbsp;·&nbsp; ${p.median} Tage Wartezeit (Spanne ${p.p25}–${p.p75})
         </div>
         <div class="confidence-fan-wrap">${confidenceFanSVG(p)}</div>
+        ${trendWarningHtml()}
         ${forumNote}
         ${configSummary(r)}
         ${sameConfigBlock(r)}
@@ -2969,7 +3092,7 @@
         <div class="lk-head">
           <span class="lk-user">Hypothetische Konfiguration</span>
           <span class="lk-status">Prognose</span>
-          <span class="lk-quality ${p.tier.quality}">${p.count} Referenzen</span>
+          ${qualityBadge(p)}
         </div>
         <div class="lk-hero">
           <span class="lk-date">${fmtLong(p.dateMedian)}</span>
@@ -2980,6 +3103,7 @@
           &nbsp;·&nbsp; Spanne ${p.p25}–${p.p75} Tage
         </div>
         <div class="confidence-fan-wrap">${confidenceFanSVG(p)}</div>
+        ${trendWarningHtml()}
         <p class="lk-sub" style="margin:10px 0 0;">${timing}</p>
         <p class="lk-config">
           <strong>${escapeHtml(modell)}</strong>
@@ -3122,9 +3246,16 @@
         sähe die Prognose künstlich zu pessimistisch aus.
       </p>
 
-      <div class="methodik-headline">
-        <div class="methodik-headline-num">± ${n.mae} Tage</div>
-        <div class="methodik-headline-lbl">so weit liegt die Prognose typischerweise neben der tatsächlichen Wartezeit</div>
+      <div class="methodik-headline-row">
+        <div class="methodik-headline">
+          <div class="methodik-headline-num">± ${n.mae} Tage</div>
+          <div class="methodik-headline-lbl">Ø Abweichung (Mittelwert) — wird von einzelnen Ausreißern nach oben gezogen</div>
+        </div>
+        ${n.median_ae != null ? `
+        <div class="methodik-headline methodik-headline-secondary">
+          <div class="methodik-headline-num">± ${n.median_ae} Tage</div>
+          <div class="methodik-headline-lbl">Median-Abweichung — bei der Hälfte aller Fälle liegt die Prognose näher dran als das</div>
+        </div>` : ''}
       </div>
       <p class="methodik-intro">
         ${biasSentence} Bei Wartezeiten, die oft mehrere Monate dauern, ist das eine grobe Orientierung für die
@@ -3239,6 +3370,72 @@
       </div>`;
   }
 
+  // ---- Community-Schätzung vs. eigene Prognose (Offener Punkt 5 der
+  // Projektübergabe) ----
+  // Vergleicht unsere Prognose mit der Forums-eigenen "voraussichtliches
+  // Lieferdatum"-Angabe, jeweils gegen dieselbe tatsächliche Wartezeit
+  // gemessen — und zwar nur für die Teilmenge, wo BEIDE Werte vorliegen,
+  // sonst wäre der Vergleich nicht fair (z.B. weil die Community-Schätzung
+  // erst seit kurzem erfasst wird und tendenziell aus jüngeren, evtl.
+  // untypischen Bestellungen besteht).
+  // CommunityEstimateDays wird erst seit kurzem beim ersten Erfassen einer
+  // offenen Bestellung eingefroren (siehe elroq_dashboard_update.py) — es
+  // kann also eine Weile dauern, bis hier überhaupt genug Fälle
+  // zusammenkommen.
+  const COMMUNITY_COMPARISON_MIN_N = 15;
+
+  function renderCommunityComparisonPanel(){
+    const el = document.getElementById('communityComparisonPanel');
+    if (!el) return;
+
+    const both = ALL_ORDERS.filter(r =>
+      r.CommunityDeviationDays !== undefined && r.CommunityDeviationDays !== null &&
+      r.DeviationDays !== undefined && r.DeviationDays !== null);
+
+    if (both.length < COMMUNITY_COMPARISON_MIN_N){
+      el.innerHTML = `<p class="empty-state">
+        Noch zu wenig Datengrundlage für einen fairen Vergleich (${both.length} von mind.
+        ${COMMUNITY_COMPARISON_MIN_N} benötigten Fällen, bei denen sowohl unsere Prognose als auch eine
+        Forums-Angabe zum voraussichtlichen Lieferdatum vorlagen und sich inzwischen aufgelöst haben).
+        Die Forums-Angabe wird seit kurzem bei jeder neu erfassten Bestellung mitgeloggt — diese Auswertung
+        füllt sich also von selbst, sobald mehr davon ausgeliefert wurden.</p>`;
+      return;
+    }
+
+    const ourMae = both.reduce((a, r) => a + Math.abs(r.DeviationDays), 0) / both.length;
+    const ourBias = both.reduce((a, r) => a + r.DeviationDays, 0) / both.length;
+    const commMae = both.reduce((a, r) => a + Math.abs(r.CommunityDeviationDays), 0) / both.length;
+    const commBias = both.reduce((a, r) => a + r.CommunityDeviationDays, 0) / both.length;
+    const ourWins = both.filter(r => Math.abs(r.DeviationDays) < Math.abs(r.CommunityDeviationDays)).length;
+    const commWins = both.filter(r => Math.abs(r.CommunityDeviationDays) < Math.abs(r.DeviationDays)).length;
+
+    const better = ourMae < commMae;
+    const verdict = better
+      ? `Auf dieser Datengrundlage liegt unsere Prognose im Schnitt <strong>näher an der Wahrheit</strong> als die
+         Forums-eigene Angabe.`
+      : `Auf dieser Datengrundlage liegt die Forums-eigene Angabe im Schnitt <strong>näher an der Wahrheit</strong>
+         als unsere Prognose — die Community-Schätzung liefert hier offenbar zusätzliches Signal.`;
+
+    el.innerHTML = `
+      <div class="accuracy-wrap">
+        <div class="accuracy-stats">
+          <div class="accuracy-stat"><div class="num mono">${both.length}</div><div class="lbl">Vergleichbare Fälle</div></div>
+          <div class="accuracy-stat"><div class="num mono ${better ? 'good' : ''}">±${Math.round(ourMae)}</div><div class="lbl">Unsere Ø Abweichung (Tage)</div></div>
+          <div class="accuracy-stat"><div class="num mono ${!better ? 'good' : ''}">±${Math.round(commMae)}</div><div class="lbl">Forums-Ø Abweichung (Tage)</div></div>
+          <div class="accuracy-stat"><div class="num mono">${ourWins} / ${commWins}</div><div class="lbl">Näher dran: wir / Forum</div></div>
+        </div>
+        <div class="accuracy-bias">
+          ${verdict} Tendenz: unsere Prognose ${fmtSigned(ourBias)} Tage, die Forums-Angabe ${fmtSigned(commBias)} Tage
+          (positiv = tatsächliche Wartezeit war länger als angegeben).
+        </div>
+        <p class="resolved-hint" style="margin-top:10px;">
+          Die Forums-Angabe wird beim ersten Erfassen einer offenen Bestellung eingefroren, genau wie unsere
+          eigene Erstprognose — beide werden also fair gegen dieselbe, zum damaligen Zeitpunkt noch unbekannte
+          tatsächliche Wartezeit gemessen.
+        </p>
+      </div>`;
+  }
+
   // ---- Personal-area tabs (Nachschlagen / Was-wäre-wenn) ----
   function initTabs(){
     const buttons = document.querySelectorAll('.tab-btn');
@@ -3311,6 +3508,7 @@
   initTabs();
   renderAccuracyPanel();
   renderMethodikPanel();
+  renderCommunityComparisonPanel();
 
   // ---- Mobile filter drawer ----
   const panelEl = document.getElementById('filterPanel');
@@ -3401,6 +3599,7 @@
     renderHistogram(filtered);
     renderTrendChart(filtered);
     renderBreakdown(filtered);
+    renderLandBreakdown(filtered);
     renderFeatureRanking(filtered);
     renderExtremes(filtered);
     renderTwins();
