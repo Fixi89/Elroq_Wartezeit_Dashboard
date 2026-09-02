@@ -1097,6 +1097,10 @@ def main():
         sys.exit("Keine auswertbaren Daten gefunden — Seitenstruktur geaendert?")
 
     # Ausreisser betreffen nur die statistische Basis (ausgelieferte Fahrzeuge).
+    # Wird vor dem Log-Merge unten gebraucht, um zu erkennen, ob eine bereits
+    # aufgeloeste Prognose durch den Ausreisser-Filter aus der Anzeige faellt.
+    pre_outlier_by_id = {r["ID"]: r for r in delivered}
+    low = high = None
     if args.keep_outliers:
         print("Ausreisser bleiben enthalten (--keep-outliers).")
     else:
@@ -1114,6 +1118,37 @@ def main():
         log, delivered, open_orders, now_ts)
     save_log(log)
     merge_log_into_records(log, delivered, open_orders)
+
+    # Diagnose: eine im Log als "eingetroffen" markierte Bestellung kann aus
+    # zwei Gruenden NICHT im Dashboard auftauchen, obwohl sie im Log korrekt
+    # aufgeloest ist -- beides passiert VOR merge_log_into_records() und war
+    # bisher unsichtbar, sobald es zuschlug:
+    #   1. Ausreisser-Filter: WartezeitTage liegt ausserhalb des aktuell
+    #      gueltigen Bereichs (der sich mit wachsenden Wartezeiten verschiebt)
+    #   2. Bestellung wurde in diesem Lauf gar nicht mehr gescraped (z.B.
+    #      Forums-Seitenstruktur geaendert, Eintrag von der Ergebnisseite
+    #      verschwunden)
+    resolved_ids = {lid for lid, e in log.items() if e.get("Status") == "eingetroffen"}
+    merged_ids = {r["ID"] for r in delivered if r.get("DeviationDays") is not None}
+    missing_ids = resolved_ids - merged_ids
+    if missing_ids:
+        outlier_filtered = [lid for lid in missing_ids if lid in pre_outlier_by_id]
+        not_rescraped = [lid for lid in missing_ids if lid not in pre_outlier_by_id]
+        print(f"\n⚠️  {len(missing_ids)} bereits aufgeloeste Prognose(n) fehlen im Dashboard:")
+        if outlier_filtered:
+            bounds_txt = f"{low:.0f}–{high:.0f} Tage" if low is not None else "unbekannt, da --keep-outliers aktiv"
+            print(f"  {len(outlier_filtered)} durch den Ausreisser-Filter entfernt "
+                  f"(gueltiger Bereich: {bounds_txt}):")
+            for lid in outlier_filtered[:10]:
+                d = pre_outlier_by_id[lid]
+                print(f"    ID {lid}: {d.get('WartezeitTage')} Tage "
+                      f"({d.get('Modell', '?')}, bestellt {d.get('Bestelldatum', '?')})")
+        if not_rescraped:
+            print(f"  {len(not_rescraped)} in diesem Lauf nicht mehr im Forum gefunden "
+                  f"(evtl. Seitenlimit --max-pages oder geaenderte Forumsstruktur):")
+            for lid in not_rescraped[:10]:
+                print(f"    ID {lid}")
+        print("  Tipp: mit --keep-outliers testen, ob sich das Bild dadurch aendert.")
 
     resolved_all = [e for e in log.values() if e.get("Status") == "eingetroffen"
                     and e.get("DeviationDays") is not None]
