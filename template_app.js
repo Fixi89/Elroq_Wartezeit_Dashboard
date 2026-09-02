@@ -3389,7 +3389,7 @@
     if (!el) return;
 
     const both = ALL_ORDERS.filter(r =>
-      r.CommunityDeviationDays !== undefined && r.CommunityDeviationDays !== null &&
+      r.CommunityEstimateDeviationDays !== undefined && r.CommunityEstimateDeviationDays !== null &&
       r.DeviationDays !== undefined && r.DeviationDays !== null);
 
     if (both.length < COMMUNITY_COMPARISON_MIN_N){
@@ -3404,10 +3404,10 @@
 
     const ourMae = both.reduce((a, r) => a + Math.abs(r.DeviationDays), 0) / both.length;
     const ourBias = both.reduce((a, r) => a + r.DeviationDays, 0) / both.length;
-    const commMae = both.reduce((a, r) => a + Math.abs(r.CommunityDeviationDays), 0) / both.length;
-    const commBias = both.reduce((a, r) => a + r.CommunityDeviationDays, 0) / both.length;
-    const ourWins = both.filter(r => Math.abs(r.DeviationDays) < Math.abs(r.CommunityDeviationDays)).length;
-    const commWins = both.filter(r => Math.abs(r.CommunityDeviationDays) < Math.abs(r.DeviationDays)).length;
+    const commMae = both.reduce((a, r) => a + Math.abs(r.CommunityEstimateDeviationDays), 0) / both.length;
+    const commBias = both.reduce((a, r) => a + r.CommunityEstimateDeviationDays, 0) / both.length;
+    const ourWins = both.filter(r => Math.abs(r.DeviationDays) < Math.abs(r.CommunityEstimateDeviationDays)).length;
+    const commWins = both.filter(r => Math.abs(r.CommunityEstimateDeviationDays) < Math.abs(r.DeviationDays)).length;
 
     const better = ourMae < commMae;
     const verdict = better

@@ -256,7 +256,16 @@ def _agg(devs):
     mae = sum(abs(d) for d in devs) / n
     bias = sum(devs) / n
     within14 = sum(1 for d in devs if abs(d) <= 14) / n
-    return {"n": n, "mae": round(mae, 1), "bias": round(bias, 1), "within14": round(within14, 3)}
+    # Median des ABSOLUTEN Fehlers (nicht zu verwechseln mit "bias" oben, das
+    # ist der Mittelwert der VORZEICHENBEHAFTETEN Abweichung). Der MAE wird
+    # von wenigen sehr weit danebenliegenden Prognosen stark nach oben
+    # gezogen; der Median ist robuster und oft die ehrlichere "typische
+    # Abweichung" fuer eine Nutzer-Anzeige.
+    abs_devs = sorted(abs(d) for d in devs)
+    mid = n // 2
+    median_ae = abs_devs[mid] if n % 2 else (abs_devs[mid - 1] + abs_devs[mid]) / 2
+    return {"n": n, "mae": round(mae, 1), "median_ae": round(median_ae, 1),
+            "bias": round(bias, 1), "within14": round(within14, 3)}
 
 
 def aggregate_backtest(results, segment_keys=("Modellgruppe", "Land")):
