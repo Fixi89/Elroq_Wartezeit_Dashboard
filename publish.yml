@@ -8,7 +8,18 @@ on:
     # "0 6 * * *" = 06:00 UTC = 07:00 MEZ (Winter) bzw. 08:00 MESZ (Sommer).
     # Bei Bedarf einfach die Uhrzeit hier anpassen.
     - cron: "0 6 * * *"
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      keep_outliers:
+        description: "Ausreisser NICHT entfernen (--keep-outliers, zum Testen/Diagnostizieren)"
+        required: false
+        type: boolean
+        default: false
+      no_push:
+        description: "Nur bauen, NICHT committen/pushen (sicherer Testlauf, siehe Konsolen-Log)"
+        required: false
+        type: boolean
+        default: false
 
 # Damit der Job im Repo committen und pushen darf.
 permissions:
@@ -35,17 +46,12 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
       - name: Dashboards bauen und veröffentlichen
-        # Nur Elroq, bis Enyaq wieder aufgenommen wird (siehe PROJEKT_UEBERGABE.md).
-        # Reaktivieren: einfach wieder auf "--vehicle both" ändern.
-        #
-        # ID_HASH_SALT: geheimes Salt fürs Hashen der internen Forums-ID vor
-        # der Veröffentlichung (siehe hash_id() in elroq_dashboard_update.py).
-        # Als Repository-Secret anlegen (Settings → Secrets and variables →
-        # Actions → "New repository secret", Name ID_HASH_SALT, ein beliebiger
-        # langer Zufallswert) — taucht dadurch nie im öffentlichen Repo auf.
-        # Ohne gesetztes Secret greift ein fest einprogrammierter Standard-
-        # Salt: besser als Klartext-IDs, aber kein Schutz gegen einen
-        # gezielten Angriff.
-        env:
-          ID_HASH_SALT: ${{ secrets.ID_HASH_SALT }}
-        run: python3 publish.py --vehicle elroq
+        # Die beiden Haekchen aus dem "Run workflow"-Dialog werden hier als
+        # zusaetzliche Flags durchgereicht -- bei einem normalen Cron-Lauf
+        # (kein workflow_dispatch) sind beide "inputs" leer/false, das
+        # Verhalten bleibt also unveraendert wie bisher.
+        run: >
+          python3 publish.py --vehicle both
+          ${{ inputs.keep_outliers && '--keep-outliers' || '' }}
+          ${{ inputs.no_push && '--no-push' || '' }}
+
