@@ -1372,7 +1372,7 @@
 </script>
 
 <script id="methodology-data" type="application/json">
-{"backtest": {"generated_at": 1788332284448, "n_tested": 1239, "new": {"n": 773, "mae": 207.4, "bias": 117.0, "within14": 0.04}, "old": {"n": 1239, "mae": 220.0, "bias": 110.4, "within14": 0.044}, "segments": {"Modellgruppe": [{"key": "Enyaq 80", "n": 280, "new_mae": 302.0, "new_bias": 269.8, "old_mae": 290.7, "old_bias": 252.5}, {"key": "Enyaq 85", "n": 167, "new_mae": 92.8, "new_bias": -6.3, "old_mae": 108.5, "old_bias": -27.9}, {"key": "Enyaq 60", "n": 102, "new_mae": 313.2, "new_bias": 256.3, "old_mae": 332.6, "old_bias": 232.7}, {"key": "Enyaq RS", "n": 85, "new_mae": 79.9, "new_bias": 18.7, "old_mae": 86.7, "old_bias": -38.1}, {"key": "Enyaq Coupe RS", "n": 46, "new_mae": 104.5, "new_bias": -84.8, "old_mae": 192.8, "old_bias": 100.2}, {"key": "Enyaq 85x", "n": 36, "new_mae": 114.8, "new_bias": -86.1, "old_mae": 150.2, "old_bias": -21.9}, {"key": "Enyaq 80x", "n": 29, "new_mae": 196.6, "new_bias": 50.7, "old_mae": 356.6, "old_bias": 327.6}, {"key": "Enyaq 50", "n": 14, "new_mae": 439.5, "new_bias": -406.5, "old_mae": 332.5, "old_bias": -231.6}], "Land": [{"key": "Deutschland", "n": 705, "new_mae": 213.6, "new_bias": 129.7, "old_mae": 223.2, "old_bias": 121.4}, {"key": "Österreich", "n": 34, "new_mae": 165.9, "new_bias": 33.6, "old_mae": 234.3, "old_bias": 40.7}, {"key": "Schweiz", "n": 23, "new_mae": 114.1, "new_bias": -38.1, "old_mae": 160.0, "old_bias": 10.3}]}}, "data_quality": {"storniert_count": 0, "entfernt_count": 0, "eingetroffen_count": 7, "storniert_rate": 0.0, "entfernt_rate": 0.0}, "censoring_correction": {"decision": "aus", "reason": "verbessert die mittlere Abweichung nicht", "off": {"n": 373, "mae": 92.3, "bias": -24.7, "within14": 0.064}, "on": {"n": 373, "mae": 108.1, "bias": -80.4, "within14": 0.064}}, "band_calibration": {"factors": {"50": 1.0, "80": 1.0, "95": 1.0}, "report": {"50": {"target": 0.5, "scale": 1.0, "enabled": false, "n_fit": 427, "n_val": 346, "coverage_before": 0.425, "coverage_after": 0.425}, "80": {"target": 0.8, "scale": 1.0, "enabled": false, "n_fit": 427, "n_val": 346, "coverage_before": 0.827, "coverage_after": 0.827}, "95": {"target": 0.95, "scale": 1.0, "enabled": false, "n_fit": 427, "n_val": 346, "coverage_before": 0.925, "coverage_after": 0.925}}}}
+{"backtest": {"generated_at": 1788333685286, "n_tested": 1239, "new": {"n": 773, "mae": 207.4, "median_ae": 159, "bias": 117.0, "within14": 0.04}, "old": {"n": 1239, "mae": 220.0, "median_ae": 206, "bias": 110.4, "within14": 0.044}, "segments": {"Modellgruppe": [{"key": "Enyaq 80", "n": 280, "new_mae": 302.0, "new_bias": 269.8, "old_mae": 290.7, "old_bias": 252.5}, {"key": "Enyaq 85", "n": 167, "new_mae": 92.8, "new_bias": -6.3, "old_mae": 108.5, "old_bias": -27.9}, {"key": "Enyaq 60", "n": 102, "new_mae": 313.2, "new_bias": 256.3, "old_mae": 332.6, "old_bias": 232.7}, {"key": "Enyaq RS", "n": 85, "new_mae": 79.9, "new_bias": 18.7, "old_mae": 86.7, "old_bias": -38.1}, {"key": "Enyaq Coupe RS", "n": 46, "new_mae": 104.5, "new_bias": -84.8, "old_mae": 192.8, "old_bias": 100.2}, {"key": "Enyaq 85x", "n": 36, "new_mae": 114.8, "new_bias": -86.1, "old_mae": 150.2, "old_bias": -21.9}, {"key": "Enyaq 80x", "n": 29, "new_mae": 196.6, "new_bias": 50.7, "old_mae": 356.6, "old_bias": 327.6}, {"key": "Enyaq 50", "n": 14, "new_mae": 439.5, "new_bias": -406.5, "old_mae": 332.5, "old_bias": -231.6}], "Land": [{"key": "Deutschland", "n": 705, "new_mae": 213.6, "new_bias": 129.7, "old_mae": 223.2, "old_bias": 121.4}, {"key": "Österreich", "n": 34, "new_mae": 165.9, "new_bias": 33.6, "old_mae": 234.3, "old_bias": 40.7}, {"key": "Schweiz", "n": 23, "new_mae": 114.1, "new_bias": -38.1, "old_mae": 160.0, "old_bias": 10.3}]}}, "data_quality": {"storniert_count": 0, "entfernt_count": 0, "eingetroffen_count": 7, "storniert_rate": 0.0, "entfernt_rate": 0.0}, "censoring_correction": {"decision": "aus", "reason": "verbessert die mittlere Abweichung nicht", "off": {"n": 373, "mae": 92.3, "bias": -24.7, "within14": 0.064}, "on": {"n": 373, "mae": 108.1, "bias": -80.4, "within14": 0.064}}, "band_calibration": {"factors": {"50": 1.0, "80": 1.0, "95": 1.0}, "report": {"50": {"target": 0.5, "scale": 1.0, "enabled": false, "n_fit": 427, "n_val": 346, "coverage_before": 0.425, "coverage_after": 0.425}, "80": {"target": 0.8, "scale": 1.0, "enabled": false, "n_fit": 427, "n_val": 346, "coverage_before": 0.827, "coverage_after": 0.827}, "95": {"target": 0.95, "scale": 1.0, "enabled": false, "n_fit": 427, "n_val": 346, "coverage_before": 0.925, "coverage_after": 0.925}}}}
 </script>
 
 <script>
@@ -4767,7 +4767,7 @@
     if (!el) return;
 
     const both = ALL_ORDERS.filter(r =>
-      r.CommunityDeviationDays !== undefined && r.CommunityDeviationDays !== null &&
+      r.CommunityEstimateDeviationDays !== undefined && r.CommunityEstimateDeviationDays !== null &&
       r.DeviationDays !== undefined && r.DeviationDays !== null);
 
     if (both.length < COMMUNITY_COMPARISON_MIN_N){
@@ -4782,10 +4782,10 @@
 
     const ourMae = both.reduce((a, r) => a + Math.abs(r.DeviationDays), 0) / both.length;
     const ourBias = both.reduce((a, r) => a + r.DeviationDays, 0) / both.length;
-    const commMae = both.reduce((a, r) => a + Math.abs(r.CommunityDeviationDays), 0) / both.length;
-    const commBias = both.reduce((a, r) => a + r.CommunityDeviationDays, 0) / both.length;
-    const ourWins = both.filter(r => Math.abs(r.DeviationDays) < Math.abs(r.CommunityDeviationDays)).length;
-    const commWins = both.filter(r => Math.abs(r.CommunityDeviationDays) < Math.abs(r.DeviationDays)).length;
+    const commMae = both.reduce((a, r) => a + Math.abs(r.CommunityEstimateDeviationDays), 0) / both.length;
+    const commBias = both.reduce((a, r) => a + r.CommunityEstimateDeviationDays, 0) / both.length;
+    const ourWins = both.filter(r => Math.abs(r.DeviationDays) < Math.abs(r.CommunityEstimateDeviationDays)).length;
+    const commWins = both.filter(r => Math.abs(r.CommunityEstimateDeviationDays) < Math.abs(r.DeviationDays)).length;
 
     const better = ourMae < commMae;
     const verdict = better

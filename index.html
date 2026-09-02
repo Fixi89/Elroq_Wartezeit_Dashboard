@@ -1372,7 +1372,7 @@
 </script>
 
 <script id="methodology-data" type="application/json">
-{"backtest": {"generated_at": 1788332244802, "n_tested": 431, "new": {"n": 360, "mae": 49.0, "bias": 4.8, "within14": 0.142}, "old": {"n": 431, "mae": 60.1, "bias": 39.8, "within14": 0.118}, "segments": {"Modellgruppe": [{"key": "Elroq 85", "n": 238, "new_mae": 50.7, "new_bias": 7.7, "old_mae": 63.8, "old_bias": 41.4}, {"key": "Elroq RS", "n": 59, "new_mae": 39.3, "new_bias": -1.6, "old_mae": 54.4, "old_bias": 49.0}, {"key": "Elroq 60", "n": 48, "new_mae": 59.2, "new_bias": -1.3, "old_mae": 68.4, "old_bias": 29.9}, {"key": "Elroq 50", "n": 13, "new_mae": 29.0, "new_bias": 3.8, "old_mae": 33.8, "old_bias": 15.2}], "Land": [{"key": "Deutschland", "n": 320, "new_mae": 46.4, "new_bias": 13.9, "old_mae": 64.1, "old_bias": 47.4}, {"key": "Österreich", "n": 27, "new_mae": 71.6, "new_bias": -68.7, "old_mae": 33.0, "old_bias": -18.2}, {"key": "Schweiz", "n": 13, "new_mae": 66.2, "new_bias": -66.2, "old_mae": 29.7, "old_bias": -5.0}]}}, "data_quality": {"storniert_count": 0, "entfernt_count": 788, "eingetroffen_count": 26, "storniert_rate": 0.0, "entfernt_rate": 0.9681}, "censoring_correction": {"decision": "an", "reason": "verbessert die mittlere Abweichung", "off": {"n": 213, "mae": 57.1, "bias": 32.5, "within14": 0.131}, "on": {"n": 213, "mae": 45.0, "bias": 0.7, "within14": 0.178}}, "band_calibration": {"factors": {"50": 1.0, "80": 1.0, "95": 3.0}, "report": {"50": {"target": 0.5, "scale": 1.0, "enabled": false, "n_fit": 188, "n_val": 172, "coverage_before": 0.442, "coverage_after": 0.442}, "80": {"target": 0.8, "scale": 1.0, "enabled": false, "n_fit": 188, "n_val": 172, "coverage_before": 0.727, "coverage_after": 0.727}, "95": {"target": 0.95, "scale": 3.0, "enabled": true, "n_fit": 188, "n_val": 172, "coverage_before": 0.82, "coverage_after": 1.0}}}}
+{"backtest": {"generated_at": 1788333648007, "n_tested": 431, "new": {"n": 360, "mae": 49.0, "median_ae": 44.0, "bias": 4.8, "within14": 0.142}, "old": {"n": 431, "mae": 60.1, "median_ae": 56, "bias": 39.8, "within14": 0.118}, "segments": {"Modellgruppe": [{"key": "Elroq 85", "n": 238, "new_mae": 50.7, "new_bias": 7.7, "old_mae": 63.8, "old_bias": 41.4}, {"key": "Elroq RS", "n": 59, "new_mae": 39.3, "new_bias": -1.6, "old_mae": 54.4, "old_bias": 49.0}, {"key": "Elroq 60", "n": 48, "new_mae": 59.2, "new_bias": -1.3, "old_mae": 68.4, "old_bias": 29.9}, {"key": "Elroq 50", "n": 13, "new_mae": 29.0, "new_bias": 3.8, "old_mae": 33.8, "old_bias": 15.2}], "Land": [{"key": "Deutschland", "n": 320, "new_mae": 46.4, "new_bias": 13.9, "old_mae": 64.1, "old_bias": 47.4}, {"key": "Österreich", "n": 27, "new_mae": 71.6, "new_bias": -68.7, "old_mae": 33.0, "old_bias": -18.2}, {"key": "Schweiz", "n": 13, "new_mae": 66.2, "new_bias": -66.2, "old_mae": 29.7, "old_bias": -5.0}]}}, "data_quality": {"storniert_count": 0, "entfernt_count": 788, "eingetroffen_count": 26, "storniert_rate": 0.0, "entfernt_rate": 0.9681}, "censoring_correction": {"decision": "an", "reason": "verbessert die mittlere Abweichung", "off": {"n": 213, "mae": 57.1, "bias": 32.5, "within14": 0.131}, "on": {"n": 213, "mae": 45.0, "bias": 0.7, "within14": 0.178}}, "band_calibration": {"factors": {"50": 1.0, "80": 1.0, "95": 3.0}, "report": {"50": {"target": 0.5, "scale": 1.0, "enabled": false, "n_fit": 188, "n_val": 172, "coverage_before": 0.442, "coverage_after": 0.442}, "80": {"target": 0.8, "scale": 1.0, "enabled": false, "n_fit": 188, "n_val": 172, "coverage_before": 0.727, "coverage_after": 0.727}, "95": {"target": 0.95, "scale": 3.0, "enabled": true, "n_fit": 188, "n_val": 172, "coverage_before": 0.82, "coverage_after": 1.0}}}}
 </script>
 
 <script>
@@ -4767,7 +4767,7 @@
     if (!el) return;
 
     const both = ALL_ORDERS.filter(r =>
-      r.CommunityDeviationDays !== undefined && r.CommunityDeviationDays !== null &&
+      r.CommunityEstimateDeviationDays !== undefined && r.CommunityEstimateDeviationDays !== null &&
       r.DeviationDays !== undefined && r.DeviationDays !== null);
 
     if (both.length < COMMUNITY_COMPARISON_MIN_N){
@@ -4782,10 +4782,10 @@
 
     const ourMae = both.reduce((a, r) => a + Math.abs(r.DeviationDays), 0) / both.length;
     const ourBias = both.reduce((a, r) => a + r.DeviationDays, 0) / both.length;
-    const commMae = both.reduce((a, r) => a + Math.abs(r.CommunityDeviationDays), 0) / both.length;
-    const commBias = both.reduce((a, r) => a + r.CommunityDeviationDays, 0) / both.length;
-    const ourWins = both.filter(r => Math.abs(r.DeviationDays) < Math.abs(r.CommunityDeviationDays)).length;
-    const commWins = both.filter(r => Math.abs(r.CommunityDeviationDays) < Math.abs(r.DeviationDays)).length;
+    const commMae = both.reduce((a, r) => a + Math.abs(r.CommunityEstimateDeviationDays), 0) / both.length;
+    const commBias = both.reduce((a, r) => a + r.CommunityEstimateDeviationDays, 0) / both.length;
+    const ourWins = both.filter(r => Math.abs(r.DeviationDays) < Math.abs(r.CommunityEstimateDeviationDays)).length;
+    const commWins = both.filter(r => Math.abs(r.CommunityEstimateDeviationDays) < Math.abs(r.DeviationDays)).length;
 
     const better = ourMae < commMae;
     const verdict = better
