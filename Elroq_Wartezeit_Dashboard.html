@@ -850,6 +850,11 @@
   .resolved-meta{ display:block; font-size:10.5px; color:var(--text-dim); margin-top:2px; }
   .resolved-meta.good{ color:var(--accent); }
   .resolved-meta.bad{ color:var(--danger); }
+  .resolved-winner{
+    display:inline-block; margin-left:6px; padding:1px 6px; border-radius:999px;
+    font-size:9px; text-transform:uppercase; letter-spacing:0.04em; font-weight:600;
+    background:rgba(var(--accent-rgb),0.16); color:var(--accent); vertical-align:middle;
+  }
 
   /* Sortierbare Spaltenköpfe der Einzelfall-Liste (siehe renderAccuracyPanel
      in template_app.js) */
@@ -1381,7 +1386,7 @@
 </script>
 
 <script id="methodology-data" type="application/json">
-{"backtest": {"generated_at": 1789107029605, "n_tested": 447, "new": {"n": 375, "mae": 48.2, "median_ae": 43, "bias": 3.9, "within14": 0.144}, "old": {"n": 447, "mae": 58.9, "median_ae": 54, "bias": 39.0, "within14": 0.123}, "segments": {"Modellgruppe": [{"key": "Elroq 85", "n": 245, "new_mae": 50.1, "new_bias": 6.6, "old_mae": 62.4, "old_bias": 40.2}, {"key": "Elroq RS", "n": 66, "new_mae": 37.2, "new_bias": -1.7, "old_mae": 53.4, "old_bias": 48.4}, {"key": "Elroq 60", "n": 49, "new_mae": 59.4, "new_bias": -2.6, "old_mae": 67.9, "old_bias": 28.8}, {"key": "Elroq 50", "n": 13, "new_mae": 29.0, "new_bias": 3.8, "old_mae": 33.8, "old_bias": 15.2}], "Land": [{"key": "Deutschland", "n": 335, "new_mae": 45.6, "new_bias": 12.5, "old_mae": 62.7, "old_bias": 46.1}, {"key": "Österreich", "n": 27, "new_mae": 71.6, "new_bias": -68.7, "old_mae": 33.0, "old_bias": -18.2}, {"key": "Schweiz", "n": 13, "new_mae": 66.2, "new_bias": -66.2, "old_mae": 29.7, "old_bias": -5.0}]}}, "data_quality": {"storniert_count": 0, "entfernt_count": 789, "eingetroffen_count": 26, "storniert_rate": 0.0, "entfernt_rate": 0.9681}, "censoring_correction": {"decision": "an", "reason": "verbessert die mittlere Abweichung", "off": {"n": 220, "mae": 54.3, "bias": 29.9, "within14": 0.159}, "on": {"n": 220, "mae": 43.6, "bias": -2.0, "within14": 0.182}}, "band_calibration": {"factors": {"50": 1.0, "80": 1.0, "95": 3.0}, "report": {"50": {"target": 0.5, "scale": 1.0, "enabled": false, "n_fit": 196, "n_val": 179, "coverage_before": 0.48, "coverage_after": 0.48}, "80": {"target": 0.8, "scale": 1.0, "enabled": false, "n_fit": 196, "n_val": 179, "coverage_before": 0.737, "coverage_after": 0.737}, "95": {"target": 0.95, "scale": 3.0, "enabled": true, "n_fit": 196, "n_val": 179, "coverage_before": 0.832, "coverage_after": 1.0}}}}
+{"backtest": {"generated_at": 1789107727685, "n_tested": 447, "new": {"n": 375, "mae": 48.2, "median_ae": 43, "bias": 3.9, "within14": 0.144}, "old": {"n": 447, "mae": 58.9, "median_ae": 54, "bias": 39.0, "within14": 0.123}, "segments": {"Modellgruppe": [{"key": "Elroq 85", "n": 245, "new_mae": 50.1, "new_bias": 6.6, "old_mae": 62.4, "old_bias": 40.2}, {"key": "Elroq RS", "n": 66, "new_mae": 37.2, "new_bias": -1.7, "old_mae": 53.4, "old_bias": 48.4}, {"key": "Elroq 60", "n": 49, "new_mae": 59.4, "new_bias": -2.6, "old_mae": 67.9, "old_bias": 28.8}, {"key": "Elroq 50", "n": 13, "new_mae": 29.0, "new_bias": 3.8, "old_mae": 33.8, "old_bias": 15.2}], "Land": [{"key": "Deutschland", "n": 335, "new_mae": 45.6, "new_bias": 12.5, "old_mae": 62.7, "old_bias": 46.1}, {"key": "Österreich", "n": 27, "new_mae": 71.6, "new_bias": -68.7, "old_mae": 33.0, "old_bias": -18.2}, {"key": "Schweiz", "n": 13, "new_mae": 66.2, "new_bias": -66.2, "old_mae": 29.7, "old_bias": -5.0}]}}, "data_quality": {"storniert_count": 0, "entfernt_count": 789, "eingetroffen_count": 26, "storniert_rate": 0.0, "entfernt_rate": 0.9681}, "censoring_correction": {"decision": "an", "reason": "verbessert die mittlere Abweichung", "off": {"n": 220, "mae": 54.3, "bias": 29.9, "within14": 0.159}, "on": {"n": 220, "mae": 43.6, "bias": -2.0, "within14": 0.182}}, "band_calibration": {"factors": {"50": 1.0, "80": 1.0, "95": 3.0}, "report": {"50": {"target": 0.5, "scale": 1.0, "enabled": false, "n_fit": 196, "n_val": 179, "coverage_before": 0.48, "coverage_after": 0.48}, "80": {"target": 0.8, "scale": 1.0, "enabled": false, "n_fit": 196, "n_val": 179, "coverage_before": 0.737, "coverage_after": 0.737}, "95": {"target": 0.95, "scale": 3.0, "enabled": true, "n_fit": 196, "n_val": 179, "coverage_before": 0.832, "coverage_after": 1.0}}}}
 </script>
 
 <script>
@@ -4759,14 +4764,24 @@
         // konnte (siehe CommunityEstimateDays in elroq_dashboard_update.py) —
         // bei älteren, schon vor der Einführung geloggten Bestellungen fehlt
         // sie schlicht.
+        const cdev = r.CommunityEstimateDeviationDays;
+        // Wer lag näher dran? Nur ermittelbar, wenn BEIDE Abweichungen
+        // vorliegen -- sonst gibt's nichts zum Vergleichen.
+        let ourWon = false, forumWon = false;
+        if (r.CommunityEstimateDays != null && cdev != null && dev != null){
+          if (Math.abs(dev) < Math.abs(cdev)) ourWon = true;
+          else if (Math.abs(cdev) < Math.abs(dev)) forumWon = true;
+          // bei exaktem Gleichstand bleibt beides false -- kein Gewinner
+        }
+        const winnerBadge = `<span class="resolved-winner" title="Lag näher an der tatsächlichen Wartezeit">näher dran</span>`;
+
         let forumCell = '<td class="mono resolved-muted">–</td>';
         if (r.CommunityEstimateDays != null){
-          const cdev = r.CommunityEstimateDeviationDays;
           if (cdev != null){
             const cCls = Math.abs(cdev) <= 14 ? 'good' : (Math.abs(cdev) <= 30 ? '' : 'bad');
             const cArrow = cdev > 0 ? '▲' : (cdev < 0 ? '▼' : '');
             forumCell = `<td class="mono">${r.CommunityEstimateDays} Tage
-              <span class="resolved-meta ${cCls}"><span class="resolved-arrow" aria-hidden="true">${cArrow}</span>${cdev > 0 ? '+' : (cdev < 0 ? '−' : '±')}${Math.abs(Math.round(cdev))} Tage Abw.</span></td>`;
+              <span class="resolved-meta ${cCls}"><span class="resolved-arrow" aria-hidden="true">${cArrow}</span>${cdev > 0 ? '+' : (cdev < 0 ? '−' : '±')}${Math.abs(Math.round(cdev))} Tage Abw.${forumWon ? winnerBadge : ''}</span></td>`;
           } else {
             forumCell = `<td class="mono">${r.CommunityEstimateDays} Tage</td>`;
           }
@@ -4778,7 +4793,7 @@
           <td class="mono">${r.PredictedMedianDays != null ? r.PredictedMedianDays + ' Tage' : '–'}</td>
           ${forumCell}
           <td class="mono">${r.ActualWaitDays != null ? r.ActualWaitDays + ' Tage' : '–'}</td>
-          <td class="mono ${cls}"><span class="resolved-arrow" aria-hidden="true">${arrow}</span>${dev > 0 ? '+' : (dev < 0 ? '−' : '±')}${Math.abs(Math.round(dev))} Tage</td>
+          <td class="mono ${cls}"><span class="resolved-arrow" aria-hidden="true">${arrow}</span>${dev > 0 ? '+' : (dev < 0 ? '−' : '±')}${Math.abs(Math.round(dev))} Tage${ourWon ? winnerBadge : ''}</td>
         </tr>`;
       }).join('');
     }
@@ -4792,7 +4807,8 @@
           <p class="resolved-hint">Was ursprünglich prognostiziert wurde (unsere Prognose und, falls vorhanden, die
             Forums-eigene Angabe zum voraussichtlichen Liefertermin) verglichen mit der tatsächlichen Wartezeit.
             Spaltenköpfe anklicken zum Sortieren. <strong>▲</strong> = hat länger gedauert als vorhergesagt/angegeben,
-            <strong>▼</strong> = ging schneller.</p>
+            <strong>▼</strong> = ging schneller. Die Markierung <span class="resolved-winner" style="margin-left:0;">näher dran</span>
+            zeigt, welche der beiden Schätzungen näher an der tatsächlichen Wartezeit lag (nur wenn beide vorliegen).</p>
           <div class="resolved-wrap">
             <table class="resolved-table" id="resolvedTable">
               <thead><tr>

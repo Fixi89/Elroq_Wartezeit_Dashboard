@@ -850,6 +850,11 @@
   .resolved-meta{ display:block; font-size:10.5px; color:var(--text-dim); margin-top:2px; }
   .resolved-meta.good{ color:var(--accent); }
   .resolved-meta.bad{ color:var(--danger); }
+  .resolved-winner{
+    display:inline-block; margin-left:6px; padding:1px 6px; border-radius:999px;
+    font-size:9px; text-transform:uppercase; letter-spacing:0.04em; font-weight:600;
+    background:rgba(var(--accent-rgb),0.16); color:var(--accent); vertical-align:middle;
+  }
 
   /* Sortierbare Spaltenköpfe der Einzelfall-Liste (siehe renderAccuracyPanel
      in template_app.js) */
@@ -1381,7 +1386,7 @@
 </script>
 
 <script id="methodology-data" type="application/json">
-{"backtest": {"generated_at": 1789107071307, "n_tested": 1243, "new": {"n": 777, "mae": 206.5, "median_ae": 158, "bias": 116.5, "within14": 0.042}, "old": {"n": 1243, "mae": 219.5, "median_ae": 204, "bias": 109.9, "within14": 0.045}, "segments": {"Modellgruppe": [{"key": "Enyaq 80", "n": 280, "new_mae": 302.0, "new_bias": 269.8, "old_mae": 290.7, "old_bias": 252.5}, {"key": "Enyaq 85", "n": 167, "new_mae": 92.8, "new_bias": -6.3, "old_mae": 108.5, "old_bias": -27.9}, {"key": "Enyaq 60", "n": 102, "new_mae": 313.2, "new_bias": 256.3, "old_mae": 332.6, "old_bias": 232.7}, {"key": "Enyaq RS", "n": 88, "new_mae": 77.8, "new_bias": 18.4, "old_mae": 84.8, "old_bias": -37.3}, {"key": "Enyaq Coupe RS", "n": 47, "new_mae": 103.0, "new_bias": -82.3, "old_mae": 193.1, "old_bias": 97.5}, {"key": "Enyaq 85x", "n": 36, "new_mae": 114.8, "new_bias": -86.1, "old_mae": 150.2, "old_bias": -21.9}, {"key": "Enyaq 80x", "n": 29, "new_mae": 196.6, "new_bias": 50.7, "old_mae": 356.6, "old_bias": 327.6}, {"key": "Enyaq 50", "n": 14, "new_mae": 439.5, "new_bias": -406.5, "old_mae": 332.5, "old_bias": -231.6}], "Land": [{"key": "Deutschland", "n": 707, "new_mae": 213.0, "new_bias": 129.3, "old_mae": 222.8, "old_bias": 121.2}, {"key": "Österreich", "n": 36, "new_mae": 158.5, "new_bias": 33.5, "old_mae": 230.8, "old_bias": 35.5}, {"key": "Schweiz", "n": 23, "new_mae": 114.1, "new_bias": -38.1, "old_mae": 160.0, "old_bias": 10.3}]}}, "data_quality": {"storniert_count": 0, "entfernt_count": 0, "eingetroffen_count": 11, "storniert_rate": 0.0, "entfernt_rate": 0.0}, "censoring_correction": {"decision": "aus", "reason": "verbessert die mittlere Abweichung nicht", "off": {"n": 375, "mae": 91.1, "bias": -23.5, "within14": 0.069}, "on": {"n": 375, "mae": 107.1, "bias": -79.5, "within14": 0.064}}, "band_calibration": {"factors": {"50": 1.0, "80": 1.0, "95": 1.0}, "report": {"50": {"target": 0.5, "scale": 1.0, "enabled": false, "n_fit": 428, "n_val": 349, "coverage_before": 0.43, "coverage_after": 0.43}, "80": {"target": 0.8, "scale": 1.0, "enabled": false, "n_fit": 428, "n_val": 349, "coverage_before": 0.828, "coverage_after": 0.828}, "95": {"target": 0.95, "scale": 1.0, "enabled": false, "n_fit": 428, "n_val": 349, "coverage_before": 0.926, "coverage_after": 0.926}}}}
+{"backtest": {"generated_at": 1789107768084, "n_tested": 1243, "new": {"n": 777, "mae": 206.5, "median_ae": 158, "bias": 116.5, "within14": 0.042}, "old": {"n": 1243, "mae": 219.5, "median_ae": 204, "bias": 109.9, "within14": 0.045}, "segments": {"Modellgruppe": [{"key": "Enyaq 80", "n": 280, "new_mae": 302.0, "new_bias": 269.8, "old_mae": 290.7, "old_bias": 252.5}, {"key": "Enyaq 85", "n": 167, "new_mae": 92.8, "new_bias": -6.3, "old_mae": 108.5, "old_bias": -27.9}, {"key": "Enyaq 60", "n": 102, "new_mae": 313.2, "new_bias": 256.3, "old_mae": 332.6, "old_bias": 232.7}, {"key": "Enyaq RS", "n": 88, "new_mae": 77.8, "new_bias": 18.4, "old_mae": 84.8, "old_bias": -37.3}, {"key": "Enyaq Coupe RS", "n": 47, "new_mae": 103.0, "new_bias": -82.3, "old_mae": 193.1, "old_bias": 97.5}, {"key": "Enyaq 85x", "n": 36, "new_mae": 114.8, "new_bias": -86.1, "old_mae": 150.2, "old_bias": -21.9}, {"key": "Enyaq 80x", "n": 29, "new_mae": 196.6, "new_bias": 50.7, "old_mae": 356.6, "old_bias": 327.6}, {"key": "Enyaq 50", "n": 14, "new_mae": 439.5, "new_bias": -406.5, "old_mae": 332.5, "old_bias": -231.6}], "Land": [{"key": "Deutschland", "n": 707, "new_mae": 213.0, "new_bias": 129.3, "old_mae": 222.8, "old_bias": 121.2}, {"key": "Österreich", "n": 36, "new_mae": 158.5, "new_bias": 33.5, "old_mae": 230.8, "old_bias": 35.5}, {"key": "Schweiz", "n": 23, "new_mae": 114.1, "new_bias": -38.1, "old_mae": 160.0, "old_bias": 10.3}]}}, "data_quality": {"storniert_count": 0, "entfernt_count": 0, "eingetroffen_count": 11, "storniert_rate": 0.0, "entfernt_rate": 0.0}, "censoring_correction": {"decision": "aus", "reason": "verbessert die mittlere Abweichung nicht", "off": {"n": 375, "mae": 91.1, "bias": -23.5, "within14": 0.069}, "on": {"n": 375, "mae": 107.1, "bias": -79.5, "within14": 0.064}}, "band_calibration": {"factors": {"50": 1.0, "80": 1.0, "95": 1.0}, "report": {"50": {"target": 0.5, "scale": 1.0, "enabled": false, "n_fit": 428, "n_val": 349, "coverage_before": 0.43, "coverage_after": 0.43}, "80": {"target": 0.8, "scale": 1.0, "enabled": false, "n_fit": 428, "n_val": 349, "coverage_before": 0.828, "coverage_after": 0.828}, "95": {"target": 0.95, "scale": 1.0, "enabled": false, "n_fit": 428, "n_val": 349, "coverage_before": 0.926, "coverage_after": 0.926}}}}
 </script>
 
 <script>
@@ -4759,14 +4764,24 @@
         // konnte (siehe CommunityEstimateDays in elroq_dashboard_update.py) —
         // bei älteren, schon vor der Einführung geloggten Bestellungen fehlt
         // sie schlicht.
+        const cdev = r.CommunityEstimateDeviationDays;
+        // Wer lag näher dran? Nur ermittelbar, wenn BEIDE Abweichungen
+        // vorliegen -- sonst gibt's nichts zum Vergleichen.
+        let ourWon = false, forumWon = false;
+        if (r.CommunityEstimateDays != null && cdev != null && dev != null){
+          if (Math.abs(dev) < Math.abs(cdev)) ourWon = true;
+          else if (Math.abs(cdev) < Math.abs(dev)) forumWon = true;
+          // bei exaktem Gleichstand bleibt beides false -- kein Gewinner
+        }
+        const winnerBadge = `<span class="resolved-winner" title="Lag näher an der tatsächlichen Wartezeit">näher dran</span>`;
+
         let forumCell = '<td class="mono resolved-muted">–</td>';
         if (r.CommunityEstimateDays != null){
-          const cdev = r.CommunityEstimateDeviationDays;
           if (cdev != null){
             const cCls = Math.abs(cdev) <= 14 ? 'good' : (Math.abs(cdev) <= 30 ? '' : 'bad');
             const cArrow = cdev > 0 ? '▲' : (cdev < 0 ? '▼' : '');
             forumCell = `<td class="mono">${r.CommunityEstimateDays} Tage
-              <span class="resolved-meta ${cCls}"><span class="resolved-arrow" aria-hidden="true">${cArrow}</span>${cdev > 0 ? '+' : (cdev < 0 ? '−' : '±')}${Math.abs(Math.round(cdev))} Tage Abw.</span></td>`;
+              <span class="resolved-meta ${cCls}"><span class="resolved-arrow" aria-hidden="true">${cArrow}</span>${cdev > 0 ? '+' : (cdev < 0 ? '−' : '±')}${Math.abs(Math.round(cdev))} Tage Abw.${forumWon ? winnerBadge : ''}</span></td>`;
           } else {
             forumCell = `<td class="mono">${r.CommunityEstimateDays} Tage</td>`;
           }
@@ -4778,7 +4793,7 @@
           <td class="mono">${r.PredictedMedianDays != null ? r.PredictedMedianDays + ' Tage' : '–'}</td>
           ${forumCell}
           <td class="mono">${r.ActualWaitDays != null ? r.ActualWaitDays + ' Tage' : '–'}</td>
-          <td class="mono ${cls}"><span class="resolved-arrow" aria-hidden="true">${arrow}</span>${dev > 0 ? '+' : (dev < 0 ? '−' : '±')}${Math.abs(Math.round(dev))} Tage</td>
+          <td class="mono ${cls}"><span class="resolved-arrow" aria-hidden="true">${arrow}</span>${dev > 0 ? '+' : (dev < 0 ? '−' : '±')}${Math.abs(Math.round(dev))} Tage${ourWon ? winnerBadge : ''}</td>
         </tr>`;
       }).join('');
     }
@@ -4792,7 +4807,8 @@
           <p class="resolved-hint">Was ursprünglich prognostiziert wurde (unsere Prognose und, falls vorhanden, die
             Forums-eigene Angabe zum voraussichtlichen Liefertermin) verglichen mit der tatsächlichen Wartezeit.
             Spaltenköpfe anklicken zum Sortieren. <strong>▲</strong> = hat länger gedauert als vorhergesagt/angegeben,
-            <strong>▼</strong> = ging schneller.</p>
+            <strong>▼</strong> = ging schneller. Die Markierung <span class="resolved-winner" style="margin-left:0;">näher dran</span>
+            zeigt, welche der beiden Schätzungen näher an der tatsächlichen Wartezeit lag (nur wenn beide vorliegen).</p>
           <div class="resolved-wrap">
             <table class="resolved-table" id="resolvedTable">
               <thead><tr>
