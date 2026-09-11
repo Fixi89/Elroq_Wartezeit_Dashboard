@@ -845,8 +845,17 @@
   .resolved-table td.mono{ font-family:'JetBrains Mono',monospace; white-space:nowrap; }
   .resolved-table td.good{ color:var(--accent); }
   .resolved-table td.bad{ color:var(--danger); }
+  .resolved-table td.resolved-muted{ color:var(--text-dim); }
   .resolved-arrow{ font-size:9px; margin-right:3px; }
   .resolved-meta{ display:block; font-size:10.5px; color:var(--text-dim); margin-top:2px; }
+  .resolved-meta.good{ color:var(--accent); }
+  .resolved-meta.bad{ color:var(--danger); }
+
+  /* Sortierbare Spaltenköpfe der Einzelfall-Liste (siehe renderAccuracyPanel
+     in template_app.js) */
+  .resolved-table th[data-sort-key]{ cursor:pointer; user-select:none; }
+  .resolved-table th[data-sort-key]:hover{ color:var(--accent); }
+  .resolved-sort-arrow{ margin-left:3px; color:var(--accent); font-size:10px; }
 
   .methodik-intro{ font-size:13px; color:var(--text-muted); line-height:1.6; margin:0 0 14px; }
   .methodik-intro-sub{ font-size:12px; color:var(--text-dim); margin:2px 0 16px; }

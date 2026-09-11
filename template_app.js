@@ -3321,33 +3321,101 @@
 
     // Einzelfall-Liste: die aggregierten Kennzahlen oben sagen nichts darüber,
     // WIE die Prognosen daneben lagen. Nach Abweichung sortiert (größte
-    // zuerst), damit sofort sichtbar ist, wo es klemmt — und weil eine reine
-    // Zahl wie "±21 Tage" ohne konkrete Fälle schwer einzuordnen ist.
-    const sorted = [...resolved].sort((a, b) => Math.abs(b.DeviationDays) - Math.abs(a.DeviationDays));
-    const rows = sorted.map(r => {
-      const dev = r.DeviationDays;
-      const cls = Math.abs(dev) <= 14 ? 'good' : (Math.abs(dev) <= 30 ? '' : 'bad');
-      const arrow = dev > 0 ? '▲' : (dev < 0 ? '▼' : '');
-      const cfgParts = [r.Modell, r.Farbe, r.Innenausstattung_DesignSelection, r.Felgenname]
-        .filter(v => v && v !== UNKNOWN);
-      return `<tr>
-        <td>${escapeHtml(cfgParts.join(' · '))}<span class="resolved-meta">${escapeHtml(r.Land || '')} · bestellt ${escapeHtml(r.Bestelldatum || '')}</span></td>
-        <td class="mono">${r.PredictedMedianDays != null ? r.PredictedMedianDays + ' Tage' : '–'}</td>
-        <td class="mono">${r.ActualWaitDays != null ? r.ActualWaitDays + ' Tage' : '–'}</td>
-        <td class="mono ${cls}"><span class="resolved-arrow" aria-hidden="true">${arrow}</span>${dev > 0 ? '+' : (dev < 0 ? '−' : '±')}${Math.abs(Math.round(dev))} Tage</td>
-      </tr>`;
-    }).join('');
+    // zuerst) als Startzustand, damit sofort sichtbar ist, wo es klemmt —
+    // die Spaltenköpfe sind zusätzlich klickbar, um nach jedem anderen Feld
+    // umzusortieren (u.a. Bestelldatum).
+    const RESOLVED_SORT_COLUMNS = {
+      bestelldatum: { label: 'Bestelldatum', get: r => r.BestelldatumTS },
+      prognose: { label: 'Prognose', get: r => r.PredictedMedianDays },
+      forum: { label: 'Forums-Schätzung', get: r => r.CommunityEstimateDays },
+      tatsaechlich: { label: 'Tatsächlich', get: r => r.ActualWaitDays },
+      abweichung: { label: 'Abweichung', get: r => Math.abs(r.DeviationDays) },
+    };
+    if (!window._resolvedSortState){
+      window._resolvedSortState = { key: 'abweichung', dir: 'desc' };
+    }
+    const sortState = window._resolvedSortState;
+
+    function sortResolved(list, key, dir){
+      const getVal = RESOLVED_SORT_COLUMNS[key].get;
+      const mul = dir === 'asc' ? 1 : -1;
+      return [...list].sort((a, b) => {
+        const va = getVal(a), vb = getVal(b);
+        const aNull = va === null || va === undefined;
+        const bNull = vb === null || vb === undefined;
+        // Fehlende Werte (z.B. keine Forums-Schätzung vorhanden) landen immer
+        // am Ende, unabhängig von der Sortierrichtung — sonst würden sie bei
+        // "aufsteigend" ganz nach oben rutschen und den Eindruck erwecken,
+        // sie wären "0 Tage".
+        if (aNull && bNull) return 0;
+        if (aNull) return 1;
+        if (bNull) return -1;
+        return (va - vb) * mul;
+      });
+    }
+
+    function sortIndicator(key){
+      if (sortState.key !== key) return '';
+      return `<span class="resolved-sort-arrow" aria-hidden="true">${sortState.dir === 'asc' ? '↑' : '↓'}</span>`;
+    }
+
+    function buildResolvedRows(list){
+      return list.map(r => {
+        const dev = r.DeviationDays;
+        const cls = Math.abs(dev) <= 14 ? 'good' : (Math.abs(dev) <= 30 ? '' : 'bad');
+        const arrow = dev > 0 ? '▲' : (dev < 0 ? '▼' : '');
+        const cfgParts = [r.Modell, r.Farbe, r.Innenausstattung_DesignSelection, r.Felgenname]
+          .filter(v => v && v !== UNKNOWN);
+
+        // Forums-eigene "voraussichtliches Lieferdatum"-Angabe: nur vorhanden,
+        // wenn sie beim erstmaligen Erfassen der Bestellung eingefroren werden
+        // konnte (siehe CommunityEstimateDays in elroq_dashboard_update.py) —
+        // bei älteren, schon vor der Einführung geloggten Bestellungen fehlt
+        // sie schlicht.
+        let forumCell = '<td class="mono resolved-muted">–</td>';
+        if (r.CommunityEstimateDays != null){
+          const cdev = r.CommunityEstimateDeviationDays;
+          if (cdev != null){
+            const cCls = Math.abs(cdev) <= 14 ? 'good' : (Math.abs(cdev) <= 30 ? '' : 'bad');
+            const cArrow = cdev > 0 ? '▲' : (cdev < 0 ? '▼' : '');
+            forumCell = `<td class="mono">${r.CommunityEstimateDays} Tage
+              <span class="resolved-meta ${cCls}"><span class="resolved-arrow" aria-hidden="true">${cArrow}</span>${cdev > 0 ? '+' : (cdev < 0 ? '−' : '±')}${Math.abs(Math.round(cdev))} Tage Abw.</span></td>`;
+          } else {
+            forumCell = `<td class="mono">${r.CommunityEstimateDays} Tage</td>`;
+          }
+        }
+
+        return `<tr>
+          <td>${escapeHtml(cfgParts.join(' · '))}<span class="resolved-meta">${escapeHtml(r.Land || '')}</span></td>
+          <td class="mono">${escapeHtml(r.Bestelldatum || '–')}</td>
+          <td class="mono">${r.PredictedMedianDays != null ? r.PredictedMedianDays + ' Tage' : '–'}</td>
+          ${forumCell}
+          <td class="mono">${r.ActualWaitDays != null ? r.ActualWaitDays + ' Tage' : '–'}</td>
+          <td class="mono ${cls}"><span class="resolved-arrow" aria-hidden="true">${arrow}</span>${dev > 0 ? '+' : (dev < 0 ? '−' : '±')}${Math.abs(Math.round(dev))} Tage</td>
+        </tr>`;
+      }).join('');
+    }
+
+    const rows = buildResolvedRows(sortResolved(resolved, sortState.key, sortState.dir));
 
     const resolvedList = `
       <details class="resolved-details">
         <summary>Alle ${resolved.length} aufgelöste${resolved.length === 1 ? ' Prognose' : 'n Prognosen'} im Einzelnen ansehen</summary>
         <div class="resolved-body">
-          <p class="resolved-hint">Was ursprünglich prognostiziert wurde, verglichen mit der tatsächlichen Wartezeit.
-            Sortiert nach Abweichung, größte zuerst. <strong>▲</strong> = hat länger gedauert als vorhergesagt,
+          <p class="resolved-hint">Was ursprünglich prognostiziert wurde (unsere Prognose und, falls vorhanden, die
+            Forums-eigene Angabe zum voraussichtlichen Liefertermin) verglichen mit der tatsächlichen Wartezeit.
+            Spaltenköpfe anklicken zum Sortieren. <strong>▲</strong> = hat länger gedauert als vorhergesagt/angegeben,
             <strong>▼</strong> = ging schneller.</p>
           <div class="resolved-wrap">
-            <table class="resolved-table">
-              <thead><tr><th>Konfiguration</th><th>Prognose</th><th>Tatsächlich</th><th>Abweichung</th></tr></thead>
+            <table class="resolved-table" id="resolvedTable">
+              <thead><tr>
+                <th>Konfiguration</th>
+                <th data-sort-key="bestelldatum">Bestelldatum${sortIndicator('bestelldatum')}</th>
+                <th data-sort-key="prognose">Prognose${sortIndicator('prognose')}</th>
+                <th data-sort-key="forum">Forums-Schätzung${sortIndicator('forum')}</th>
+                <th data-sort-key="tatsaechlich">Tatsächlich${sortIndicator('tatsaechlich')}</th>
+                <th data-sort-key="abweichung">Abweichung${sortIndicator('abweichung')}</th>
+              </tr></thead>
               <tbody>${rows}</tbody>
             </table>
           </div>
@@ -3368,6 +3436,29 @@
         ${biasNote}
         ${resolvedList}
       </div>`;
+
+    // Sortier-Klicks auf die Spaltenköpfe: Delegation auf dem Panel selbst
+    // (statt auf der Tabelle direkt), da die Tabelle bei jedem Sortiervorgang
+    // per renderAccuracyPanel() komplett neu aufgebaut wird und ein direkt
+    // angehefteter Listener dabei verloren ginge.
+    if (!el.dataset.sortWired){
+      el.addEventListener('click', (e) => {
+        const th = e.target.closest('th[data-sort-key]');
+        if (!th) return;
+        const key = th.dataset.sortKey;
+        if (sortState.key === key){
+          sortState.dir = sortState.dir === 'asc' ? 'desc' : 'asc';
+        } else {
+          sortState.key = key;
+          sortState.dir = 'desc';
+        }
+        renderAccuracyPanel();
+        // Aufgeklappten Zustand der Einzelfall-Liste beim Umsortieren erhalten.
+        const details = el.querySelector('.resolved-details');
+        if (details) details.open = true;
+      });
+      el.dataset.sortWired = '1';
+    }
   }
 
   // ---- Community-Schätzung vs. eigene Prognose (Offener Punkt 5 der
