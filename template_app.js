@@ -3372,14 +3372,24 @@
         // konnte (siehe CommunityEstimateDays in elroq_dashboard_update.py) —
         // bei älteren, schon vor der Einführung geloggten Bestellungen fehlt
         // sie schlicht.
+        const cdev = r.CommunityEstimateDeviationDays;
+        // Wer lag näher dran? Nur ermittelbar, wenn BEIDE Abweichungen
+        // vorliegen -- sonst gibt's nichts zum Vergleichen.
+        let ourWon = false, forumWon = false;
+        if (r.CommunityEstimateDays != null && cdev != null && dev != null){
+          if (Math.abs(dev) < Math.abs(cdev)) ourWon = true;
+          else if (Math.abs(cdev) < Math.abs(dev)) forumWon = true;
+          // bei exaktem Gleichstand bleibt beides false -- kein Gewinner
+        }
+        const winnerBadge = `<span class="resolved-winner" title="Lag näher an der tatsächlichen Wartezeit">näher dran</span>`;
+
         let forumCell = '<td class="mono resolved-muted">–</td>';
         if (r.CommunityEstimateDays != null){
-          const cdev = r.CommunityEstimateDeviationDays;
           if (cdev != null){
             const cCls = Math.abs(cdev) <= 14 ? 'good' : (Math.abs(cdev) <= 30 ? '' : 'bad');
             const cArrow = cdev > 0 ? '▲' : (cdev < 0 ? '▼' : '');
             forumCell = `<td class="mono">${r.CommunityEstimateDays} Tage
-              <span class="resolved-meta ${cCls}"><span class="resolved-arrow" aria-hidden="true">${cArrow}</span>${cdev > 0 ? '+' : (cdev < 0 ? '−' : '±')}${Math.abs(Math.round(cdev))} Tage Abw.</span></td>`;
+              <span class="resolved-meta ${cCls}"><span class="resolved-arrow" aria-hidden="true">${cArrow}</span>${cdev > 0 ? '+' : (cdev < 0 ? '−' : '±')}${Math.abs(Math.round(cdev))} Tage Abw.${forumWon ? winnerBadge : ''}</span></td>`;
           } else {
             forumCell = `<td class="mono">${r.CommunityEstimateDays} Tage</td>`;
           }
@@ -3391,7 +3401,7 @@
           <td class="mono">${r.PredictedMedianDays != null ? r.PredictedMedianDays + ' Tage' : '–'}</td>
           ${forumCell}
           <td class="mono">${r.ActualWaitDays != null ? r.ActualWaitDays + ' Tage' : '–'}</td>
-          <td class="mono ${cls}"><span class="resolved-arrow" aria-hidden="true">${arrow}</span>${dev > 0 ? '+' : (dev < 0 ? '−' : '±')}${Math.abs(Math.round(dev))} Tage</td>
+          <td class="mono ${cls}"><span class="resolved-arrow" aria-hidden="true">${arrow}</span>${dev > 0 ? '+' : (dev < 0 ? '−' : '±')}${Math.abs(Math.round(dev))} Tage${ourWon ? winnerBadge : ''}</td>
         </tr>`;
       }).join('');
     }
@@ -3405,7 +3415,8 @@
           <p class="resolved-hint">Was ursprünglich prognostiziert wurde (unsere Prognose und, falls vorhanden, die
             Forums-eigene Angabe zum voraussichtlichen Liefertermin) verglichen mit der tatsächlichen Wartezeit.
             Spaltenköpfe anklicken zum Sortieren. <strong>▲</strong> = hat länger gedauert als vorhergesagt/angegeben,
-            <strong>▼</strong> = ging schneller.</p>
+            <strong>▼</strong> = ging schneller. Die Markierung <span class="resolved-winner" style="margin-left:0;">näher dran</span>
+            zeigt, welche der beiden Schätzungen näher an der tatsächlichen Wartezeit lag (nur wenn beide vorliegen).</p>
           <div class="resolved-wrap">
             <table class="resolved-table" id="resolvedTable">
               <thead><tr>

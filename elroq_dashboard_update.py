@@ -878,6 +878,7 @@ def update_prediction_log(log, delivered, open_orders, cancelled, now_ts):
     # nachtragen.
     ids_migrated = _migrate_hash_ids(log)
     original_migrated = _migrate_add_original_snapshot(log)
+    community_migrated = _migrate_add_community_estimate(log, open_by_id)
 
     # Bereits offene Log-Eintraege pruefen: ausgeliefert, storniert oder
     # anderweitig verschwunden?
@@ -954,7 +955,8 @@ def update_prediction_log(log, delivered, open_orders, cancelled, now_ts):
             recalculated += 1
 
     personal_data_stripped = _migrate_strip_personal_data(log)
-    return new_logged, resolved_now, recalculated, original_migrated, personal_data_stripped, ids_migrated
+    return (new_logged, resolved_now, recalculated, original_migrated,
+            personal_data_stripped, ids_migrated, community_migrated)
 
 
 def _migrate_add_original_snapshot(log):
@@ -1027,6 +1029,39 @@ def _migrate_hash_ids(log):
         entry = log.pop(old_key)
         entry["ID"] = new_key
         log[new_key] = entry
+        migrated += 1
+    return migrated
+
+
+def _migrate_add_community_estimate(log, open_by_id):
+    """
+    Einmalige Nachtrag-Migration: Log-Eintraege von VOR der Einfuehrung der
+    Community-Schaetzung (CommunityEstimateDays) haben dieses Feld gar nicht
+    erst bekommen, weil es beim erstmaligen Erfassen dieser Bestellung noch
+    nicht existierte.
+
+    Fuer Eintraege, die JETZT NOCH offen sind, laesst sich das nachholen --
+    die Forums-eigene "voraussichtliches Lieferdatum"-Angabe steht ja im
+    aktuellen Scrape noch zur Verfuegung. Fuer BEREITS AUFGELOESTE
+    Alt-Eintraege ist das NICHT mehr moeglich: das Forum zeigt dieses Feld
+    nach der Auslieferung nicht mehr an, und vor Einfuehrung dieser Funktion
+    wurde es nirgends zwischengespeichert -- die Angabe ist fuer diese Faelle
+    unwiederbringlich verloren.
+    """
+    migrated = 0
+    for oid, entry in log.items():
+        if entry.get("Status") != "offen" or "CommunityEstimateDays" in entry:
+            continue
+        order = open_by_id.get(oid)
+        if not order:
+            continue
+        voraus_ts = parse_de_date(order.get("VorausLieferdatum", ""))
+        if voraus_ts is None or order.get("BestelldatumTS") is None:
+            continue
+        voraus_ts_ms = int(datetime(voraus_ts.year, voraus_ts.month,
+                                    voraus_ts.day).timestamp() * 1000)
+        entry["CommunityEstimateDays"] = round((voraus_ts_ms - order["BestelldatumTS"]) / DAY_MS)
+        entry["CommunityEstimateDeviationDays"] = None
         migrated += 1
     return migrated
 
@@ -1238,7 +1273,7 @@ def main():
     # inzwischen ausgelieferte werden mit dem tatsaechlichen Ergebnis aufgeloest.
     now_ts = int(datetime.now().timestamp() * 1000)
     log = load_log()
-    new_logged, resolved_now, recalculated, original_migrated, personal_data_stripped, ids_migrated = update_prediction_log(
+    new_logged, resolved_now, recalculated, original_migrated, personal_data_stripped, ids_migrated, community_migrated = update_prediction_log(
         log, delivered, open_orders, cancelled, now_ts)
     save_log(log)
     merge_log_into_records(log, delivered, open_orders)
@@ -1287,6 +1322,8 @@ def main():
         print(f"  Einmalig bereinigt (Benutzername/Profil-Link entfernt, DSGVO): {personal_data_stripped}")
     if ids_migrated:
         print(f"  Einmalig migriert (rohe ID durch Hash ersetzt, Datenschutz): {ids_migrated}")
+    if community_migrated:
+        print(f"  Einmalig nachgetragen (Forums-Schätzung für noch offene Alt-Bestellungen): {community_migrated}")
     if resolved_all:
         mae = sum(abs(e["DeviationDays"]) for e in resolved_all) / len(resolved_all)
         within2w = sum(1 for e in resolved_all if abs(e["DeviationDays"]) <= 14) / len(resolved_all)
