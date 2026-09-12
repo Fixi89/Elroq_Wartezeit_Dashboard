@@ -11,9 +11,9 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1803324691839.6006,
-    "PredictedRangeLowDate": 1801078291839.6006,
-    "PredictedRangeHighDate": 1804793491839.6006,
+    "PredictedDate": 1803323252209.793,
+    "PredictedRangeLowDate": 1801076852209.793,
+    "PredictedRangeHighDate": 1804792052209.793,
     "PredictedMedianDays": 197,
     "PredictedRangeLowDays": 171,
     "PredictedRangeHighDays": 214,
@@ -73,10 +73,10 @@
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1796499091839.6006,
-    "PredictedP90Date": 1807005852493.6516,
-    "PredictedP2_5Date": 1794166291839.6006,
-    "PredictedP97_5Date": 1809891091839.6006,
+    "PredictedP10Date": 1796497652209.793,
+    "PredictedP90Date": 1807004412863.844,
+    "PredictedP2_5Date": 1794164852209.793,
+    "PredictedP97_5Date": 1809889652209.793,
     "PredictedP10Days": 118,
     "PredictedP90Days": 239,
     "PredictedP2_5Days": 91,
@@ -139,16 +139,16 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1795203842102.3496,
-    "PredictedRangeLowDate": 1793216642102.3496,
-    "PredictedRangeHighDate": 1800647042102.3496,
-    "PredictedMedianDays": 108,
-    "PredictedRangeLowDays": 85,
-    "PredictedRangeHighDays": 171,
-    "ReferenceCount": 73,
+    "PredictedDate": 1795812069981.3777,
+    "PredictedRangeLowDate": 1793707122262.7217,
+    "PredictedRangeHighDate": 1800811778038.372,
+    "PredictedMedianDays": 115,
+    "PredictedRangeLowDays": 90,
+    "PredictedRangeHighDays": 173,
+    "ReferenceCount": 76,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
       {
         "Land": "Deutschland",
@@ -176,6 +176,10 @@
       },
       {
         "Land": "Deutschland",
+        "WartezeitTage": 119
+      },
+      {
+        "Land": "Deutschland",
         "WartezeitTage": 93
       },
       {
@@ -193,22 +197,18 @@
       {
         "Land": "Deutschland",
         "WartezeitTage": 194
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 176
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1792589893018.9495,
-    "PredictedP90Date": 1803073279546.224,
-    "PredictedP2_5Date": 1790949693919.3162,
-    "PredictedP97_5Date": 1807131493640.1016,
-    "PredictedP10Days": 78,
-    "PredictedP90Days": 199,
-    "PredictedP2_5Days": 59,
-    "PredictedP97_5Days": 246,
+    "PredictedP10Date": 1792940907154.2878,
+    "PredictedP90Date": 1803403778038.372,
+    "PredictedP2_5Date": 1791372251026.8074,
+    "PredictedP97_5Date": 1807340177822.2788,
+    "PredictedP10Days": 82,
+    "PredictedP90Days": 203,
+    "PredictedP2_5Days": 63,
+    "PredictedP97_5Days": 248,
     "OriginalPredictedDate": 1801173600000,
     "OriginalPredictedRangeLowDate": 1793052000000,
     "OriginalPredictedRangeHighDate": 1802642400000,
@@ -291,9 +291,9 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1802555066081.1248,
-    "PredictedRangeLowDate": 1800455330977.9646,
-    "PredictedRangeHighDate": 1804023866081.1248,
+    "PredictedDate": 1802553345252.6306,
+    "PredictedRangeLowDate": 1800453610149.4702,
+    "PredictedRangeHighDate": 1804022145252.6306,
     "PredictedMedianDays": 198,
     "PredictedRangeLowDays": 174,
     "PredictedRangeHighDays": 215,
@@ -353,10 +353,10 @@
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1795688180974.9912,
-    "PredictedP90Date": 1806270266081.1248,
-    "PredictedP2_5Date": 1793254708054.1626,
-    "PredictedP97_5Date": 1810217593354.9412,
+    "PredictedP10Date": 1795686460146.497,
+    "PredictedP90Date": 1806268545252.6306,
+    "PredictedP2_5Date": 1793252987225.6685,
+    "PredictedP97_5Date": 1810215872526.447,
     "PredictedP10Days": 118,
     "PredictedP90Days": 241,
     "PredictedP2_5Days": 90,
@@ -427,11 +427,11 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1800994642341.3638,
-    "PredictedRangeLowDate": 1799039925930.9626,
-    "PredictedRangeHighDate": 1802895442341.3638,
+    "PredictedDate": 1801025862462.2988,
+    "PredictedRangeLowDate": 1799071146051.898,
+    "PredictedRangeHighDate": 1802926662462.2988,
     "PredictedMedianDays": 182,
-    "PredictedRangeLowDays": 159,
+    "PredictedRangeLowDays": 160,
     "PredictedRangeHighDays": 204,
     "ReferenceCount": 110,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
@@ -489,14 +489,14 @@
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1796852543510.2473,
-    "PredictedP90Date": 1805869057051.1047,
-    "PredictedP2_5Date": 1794103612890.201,
-    "PredictedP97_5Date": 1807329443544.2126,
+    "PredictedP10Date": 1796883763631.1826,
+    "PredictedP90Date": 1805900277172.0398,
+    "PredictedP2_5Date": 1794134833011.1362,
+    "PredictedP97_5Date": 1807360663665.148,
     "PredictedP10Days": 134,
-    "PredictedP90Days": 238,
+    "PredictedP90Days": 239,
     "PredictedP2_5Days": 102,
-    "PredictedP97_5Days": 255,
+    "PredictedP97_5Days": 256,
     "OriginalPredictedDate": 1800223200000,
     "OriginalPredictedRangeLowDate": 1798581600000,
     "OriginalPredictedRangeHighDate": 1801605600000,
@@ -731,20 +731,28 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1794388768955.9316,
-    "PredictedRangeLowDate": 1792821724055.8047,
-    "PredictedRangeHighDate": 1799766672895.767,
-    "PredictedMedianDays": 106,
-    "PredictedRangeLowDays": 88,
-    "PredictedRangeHighDays": 169,
-    "ReferenceCount": 73,
+    "PredictedDate": 1795298240131.7922,
+    "PredictedRangeLowDate": 1793542838876.448,
+    "PredictedRangeHighDate": 1797753598961.7673,
+    "PredictedMedianDays": 117,
+    "PredictedRangeLowDays": 97,
+    "PredictedRangeHighDays": 145,
+    "ReferenceCount": 76,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
       {
         "Land": "Deutschland",
         "WartezeitTage": 93
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 134
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 119
       },
       {
         "Land": "Deutschland",
@@ -781,26 +789,18 @@
       {
         "Land": "Deutschland",
         "WartezeitTage": 128
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 179
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 191
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1791961651973.964,
-    "PredictedP90Date": 1802358672895.767,
-    "PredictedP2_5Date": 1790906045610.6997,
-    "PredictedP97_5Date": 1806138479125.808,
-    "PredictedP10Days": 78,
-    "PredictedP90Days": 199,
-    "PredictedP2_5Days": 66,
-    "PredictedP97_5Days": 242,
+    "PredictedP10Date": 1792432650055.8274,
+    "PredictedP90Date": 1802630639624.1484,
+    "PredictedP2_5Date": 1791609260694.261,
+    "PredictedP97_5Date": 1805526871052.985,
+    "PredictedP10Days": 84,
+    "PredictedP90Days": 202,
+    "PredictedP2_5Days": 74,
+    "PredictedP97_5Days": 235,
     "OriginalPredictedDate": 1800396000000,
     "OriginalPredictedRangeLowDate": 1795730400000,
     "OriginalPredictedRangeHighDate": 1802037600000,
@@ -879,17 +879,21 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1794535165916.4224,
-    "PredictedRangeLowDate": 1792731344013.5637,
-    "PredictedRangeHighDate": 1799433861724.5989,
-    "PredictedMedianDays": 108,
-    "PredictedRangeLowDays": 87,
-    "PredictedRangeHighDays": 165,
-    "ReferenceCount": 73,
+    "PredictedDate": 1796345821013.5706,
+    "PredictedRangeLowDate": 1793407752657.0425,
+    "PredictedRangeHighDate": 1797778543082.2837,
+    "PredictedMedianDays": 129,
+    "PredictedRangeLowDays": 95,
+    "PredictedRangeHighDays": 146,
+    "ReferenceCount": 76,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 119
+      },
       {
         "Land": "Deutschland",
         "WartezeitTage": 82
@@ -897,6 +901,10 @@
       {
         "Land": "Deutschland",
         "WartezeitTage": 133
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 135
       },
       {
         "Land": "Deutschland",
@@ -924,31 +932,23 @@
       },
       {
         "Land": "Deutschland",
+        "WartezeitTage": 134
+      },
+      {
+        "Land": "Deutschland",
         "WartezeitTage": 53
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 128
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 179
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 191
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1792010410610.8137,
-    "PredictedP90Date": 1802371461724.5989,
-    "PredictedP2_5Date": 1791037973004.7898,
-    "PredictedP97_5Date": 1805943663171.7166,
-    "PredictedP10Days": 79,
-    "PredictedP90Days": 199,
-    "PredictedP2_5Days": 68,
-    "PredictedP97_5Days": 240,
+    "PredictedP10Date": 1792874686259.057,
+    "PredictedP90Date": 1802529891457.5183,
+    "PredictedP2_5Date": 1791995535368.2288,
+    "PredictedP97_5Date": 1804753190413.2737,
+    "PredictedP10Days": 89,
+    "PredictedP90Days": 201,
+    "PredictedP2_5Days": 79,
+    "PredictedP97_5Days": 226,
     "OriginalPredictedDate": 1799186400000,
     "OriginalPredictedRangeLowDate": 1792447200000,
     "OriginalPredictedRangeHighDate": 1801778400000,
@@ -1031,9 +1031,9 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1802031075245.1294,
-    "PredictedRangeLowDate": 1799611875245.1294,
-    "PredictedRangeHighDate": 1803327075245.1294,
+    "PredictedDate": 1802028935762.4797,
+    "PredictedRangeLowDate": 1799609735762.4797,
+    "PredictedRangeHighDate": 1803324935762.4797,
     "PredictedMedianDays": 198,
     "PredictedRangeLowDays": 170,
     "PredictedRangeHighDays": 213,
@@ -1093,10 +1093,10 @@
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1795112188767.1328,
-    "PredictedP90Date": 1805746275245.1294,
-    "PredictedP2_5Date": 1792634254446.4312,
-    "PredictedP97_5Date": 1809670937682.2532,
+    "PredictedP10Date": 1795110049284.4832,
+    "PredictedP90Date": 1805744135762.4797,
+    "PredictedP2_5Date": 1792632114963.7815,
+    "PredictedP97_5Date": 1809668798199.6035,
     "PredictedP10Days": 118,
     "PredictedP90Days": 241,
     "PredictedP2_5Days": 89,
@@ -1183,9 +1183,9 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1801768191377.8325,
-    "PredictedRangeLowDate": 1799881054079.8245,
-    "PredictedRangeHighDate": 1803304127395.3987,
+    "PredictedDate": 1801765907196.0886,
+    "PredictedRangeLowDate": 1799878769898.0806,
+    "PredictedRangeHighDate": 1803301843213.6548,
     "PredictedMedianDays": 196,
     "PredictedRangeLowDays": 174,
     "PredictedRangeHighDays": 214,
@@ -1245,10 +1245,10 @@
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1794948822872.118,
-    "PredictedP90Date": 1805465494155.9316,
-    "PredictedP2_5Date": 1792678294155.9316,
-    "PredictedP97_5Date": 1807884694155.9316,
+    "PredictedP10Date": 1794946538690.374,
+    "PredictedP90Date": 1805463209974.1877,
+    "PredictedP2_5Date": 1792676009974.1877,
+    "PredictedP97_5Date": 1807882409974.1877,
     "PredictedP10Days": 117,
     "PredictedP90Days": 239,
     "PredictedP2_5Days": 91,
@@ -1335,9 +1335,9 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1801863866081.1248,
-    "PredictedRangeLowDate": 1799444666081.1248,
-    "PredictedRangeHighDate": 1803159866081.1248,
+    "PredictedDate": 1801862145252.6306,
+    "PredictedRangeLowDate": 1799442945252.6306,
+    "PredictedRangeHighDate": 1803158145252.6306,
     "PredictedMedianDays": 198,
     "PredictedRangeLowDays": 170,
     "PredictedRangeHighDays": 213,
@@ -1397,10 +1397,10 @@
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1794944979603.1282,
-    "PredictedP90Date": 1805579066081.1248,
-    "PredictedP2_5Date": 1792467045282.4268,
-    "PredictedP97_5Date": 1809503728518.2485,
+    "PredictedP10Date": 1794943258774.634,
+    "PredictedP90Date": 1805577345252.6306,
+    "PredictedP2_5Date": 1792465324453.9324,
+    "PredictedP97_5Date": 1809502007689.7544,
     "PredictedP10Days": 118,
     "PredictedP90Days": 241,
     "PredictedP2_5Days": 89,
@@ -1487,9 +1487,9 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1801863866081.1248,
-    "PredictedRangeLowDate": 1799444666081.1248,
-    "PredictedRangeHighDate": 1803159866081.1248,
+    "PredictedDate": 1801862145252.6306,
+    "PredictedRangeLowDate": 1799442945252.6306,
+    "PredictedRangeHighDate": 1803158145252.6306,
     "PredictedMedianDays": 198,
     "PredictedRangeLowDays": 170,
     "PredictedRangeHighDays": 213,
@@ -1549,10 +1549,10 @@
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1794944979603.1282,
-    "PredictedP90Date": 1805579066081.1248,
-    "PredictedP2_5Date": 1792467045282.4268,
-    "PredictedP97_5Date": 1809503728518.2485,
+    "PredictedP10Date": 1794943258774.634,
+    "PredictedP90Date": 1805577345252.6306,
+    "PredictedP2_5Date": 1792465324453.9324,
+    "PredictedP97_5Date": 1809502007689.7544,
     "PredictedP10Days": 118,
     "PredictedP90Days": 241,
     "PredictedP2_5Days": 89,
@@ -1639,17 +1639,25 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1796219215491.9512,
-    "PredictedRangeLowDate": 1792399698187.9495,
-    "PredictedRangeHighDate": 1799351203985.9844,
-    "PredictedMedianDays": 136,
-    "PredictedRangeLowDays": 91,
-    "PredictedRangeHighDays": 172,
-    "ReferenceCount": 69,
+    "PredictedDate": 1797039778282.2778,
+    "PredictedRangeLowDate": 1794962373239.455,
+    "PredictedRangeHighDate": 1798157833626.6382,
+    "PredictedMedianDays": 145,
+    "PredictedRangeLowDays": 121,
+    "PredictedRangeHighDays": 158,
+    "ReferenceCount": 72,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 135
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 119
+      },
       {
         "Land": "Deutschland",
         "WartezeitTage": 82
@@ -1661,6 +1669,10 @@
       {
         "Land": "Deutschland",
         "WartezeitTage": 108
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 134
       },
       {
         "Land": "Deutschland",
@@ -1685,30 +1697,18 @@
       {
         "Land": "Deutschland",
         "WartezeitTage": 108
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 73
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 209
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 103
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1792157341928.2712,
-    "PredictedP90Date": 1801253244540.5952,
-    "PredictedP2_5Date": 1791117852425.0461,
-    "PredictedP97_5Date": 1803574553961.5225,
-    "PredictedP10Days": 89,
-    "PredictedP90Days": 194,
-    "PredictedP2_5Days": 77,
-    "PredictedP97_5Days": 221,
+    "PredictedP10Date": 1792676473113.2715,
+    "PredictedP90Date": 1800754243722.733,
+    "PredictedP2_5Date": 1791940652892.9424,
+    "PredictedP97_5Date": 1803731682103.4746,
+    "PredictedP10Days": 95,
+    "PredictedP90Days": 188,
+    "PredictedP2_5Days": 86,
+    "PredictedP97_5Days": 223,
     "OriginalPredictedDate": 1798840800000,
     "OriginalPredictedRangeLowDate": 1795816800000,
     "OriginalPredictedRangeHighDate": 1800568800000,
@@ -1791,20 +1791,28 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1794964866924.137,
-    "PredictedRangeLowDate": 1792340860752.892,
-    "PredictedRangeHighDate": 1798846338942.7388,
-    "PredictedMedianDays": 121,
-    "PredictedRangeLowDays": 91,
-    "PredictedRangeHighDays": 166,
-    "ReferenceCount": 72,
+    "PredictedDate": 1796939745617.7617,
+    "PredictedRangeLowDate": 1794642398809.06,
+    "PredictedRangeHighDate": 1797544410218.9565,
+    "PredictedMedianDays": 144,
+    "PredictedRangeLowDays": 117,
+    "PredictedRangeHighDays": 151,
+    "ReferenceCount": 75,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
       {
         "Land": "Deutschland",
+        "WartezeitTage": 135
+      },
+      {
+        "Land": "Deutschland",
         "WartezeitTage": 133
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 119
       },
       {
         "Land": "Deutschland",
@@ -1836,31 +1844,23 @@
       },
       {
         "Land": "Deutschland",
+        "WartezeitTage": 134
+      },
+      {
+        "Land": "Deutschland",
         "WartezeitTage": 103
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 209
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 182
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 164
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1792049323135.9172,
-    "PredictedP90Date": 1800753666924.137,
-    "PredictedP2_5Date": 1791287547136.8281,
-    "PredictedP97_5Date": 1803100876950.5632,
-    "PredictedP10Days": 87,
-    "PredictedP90Days": 188,
-    "PredictedP2_5Days": 78,
-    "PredictedP97_5Days": 215,
+    "PredictedP10Date": 1792677694598.3435,
+    "PredictedP90Date": 1800811394030.5977,
+    "PredictedP2_5Date": 1791927146041.7415,
+    "PredictedP97_5Date": 1803267137196.7056,
+    "PredictedP10Days": 95,
+    "PredictedP90Days": 189,
+    "PredictedP2_5Days": 86,
+    "PredictedP97_5Days": 217,
     "OriginalPredictedDate": 1798840800000,
     "OriginalPredictedRangeLowDate": 1795557600000,
     "OriginalPredictedRangeHighDate": 1801000800000,
@@ -1943,9 +1943,9 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1801242397925.6187,
-    "PredictedRangeLowDate": 1799360660192.2424,
-    "PredictedRangeHighDate": 1802797597925.6187,
+    "PredictedDate": 1801240235446.0823,
+    "PredictedRangeLowDate": 1799358497712.706,
+    "PredictedRangeHighDate": 1802795435446.0823,
     "PredictedMedianDays": 197,
     "PredictedRangeLowDays": 175,
     "PredictedRangeHighDays": 215,
@@ -2005,10 +2005,10 @@
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1794157597925.6187,
-    "PredictedP90Date": 1804871197925.6187,
-    "PredictedP2_5Date": 1792083997925.6187,
-    "PredictedP97_5Date": 1807589192884.239,
+    "PredictedP10Date": 1794155435446.0823,
+    "PredictedP90Date": 1804869035446.0823,
+    "PredictedP2_5Date": 1792081835446.0823,
+    "PredictedP97_5Date": 1807587030404.703,
     "PredictedP10Days": 115,
     "PredictedP90Days": 239,
     "PredictedP2_5Days": 91,
@@ -2095,11 +2095,11 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1800137330628.505,
-    "PredictedRangeLowDate": 1798262933823.1765,
-    "PredictedRangeHighDate": 1802038130628.505,
+    "PredictedDate": 1800164640924.9463,
+    "PredictedRangeLowDate": 1798290244119.618,
+    "PredictedRangeHighDate": 1802065440924.9463,
     "PredictedMedianDays": 185,
-    "PredictedRangeLowDays": 163,
+    "PredictedRangeLowDays": 164,
     "PredictedRangeHighDays": 207,
     "ReferenceCount": 110,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
@@ -2157,14 +2157,14 @@
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1796066362979.5225,
-    "PredictedP90Date": 1805236944683.222,
-    "PredictedP2_5Date": 1793428747155.1318,
-    "PredictedP97_5Date": 1806473690380.4573,
+    "PredictedP10Date": 1796093673275.9639,
+    "PredictedP90Date": 1805264254979.6636,
+    "PredictedP2_5Date": 1793456057451.5732,
+    "PredictedP97_5Date": 1806501000676.8987,
     "PredictedP10Days": 138,
     "PredictedP90Days": 244,
-    "PredictedP2_5Days": 107,
-    "PredictedP97_5Days": 258,
+    "PredictedP2_5Days": 108,
+    "PredictedP97_5Days": 259,
     "OriginalPredictedDate": 1799532000000,
     "OriginalPredictedRangeLowDate": 1798063200000,
     "OriginalPredictedRangeHighDate": 1802210400000,
@@ -2247,9 +2247,9 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1799638904190.9587,
-    "PredictedRangeLowDate": 1797684187780.5579,
-    "PredictedRangeHighDate": 1801539704190.9587,
+    "PredictedDate": 1799664285778.5928,
+    "PredictedRangeLowDate": 1797709569368.1917,
+    "PredictedRangeHighDate": 1801565085778.5928,
     "PredictedMedianDays": 186,
     "PredictedRangeLowDays": 164,
     "PredictedRangeHighDays": 208,
@@ -2309,14 +2309,14 @@
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1795496805359.8425,
-    "PredictedP90Date": 1804513318900.6997,
-    "PredictedP2_5Date": 1792747874739.7961,
-    "PredictedP97_5Date": 1805973705393.8079,
-    "PredictedP10Days": 138,
+    "PredictedP10Date": 1795522186947.4763,
+    "PredictedP90Date": 1804538700488.3337,
+    "PredictedP2_5Date": 1792773256327.4302,
+    "PredictedP97_5Date": 1805999086981.4417,
+    "PredictedP10Days": 139,
     "PredictedP90Days": 243,
-    "PredictedP2_5Days": 106,
-    "PredictedP97_5Days": 259,
+    "PredictedP2_5Days": 107,
+    "PredictedP97_5Days": 260,
     "OriginalPredictedDate": 1798927200000,
     "OriginalPredictedRangeLowDate": 1797285600000,
     "OriginalPredictedRangeHighDate": 1799791200000,
@@ -2399,20 +2399,28 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1793222896074.043,
-    "PredictedRangeLowDate": 1791805122245.9587,
-    "PredictedRangeHighDate": 1798406896074.043,
-    "PredictedMedianDays": 108,
-    "PredictedRangeLowDays": 91,
-    "PredictedRangeHighDays": 168,
-    "ReferenceCount": 73,
+    "PredictedDate": 1794105559154.6055,
+    "PredictedRangeLowDate": 1792675080784.7007,
+    "PredictedRangeHighDate": 1796330667435.4993,
+    "PredictedMedianDays": 118,
+    "PredictedRangeLowDays": 102,
+    "PredictedRangeHighDays": 144,
+    "ReferenceCount": 76,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
       {
         "Land": "Deutschland",
         "WartezeitTage": 93
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 134
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 119
       },
       {
         "Land": "Deutschland",
@@ -2449,26 +2457,18 @@
       {
         "Land": "Deutschland",
         "WartezeitTage": 179
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 53
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 109
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1790767886356.8665,
-    "PredictedP90Date": 1801085296074.043,
-    "PredictedP2_5Date": 1790172211124.2522,
-    "PredictedP97_5Date": 1803688691272.4175,
-    "PredictedP10Days": 79,
+    "PredictedP10Date": 1791515659066.8164,
+    "PredictedP90Date": 1801057041174.0059,
+    "PredictedP2_5Date": 1790683043555.5364,
+    "PredictedP97_5Date": 1803120484399.04,
+    "PredictedP10Days": 88,
     "PredictedP90Days": 199,
-    "PredictedP2_5Days": 73,
-    "PredictedP97_5Days": 229,
+    "PredictedP2_5Days": 78,
+    "PredictedP97_5Days": 222,
     "OriginalPredictedDate": 1798581600000,
     "OriginalPredictedRangeLowDate": 1796076000000,
     "OriginalPredictedRangeHighDate": 1799877600000,
@@ -2535,17 +2535,21 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1793251582479.9072,
-    "PredictedRangeLowDate": 1791447760577.0486,
-    "PredictedRangeHighDate": 1798150278288.0835,
-    "PredictedMedianDays": 108,
-    "PredictedRangeLowDays": 87,
-    "PredictedRangeHighDays": 165,
-    "ReferenceCount": 73,
+    "PredictedDate": 1795071232966.4783,
+    "PredictedRangeLowDate": 1792133164609.9502,
+    "PredictedRangeHighDate": 1796503955035.1914,
+    "PredictedMedianDays": 129,
+    "PredictedRangeLowDays": 95,
+    "PredictedRangeHighDays": 146,
+    "ReferenceCount": 76,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 119
+      },
       {
         "Land": "Deutschland",
         "WartezeitTage": 82
@@ -2553,6 +2557,10 @@
       {
         "Land": "Deutschland",
         "WartezeitTage": 133
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 135
       },
       {
         "Land": "Deutschland",
@@ -2580,31 +2588,23 @@
       },
       {
         "Land": "Deutschland",
+        "WartezeitTage": 134
+      },
+      {
+        "Land": "Deutschland",
         "WartezeitTage": 53
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 128
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 179
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 191
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1790726827174.2986,
-    "PredictedP90Date": 1801087878288.0835,
-    "PredictedP2_5Date": 1789754389568.2747,
-    "PredictedP97_5Date": 1804660079735.2012,
-    "PredictedP10Days": 79,
-    "PredictedP90Days": 199,
-    "PredictedP2_5Days": 68,
-    "PredictedP97_5Days": 240,
+    "PredictedP10Date": 1791600098211.9646,
+    "PredictedP90Date": 1801255303410.426,
+    "PredictedP2_5Date": 1790720947321.1365,
+    "PredictedP97_5Date": 1803478602366.1814,
+    "PredictedP10Days": 89,
+    "PredictedP90Days": 201,
+    "PredictedP2_5Days": 79,
+    "PredictedP97_5Days": 227,
     "OriginalPredictedDate": 1798927200000,
     "OriginalPredictedRangeLowDate": 1793311200000,
     "OriginalPredictedRangeHighDate": 1800655200000,
@@ -2687,11 +2687,11 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1800273974793.8613,
-    "PredictedRangeLowDate": 1798545974793.8613,
-    "PredictedRangeHighDate": 1802469501171.4958,
-    "PredictedMedianDays": 196,
-    "PredictedRangeLowDays": 176,
+    "PredictedDate": 1800271413248.2734,
+    "PredictedRangeLowDate": 1798543413248.2734,
+    "PredictedRangeHighDate": 1802466939625.908,
+    "PredictedMedianDays": 195,
+    "PredictedRangeLowDays": 175,
     "PredictedRangeHighDays": 221,
     "ReferenceCount": 390,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
@@ -2749,12 +2749,12 @@
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1793534774793.8613,
-    "PredictedP90Date": 1804075574793.8613,
-    "PredictedP2_5Date": 1791361678883.4941,
-    "PredictedP97_5Date": 1808241120813.181,
-    "PredictedP10Days": 118,
-    "PredictedP90Days": 240,
+    "PredictedP10Date": 1793532213248.2734,
+    "PredictedP90Date": 1804073013248.2734,
+    "PredictedP2_5Date": 1791359117337.9062,
+    "PredictedP97_5Date": 1808238559267.5933,
+    "PredictedP10Days": 117,
+    "PredictedP90Days": 239,
     "PredictedP2_5Days": 92,
     "PredictedP97_5Days": 288,
     "OriginalPredictedDate": 1799186400000,
@@ -2839,20 +2839,28 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1793951329622.8142,
-    "PredictedRangeLowDate": 1791430204618.858,
-    "PredictedRangeHighDate": 1797953910828.2625,
-    "PredictedMedianDays": 123,
-    "PredictedRangeLowDays": 94,
-    "PredictedRangeHighDays": 170,
-    "ReferenceCount": 69,
+    "PredictedDate": 1795773957504.9902,
+    "PredictedRangeLowDate": 1793762580294.7305,
+    "PredictedRangeHighDate": 1796742961449.1064,
+    "PredictedMedianDays": 144,
+    "PredictedRangeLowDays": 121,
+    "PredictedRangeHighDays": 156,
+    "ReferenceCount": 72,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
       {
         "Land": "Deutschland",
+        "WartezeitTage": 135
+      },
+      {
+        "Land": "Deutschland",
         "WartezeitTage": 133
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 119
       },
       {
         "Land": "Deutschland",
@@ -2889,26 +2897,18 @@
       {
         "Land": "Deutschland",
         "WartezeitTage": 53
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 93
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 85
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1790872824516.7334,
-    "PredictedP90Date": 1799538442019.872,
-    "PredictedP2_5Date": 1790069833915.1423,
-    "PredictedP97_5Date": 1801934119842.82,
-    "PredictedP10Days": 88,
-    "PredictedP90Days": 188,
-    "PredictedP2_5Days": 78,
-    "PredictedP97_5Days": 216,
+    "PredictedP10Date": 1791492529049.365,
+    "PredictedP90Date": 1799464980294.7305,
+    "PredictedP2_5Date": 1790898720479.6497,
+    "PredictedP97_5Date": 1802019102313.107,
+    "PredictedP10Days": 95,
+    "PredictedP90Days": 187,
+    "PredictedP2_5Days": 88,
+    "PredictedP97_5Days": 217,
     "OriginalPredictedDate": 1797976800000,
     "OriginalPredictedRangeLowDate": 1796508000000,
     "OriginalPredictedRangeHighDate": 1799791200000,
@@ -3419,16 +3419,16 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1791787935430.457,
-    "PredictedRangeLowDate": 1789800735430.457,
-    "PredictedRangeHighDate": 1797945741379.939,
-    "PredictedMedianDays": 108,
-    "PredictedRangeLowDays": 85,
-    "PredictedRangeHighDays": 180,
-    "ReferenceCount": 70,
+    "PredictedDate": 1792101945755.104,
+    "PredictedRangeLowDate": 1790114745755.104,
+    "PredictedRangeHighDate": 1797545145755.104,
+    "PredictedMedianDays": 112,
+    "PredictedRangeLowDays": 89,
+    "PredictedRangeHighDays": 175,
+    "ReferenceCount": 73,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
       {
         "Land": "Deutschland",
@@ -3476,19 +3476,19 @@
       },
       {
         "Land": "Deutschland",
-        "WartezeitTage": 93
+        "WartezeitTage": 119
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1789155029622.3162,
-    "PredictedP90Date": 1799650335430.457,
-    "PredictedP2_5Date": 1787467935430.457,
-    "PredictedP97_5Date": 1804055188235.5942,
-    "PredictedP10Days": 78,
-    "PredictedP90Days": 199,
-    "PredictedP2_5Days": 58,
-    "PredictedP97_5Days": 250,
+    "PredictedP10Date": 1789478434631.952,
+    "PredictedP90Date": 1799964345755.104,
+    "PredictedP2_5Date": 1787781945755.104,
+    "PredictedP97_5Date": 1804297119613.8926,
+    "PredictedP10Days": 82,
+    "PredictedP90Days": 203,
+    "PredictedP2_5Days": 62,
+    "PredictedP97_5Days": 253,
     "OriginalPredictedDate": 1797631200000,
     "OriginalPredictedRangeLowDate": 1789509600000,
     "OriginalPredictedRangeHighDate": 1799359200000,
@@ -3567,20 +3567,28 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1793043784114.2366,
-    "PredictedRangeLowDate": 1790522659110.2803,
-    "PredictedRangeHighDate": 1797046365319.685,
-    "PredictedMedianDays": 124,
-    "PredictedRangeLowDays": 95,
-    "PredictedRangeHighDays": 170,
-    "ReferenceCount": 69,
+    "PredictedDate": 1794870988973.1907,
+    "PredictedRangeLowDate": 1792859611762.931,
+    "PredictedRangeHighDate": 1795839992917.307,
+    "PredictedMedianDays": 145,
+    "PredictedRangeLowDays": 122,
+    "PredictedRangeHighDays": 156,
+    "ReferenceCount": 72,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
       {
         "Land": "Deutschland",
+        "WartezeitTage": 135
+      },
+      {
+        "Land": "Deutschland",
         "WartezeitTage": 133
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 119
       },
       {
         "Land": "Deutschland",
@@ -3617,26 +3625,18 @@
       {
         "Land": "Deutschland",
         "WartezeitTage": 53
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 93
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 85
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1789965279008.156,
-    "PredictedP90Date": 1798630896511.2944,
-    "PredictedP2_5Date": 1789162288406.5647,
-    "PredictedP97_5Date": 1801026574334.2427,
-    "PredictedP10Days": 88,
+    "PredictedP10Date": 1790589560517.5654,
+    "PredictedP90Date": 1798562011762.931,
+    "PredictedP2_5Date": 1789995751947.85,
+    "PredictedP97_5Date": 1801116133781.3071,
+    "PredictedP10Days": 95,
     "PredictedP90Days": 188,
-    "PredictedP2_5Days": 79,
-    "PredictedP97_5Days": 216,
+    "PredictedP2_5Days": 89,
+    "PredictedP97_5Days": 217,
     "OriginalPredictedDate": 1796680800000,
     "OriginalPredictedRangeLowDate": 1793397600000,
     "OriginalPredictedRangeHighDate": 1799100000000,
@@ -3719,16 +3719,16 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1791787935430.457,
-    "PredictedRangeLowDate": 1789800735430.457,
-    "PredictedRangeHighDate": 1797231135430.457,
-    "PredictedMedianDays": 108,
-    "PredictedRangeLowDays": 85,
-    "PredictedRangeHighDays": 171,
-    "ReferenceCount": 73,
+    "PredictedDate": 1792417432937.247,
+    "PredictedRangeLowDate": 1790312485218.591,
+    "PredictedRangeHighDate": 1797417140994.2415,
+    "PredictedMedianDays": 116,
+    "PredictedRangeLowDays": 91,
+    "PredictedRangeHighDays": 173,
+    "ReferenceCount": 76,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
       {
         "Land": "Deutschland",
@@ -3756,6 +3756,10 @@
       },
       {
         "Land": "Deutschland",
+        "WartezeitTage": 119
+      },
+      {
+        "Land": "Deutschland",
         "WartezeitTage": 93
       },
       {
@@ -3773,22 +3777,18 @@
       {
         "Land": "Deutschland",
         "WartezeitTage": 194
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 176
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1789173986347.057,
-    "PredictedP90Date": 1799657372874.3315,
-    "PredictedP2_5Date": 1787533787247.4236,
-    "PredictedP97_5Date": 1803715586968.209,
-    "PredictedP10Days": 78,
-    "PredictedP90Days": 199,
-    "PredictedP2_5Days": 59,
-    "PredictedP97_5Days": 246,
+    "PredictedP10Date": 1789546270110.1572,
+    "PredictedP90Date": 1800009140994.2415,
+    "PredictedP2_5Date": 1787977613982.6768,
+    "PredictedP97_5Date": 1803945540778.1482,
+    "PredictedP10Days": 82,
+    "PredictedP90Days": 203,
+    "PredictedP2_5Days": 64,
+    "PredictedP97_5Days": 249,
     "OriginalPredictedDate": 1797026400000,
     "OriginalPredictedRangeLowDate": 1789509600000,
     "OriginalPredictedRangeHighDate": 1799013600000,
@@ -3871,17 +3871,21 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1792109823292.5386,
-    "PredictedRangeLowDate": 1789978790111.0955,
-    "PredictedRangeHighDate": 1796861823292.5386,
-    "PredictedMedianDays": 114,
-    "PredictedRangeLowDays": 89,
-    "PredictedRangeHighDays": 169,
-    "ReferenceCount": 73,
+    "PredictedDate": 1793709711992.3513,
+    "PredictedRangeLowDate": 1790895118700.4841,
+    "PredictedRangeHighDate": 1795616172472.2676,
+    "PredictedMedianDays": 133,
+    "PredictedRangeLowDays": 100,
+    "PredictedRangeHighDays": 155,
+    "ReferenceCount": 76,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 119
+      },
       {
         "Land": "Deutschland",
         "WartezeitTage": 82
@@ -3889,6 +3893,10 @@
       {
         "Land": "Deutschland",
         "WartezeitTage": 133
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 135
       },
       {
         "Land": "Deutschland",
@@ -3921,26 +3929,18 @@
       {
         "Land": "Deutschland",
         "WartezeitTage": 179
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 166
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 53
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1789537605625.8982,
-    "PredictedP90Date": 1799364634281.2485,
-    "PredictedP2_5Date": 1788740223292.5386,
-    "PredictedP97_5Date": 1801715710648.4524,
-    "PredictedP10Days": 84,
-    "PredictedP90Days": 198,
-    "PredictedP2_5Days": 75,
-    "PredictedP97_5Days": 225,
+    "PredictedP10Date": 1790214438222.0374,
+    "PredictedP90Date": 1799027238222.0374,
+    "PredictedP2_5Date": 1789413841209.9595,
+    "PredictedP97_5Date": 1801584074402.76,
+    "PredictedP10Days": 92,
+    "PredictedP90Days": 194,
+    "PredictedP2_5Days": 83,
+    "PredictedP97_5Days": 224,
     "OriginalPredictedDate": 1797285600000,
     "OriginalPredictedRangeLowDate": 1795730400000,
     "OriginalPredictedRangeHighDate": 1797631200000,
@@ -4019,17 +4019,21 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1791567299775.8225,
-    "PredictedRangeLowDate": 1789727781378.8108,
-    "PredictedRangeHighDate": 1796328287702.712,
-    "PredictedMedianDays": 109,
-    "PredictedRangeLowDays": 87,
-    "PredictedRangeHighDays": 164,
-    "ReferenceCount": 71,
+    "PredictedDate": 1793427279782.857,
+    "PredictedRangeLowDate": 1790412680128.2666,
+    "PredictedRangeHighDate": 1794862365241.5159,
+    "PredictedMedianDays": 130,
+    "PredictedRangeLowDays": 95,
+    "PredictedRangeHighDays": 147,
+    "ReferenceCount": 74,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 119
+      },
       {
         "Land": "Deutschland",
         "WartezeitTage": 82
@@ -4037,6 +4041,10 @@
       {
         "Land": "Deutschland",
         "WartezeitTage": 133
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 135
       },
       {
         "Land": "Deutschland",
@@ -4068,26 +4076,18 @@
       },
       {
         "Land": "Deutschland",
-        "WartezeitTage": 128
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 179
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 191
+        "WartezeitTage": 134
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1789030880984.5967,
-    "PredictedP90Date": 1799429699775.8225,
-    "PredictedP2_5Date": 1787469913625.2412,
-    "PredictedP97_5Date": 1803942384276.042,
-    "PredictedP10Days": 79,
-    "PredictedP90Days": 200,
-    "PredictedP2_5Days": 61,
+    "PredictedP10Date": 1789953502293.962,
+    "PredictedP90Date": 1799535932577.87,
+    "PredictedP2_5Date": 1788336051848.28,
+    "PredictedP97_5Date": 1803959396746.101,
+    "PredictedP10Days": 90,
+    "PredictedP90Days": 201,
+    "PredictedP2_5Days": 71,
     "PredictedP97_5Days": 252,
     "OriginalPredictedDate": 1796162400000,
     "OriginalPredictedRangeLowDate": 1789336800000,
@@ -4323,16 +4323,16 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1791567299775.8225,
-    "PredictedRangeLowDate": 1789580099775.8225,
-    "PredictedRangeHighDate": 1797701699775.8225,
-    "PredictedMedianDays": 109,
-    "PredictedRangeLowDays": 86,
-    "PredictedRangeHighDays": 180,
-    "ReferenceCount": 73,
+    "PredictedDate": 1792231410227.6362,
+    "PredictedRangeLowDate": 1790085851465.613,
+    "PredictedRangeHighDate": 1797338078875.5388,
+    "PredictedMedianDays": 116,
+    "PredictedRangeLowDays": 92,
+    "PredictedRangeHighDays": 176,
+    "ReferenceCount": 76,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
       {
         "Land": "Deutschland",
@@ -4368,6 +4368,10 @@
       },
       {
         "Land": "Deutschland",
+        "WartezeitTage": 119
+      },
+      {
+        "Land": "Deutschland",
         "WartezeitTage": 93
       },
       {
@@ -4376,23 +4380,19 @@
       },
       {
         "Land": "Deutschland",
-        "WartezeitTage": 191
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 176
+        "WartezeitTage": 134
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1788952781342.9482,
-    "PredictedP90Date": 1799429699775.8225,
-    "PredictedP2_5Date": 1787288364332.2432,
-    "PredictedP97_5Date": 1803367330456.9412,
-    "PredictedP10Days": 78,
-    "PredictedP90Days": 200,
-    "PredictedP2_5Days": 59,
-    "PredictedP97_5Days": 245,
+    "PredictedP10Date": 1789342736802.8525,
+    "PredictedP90Date": 1799806419957.8306,
+    "PredictedP2_5Date": 1787748035958.2249,
+    "PredictedP97_5Date": 1803619168693.316,
+    "PredictedP10Days": 83,
+    "PredictedP90Days": 204,
+    "PredictedP2_5Days": 65,
+    "PredictedP97_5Days": 248,
     "OriginalPredictedDate": 1797544800000,
     "OriginalPredictedRangeLowDate": 1791237600000,
     "OriginalPredictedRangeHighDate": 1799272800000,
@@ -4467,16 +4467,16 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1791489227626.664,
-    "PredictedRangeLowDate": 1789502027626.664,
-    "PredictedRangeHighDate": 1796932427626.664,
-    "PredictedMedianDays": 109,
-    "PredictedRangeLowDays": 86,
-    "PredictedRangeHighDays": 172,
-    "ReferenceCount": 73,
+    "PredictedDate": 1792136280820.0564,
+    "PredictedRangeLowDate": 1790031333101.4001,
+    "PredictedRangeHighDate": 1797135988877.0505,
+    "PredictedMedianDays": 116,
+    "PredictedRangeLowDays": 92,
+    "PredictedRangeHighDays": 174,
+    "ReferenceCount": 76,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
       {
         "Land": "Deutschland",
@@ -4504,6 +4504,10 @@
       },
       {
         "Land": "Deutschland",
+        "WartezeitTage": 119
+      },
+      {
+        "Land": "Deutschland",
         "WartezeitTage": 93
       },
       {
@@ -4521,22 +4525,18 @@
       {
         "Land": "Deutschland",
         "WartezeitTage": 194
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 176
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1788875278543.264,
-    "PredictedP90Date": 1799358665070.5386,
-    "PredictedP2_5Date": 1787235079443.6306,
-    "PredictedP97_5Date": 1803416879164.416,
-    "PredictedP10Days": 79,
-    "PredictedP90Days": 200,
-    "PredictedP2_5Days": 60,
-    "PredictedP97_5Days": 247,
+    "PredictedP10Date": 1789265117992.9663,
+    "PredictedP90Date": 1799727988877.0505,
+    "PredictedP2_5Date": 1787696461865.4858,
+    "PredictedP97_5Date": 1803664388660.9575,
+    "PredictedP10Days": 83,
+    "PredictedP90Days": 204,
+    "PredictedP2_5Days": 65,
+    "PredictedP97_5Days": 250,
     "OriginalPredictedDate": 1796767200000,
     "OriginalPredictedRangeLowDate": 1789250400000,
     "OriginalPredictedRangeHighDate": 1798754400000,
@@ -5047,24 +5047,36 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1791471637705.7356,
-    "PredictedRangeLowDate": 1789329130592.2402,
-    "PredictedRangeHighDate": 1796316838890.6377,
-    "PredictedMedianDays": 115,
-    "PredictedRangeLowDays": 90,
-    "PredictedRangeHighDays": 171,
-    "ReferenceCount": 73,
+    "PredictedDate": 1793322143151.3374,
+    "PredictedRangeLowDate": 1790658489116.5566,
+    "PredictedRangeHighDate": 1794847544911.8806,
+    "PredictedMedianDays": 136,
+    "PredictedRangeLowDays": 105,
+    "PredictedRangeHighDays": 154,
+    "ReferenceCount": 76,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 119
+      },
       {
         "Land": "Deutschland",
         "WartezeitTage": 82
       },
       {
         "Land": "Deutschland",
+        "WartezeitTage": 135
+      },
+      {
+        "Land": "Deutschland",
         "WartezeitTage": 133
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 134
       },
       {
         "Land": "Deutschland",
@@ -5093,30 +5105,18 @@
       {
         "Land": "Deutschland",
         "WartezeitTage": 108
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 128
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 179
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 166
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1788879637705.7356,
-    "PredictedP90Date": 1798902037705.7356,
-    "PredictedP2_5Date": 1788102037705.7356,
-    "PredictedP97_5Date": 1800460066716.759,
-    "PredictedP10Days": 85,
-    "PredictedP90Days": 201,
-    "PredictedP2_5Days": 76,
-    "PredictedP97_5Days": 219,
+    "PredictedP10Date": 1789642101386.57,
+    "PredictedP90Date": 1798862699293.7903,
+    "PredictedP2_5Date": 1788874244425.4282,
+    "PredictedP97_5Date": 1800791509526.101,
+    "PredictedP10Days": 93,
+    "PredictedP90Days": 200,
+    "PredictedP2_5Days": 85,
+    "PredictedP97_5Days": 222,
     "OriginalPredictedDate": 1796248800000,
     "OriginalPredictedRangeLowDate": 1794780000000,
     "OriginalPredictedRangeHighDate": 1798063200000,
@@ -5351,20 +5351,28 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1792151018451.6533,
-    "PredictedRangeLowDate": 1789948994565.0405,
-    "PredictedRangeHighDate": 1796327501111.1433,
-    "PredictedMedianDays": 122,
-    "PredictedRangeLowDays": 97,
-    "PredictedRangeHighDays": 171,
-    "ReferenceCount": 72,
+    "PredictedDate": 1794114843988.0686,
+    "PredictedRangeLowDate": 1792122488781.623,
+    "PredictedRangeHighDate": 1794990115605.5034,
+    "PredictedMedianDays": 145,
+    "PredictedRangeLowDays": 122,
+    "PredictedRangeHighDays": 155,
+    "ReferenceCount": 75,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
       {
         "Land": "Deutschland",
+        "WartezeitTage": 135
+      },
+      {
+        "Land": "Deutschland",
         "WartezeitTage": 133
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 119
       },
       {
         "Land": "Deutschland",
@@ -5401,26 +5409,18 @@
       {
         "Land": "Deutschland",
         "WartezeitTage": 73
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 103
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 166
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1789248926856.8914,
-    "PredictedP90Date": 1797939818451.6533,
-    "PredictedP2_5Date": 1788482412838.6758,
-    "PredictedP97_5Date": 1800273572192.6545,
-    "PredictedP10Days": 89,
-    "PredictedP90Days": 189,
-    "PredictedP2_5Days": 80,
-    "PredictedP97_5Days": 216,
+    "PredictedP10Date": 1789866402783.256,
+    "PredictedP90Date": 1798275041494.8208,
+    "PredictedP2_5Date": 1789122727143.8894,
+    "PredictedP97_5Date": 1800353066244.4412,
+    "PredictedP10Days": 96,
+    "PredictedP90Days": 193,
+    "PredictedP2_5Days": 87,
+    "PredictedP97_5Days": 217,
     "OriginalPredictedDate": 1796594400000,
     "OriginalPredictedRangeLowDate": 1794780000000,
     "OriginalPredictedRangeHighDate": 1798322400000,
@@ -5503,17 +5503,21 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1791394787525.9875,
-    "PredictedRangeLowDate": 1789263754344.5447,
-    "PredictedRangeHighDate": 1796146787525.9875,
-    "PredictedMedianDays": 115,
-    "PredictedRangeLowDays": 90,
-    "PredictedRangeHighDays": 170,
-    "ReferenceCount": 73,
+    "PredictedDate": 1792993979530.0427,
+    "PredictedRangeLowDate": 1790179386238.1753,
+    "PredictedRangeHighDate": 1794900440009.9587,
+    "PredictedMedianDays": 133,
+    "PredictedRangeLowDays": 101,
+    "PredictedRangeHighDays": 155,
+    "ReferenceCount": 76,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 119
+      },
       {
         "Land": "Deutschland",
         "WartezeitTage": 82
@@ -5521,6 +5525,10 @@
       {
         "Land": "Deutschland",
         "WartezeitTage": 133
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 135
       },
       {
         "Land": "Deutschland",
@@ -5553,26 +5561,18 @@
       {
         "Land": "Deutschland",
         "WartezeitTage": 179
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 166
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 53
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1788822569859.3472,
-    "PredictedP90Date": 1798649598514.6978,
-    "PredictedP2_5Date": 1788025187525.9875,
-    "PredictedP97_5Date": 1801000674881.9014,
-    "PredictedP10Days": 85,
-    "PredictedP90Days": 199,
-    "PredictedP2_5Days": 76,
-    "PredictedP97_5Days": 226,
+    "PredictedP10Date": 1789498705759.7288,
+    "PredictedP90Date": 1798311505759.7288,
+    "PredictedP2_5Date": 1788698108747.651,
+    "PredictedP97_5Date": 1800868341940.4512,
+    "PredictedP10Days": 93,
+    "PredictedP90Days": 195,
+    "PredictedP2_5Days": 84,
+    "PredictedP97_5Days": 224,
     "OriginalPredictedDate": 1795816800000,
     "OriginalPredictedRangeLowDate": 1792533600000,
     "OriginalPredictedRangeHighDate": 1798236000000,
@@ -5655,16 +5655,16 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1790737894271.8804,
-    "PredictedRangeLowDate": 1788750694271.8804,
-    "PredictedRangeHighDate": 1796181094271.8804,
-    "PredictedMedianDays": 109,
-    "PredictedRangeLowDays": 86,
-    "PredictedRangeHighDays": 172,
-    "ReferenceCount": 73,
+    "PredictedDate": 1791390422545.7563,
+    "PredictedRangeLowDate": 1789285474827.1003,
+    "PredictedRangeHighDate": 1796390130602.7507,
+    "PredictedMedianDays": 117,
+    "PredictedRangeLowDays": 92,
+    "PredictedRangeHighDays": 175,
+    "ReferenceCount": 76,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
       {
         "Land": "Deutschland",
@@ -5692,6 +5692,10 @@
       },
       {
         "Land": "Deutschland",
+        "WartezeitTage": 119
+      },
+      {
+        "Land": "Deutschland",
         "WartezeitTage": 93
       },
       {
@@ -5709,22 +5713,18 @@
       {
         "Land": "Deutschland",
         "WartezeitTage": 194
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 176
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1788123945188.4805,
-    "PredictedP90Date": 1798607331715.755,
-    "PredictedP2_5Date": 1786483746088.8472,
-    "PredictedP97_5Date": 1802665545809.6323,
-    "PredictedP10Days": 79,
-    "PredictedP90Days": 200,
-    "PredictedP2_5Days": 60,
-    "PredictedP97_5Days": 247,
+    "PredictedP10Date": 1788519259718.6665,
+    "PredictedP90Date": 1798982130602.7507,
+    "PredictedP2_5Date": 1786950603591.186,
+    "PredictedP97_5Date": 1802918530386.6575,
+    "PredictedP10Days": 83,
+    "PredictedP90Days": 205,
+    "PredictedP2_5Days": 65,
+    "PredictedP97_5Days": 250,
     "OriginalPredictedDate": 1795471200000,
     "OriginalPredictedRangeLowDate": 1788559200000,
     "OriginalPredictedRangeHighDate": 1797890400000,
@@ -6083,24 +6083,36 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1790809672398.19,
-    "PredictedRangeLowDate": 1788667165284.6946,
-    "PredictedRangeHighDate": 1795654873583.092,
-    "PredictedMedianDays": 115,
-    "PredictedRangeLowDays": 90,
-    "PredictedRangeHighDays": 171,
-    "ReferenceCount": 73,
+    "PredictedDate": 1792646937380.0315,
+    "PredictedRangeLowDate": 1789983283345.251,
+    "PredictedRangeHighDate": 1794172339140.575,
+    "PredictedMedianDays": 136,
+    "PredictedRangeLowDays": 105,
+    "PredictedRangeHighDays": 154,
+    "ReferenceCount": 76,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 119
+      },
       {
         "Land": "Deutschland",
         "WartezeitTage": 82
       },
       {
         "Land": "Deutschland",
+        "WartezeitTage": 135
+      },
+      {
+        "Land": "Deutschland",
         "WartezeitTage": 133
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 134
       },
       {
         "Land": "Deutschland",
@@ -6129,30 +6141,18 @@
       {
         "Land": "Deutschland",
         "WartezeitTage": 108
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 128
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 179
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 166
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1788217672398.19,
-    "PredictedP90Date": 1798240072398.19,
-    "PredictedP2_5Date": 1787440072398.19,
-    "PredictedP97_5Date": 1799798101409.2134,
-    "PredictedP10Days": 85,
-    "PredictedP90Days": 201,
-    "PredictedP2_5Days": 76,
-    "PredictedP97_5Days": 219,
+    "PredictedP10Date": 1788966895615.2644,
+    "PredictedP90Date": 1798187493522.4846,
+    "PredictedP2_5Date": 1788199038654.1223,
+    "PredictedP97_5Date": 1800116303754.7954,
+    "PredictedP10Days": 94,
+    "PredictedP90Days": 200,
+    "PredictedP2_5Days": 85,
+    "PredictedP97_5Days": 223,
     "OriginalPredictedDate": 1795557600000,
     "OriginalPredictedRangeLowDate": 1794088800000,
     "OriginalPredictedRangeHighDate": 1797372000000,
@@ -6387,24 +6387,36 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1790570880000.0,
-    "PredictedRangeLowDate": 1788322184139.0254,
-    "PredictedRangeHighDate": 1795322880000.0,
-    "PredictedMedianDays": 115,
-    "PredictedRangeLowDays": 89,
-    "PredictedRangeHighDays": 170,
-    "ReferenceCount": 72,
+    "PredictedDate": 1792269166706.027,
+    "PredictedRangeLowDate": 1789091620317.897,
+    "PredictedRangeHighDate": 1793671065251.7617,
+    "PredictedMedianDays": 135,
+    "PredictedRangeLowDays": 98,
+    "PredictedRangeHighDays": 151,
+    "ReferenceCount": 75,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 119
+      },
       {
         "Land": "Deutschland",
         "WartezeitTage": 82
       },
       {
         "Land": "Deutschland",
+        "WartezeitTage": 135
+      },
+      {
+        "Land": "Deutschland",
         "WartezeitTage": 133
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 134
       },
       {
         "Land": "Deutschland",
@@ -6433,30 +6445,18 @@
       {
         "Land": "Deutschland",
         "WartezeitTage": 53
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 103
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 128
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 179
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1787922678866.087,
-    "PredictedP90Date": 1798001280000.0,
-    "PredictedP2_5Date": 1786221835221.2163,
-    "PredictedP97_5Date": 1802200741706.6587,
-    "PredictedP10Days": 85,
-    "PredictedP90Days": 201,
-    "PredictedP2_5Days": 65,
-    "PredictedP97_5Days": 250,
+    "PredictedP10Date": 1788667341184.666,
+    "PredictedP90Date": 1797600434799.904,
+    "PredictedP2_5Date": 1787317342028.5527,
+    "PredictedP97_5Date": 1800197387792.2664,
+    "PredictedP10Days": 93,
+    "PredictedP90Days": 197,
+    "PredictedP2_5Days": 78,
+    "PredictedP97_5Days": 227,
     "OriginalPredictedDate": 1794952800000,
     "OriginalPredictedRangeLowDate": 1791669600000,
     "OriginalPredictedRangeHighDate": 1797372000000,
@@ -6967,16 +6967,16 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1790018516529.7476,
-    "PredictedRangeLowDate": 1788031316529.7476,
-    "PredictedRangeHighDate": 1795461716529.7476,
-    "PredictedMedianDays": 110,
-    "PredictedRangeLowDays": 87,
-    "PredictedRangeHighDays": 173,
-    "ReferenceCount": 73,
+    "PredictedDate": 1790668315238.7385,
+    "PredictedRangeLowDate": 1788563367520.0825,
+    "PredictedRangeHighDate": 1795668023295.733,
+    "PredictedMedianDays": 117,
+    "PredictedRangeLowDays": 93,
+    "PredictedRangeHighDays": 175,
+    "ReferenceCount": 76,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
       {
         "Land": "Deutschland",
@@ -7004,6 +7004,10 @@
       },
       {
         "Land": "Deutschland",
+        "WartezeitTage": 119
+      },
+      {
+        "Land": "Deutschland",
         "WartezeitTage": 93
       },
       {
@@ -7021,22 +7025,18 @@
       {
         "Land": "Deutschland",
         "WartezeitTage": 194
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 176
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1787404567446.3477,
-    "PredictedP90Date": 1797887953973.6223,
-    "PredictedP2_5Date": 1785764368346.7144,
-    "PredictedP97_5Date": 1801946168067.4995,
-    "PredictedP10Days": 80,
-    "PredictedP90Days": 201,
-    "PredictedP2_5Days": 61,
-    "PredictedP97_5Days": 248,
+    "PredictedP10Date": 1787797152411.6487,
+    "PredictedP90Date": 1798260023295.733,
+    "PredictedP2_5Date": 1786228496284.1682,
+    "PredictedP97_5Date": 1802196423079.6396,
+    "PredictedP10Days": 84,
+    "PredictedP90Days": 205,
+    "PredictedP2_5Days": 66,
+    "PredictedP97_5Days": 251,
     "OriginalPredictedDate": 1795212000000,
     "OriginalPredictedRangeLowDate": 1787781600000,
     "OriginalPredictedRangeHighDate": 1797285600000,
@@ -7119,20 +7119,28 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1791371709492.6724,
-    "PredictedRangeLowDate": 1788850584488.716,
-    "PredictedRangeHighDate": 1795374290698.1208,
-    "PredictedMedianDays": 125,
-    "PredictedRangeLowDays": 96,
-    "PredictedRangeHighDays": 172,
-    "ReferenceCount": 69,
+    "PredictedDate": 1793081032262.6892,
+    "PredictedRangeLowDate": 1791069655052.4294,
+    "PredictedRangeHighDate": 1794050036206.8054,
+    "PredictedMedianDays": 145,
+    "PredictedRangeLowDays": 122,
+    "PredictedRangeHighDays": 156,
+    "ReferenceCount": 72,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
       {
         "Land": "Deutschland",
+        "WartezeitTage": 135
+      },
+      {
+        "Land": "Deutschland",
         "WartezeitTage": 133
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 119
       },
       {
         "Land": "Deutschland",
@@ -7169,25 +7177,17 @@
       {
         "Land": "Deutschland",
         "WartezeitTage": 53
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 93
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 85
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1788293204386.5918,
-    "PredictedP90Date": 1796958821889.7302,
-    "PredictedP2_5Date": 1787490213785.0005,
-    "PredictedP97_5Date": 1799354499712.6785,
-    "PredictedP10Days": 90,
-    "PredictedP90Days": 190,
-    "PredictedP2_5Days": 81,
+    "PredictedP10Date": 1788799603807.064,
+    "PredictedP90Date": 1796772055052.4294,
+    "PredictedP2_5Date": 1788205795237.3489,
+    "PredictedP97_5Date": 1799326177070.806,
+    "PredictedP10Days": 96,
+    "PredictedP90Days": 188,
+    "PredictedP2_5Days": 89,
     "PredictedP97_5Days": 218,
     "OriginalPredictedDate": 1794693600000,
     "OriginalPredictedRangeLowDate": 1789941600000,
@@ -7395,16 +7395,16 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1789076067169.363,
-    "PredictedRangeLowDate": 1788190518656.4856,
-    "PredictedRangeHighDate": 1794779847102.757,
-    "PredictedMedianDays": 100,
-    "PredictedRangeLowDays": 90,
-    "PredictedRangeHighDays": 166,
-    "ReferenceCount": 70,
+    "PredictedDate": 1790778632652.1768,
+    "PredictedRangeLowDate": 1789382995282.559,
+    "PredictedRangeHighDate": 1793025032652.1768,
+    "PredictedMedianDays": 120,
+    "PredictedRangeLowDays": 103,
+    "PredictedRangeHighDays": 146,
+    "ReferenceCount": 73,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
       {
         "Land": "Deutschland",
@@ -7412,7 +7412,15 @@
       },
       {
         "Land": "Deutschland",
+        "WartezeitTage": 134
+      },
+      {
+        "Land": "Deutschland",
         "WartezeitTage": 80
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 119
       },
       {
         "Land": "Deutschland",
@@ -7445,26 +7453,18 @@
       {
         "Land": "Deutschland",
         "WartezeitTage": 108
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 128
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 179
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1787452858028.2007,
-    "PredictedP90Date": 1797717447102.757,
-    "PredictedP2_5Date": 1785673850312.6384,
-    "PredictedP97_5Date": 1802372230372.0269,
-    "PredictedP10Days": 81,
-    "PredictedP90Days": 200,
-    "PredictedP2_5Days": 61,
-    "PredictedP97_5Days": 254,
+    "PredictedP10Date": 1788186632652.1768,
+    "PredictedP90Date": 1797673808081.6099,
+    "PredictedP2_5Date": 1786410326811.5488,
+    "PredictedP97_5Date": 1802441937286.1565,
+    "PredictedP10Days": 90,
+    "PredictedP90Days": 199,
+    "PredictedP2_5Days": 69,
+    "PredictedP97_5Days": 255,
     "OriginalPredictedDate": 1794780000000,
     "OriginalPredictedRangeLowDate": 1791496800000,
     "OriginalPredictedRangeHighDate": 1797199200000,
@@ -7547,16 +7547,16 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1789865783594.4219,
-    "PredictedRangeLowDate": 1787955921656.103,
-    "PredictedRangeHighDate": 1795386321656.103,
-    "PredictedMedianDays": 109,
-    "PredictedRangeLowDays": 87,
-    "PredictedRangeHighDays": 173,
-    "ReferenceCount": 71,
+    "PredictedDate": 1790286119731.8887,
+    "PredictedRangeLowDate": 1788298919731.8887,
+    "PredictedRangeHighDate": 1795556519731.8887,
+    "PredictedMedianDays": 114,
+    "PredictedRangeLowDays": 91,
+    "PredictedRangeHighDays": 175,
+    "ReferenceCount": 74,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
       {
         "Land": "Deutschland",
@@ -7588,6 +7588,10 @@
       },
       {
         "Land": "Deutschland",
+        "WartezeitTage": 119
+      },
+      {
+        "Land": "Deutschland",
         "WartezeitTage": 93
       },
       {
@@ -7601,22 +7605,18 @@
       {
         "Land": "Deutschland",
         "WartezeitTage": 194
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 176
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1787313830194.5925,
-    "PredictedP90Date": 1797862936385.7983,
-    "PredictedP2_5Date": 1785623121656.103,
-    "PredictedP97_5Date": 1802257816633.784,
-    "PredictedP10Days": 80,
-    "PredictedP90Days": 202,
-    "PredictedP2_5Days": 60,
-    "PredictedP97_5Days": 252,
+    "PredictedP10Date": 1787667385012.867,
+    "PredictedP90Date": 1798148519731.8887,
+    "PredictedP2_5Date": 1785966119731.8887,
+    "PredictedP97_5Date": 1802515086065.8486,
+    "PredictedP10Days": 84,
+    "PredictedP90Days": 205,
+    "PredictedP2_5Days": 64,
+    "PredictedP97_5Days": 255,
     "OriginalPredictedDate": 1795644000000,
     "OriginalPredictedRangeLowDate": 1787522400000,
     "OriginalPredictedRangeHighDate": 1797199200000,
@@ -7851,20 +7851,28 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1789855091520.9658,
-    "PredictedRangeLowDate": 1788260937434.298,
-    "PredictedRangeHighDate": 1795021319589.9407,
-    "PredictedMedianDays": 114,
-    "PredictedRangeLowDays": 95,
-    "PredictedRangeHighDays": 174,
-    "ReferenceCount": 73,
+    "PredictedDate": 1791373234882.4626,
+    "PredictedRangeLowDate": 1789121384632.8232,
+    "PredictedRangeHighDate": 1794178810889.0676,
+    "PredictedMedianDays": 131,
+    "PredictedRangeLowDays": 105,
+    "PredictedRangeHighDays": 164,
+    "ReferenceCount": 76,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
       {
         "Land": "Deutschland",
+        "WartezeitTage": 134
+      },
+      {
+        "Land": "Deutschland",
         "WartezeitTage": 93
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 119
       },
       {
         "Land": "Deutschland",
@@ -7884,6 +7892,10 @@
       },
       {
         "Land": "Deutschland",
+        "WartezeitTage": 135
+      },
+      {
+        "Land": "Deutschland",
         "WartezeitTage": 103
       },
       {
@@ -7897,30 +7909,18 @@
       {
         "Land": "Deutschland",
         "WartezeitTage": 128
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 179
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 166
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 53
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1787146678267.313,
-    "PredictedP90Date": 1797440519589.9407,
-    "PredictedP2_5Date": 1786591943776.9167,
-    "PredictedP97_5Date": 1799131533184.7366,
-    "PredictedP10Days": 83,
-    "PredictedP90Days": 202,
-    "PredictedP2_5Days": 76,
-    "PredictedP97_5Days": 221,
+    "PredictedP10Date": 1788024848609.0007,
+    "PredictedP90Date": 1797700471572.191,
+    "PredictedP2_5Date": 1787156270212.287,
+    "PredictedP97_5Date": 1799243360110.6616,
+    "PredictedP10Days": 93,
+    "PredictedP90Days": 205,
+    "PredictedP2_5Days": 83,
+    "PredictedP97_5Days": 223,
     "OriginalPredictedDate": 1794348000000,
     "OriginalPredictedRangeLowDate": 1791064800000,
     "OriginalPredictedRangeHighDate": 1796767200000,
@@ -8003,20 +8003,28 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1791003954418.0833,
-    "PredictedRangeLowDate": 1788090695731.9553,
-    "PredictedRangeHighDate": 1794978354418.0833,
-    "PredictedMedianDays": 127,
-    "PredictedRangeLowDays": 93,
-    "PredictedRangeHighDays": 173,
-    "ReferenceCount": 72,
+    "PredictedDate": 1792145408294.0918,
+    "PredictedRangeLowDate": 1790051429291.4153,
+    "PredictedRangeHighDate": 1793549939391.4258,
+    "PredictedMedianDays": 140,
+    "PredictedRangeLowDays": 116,
+    "PredictedRangeHighDays": 157,
+    "ReferenceCount": 75,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
       {
         "Land": "Deutschland",
+        "WartezeitTage": 119
+      },
+      {
+        "Land": "Deutschland",
         "WartezeitTage": 82
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 135
       },
       {
         "Land": "Deutschland",
@@ -8048,31 +8056,23 @@
       },
       {
         "Land": "Deutschland",
+        "WartezeitTage": 134
+      },
+      {
+        "Land": "Deutschland",
         "WartezeitTage": 103
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 182
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 174
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 164
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1787828040316.8884,
-    "PredictedP90Date": 1796533554418.0833,
-    "PredictedP2_5Date": 1787048015093.472,
-    "PredictedP97_5Date": 1798947912722.8767,
-    "PredictedP10Days": 90,
+    "PredictedP10Date": 1788207425347.224,
+    "PredictedP90Date": 1796554852469.1108,
+    "PredictedP2_5Date": 1787435867324.1782,
+    "PredictedP97_5Date": 1798694911780.1052,
+    "PredictedP10Days": 95,
     "PredictedP90Days": 191,
-    "PredictedP2_5Days": 81,
-    "PredictedP97_5Days": 219,
+    "PredictedP2_5Days": 86,
+    "PredictedP97_5Days": 216,
     "OriginalPredictedDate": 1794348000000,
     "OriginalPredictedRangeLowDate": 1791064800000,
     "OriginalPredictedRangeHighDate": 1796508000000,
@@ -8307,24 +8307,36 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1789965019494.5847,
-    "PredictedRangeLowDate": 1787716323633.6104,
-    "PredictedRangeHighDate": 1794717019494.5847,
-    "PredictedMedianDays": 116,
-    "PredictedRangeLowDays": 90,
-    "PredictedRangeHighDays": 171,
-    "ReferenceCount": 72,
+    "PredictedDate": 1791531465578.6648,
+    "PredictedRangeLowDate": 1788353919190.535,
+    "PredictedRangeHighDate": 1792933364124.3997,
+    "PredictedMedianDays": 134,
+    "PredictedRangeLowDays": 98,
+    "PredictedRangeHighDays": 151,
+    "ReferenceCount": 75,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 119
+      },
       {
         "Land": "Deutschland",
         "WartezeitTage": 82
       },
       {
         "Land": "Deutschland",
+        "WartezeitTage": 135
+      },
+      {
+        "Land": "Deutschland",
         "WartezeitTage": 133
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 134
       },
       {
         "Land": "Deutschland",
@@ -8353,30 +8365,18 @@
       {
         "Land": "Deutschland",
         "WartezeitTage": 53
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 103
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 128
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 179
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1787316818360.6719,
-    "PredictedP90Date": 1797395419494.585,
-    "PredictedP2_5Date": 1785615974715.8013,
-    "PredictedP97_5Date": 1801594881201.2434,
-    "PredictedP10Days": 86,
-    "PredictedP90Days": 202,
-    "PredictedP2_5Days": 66,
-    "PredictedP97_5Days": 251,
+    "PredictedP10Date": 1787929640057.304,
+    "PredictedP90Date": 1796862733672.542,
+    "PredictedP2_5Date": 1786579640901.1904,
+    "PredictedP97_5Date": 1799459686664.9043,
+    "PredictedP10Days": 93,
+    "PredictedP90Days": 196,
+    "PredictedP2_5Days": 77,
+    "PredictedP97_5Days": 226,
     "OriginalPredictedDate": 1794261600000,
     "OriginalPredictedRangeLowDate": 1790978400000,
     "OriginalPredictedRangeHighDate": 1796680800000,
@@ -8611,24 +8611,36 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1789965019494.5847,
-    "PredictedRangeLowDate": 1787822512381.0894,
-    "PredictedRangeHighDate": 1794810220679.4868,
-    "PredictedMedianDays": 116,
-    "PredictedRangeLowDays": 91,
-    "PredictedRangeHighDays": 172,
-    "ReferenceCount": 73,
+    "PredictedDate": 1791645580966.7307,
+    "PredictedRangeLowDate": 1788981926931.95,
+    "PredictedRangeHighDate": 1793170982727.274,
+    "PredictedMedianDays": 136,
+    "PredictedRangeLowDays": 105,
+    "PredictedRangeHighDays": 153,
+    "ReferenceCount": 76,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 119
+      },
       {
         "Land": "Deutschland",
         "WartezeitTage": 82
       },
       {
         "Land": "Deutschland",
+        "WartezeitTage": 135
+      },
+      {
+        "Land": "Deutschland",
         "WartezeitTage": 133
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 134
       },
       {
         "Land": "Deutschland",
@@ -8657,30 +8669,18 @@
       {
         "Land": "Deutschland",
         "WartezeitTage": 108
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 128
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 179
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 166
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1787373019494.5847,
-    "PredictedP90Date": 1797395419494.585,
-    "PredictedP2_5Date": 1786595419494.5847,
-    "PredictedP97_5Date": 1798953448505.6082,
-    "PredictedP10Days": 86,
-    "PredictedP90Days": 202,
-    "PredictedP2_5Days": 77,
-    "PredictedP97_5Days": 220,
+    "PredictedP10Date": 1787965539201.9634,
+    "PredictedP90Date": 1797186137109.1836,
+    "PredictedP2_5Date": 1787197682240.8215,
+    "PredictedP97_5Date": 1799114947341.4944,
+    "PredictedP10Days": 93,
+    "PredictedP90Days": 200,
+    "PredictedP2_5Days": 84,
+    "PredictedP97_5Days": 222,
     "OriginalPredictedDate": 1794261600000,
     "OriginalPredictedRangeLowDate": 1790978400000,
     "OriginalPredictedRangeHighDate": 1796680800000,
@@ -9067,17 +9067,25 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1790344032049.1816,
-    "PredictedRangeLowDate": 1787744204101.8025,
-    "PredictedRangeHighDate": 1794721801794.273,
-    "PredictedMedianDays": 123,
-    "PredictedRangeLowDays": 92,
-    "PredictedRangeHighDays": 173,
-    "ReferenceCount": 60,
+    "PredictedDate": 1792129899663.1665,
+    "PredictedRangeLowDate": 1788823437574.813,
+    "PredictedRangeHighDate": 1793027654434.1316,
+    "PredictedMedianDays": 143,
+    "PredictedRangeLowDays": 105,
+    "PredictedRangeHighDays": 154,
+    "ReferenceCount": 63,
     "ReferenceQualityLabel": "einige gewichtete Referenzen",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 135
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 119
+      },
       {
         "Land": "Deutschland",
         "WartezeitTage": 82
@@ -9085,6 +9093,10 @@
       {
         "Land": "Deutschland",
         "WartezeitTage": 133
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 134
       },
       {
         "Land": "Deutschland",
@@ -9113,29 +9125,17 @@
       {
         "Land": "Deutschland",
         "WartezeitTage": 73
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 103
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 109
-      },
-      {
-        "Land": "Österreich",
-        "WartezeitTage": 69
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": false,
-    "PredictedP10Date": 1787019136183.4016,
-    "PredictedP90Date": 1796741405963.24,
-    "PredictedP2_5Date": 1786500736183.4016,
-    "PredictedP97_5Date": 1798645701112.0322,
-    "PredictedP10Days": 84,
-    "PredictedP90Days": 197,
-    "PredictedP2_5Days": 78,
+    "PredictedP10Date": 1787810811258.7678,
+    "PredictedP90Date": 1795964677198.3887,
+    "PredictedP2_5Date": 1786815502537.0144,
+    "PredictedP97_5Date": 1798690815007.5872,
+    "PredictedP10Days": 93,
+    "PredictedP90Days": 188,
+    "PredictedP2_5Days": 82,
     "PredictedP97_5Days": 219,
     "OriginalPredictedDate": 1786226400000,
     "OriginalPredictedRangeLowDate": 1785794400000,
@@ -9211,16 +9211,16 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1790440533969.6934,
-    "PredictedRangeLowDate": 1788210674728.3672,
-    "PredictedRangeHighDate": 1795277983415.8215,
-    "PredictedMedianDays": 128,
-    "PredictedRangeLowDays": 102,
-    "PredictedRangeHighDays": 184,
-    "ReferenceCount": 73,
+    "PredictedDate": 1790841160325.6116,
+    "PredictedRangeLowDate": 1788457077246.834,
+    "PredictedRangeHighDate": 1795363097112.0464,
+    "PredictedMedianDays": 132,
+    "PredictedRangeLowDays": 105,
+    "PredictedRangeHighDays": 185,
+    "ReferenceCount": 76,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
       {
         "Land": "Deutschland",
@@ -9237,6 +9237,10 @@
       {
         "Land": "Deutschland",
         "WartezeitTage": 128
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 119
       },
       {
         "Land": "Deutschland",
@@ -9265,22 +9269,18 @@
       {
         "Land": "Deutschland",
         "WartezeitTage": 194
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 53
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1786776381262.338,
-    "PredictedP90Date": 1797490991717.146,
-    "PredictedP2_5Date": 1785766111765.2493,
-    "PredictedP97_5Date": 1801826896073.6716,
-    "PredictedP10Days": 85,
-    "PredictedP90Days": 209,
-    "PredictedP2_5Days": 74,
-    "PredictedP97_5Days": 259,
+    "PredictedP10Date": 1787176025537.4233,
+    "PredictedP90Date": 1797580726754.065,
+    "PredictedP2_5Date": 1786074885122.4402,
+    "PredictedP97_5Date": 1801836399923.7393,
+    "PredictedP10Days": 90,
+    "PredictedP90Days": 210,
+    "PredictedP2_5Days": 77,
+    "PredictedP97_5Days": 260,
     "OriginalPredictedDate": 1794088800000,
     "OriginalPredictedRangeLowDate": 1793224800000,
     "OriginalPredictedRangeHighDate": 1796162400000,
@@ -10075,20 +10075,28 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1790133462478.7744,
-    "PredictedRangeLowDate": 1787838937493.8347,
-    "PredictedRangeHighDate": 1794077838876.6716,
-    "PredictedMedianDays": 128,
-    "PredictedRangeLowDays": 102,
-    "PredictedRangeHighDays": 174,
-    "ReferenceCount": 72,
+    "PredictedDate": 1791424018820.6687,
+    "PredictedRangeLowDate": 1789342271609.7288,
+    "PredictedRangeHighDate": 1792344410319.5225,
+    "PredictedMedianDays": 143,
+    "PredictedRangeLowDays": 119,
+    "PredictedRangeHighDays": 154,
+    "ReferenceCount": 75,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
       {
         "Land": "Deutschland",
+        "WartezeitTage": 135
+      },
+      {
+        "Land": "Deutschland",
         "WartezeitTage": 133
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 119
       },
       {
         "Land": "Deutschland",
@@ -10097,6 +10105,10 @@
       {
         "Land": "Deutschland",
         "WartezeitTage": 108
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 134
       },
       {
         "Land": "Deutschland",
@@ -10121,29 +10133,17 @@
       {
         "Land": "Deutschland",
         "WartezeitTage": 108
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 73
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 170
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 103
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1786940959423.323,
-    "PredictedP90Date": 1796277548678.6343,
-    "PredictedP2_5Date": 1786171290276.3962,
-    "PredictedP97_5Date": 1798007485746.4507,
-    "PredictedP10Days": 91,
-    "PredictedP90Days": 199,
-    "PredictedP2_5Days": 82,
+    "PredictedP10Date": 1787094031129.5967,
+    "PredictedP90Date": 1795487635525.599,
+    "PredictedP2_5Date": 1786358483780.7913,
+    "PredictedP97_5Date": 1797990606411.9822,
+    "PredictedP10Days": 93,
+    "PredictedP90Days": 190,
+    "PredictedP2_5Days": 84,
     "PredictedP97_5Days": 219,
     "OriginalPredictedDate": 1793397600000,
     "OriginalPredictedRangeLowDate": 1790114400000,
@@ -10531,17 +10531,21 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1788444024059.043,
-    "PredictedRangeLowDate": 1786640202156.1843,
-    "PredictedRangeHighDate": 1793342719867.2192,
-    "PredictedMedianDays": 112,
-    "PredictedRangeLowDays": 91,
-    "PredictedRangeHighDays": 168,
-    "ReferenceCount": 73,
+    "PredictedDate": 1789978475204.5005,
+    "PredictedRangeLowDate": 1787040406847.9724,
+    "PredictedRangeHighDate": 1791411197273.2136,
+    "PredictedMedianDays": 129,
+    "PredictedRangeLowDays": 95,
+    "PredictedRangeHighDays": 146,
+    "ReferenceCount": 76,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 119
+      },
       {
         "Land": "Deutschland",
         "WartezeitTage": 82
@@ -10549,6 +10553,10 @@
       {
         "Land": "Deutschland",
         "WartezeitTage": 133
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 135
       },
       {
         "Land": "Deutschland",
@@ -10576,31 +10584,23 @@
       },
       {
         "Land": "Deutschland",
+        "WartezeitTage": 134
+      },
+      {
+        "Land": "Deutschland",
         "WartezeitTage": 53
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 128
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 179
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 191
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1785919268753.4343,
-    "PredictedP90Date": 1796280319867.2192,
-    "PredictedP2_5Date": 1784946831147.4104,
-    "PredictedP97_5Date": 1799852521314.337,
-    "PredictedP10Days": 82,
-    "PredictedP90Days": 202,
-    "PredictedP2_5Days": 71,
-    "PredictedP97_5Days": 244,
+    "PredictedP10Date": 1786507340449.9866,
+    "PredictedP90Date": 1796162545648.4482,
+    "PredictedP2_5Date": 1785628189559.1587,
+    "PredictedP97_5Date": 1798385844604.2036,
+    "PredictedP10Days": 89,
+    "PredictedP90Days": 201,
+    "PredictedP2_5Days": 79,
+    "PredictedP97_5Days": 227,
     "OriginalPredictedDate": 1793484000000,
     "OriginalPredictedRangeLowDate": 1786053600000,
     "OriginalPredictedRangeHighDate": 1795384800000,
@@ -10683,16 +10683,16 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1788948311893.2002,
-    "PredictedRangeLowDate": 1786834398024.8633,
-    "PredictedRangeHighDate": 1793394551565.9954,
-    "PredictedMedianDays": 117,
-    "PredictedRangeLowDays": 93,
-    "PredictedRangeHighDays": 169,
-    "ReferenceCount": 73,
+    "PredictedDate": 1790230395615.941,
+    "PredictedRangeLowDate": 1787716128815.846,
+    "PredictedRangeHighDate": 1791799232646.0598,
+    "PredictedMedianDays": 132,
+    "PredictedRangeLowDays": 103,
+    "PredictedRangeHighDays": 150,
+    "ReferenceCount": 76,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
       {
         "Land": "Deutschland",
@@ -10700,7 +10700,15 @@
       },
       {
         "Land": "Deutschland",
+        "WartezeitTage": 119
+      },
+      {
+        "Land": "Deutschland",
         "WartezeitTage": 82
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 135
       },
       {
         "Land": "Deutschland",
@@ -10733,26 +10741,18 @@
       {
         "Land": "Deutschland",
         "WartezeitTage": 108
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 128
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 179
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1786416537028.4153,
-    "PredictedP90Date": 1796101502718.7131,
-    "PredictedP2_5Date": 1785590885850.921,
-    "PredictedP97_5Date": 1797890975304.3162,
-    "PredictedP10Days": 88,
-    "PredictedP90Days": 200,
-    "PredictedP2_5Days": 79,
-    "PredictedP97_5Days": 221,
+    "PredictedP10Date": 1786739798621.7253,
+    "PredictedP90Date": 1795410052248.4607,
+    "PredictedP2_5Date": 1785956543389.4758,
+    "PredictedP97_5Date": 1797820827765.4792,
+    "PredictedP10Days": 92,
+    "PredictedP90Days": 192,
+    "PredictedP2_5Days": 83,
+    "PredictedP97_5Days": 220,
     "OriginalPredictedDate": 1793138400000,
     "OriginalPredictedRangeLowDate": 1789855200000,
     "OriginalPredictedRangeHighDate": 1795298400000,
@@ -11111,20 +11111,28 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1790660799518.8457,
-    "PredictedRangeLowDate": 1787427580544.0378,
-    "PredictedRangeHighDate": 1793671375979.8452,
-    "PredictedMedianDays": 139,
-    "PredictedRangeLowDays": 102,
-    "PredictedRangeHighDays": 174,
-    "ReferenceCount": 70,
+    "PredictedDate": 1790793786696.2395,
+    "PredictedRangeLowDate": 1788690216861.1384,
+    "PredictedRangeHighDate": 1791810811928.5977,
+    "PredictedMedianDays": 141,
+    "PredictedRangeLowDays": 116,
+    "PredictedRangeHighDays": 153,
+    "ReferenceCount": 73,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
       {
         "Land": "Deutschland",
+        "WartezeitTage": 135
+      },
+      {
+        "Land": "Deutschland",
         "WartezeitTage": 133
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 119
       },
       {
         "Land": "Deutschland",
@@ -11133,6 +11141,10 @@
       {
         "Land": "Deutschland",
         "WartezeitTage": 108
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 134
       },
       {
         "Land": "Deutschland",
@@ -11157,30 +11169,18 @@
       {
         "Land": "Deutschland",
         "WartezeitTage": 166
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 53
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 166
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 160
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1786545793772.022,
-    "PredictedP90Date": 1795393855501.5718,
-    "PredictedP2_5Date": 1785688797342.4114,
-    "PredictedP97_5Date": 1797644852629.9495,
-    "PredictedP10Days": 92,
-    "PredictedP90Days": 194,
-    "PredictedP2_5Days": 82,
-    "PredictedP97_5Days": 220,
+    "PredictedP10Date": 1786427701711.7373,
+    "PredictedP90Date": 1794547923719.3,
+    "PredictedP2_5Date": 1785827584876.0383,
+    "PredictedP97_5Date": 1797417484865.1216,
+    "PredictedP10Days": 90,
+    "PredictedP90Days": 184,
+    "PredictedP2_5Days": 83,
+    "PredictedP97_5Days": 217,
     "OriginalPredictedDate": 1793138400000,
     "OriginalPredictedRangeLowDate": 1791324000000,
     "OriginalPredictedRangeHighDate": 1795298400000,
@@ -11263,20 +11263,28 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1788138026671.193,
-    "PredictedRangeLowDate": 1786570981771.0664,
-    "PredictedRangeHighDate": 1793515930611.0288,
-    "PredictedMedianDays": 110,
-    "PredictedRangeLowDays": 92,
-    "PredictedRangeHighDays": 172,
-    "ReferenceCount": 73,
+    "PredictedDate": 1788869574138.1848,
+    "PredictedRangeLowDate": 1787109298084.94,
+    "PredictedRangeHighDate": 1791378233493.8547,
+    "PredictedMedianDays": 119,
+    "PredictedRangeLowDays": 98,
+    "PredictedRangeHighDays": 148,
+    "ReferenceCount": 76,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
       {
         "Land": "Deutschland",
         "WartezeitTage": 93
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 134
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 119
       },
       {
         "Land": "Deutschland",
@@ -11313,26 +11321,18 @@
       {
         "Land": "Deutschland",
         "WartezeitTage": 128
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 179
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 191
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1785710909689.2256,
-    "PredictedP90Date": 1796107930611.0288,
-    "PredictedP2_5Date": 1784655303325.9612,
-    "PredictedP97_5Date": 1799887736841.0696,
-    "PredictedP10Days": 82,
-    "PredictedP90Days": 202,
-    "PredictedP2_5Days": 70,
-    "PredictedP97_5Days": 246,
+    "PredictedP10Date": 1786003173713.0706,
+    "PredictedP90Date": 1796204302430.439,
+    "PredictedP2_5Date": 1785177909258.8687,
+    "PredictedP97_5Date": 1799107939704.3828,
+    "PredictedP10Days": 85,
+    "PredictedP90Days": 203,
+    "PredictedP2_5Days": 76,
+    "PredictedP97_5Days": 237,
     "OriginalPredictedDate": 1794002400000,
     "OriginalPredictedRangeLowDate": 1792533600000,
     "OriginalPredictedRangeHighDate": 1795644000000,
@@ -12263,16 +12263,16 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1787838662072.7173,
-    "PredictedRangeLowDate": 1785851462072.7173,
-    "PredictedRangeHighDate": 1793291613471.6826,
-    "PredictedMedianDays": 112,
-    "PredictedRangeLowDays": 89,
-    "PredictedRangeHighDays": 175,
-    "ReferenceCount": 73,
+    "PredictedDate": 1788180716266.4932,
+    "PredictedRangeLowDate": 1786073186929.797,
+    "PredictedRangeHighDate": 1793183231593.5078,
+    "PredictedMedianDays": 116,
+    "PredictedRangeLowDays": 91,
+    "PredictedRangeHighDays": 173,
+    "ReferenceCount": 76,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
       {
         "Land": "Deutschland",
@@ -12308,6 +12308,10 @@
       },
       {
         "Land": "Deutschland",
+        "WartezeitTage": 119
+      },
+      {
+        "Land": "Deutschland",
         "WartezeitTage": 179
       },
       {
@@ -12317,22 +12321,18 @@
       {
         "Land": "Deutschland",
         "WartezeitTage": 194
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 176
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1785224379040.891,
-    "PredictedP90Date": 1795713427129.6636,
-    "PredictedP2_5Date": 1783582384793.514,
-    "PredictedP97_5Date": 1799769543860.7432,
-    "PredictedP10Days": 81,
+    "PredictedP10Date": 1785311441714.868,
+    "PredictedP90Date": 1795775231593.5078,
+    "PredictedP2_5Date": 1783737845254.2537,
+    "PredictedP97_5Date": 1799720515603.0383,
+    "PredictedP10Days": 82,
     "PredictedP90Days": 203,
-    "PredictedP2_5Days": 62,
-    "PredictedP97_5Days": 250,
+    "PredictedP2_5Days": 64,
+    "PredictedP97_5Days": 249,
     "OriginalPredictedDate": 1792879200000,
     "OriginalPredictedRangeLowDate": 1785362400000,
     "OriginalPredictedRangeHighDate": 1794866400000,
@@ -12871,16 +12871,16 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1790239505160.6506,
-    "PredictedRangeLowDate": 1787813076292.4521,
-    "PredictedRangeHighDate": 1793947476292.4521,
-    "PredictedMedianDays": 140,
-    "PredictedRangeLowDays": 112,
-    "PredictedRangeHighDays": 183,
-    "ReferenceCount": 73,
+    "PredictedDate": 1789871801011.112,
+    "PredictedRangeLowDate": 1787484165836.489,
+    "PredictedRangeHighDate": 1793593586532.9873,
+    "PredictedMedianDays": 136,
+    "PredictedRangeLowDays": 108,
+    "PredictedRangeHighDays": 179,
+    "ReferenceCount": 76,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
       {
         "Land": "Deutschland",
@@ -12920,27 +12920,27 @@
       },
       {
         "Land": "Deutschland",
+        "WartezeitTage": 119
+      },
+      {
+        "Land": "Deutschland",
         "WartezeitTage": 133
       },
       {
         "Land": "Deutschland",
         "WartezeitTage": 103
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 194
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1785825876292.4521,
-    "PredictedP90Date": 1796147206037.6099,
-    "PredictedP2_5Date": 1784938367155.431,
-    "PredictedP97_5Date": 1798936555704.0066,
-    "PredictedP10Days": 89,
-    "PredictedP90Days": 209,
-    "PredictedP2_5Days": 79,
-    "PredictedP97_5Days": 241,
+    "PredictedP10Date": 1785496965836.489,
+    "PredictedP90Date": 1795727123270.382,
+    "PredictedP2_5Date": 1784631205667.9565,
+    "PredictedP97_5Date": 1798382809111.6465,
+    "PredictedP10Days": 85,
+    "PredictedP90Days": 204,
+    "PredictedP2_5Days": 75,
+    "PredictedP97_5Days": 235,
     "OriginalPredictedDate": 1792447200000,
     "OriginalPredictedRangeLowDate": 1789164000000,
     "OriginalPredictedRangeHighDate": 1793829600000,
@@ -13759,16 +13759,16 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1787862461708.5938,
-    "PredictedRangeLowDate": 1785825743490.8875,
-    "PredictedRangeHighDate": 1792524316338.373,
-    "PredictedMedianDays": 115,
-    "PredictedRangeLowDays": 91,
-    "PredictedRangeHighDays": 169,
-    "ReferenceCount": 73,
+    "PredictedDate": 1788823540171.3074,
+    "PredictedRangeLowDate": 1785881629401.631,
+    "PredictedRangeHighDate": 1790480395051.1965,
+    "PredictedMedianDays": 126,
+    "PredictedRangeLowDays": 92,
+    "PredictedRangeHighDays": 145,
+    "ReferenceCount": 76,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
       {
         "Land": "Deutschland",
@@ -13776,7 +13776,15 @@
       },
       {
         "Land": "Deutschland",
+        "WartezeitTage": 119
+      },
+      {
+        "Land": "Deutschland",
         "WartezeitTage": 133
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 135
       },
       {
         "Land": "Deutschland",
@@ -13804,31 +13812,23 @@
       },
       {
         "Land": "Deutschland",
+        "WartezeitTage": 134
+      },
+      {
+        "Land": "Deutschland",
         "WartezeitTage": 53
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 128
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 179
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 191
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1785094764768.8652,
-    "PredictedP90Date": 1795461916338.373,
-    "PredictedP2_5Date": 1784108221796.4514,
-    "PredictedP97_5Date": 1799097430196.796,
-    "PredictedP10Days": 83,
-    "PredictedP90Days": 203,
-    "PredictedP2_5Days": 71,
-    "PredictedP97_5Days": 245,
+    "PredictedP10Date": 1785332100428.7783,
+    "PredictedP90Date": 1795067190654.5825,
+    "PredictedP2_5Date": 1784430788879.8943,
+    "PredictedP97_5Date": 1797402816520.707,
+    "PredictedP10Days": 86,
+    "PredictedP90Days": 198,
+    "PredictedP2_5Days": 75,
+    "PredictedP97_5Days": 225,
     "OriginalPredictedDate": 1792965600000,
     "OriginalPredictedRangeLowDate": 1788991200000,
     "OriginalPredictedRangeHighDate": 1794693600000,
@@ -14671,16 +14671,16 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1788783086305.8013,
-    "PredictedRangeLowDate": 1786579502605.5894,
-    "PredictedRangeHighDate": 1793621486305.8013,
+    "PredictedDate": 1788791392167.209,
+    "PredictedRangeLowDate": 1786267542027.8022,
+    "PredictedRangeHighDate": 1793143588443.163,
     "PredictedMedianDays": 127,
-    "PredictedRangeLowDays": 101,
-    "PredictedRangeHighDays": 183,
-    "ReferenceCount": 73,
+    "PredictedRangeLowDays": 97,
+    "PredictedRangeHighDays": 177,
+    "ReferenceCount": 76,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
       {
         "Land": "Deutschland",
@@ -14720,27 +14720,27 @@
       },
       {
         "Land": "Deutschland",
+        "WartezeitTage": 119
+      },
+      {
+        "Land": "Deutschland",
         "WartezeitTage": 80
       },
       {
         "Land": "Deutschland",
         "WartezeitTage": 194
-      },
-      {
-        "Land": "Österreich",
-        "WartezeitTage": 72
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1785165079661.2043,
-    "PredictedP90Date": 1795796253546.393,
-    "PredictedP2_5Date": 1784549486305.8013,
-    "PredictedP97_5Date": 1799311851107.1675,
-    "PredictedP10Days": 85,
-    "PredictedP90Days": 208,
-    "PredictedP2_5Days": 78,
-    "PredictedP97_5Days": 248,
+    "PredictedP10Date": 1784984143389.794,
+    "PredictedP90Date": 1795284975853.3682,
+    "PredictedP2_5Date": 1784193942027.8022,
+    "PredictedP97_5Date": 1798673593634.1082,
+    "PredictedP10Days": 83,
+    "PredictedP90Days": 202,
+    "PredictedP2_5Days": 73,
+    "PredictedP97_5Days": 241,
     "OriginalPredictedDate": 1792533600000,
     "OriginalPredictedRangeLowDate": 1790546400000,
     "OriginalPredictedRangeHighDate": 1794434400000,
@@ -15583,20 +15583,24 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1787013076140.5752,
-    "PredictedRangeLowDate": 1785658376286.1365,
-    "PredictedRangeHighDate": 1792283476140.5752,
-    "PredictedMedianDays": 111,
-    "PredictedRangeLowDays": 95,
-    "PredictedRangeHighDays": 172,
-    "ReferenceCount": 73,
+    "PredictedDate": 1787700372828.4788,
+    "PredictedRangeLowDate": 1785743200019.969,
+    "PredictedRangeHighDate": 1790290862532.7214,
+    "PredictedMedianDays": 119,
+    "PredictedRangeLowDays": 96,
+    "PredictedRangeHighDays": 149,
+    "ReferenceCount": 76,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
       {
         "Land": "Deutschland",
         "WartezeitTage": 93
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 134
       },
       {
         "Land": "Deutschland",
@@ -15624,6 +15628,10 @@
       },
       {
         "Land": "Deutschland",
+        "WartezeitTage": 119
+      },
+      {
+        "Land": "Deutschland",
         "WartezeitTage": 80
       },
       {
@@ -15633,26 +15641,18 @@
       {
         "Land": "Deutschland",
         "WartezeitTage": 179
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 53
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 109
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1784548754077.2156,
-    "PredictedP90Date": 1794875476140.5752,
-    "PredictedP2_5Date": 1783892451880.1375,
-    "PredictedP97_5Date": 1797719670041.6958,
-    "PredictedP10Days": 82,
-    "PredictedP90Days": 202,
-    "PredictedP2_5Days": 75,
-    "PredictedP97_5Days": 235,
+    "PredictedP10Date": 1784561339596.3098,
+    "PredictedP90Date": 1794264658748.5698,
+    "PredictedP2_5Date": 1783725972828.4788,
+    "PredictedP97_5Date": 1796291744210.7458,
+    "PredictedP10Days": 83,
+    "PredictedP90Days": 195,
+    "PredictedP2_5Days": 73,
+    "PredictedP97_5Days": 218,
     "OriginalPredictedDate": 1792101600000,
     "OriginalPredictedRangeLowDate": 1787522400000,
     "OriginalPredictedRangeHighDate": 1794261600000,
@@ -19355,16 +19355,16 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1785405632633.168,
-    "PredictedRangeLowDate": 1783709974166.0056,
-    "PredictedRangeHighDate": 1791245412802.0884,
-    "PredictedMedianDays": 105,
-    "PredictedRangeLowDays": 86,
-    "PredictedRangeHighDays": 173,
-    "ReferenceCount": 66,
+    "PredictedDate": 1785506600712.0574,
+    "PredictedRangeLowDate": 1783450792375.838,
+    "PredictedRangeHighDate": 1790755918036.1064,
+    "PredictedMedianDays": 107,
+    "PredictedRangeLowDays": 83,
+    "PredictedRangeHighDays": 167,
+    "ReferenceCount": 69,
     "ReferenceQualityLabel": "viele gewichtete Referenzen",
     "ReferenceEraFrom": 1737072000000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
       {
         "Land": "Deutschland",
@@ -19412,19 +19412,19 @@
       },
       {
         "Land": "Deutschland",
-        "WartezeitTage": 191
+        "WartezeitTage": 119
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": false,
-    "PredictedP10Date": 1783122960347.9014,
-    "PredictedP90Date": 1793677236157.8918,
-    "PredictedP2_5Date": 1781546239879.9238,
-    "PredictedP97_5Date": 1797735447233.6868,
-    "PredictedP10Days": 79,
-    "PredictedP90Days": 201,
-    "PredictedP2_5Days": 61,
-    "PredictedP97_5Days": 248,
+    "PredictedP10Date": 1782835095246.5405,
+    "PredictedP90Date": 1793369000712.0574,
+    "PredictedP2_5Date": 1781286153390.678,
+    "PredictedP97_5Date": 1797327033248.497,
+    "PredictedP10Days": 76,
+    "PredictedP90Days": 198,
+    "PredictedP2_5Days": 58,
+    "PredictedP97_5Days": 243,
     "OriginalPredictedDate": 1782684000000,
     "OriginalPredictedRangeLowDate": 1782252000000,
     "OriginalPredictedRangeHighDate": 1783202400000,
@@ -19659,16 +19659,16 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1785405632633.168,
-    "PredictedRangeLowDate": 1783709974166.0056,
-    "PredictedRangeHighDate": 1791245412802.0884,
-    "PredictedMedianDays": 105,
-    "PredictedRangeLowDays": 86,
-    "PredictedRangeHighDays": 173,
-    "ReferenceCount": 66,
+    "PredictedDate": 1785506600712.0574,
+    "PredictedRangeLowDate": 1783450792375.838,
+    "PredictedRangeHighDate": 1790755918036.1064,
+    "PredictedMedianDays": 107,
+    "PredictedRangeLowDays": 83,
+    "PredictedRangeHighDays": 167,
+    "ReferenceCount": 69,
     "ReferenceQualityLabel": "viele gewichtete Referenzen",
     "ReferenceEraFrom": 1737072000000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
       {
         "Land": "Deutschland",
@@ -19716,19 +19716,19 @@
       },
       {
         "Land": "Deutschland",
-        "WartezeitTage": 191
+        "WartezeitTage": 119
       }
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": false,
-    "PredictedP10Date": 1783122960347.9014,
-    "PredictedP90Date": 1793677236157.8918,
-    "PredictedP2_5Date": 1781546239879.9238,
-    "PredictedP97_5Date": 1797735447233.6868,
-    "PredictedP10Days": 79,
-    "PredictedP90Days": 201,
-    "PredictedP2_5Days": 61,
-    "PredictedP97_5Days": 248,
+    "PredictedP10Date": 1782835095246.5405,
+    "PredictedP90Date": 1793369000712.0574,
+    "PredictedP2_5Date": 1781286153390.678,
+    "PredictedP97_5Date": 1797327033248.497,
+    "PredictedP10Days": 76,
+    "PredictedP90Days": 198,
+    "PredictedP2_5Days": 58,
+    "PredictedP97_5Days": 243,
     "OriginalPredictedDate": 1782770400000,
     "OriginalPredictedRangeLowDate": 1782511200000,
     "OriginalPredictedRangeHighDate": 1783029600000,
@@ -39129,16 +39129,16 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1783904221457.2236,
-    "PredictedRangeLowDate": 1779195178203.0146,
-    "PredictedRangeHighDate": 1785511973978.627,
-    "PredictedMedianDays": 171,
-    "PredictedRangeLowDays": 117,
-    "PredictedRangeHighDays": 190,
-    "ReferenceCount": 73,
+    "PredictedDate": 1783221664935.6538,
+    "PredictedRangeLowDate": 1778595968506.382,
+    "PredictedRangeHighDate": 1784867216064.2327,
+    "PredictedMedianDays": 163,
+    "PredictedRangeLowDays": 110,
+    "PredictedRangeHighDays": 182,
+    "ReferenceCount": 76,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
       {
         "Land": "Deutschland",
@@ -39191,14 +39191,14 @@
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1776908376059.0576,
-    "PredictedP90Date": 1787355268293.256,
-    "PredictedP2_5Date": 1775807393742.6013,
-    "PredictedP97_5Date": 1790995930606.751,
-    "PredictedP10Days": 90,
-    "PredictedP90Days": 211,
-    "PredictedP2_5Days": 77,
-    "PredictedP97_5Days": 253,
+    "PredictedP10Date": 1776355597777.3647,
+    "PredictedP90Date": 1786737581470.8005,
+    "PredictedP2_5Date": 1775203790647.5068,
+    "PredictedP97_5Date": 1790247378357.2195,
+    "PredictedP10Days": 84,
+    "PredictedP90Days": 204,
+    "PredictedP2_5Days": 70,
+    "PredictedP97_5Days": 244,
     "OriginalPredictedDate": 1783465200000,
     "OriginalPredictedRangeLowDate": 1782946800000,
     "OriginalPredictedRangeHighDate": 1784156400000,
@@ -43373,16 +43373,16 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1777843140341.0496,
-    "PredictedRangeLowDate": 1774073352658.1548,
-    "PredictedRangeHighDate": 1779389444289.6753,
-    "PredictedMedianDays": 175,
-    "PredictedRangeLowDays": 131,
-    "PredictedRangeHighDays": 193,
-    "ReferenceCount": 73,
+    "PredictedDate": 1777195927317.654,
+    "PredictedRangeLowDate": 1773426719092.1685,
+    "PredictedRangeHighDate": 1778740158981.4731,
+    "PredictedMedianDays": 167,
+    "PredictedRangeLowDays": 124,
+    "PredictedRangeHighDays": 185,
+    "ReferenceCount": 76,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
       {
         "Land": "Deutschland",
@@ -43435,14 +43435,14 @@
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1771382515276.2744,
-    "PredictedP90Date": 1781210740288.6445,
-    "PredictedP2_5Date": 1769641627397.9844,
-    "PredictedP97_5Date": 1785278276904.064,
-    "PredictedP10Days": 100,
-    "PredictedP90Days": 214,
-    "PredictedP2_5Days": 80,
-    "PredictedP97_5Days": 261,
+    "PredictedP10Date": 1770803776458.9136,
+    "PredictedP90Date": 1780580689754.8315,
+    "PredictedP2_5Date": 1769057400615.4976,
+    "PredictedP97_5Date": 1784639566042.1516,
+    "PredictedP10Days": 93,
+    "PredictedP90Days": 207,
+    "PredictedP2_5Days": 73,
+    "PredictedP97_5Days": 254,
     "OriginalPredictedDate": 1777762800000,
     "OriginalPredictedRangeLowDate": 1776898800000,
     "OriginalPredictedRangeHighDate": 1779231600000,
@@ -44437,16 +44437,16 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1774754377824.5408,
-    "PredictedRangeLowDate": 1768908021653.562,
-    "PredictedRangeHighDate": 1776515990200.6216,
-    "PredictedMedianDays": 184,
-    "PredictedRangeLowDays": 116,
-    "PredictedRangeHighDays": 205,
-    "ReferenceCount": 73,
+    "PredictedDate": 1774105179774.6633,
+    "PredictedRangeLowDate": 1768384927024.1838,
+    "PredictedRangeHighDate": 1775904387070.9675,
+    "PredictedMedianDays": 177,
+    "PredictedRangeLowDays": 110,
+    "PredictedRangeHighDays": 197,
+    "ReferenceCount": 76,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
       {
         "Land": "Deutschland",
@@ -44499,14 +44499,14 @@
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1766470067856.1812,
-    "PredictedP90Date": 1778244677710.0398,
-    "PredictedP2_5Date": 1764995191412.1106,
-    "PredictedP97_5Date": 1782145920676.3267,
-    "PredictedP10Days": 88,
-    "PredictedP90Days": 225,
-    "PredictedP2_5Days": 71,
-    "PredictedP97_5Days": 270,
+    "PredictedP10Date": 1765881987070.9675,
+    "PredictedP90Date": 1777584469426.9448,
+    "PredictedP2_5Date": 1764428480410.859,
+    "PredictedP97_5Date": 1781536038905.9062,
+    "PredictedP10Days": 81,
+    "PredictedP90Days": 217,
+    "PredictedP2_5Days": 65,
+    "PredictedP97_5Days": 263,
     "OriginalPredictedDate": 1775340000000,
     "OriginalPredictedRangeLowDate": 1773007200000,
     "OriginalPredictedRangeHighDate": 1776376800000,
@@ -45349,16 +45349,16 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1773199605124.4902,
-    "PredictedRangeLowDate": 1767488428567.9136,
-    "PredictedRangeHighDate": 1775149459143.3306,
-    "PredictedMedianDays": 181,
-    "PredictedRangeLowDays": 115,
-    "PredictedRangeHighDays": 204,
-    "ReferenceCount": 73,
+    "PredictedDate": 1772459224382.721,
+    "PredictedRangeLowDate": 1766836871100.7168,
+    "PredictedRangeHighDate": 1774422027795.2883,
+    "PredictedMedianDays": 173,
+    "PredictedRangeLowDays": 108,
+    "PredictedRangeHighDays": 195,
+    "ReferenceCount": 76,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
       {
         "Land": "Deutschland",
@@ -45411,14 +45411,14 @@
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1764933959735.4397,
-    "PredictedP90Date": 1777311875373.6658,
-    "PredictedP2_5Date": 1763556344915.1204,
-    "PredictedP97_5Date": 1780707577222.415,
-    "PredictedP10Days": 85,
-    "PredictedP90Days": 229,
-    "PredictedP2_5Days": 70,
-    "PredictedP97_5Days": 268,
+    "PredictedP10Date": 1764276175110.8923,
+    "PredictedP90Date": 1776509880402.4521,
+    "PredictedP2_5Date": 1762887503265.1821,
+    "PredictedP97_5Date": 1780000192309.6584,
+    "PredictedP10Days": 78,
+    "PredictedP90Days": 219,
+    "PredictedP2_5Days": 62,
+    "PredictedP97_5Days": 260,
     "OriginalPredictedDate": 1773784800000,
     "OriginalPredictedRangeLowDate": 1772488800000,
     "OriginalPredictedRangeHighDate": 1774821600000,
@@ -45805,16 +45805,16 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1771495361592.8455,
-    "PredictedRangeLowDate": 1765710256147.6672,
-    "PredictedRangeHighDate": 1773672414823.8625,
-    "PredictedMedianDays": 180,
-    "PredictedRangeLowDays": 113,
-    "PredictedRangeHighDays": 206,
-    "ReferenceCount": 71,
+    "PredictedDate": 1770754878354.2864,
+    "PredictedRangeLowDate": 1765041159007.706,
+    "PredictedRangeHighDate": 1772936791726.2683,
+    "PredictedMedianDays": 172,
+    "PredictedRangeLowDays": 106,
+    "PredictedRangeHighDays": 197,
+    "ReferenceCount": 74,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
       {
         "Land": "Deutschland",
@@ -45867,14 +45867,14 @@
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1763220563169.1658,
-    "PredictedP90Date": 1777107233689.6785,
-    "PredictedP2_5Date": 1761697624572.277,
-    "PredictedP97_5Date": 1779464347595.8452,
-    "PredictedP10Days": 85,
-    "PredictedP90Days": 245,
-    "PredictedP2_5Days": 67,
-    "PredictedP97_5Days": 273,
+    "PredictedP10Date": 1762510623014.6196,
+    "PredictedP90Date": 1776379409245.6494,
+    "PredictedP2_5Date": 1761000229463.4023,
+    "PredictedP97_5Date": 1778745319855.3577,
+    "PredictedP10Days": 76,
+    "PredictedP90Days": 237,
+    "PredictedP2_5Days": 59,
+    "PredictedP97_5Days": 264,
     "OriginalPredictedDate": 1771970400000,
     "OriginalPredictedRangeLowDate": 1770847200000,
     "OriginalPredictedRangeHighDate": 1773352800000,
@@ -46261,16 +46261,16 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1770402207639.8843,
-    "PredictedRangeLowDate": 1767100418665.739,
-    "PredictedRangeHighDate": 1772513371830.6938,
-    "PredictedMedianDays": 172,
-    "PredictedRangeLowDays": 134,
-    "PredictedRangeHighDays": 196,
-    "ReferenceCount": 73,
+    "PredictedDate": 1769686959223.6265,
+    "PredictedRangeLowDate": 1766370603084.5137,
+    "PredictedRangeHighDate": 1771774875886.109,
+    "PredictedMedianDays": 163,
+    "PredictedRangeLowDays": 125,
+    "PredictedRangeHighDays": 188,
+    "ReferenceCount": 76,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
       {
         "Land": "Deutschland",
@@ -46323,14 +46323,14 @@
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1763804339504.707,
-    "PredictedP90Date": 1774110864465.0205,
-    "PredictedP2_5Date": 1761963536828.9607,
-    "PredictedP97_5Date": 1778840421923.5686,
-    "PredictedP10Days": 95,
-    "PredictedP90Days": 215,
-    "PredictedP2_5Days": 74,
-    "PredictedP97_5Days": 269,
+    "PredictedP10Date": 1763119080558.665,
+    "PredictedP90Date": 1773407636489.0059,
+    "PredictedP2_5Date": 1761270954158.7444,
+    "PredictedP97_5Date": 1778125449987.3684,
+    "PredictedP10Days": 87,
+    "PredictedP90Days": 207,
+    "PredictedP2_5Days": 66,
+    "PredictedP97_5Days": 261,
     "OriginalPredictedDate": 1770588000000,
     "OriginalPredictedRangeLowDate": 1769810400000,
     "OriginalPredictedRangeHighDate": 1772143200000,
@@ -47021,16 +47021,16 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1769011065104.2878,
-    "PredictedRangeLowDate": 1765911563593.3533,
-    "PredictedRangeHighDate": 1770674728678.2708,
-    "PredictedMedianDays": 167,
-    "PredictedRangeLowDays": 131,
-    "PredictedRangeHighDays": 186,
-    "ReferenceCount": 73,
+    "PredictedDate": 1768316313150.391,
+    "PredictedRangeLowDate": 1765213362183.5684,
+    "PredictedRangeHighDate": 1769970750425.8896,
+    "PredictedMedianDays": 159,
+    "PredictedRangeLowDays": 123,
+    "PredictedRangeHighDays": 178,
+    "ReferenceCount": 76,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
       {
         "Land": "Deutschland",
@@ -47083,14 +47083,14 @@
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1762588021604.2773,
-    "PredictedP90Date": 1772699813406.338,
-    "PredictedP2_5Date": 1760733711829.4683,
-    "PredictedP97_5Date": 1777020025528.0867,
-    "PredictedP10Days": 92,
-    "PredictedP90Days": 209,
-    "PredictedP2_5Days": 71,
-    "PredictedP97_5Days": 259,
+    "PredictedP10Date": 1761914582531.1506,
+    "PredictedP90Date": 1772013620547.1333,
+    "PredictedP2_5Date": 1760056700756.4219,
+    "PredictedP97_5Date": 1776320124884.1343,
+    "PredictedP10Days": 85,
+    "PredictedP90Days": 201,
+    "PredictedP2_5Days": 63,
+    "PredictedP97_5Days": 251,
     "OriginalPredictedDate": 1769637600000,
     "OriginalPredictedRangeLowDate": 1768773600000,
     "OriginalPredictedRangeHighDate": 1770501600000,
@@ -47933,16 +47933,16 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1766035835194.106,
-    "PredictedRangeLowDate": 1762789712151.5266,
-    "PredictedRangeHighDate": 1767658306624.7576,
-    "PredictedMedianDays": 170,
-    "PredictedRangeLowDays": 133,
-    "PredictedRangeHighDays": 189,
-    "ReferenceCount": 72,
+    "PredictedDate": 1765331798507.8777,
+    "PredictedRangeLowDate": 1762077134811.5469,
+    "PredictedRangeHighDate": 1766947433954.9226,
+    "PredictedMedianDays": 162,
+    "PredictedRangeLowDays": 124,
+    "PredictedRangeHighDays": 181,
+    "ReferenceCount": 75,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
       {
         "Land": "Deutschland",
@@ -47995,14 +47995,14 @@
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1759565849236.5237,
-    "PredictedP90Date": 1769766265160.2205,
-    "PredictedP2_5Date": 1757775564166.5083,
-    "PredictedP97_5Date": 1774065193154.5986,
-    "PredictedP10Days": 95,
-    "PredictedP90Days": 213,
-    "PredictedP2_5Days": 75,
-    "PredictedP97_5Days": 263,
+    "PredictedP10Date": 1758868447975.314,
+    "PredictedP90Date": 1769060749107.128,
+    "PredictedP2_5Date": 1757075384348.8044,
+    "PredictedP97_5Date": 1773353411037.2878,
+    "PredictedP10Days": 87,
+    "PredictedP90Days": 205,
+    "PredictedP2_5Days": 67,
+    "PredictedP97_5Days": 255,
     "OriginalPredictedDate": 1767045600000,
     "OriginalPredictedRangeLowDate": 1765836000000,
     "OriginalPredictedRangeHighDate": 1768860000000,
@@ -48373,16 +48373,16 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1764748795820.029,
-    "PredictedRangeLowDate": 1760523482216.5337,
-    "PredictedRangeHighDate": 1766646729751.0713,
-    "PredictedMedianDays": 166,
-    "PredictedRangeLowDays": 117,
-    "PredictedRangeHighDays": 188,
-    "ReferenceCount": 73,
+    "PredictedDate": 1764063871542.491,
+    "PredictedRangeLowDate": 1759870102374.0583,
+    "PredictedRangeHighDate": 1765948887040.4585,
+    "PredictedMedianDays": 158,
+    "PredictedRangeLowDays": 110,
+    "PredictedRangeHighDays": 180,
+    "ReferenceCount": 76,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
       {
         "Land": "Deutschland",
@@ -48435,14 +48435,14 @@
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1757833949812.6667,
-    "PredictedP90Date": 1768510680653.5532,
-    "PredictedP2_5Date": 1756367995820.029,
-    "PredictedP97_5Date": 1772429629596.3997,
-    "PredictedP10Days": 86,
-    "PredictedP90Days": 210,
-    "PredictedP2_5Days": 69,
-    "PredictedP97_5Days": 255,
+    "PredictedP10Date": 1757176008461.474,
+    "PredictedP90Date": 1767823268481.7131,
+    "PredictedP2_5Date": 1755683071542.491,
+    "PredictedP97_5Date": 1771730177256.759,
+    "PredictedP10Days": 79,
+    "PredictedP90Days": 202,
+    "PredictedP2_5Days": 61,
+    "PredictedP97_5Days": 247,
     "OriginalPredictedDate": 1765749600000,
     "OriginalPredictedRangeLowDate": 1764712800000,
     "OriginalPredictedRangeHighDate": 1767909600000,
@@ -48829,16 +48829,16 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1764316833425.2139,
-    "PredictedRangeLowDate": 1760027828194.9822,
-    "PredictedRangeHighDate": 1766186165882.896,
-    "PredictedMedianDays": 165,
-    "PredictedRangeLowDays": 116,
-    "PredictedRangeHighDays": 187,
-    "ReferenceCount": 73,
+    "PredictedDate": 1763619461897.9597,
+    "PredictedRangeLowDate": 1759392668802.0627,
+    "PredictedRangeHighDate": 1765507868005.4102,
+    "PredictedMedianDays": 157,
+    "PredictedRangeLowDays": 108,
+    "PredictedRangeHighDays": 179,
+    "ReferenceCount": 76,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
       {
         "Land": "Deutschland",
@@ -48891,14 +48891,14 @@
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1757362687307.5164,
-    "PredictedP90Date": 1768073556716.4446,
-    "PredictedP2_5Date": 1755936033425.2139,
-    "PredictedP97_5Date": 1771925274307.834,
-    "PredictedP10Days": 85,
-    "PredictedP90Days": 209,
-    "PredictedP2_5Days": 68,
-    "PredictedP97_5Days": 253,
+    "PredictedP10Date": 1756722784407.0454,
+    "PredictedP90Date": 1767405165394.7158,
+    "PredictedP2_5Date": 1755270060971.939,
+    "PredictedP97_5Date": 1771244785138.244,
+    "PredictedP10Days": 77,
+    "PredictedP90Days": 201,
+    "PredictedP2_5Days": 61,
+    "PredictedP97_5Days": 246,
     "OriginalPredictedDate": 1765749600000,
     "OriginalPredictedRangeLowDate": 1764194400000,
     "OriginalPredictedRangeHighDate": 1767736800000,
@@ -50349,16 +50349,16 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1761597700401.1462,
-    "PredictedRangeLowDate": 1755906669257.3816,
-    "PredictedRangeHighDate": 1764404743131.9204,
-    "PredictedMedianDays": 159,
-    "PredictedRangeLowDays": 93,
-    "PredictedRangeHighDays": 191,
-    "ReferenceCount": 73,
+    "PredictedDate": 1761020445286.7217,
+    "PredictedRangeLowDate": 1755386756568.1455,
+    "PredictedRangeHighDate": 1763799561894.2966,
+    "PredictedMedianDays": 152,
+    "PredictedRangeLowDays": 87,
+    "PredictedRangeHighDays": 184,
+    "ReferenceCount": 76,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
       {
         "Land": "Deutschland",
@@ -50411,14 +50411,14 @@
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1754340100401.1462,
-    "PredictedP90Date": 1766894240486.654,
-    "PredictedP2_5Date": 1753263229828.2715,
-    "PredictedP97_5Date": 1769354911843.846,
-    "PredictedP10Days": 75,
-    "PredictedP90Days": 220,
-    "PredictedP2_5Days": 62,
-    "PredictedP97_5Days": 249,
+    "PredictedP10Date": 1753762845286.7217,
+    "PredictedP90Date": 1766283231973.3462,
+    "PredictedP2_5Date": 1752689926444.0327,
+    "PredictedP97_5Date": 1768762530106.9983,
+    "PredictedP10Days": 68,
+    "PredictedP90Days": 213,
+    "PredictedP2_5Days": 56,
+    "PredictedP97_5Days": 242,
     "OriginalPredictedDate": 1761948000000,
     "OriginalPredictedRangeLowDate": 1758578400000,
     "OriginalPredictedRangeHighDate": 1764453600000,
@@ -53385,16 +53385,16 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1751955790972.69,
-    "PredictedRangeLowDate": 1747911848219.8787,
-    "PredictedRangeHighDate": 1754199878678.8718,
-    "PredictedMedianDays": 140,
-    "PredictedRangeLowDays": 93,
-    "PredictedRangeHighDays": 166,
-    "ReferenceCount": 72,
+    "PredictedDate": 1750973005140.2192,
+    "PredictedRangeLowDate": 1747641471348.1929,
+    "PredictedRangeHighDate": 1753771608973.0186,
+    "PredictedMedianDays": 129,
+    "PredictedRangeLowDays": 90,
+    "PredictedRangeHighDays": 161,
+    "ReferenceCount": 75,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
       {
         "Land": "Deutschland",
@@ -53447,14 +53447,14 @@
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1745753713108.4563,
-    "PredictedP90Date": 1756380913108.4563,
-    "PredictedP2_5Date": 1744803313108.4563,
-    "PredictedP97_5Date": 1757259933617.1658,
-    "PredictedP10Days": 68,
-    "PredictedP90Days": 191,
-    "PredictedP2_5Days": 57,
-    "PredictedP97_5Days": 202,
+    "PredictedP10Date": 1745479616851.6533,
+    "PredictedP90Date": 1756106816851.6533,
+    "PredictedP2_5Date": 1744529216851.6533,
+    "PredictedP97_5Date": 1756984641141.218,
+    "PredictedP10Days": 65,
+    "PredictedP90Days": 188,
+    "PredictedP2_5Days": 54,
+    "PredictedP97_5Days": 198,
     "OriginalPredictedDate": 1749769200000,
     "OriginalPredictedRangeLowDate": 1748127600000,
     "OriginalPredictedRangeHighDate": 1752274800000,
@@ -53537,16 +53537,16 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1751349708985.0999,
-    "PredictedRangeLowDate": 1747643978585.8499,
-    "PredictedRangeHighDate": 1754253622061.4512,
-    "PredictedMedianDays": 134,
-    "PredictedRangeLowDays": 91,
-    "PredictedRangeHighDays": 168,
-    "ReferenceCount": 73,
+    "PredictedDate": 1750197940434.4229,
+    "PredictedRangeLowDate": 1747449783325.3613,
+    "PredictedRangeHighDate": 1753993418876.0527,
+    "PredictedMedianDays": 121,
+    "PredictedRangeLowDays": 89,
+    "PredictedRangeHighDays": 165,
+    "ReferenceCount": 76,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
       {
         "Land": "Deutschland",
@@ -53599,14 +53599,14 @@
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1745693780800.0698,
-    "PredictedP90Date": 1756320980800.0698,
-    "PredictedP2_5Date": 1744743380800.0698,
-    "PredictedP97_5Date": 1759113520657.4214,
-    "PredictedP10Days": 69,
-    "PredictedP90Days": 192,
-    "PredictedP2_5Days": 58,
-    "PredictedP97_5Days": 224,
+    "PredictedP10Date": 1745462583325.3613,
+    "PredictedP90Date": 1756089783325.3613,
+    "PredictedP2_5Date": 1744512183325.3613,
+    "PredictedP97_5Date": 1758873299308.1206,
+    "PredictedP10Days": 66,
+    "PredictedP90Days": 189,
+    "PredictedP2_5Days": 55,
+    "PredictedP97_5Days": 221,
     "OriginalPredictedDate": 1748905200000,
     "OriginalPredictedRangeLowDate": 1747695600000,
     "OriginalPredictedRangeHighDate": 1751756400000,
@@ -54145,16 +54145,16 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1751007156544.3296,
-    "PredictedRangeLowDate": 1746914427785.651,
-    "PredictedRangeHighDate": 1753577653852.8293,
-    "PredictedMedianDays": 139,
-    "PredictedRangeLowDays": 92,
-    "PredictedRangeHighDays": 169,
-    "ReferenceCount": 72,
+    "PredictedDate": 1750063064719.9321,
+    "PredictedRangeLowDate": 1746656869139.0352,
+    "PredictedRangeHighDate": 1753310908723.8389,
+    "PredictedMedianDays": 128,
+    "PredictedRangeLowDays": 89,
+    "PredictedRangeHighDays": 166,
+    "ReferenceCount": 75,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
       {
         "Land": "Deutschland",
@@ -54207,14 +54207,14 @@
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1744833275864.6003,
-    "PredictedP90Date": 1755460475864.6003,
-    "PredictedP2_5Date": 1743882875864.6003,
-    "PredictedP97_5Date": 1756361320673.6226,
-    "PredictedP10Days": 68,
-    "PredictedP90Days": 191,
-    "PredictedP2_5Days": 57,
-    "PredictedP97_5Days": 201,
+    "PredictedP10Date": 1744571339057.0298,
+    "PredictedP90Date": 1755198539057.0298,
+    "PredictedP2_5Date": 1743620939057.0298,
+    "PredictedP97_5Date": 1756098446464.6057,
+    "PredictedP10Days": 65,
+    "PredictedP90Days": 188,
+    "PredictedP2_5Days": 54,
+    "PredictedP97_5Days": 198,
     "OriginalPredictedDate": 1748905200000,
     "OriginalPredictedRangeLowDate": 1747004400000,
     "OriginalPredictedRangeHighDate": 1752447600000,
@@ -55361,16 +55361,16 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1748500420314.3528,
-    "PredictedRangeLowDate": 1744956543090.7397,
-    "PredictedRangeHighDate": 1752131592708.2126,
-    "PredictedMedianDays": 124,
-    "PredictedRangeLowDays": 83,
-    "PredictedRangeHighDays": 166,
-    "ReferenceCount": 73,
+    "PredictedDate": 1748093341929.072,
+    "PredictedRangeLowDate": 1744680524274.0654,
+    "PredictedRangeHighDate": 1751813668786.0522,
+    "PredictedMedianDays": 120,
+    "PredictedRangeLowDays": 80,
+    "PredictedRangeHighDays": 163,
+    "ReferenceCount": 76,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
       {
         "Land": "Deutschland",
@@ -55423,14 +55423,14 @@
     ],
     "PredictionUpdatedAt": 1786950606347,
     "CountryScoped": true,
-    "PredictedP10Date": 1743703647946.5366,
-    "PredictedP90Date": 1754330847946.5366,
-    "PredictedP2_5Date": 1742753247946.5366,
-    "PredictedP97_5Date": 1757014040492.88,
-    "PredictedP10Days": 69,
-    "PredictedP90Days": 192,
-    "PredictedP2_5Days": 58,
-    "PredictedP97_5Days": 223,
+    "PredictedP10Date": 1743423709946.6045,
+    "PredictedP90Date": 1754050909946.6045,
+    "PredictedP2_5Date": 1742473309946.6045,
+    "PredictedP97_5Date": 1756725078618.3555,
+    "PredictedP10Days": 66,
+    "PredictedP90Days": 189,
+    "PredictedP2_5Days": 55,
+    "PredictedP97_5Days": 219,
     "OriginalPredictedDate": 1746918000000,
     "OriginalPredictedRangeLowDate": 1745708400000,
     "OriginalPredictedRangeHighDate": 1748214000000,
@@ -59753,11 +59753,11 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1800476242341.3638,
-    "PredictedRangeLowDate": 1798601845536.0354,
-    "PredictedRangeHighDate": 1802377042341.3638,
+    "PredictedDate": 1800507462462.2988,
+    "PredictedRangeLowDate": 1798633065656.9707,
+    "PredictedRangeHighDate": 1802408262462.2988,
     "PredictedMedianDays": 182,
-    "PredictedRangeLowDays": 160,
+    "PredictedRangeLowDays": 161,
     "PredictedRangeHighDays": 204,
     "ReferenceCount": 110,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
@@ -59815,14 +59815,14 @@
     ],
     "CountryScoped": true,
     "PredictionUpdatedAt": 1786950606347,
-    "PredictedP10Date": 1796405274692.381,
-    "PredictedP90Date": 1805575856396.0808,
-    "PredictedP2_5Date": 1793767658867.9907,
-    "PredictedP97_5Date": 1806812602093.3162,
+    "PredictedP10Date": 1796436494813.3164,
+    "PredictedP90Date": 1805607076517.016,
+    "PredictedP2_5Date": 1793798878988.926,
+    "PredictedP97_5Date": 1806843822214.2515,
     "PredictedP10Days": 135,
     "PredictedP90Days": 241,
-    "PredictedP2_5Days": 104,
-    "PredictedP97_5Days": 255,
+    "PredictedP2_5Days": 105,
+    "PredictedP97_5Days": 256,
     "OriginalPredictedDate": 1800655200000,
     "OriginalPredictedRangeLowDate": 1798063200000,
     "OriginalPredictedRangeHighDate": 1805493600000,
@@ -60057,16 +60057,16 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1789401897366.097,
-    "PredictedRangeLowDate": 1787414697366.097,
-    "PredictedRangeHighDate": 1794845097366.097,
-    "PredictedMedianDays": 111,
-    "PredictedRangeLowDays": 88,
-    "PredictedRangeHighDays": 174,
-    "ReferenceCount": 73,
+    "PredictedDate": 1790002333868.453,
+    "PredictedRangeLowDate": 1787897386149.7966,
+    "PredictedRangeHighDate": 1795002041925.4473,
+    "PredictedMedianDays": 118,
+    "PredictedRangeLowDays": 93,
+    "PredictedRangeHighDays": 175,
+    "ReferenceCount": 76,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
       {
         "Land": "Deutschland",
@@ -60094,6 +60094,10 @@
       },
       {
         "Land": "Deutschland",
+        "WartezeitTage": 119
+      },
+      {
+        "Land": "Deutschland",
         "WartezeitTage": 93
       },
       {
@@ -60111,22 +60115,18 @@
       {
         "Land": "Deutschland",
         "WartezeitTage": 194
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 176
       }
     ],
     "CountryScoped": true,
     "PredictionUpdatedAt": 1786950606347,
-    "PredictedP10Date": 1786787948282.697,
-    "PredictedP90Date": 1797271334809.9714,
-    "PredictedP2_5Date": 1785147749183.0637,
-    "PredictedP97_5Date": 1801329548903.8489,
-    "PredictedP10Days": 80,
-    "PredictedP90Days": 202,
-    "PredictedP2_5Days": 61,
-    "PredictedP97_5Days": 249,
+    "PredictedP10Date": 1787131171041.363,
+    "PredictedP90Date": 1797594041925.4473,
+    "PredictedP2_5Date": 1785562514913.8823,
+    "PredictedP97_5Date": 1801530441709.354,
+    "PredictedP10Days": 84,
+    "PredictedP90Days": 205,
+    "PredictedP2_5Days": 66,
+    "PredictedP97_5Days": 251,
     "OriginalPredictedDate": 1795039200000,
     "OriginalPredictedRangeLowDate": 1786917600000,
     "OriginalPredictedRangeHighDate": 1796594400000,
@@ -60665,28 +60665,36 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1790040637751.0728,
-    "PredictedRangeLowDate": 1788473592850.9458,
-    "PredictedRangeHighDate": 1795418541690.9082,
-    "PredictedP10Date": 1787613520769.1052,
-    "PredictedP90Date": 1798010541690.9082,
-    "PredictedP2_5Date": 1786557914405.8406,
-    "PredictedP97_5Date": 1801790347920.9492,
-    "PredictedMedianDays": 108,
-    "PredictedRangeLowDays": 90,
-    "PredictedRangeHighDays": 170,
-    "PredictedP10Days": 80,
-    "PredictedP90Days": 200,
-    "PredictedP2_5Days": 68,
-    "PredictedP97_5Days": 244,
-    "ReferenceCount": 73,
+    "PredictedDate": 1791002117324.9165,
+    "PredictedRangeLowDate": 1789246716069.5723,
+    "PredictedRangeHighDate": 1793457476154.8916,
+    "PredictedP10Date": 1788136527248.9517,
+    "PredictedP90Date": 1798334516817.2727,
+    "PredictedP2_5Date": 1787313137887.3853,
+    "PredictedP97_5Date": 1801230748246.1094,
+    "PredictedMedianDays": 119,
+    "PredictedRangeLowDays": 99,
+    "PredictedRangeHighDays": 148,
+    "PredictedP10Days": 86,
+    "PredictedP90Days": 204,
+    "PredictedP2_5Days": 76,
+    "PredictedP97_5Days": 238,
+    "ReferenceCount": 76,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
       {
         "Land": "Deutschland",
         "WartezeitTage": 93
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 134
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 119
       },
       {
         "Land": "Deutschland",
@@ -60723,14 +60731,6 @@
       {
         "Land": "Deutschland",
         "WartezeitTage": 128
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 179
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 191
       }
     ],
     "CountryScoped": true,
@@ -61269,20 +61269,20 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1802129052620.1687,
-    "PredictedRangeLowDate": 1800254655814.8403,
-    "PredictedRangeHighDate": 1804029852620.1687,
-    "PredictedP10Date": 1798058084971.186,
-    "PredictedP90Date": 1807228666674.8857,
-    "PredictedP2_5Date": 1795420469146.7957,
-    "PredictedP97_5Date": 1808465412372.121,
+    "PredictedDate": 1802162057887.4954,
+    "PredictedRangeLowDate": 1800287661082.167,
+    "PredictedRangeHighDate": 1804062857887.4954,
+    "PredictedP10Date": 1798091090238.513,
+    "PredictedP90Date": 1807261671942.2126,
+    "PredictedP2_5Date": 1795453474414.1223,
+    "PredictedP97_5Date": 1808498417639.448,
     "PredictedMedianDays": 180,
-    "PredictedRangeLowDays": 158,
+    "PredictedRangeLowDays": 159,
     "PredictedRangeHighDays": 202,
     "PredictedP10Days": 133,
     "PredictedP90Days": 239,
-    "PredictedP2_5Days": 102,
-    "PredictedP97_5Days": 253,
+    "PredictedP2_5Days": 103,
+    "PredictedP97_5Days": 254,
     "ReferenceCount": 110,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1745020800000,
@@ -61420,24 +61420,24 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1796230791395.122,
-    "PredictedRangeLowDate": 1794039952770.9407,
-    "PredictedRangeHighDate": 1800183854350.8896,
-    "PredictedP10Date": 1793649120954.8843,
-    "PredictedP90Date": 1802950681351.7014,
-    "PredictedP2_5Date": 1792025053701.797,
-    "PredictedP97_5Date": 1807530951150.1262,
-    "PredictedMedianDays": 114,
-    "PredictedRangeLowDays": 88,
-    "PredictedRangeHighDays": 159,
-    "PredictedP10Days": 84,
+    "PredictedDate": 1797841012660.512,
+    "PredictedRangeLowDate": 1795041262309.9875,
+    "PredictedRangeHighDate": 1799293853965.6614,
+    "PredictedP10Date": 1794286430931.6282,
+    "PredictedP90Date": 1802895915675.5698,
+    "PredictedP2_5Date": 1793013634559.588,
+    "PredictedP97_5Date": 1805975647363.3335,
+    "PredictedMedianDays": 132,
+    "PredictedRangeLowDays": 100,
+    "PredictedRangeHighDays": 149,
+    "PredictedP10Days": 91,
     "PredictedP90Days": 191,
-    "PredictedP2_5Days": 65,
-    "PredictedP97_5Days": 244,
-    "ReferenceCount": 71,
+    "PredictedP2_5Days": 76,
+    "PredictedP97_5Days": 226,
+    "ReferenceCount": 74,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
       {
         "Land": "Deutschland",
@@ -61445,7 +61445,15 @@
       },
       {
         "Land": "Deutschland",
+        "WartezeitTage": 119
+      },
+      {
+        "Land": "Deutschland",
         "WartezeitTage": 82
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 135
       },
       {
         "Land": "Deutschland",
@@ -61478,14 +61486,6 @@
       {
         "Land": "Deutschland",
         "WartezeitTage": 103
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 109
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 164
       }
     ],
     "CountryScoped": true,
@@ -61571,28 +61571,36 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1788534424405.559,
-    "PredictedRangeLowDate": 1786967379505.4324,
-    "PredictedRangeHighDate": 1793912328345.3948,
-    "PredictedP10Date": 1786107307423.5918,
-    "PredictedP90Date": 1796504328345.3948,
-    "PredictedP2_5Date": 1785051701060.3271,
-    "PredictedP97_5Date": 1800284134575.4355,
-    "PredictedMedianDays": 110,
-    "PredictedRangeLowDays": 91,
-    "PredictedRangeHighDays": 172,
-    "PredictedP10Days": 82,
-    "PredictedP90Days": 202,
-    "PredictedP2_5Days": 69,
-    "PredictedP97_5Days": 246,
-    "ReferenceCount": 73,
+    "PredictedDate": 1789378413795.3264,
+    "PredictedRangeLowDate": 1787623012539.982,
+    "PredictedRangeHighDate": 1791833772625.3013,
+    "PredictedP10Date": 1786512823719.3613,
+    "PredictedP90Date": 1796710813287.6826,
+    "PredictedP2_5Date": 1785689434357.7952,
+    "PredictedP97_5Date": 1799607044716.519,
+    "PredictedMedianDays": 119,
+    "PredictedRangeLowDays": 99,
+    "PredictedRangeHighDays": 148,
+    "PredictedP10Days": 86,
+    "PredictedP90Days": 204,
+    "PredictedP2_5Days": 77,
+    "PredictedP97_5Days": 238,
+    "ReferenceCount": 76,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
       {
         "Land": "Deutschland",
         "WartezeitTage": 93
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 134
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 119
       },
       {
         "Land": "Deutschland",
@@ -61629,14 +61637,6 @@
       {
         "Land": "Deutschland",
         "WartezeitTage": 128
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 179
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 191
       }
     ],
     "CountryScoped": true,
@@ -61722,13 +61722,13 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1803893411727.625,
-    "PredictedRangeLowDate": 1802160663609.8442,
-    "PredictedRangeHighDate": 1806312611727.625,
-    "PredictedP10Date": 1797327011727.625,
-    "PredictedP90Date": 1807867811727.625,
-    "PredictedP2_5Date": 1795133648364.7808,
-    "PredictedP97_5Date": 1810253999241.019,
+    "PredictedDate": 1803891597975.5034,
+    "PredictedRangeLowDate": 1802158849857.7227,
+    "PredictedRangeHighDate": 1806310797975.5034,
+    "PredictedP10Date": 1797325197975.5034,
+    "PredictedP90Date": 1807865997975.5034,
+    "PredictedP2_5Date": 1795131834612.6592,
+    "PredictedP97_5Date": 1810252185488.8975,
     "PredictedMedianDays": 193,
     "PredictedRangeLowDays": 173,
     "PredictedRangeHighDays": 221,
@@ -61873,13 +61873,13 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1801895747947.1753,
-    "PredictedRangeLowDate": 1800162999829.3945,
-    "PredictedRangeHighDate": 1804314947947.1753,
-    "PredictedP10Date": 1795329347947.1753,
-    "PredictedP90Date": 1805870147947.1753,
-    "PredictedP2_5Date": 1793135984584.331,
-    "PredictedP97_5Date": 1808256335460.5696,
+    "PredictedDate": 1801893261018.8992,
+    "PredictedRangeLowDate": 1800160512901.1184,
+    "PredictedRangeHighDate": 1804312461018.8992,
+    "PredictedP10Date": 1795326861018.8992,
+    "PredictedP90Date": 1805867661018.8992,
+    "PredictedP2_5Date": 1793133497656.055,
+    "PredictedP97_5Date": 1808253848532.2935,
     "PredictedMedianDays": 193,
     "PredictedRangeLowDays": 173,
     "PredictedRangeHighDays": 221,
@@ -62025,19 +62025,19 @@
     "ActualWaitDays": null,
     "DeviationDays": null,
     "PredictedDate": 1795844640924.9463,
-    "PredictedRangeLowDate": 1793970244119.618,
+    "PredictedRangeLowDate": 1794023871804.317,
     "PredictedRangeHighDate": 1797745440924.9463,
-    "PredictedP10Date": 1791773673275.9639,
-    "PredictedP90Date": 1800944254979.6636,
-    "PredictedP2_5Date": 1789136057451.5732,
-    "PredictedP97_5Date": 1802181000676.8987,
+    "PredictedP10Date": 1791835554428.2253,
+    "PredictedP90Date": 1800655257973.479,
+    "PredictedP2_5Date": 1789352107877.83,
+    "PredictedP97_5Date": 1802111250573.8254,
     "PredictedMedianDays": 185,
     "PredictedRangeLowDays": 164,
     "PredictedRangeHighDays": 207,
-    "PredictedP10Days": 138,
-    "PredictedP90Days": 244,
-    "PredictedP2_5Days": 108,
-    "PredictedP97_5Days": 259,
+    "PredictedP10Days": 139,
+    "PredictedP90Days": 241,
+    "PredictedP2_5Days": 110,
+    "PredictedP97_5Days": 258,
     "ReferenceCount": 110,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1745020800000,
@@ -62045,11 +62045,19 @@
     "References": [
       {
         "Land": "Deutschland",
-        "WartezeitTage": 101
+        "WartezeitTage": 173
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 196
       },
       {
         "Land": "Deutschland",
         "WartezeitTage": 126
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 101
       },
       {
         "Land": "Deutschland",
@@ -62061,6 +62069,10 @@
       },
       {
         "Land": "Deutschland",
+        "WartezeitTage": 151
+      },
+      {
+        "Land": "Deutschland",
         "WartezeitTage": 153
       },
       {
@@ -62069,27 +62081,15 @@
       },
       {
         "Land": "Deutschland",
-        "WartezeitTage": 180
-      },
-      {
-        "Land": "Deutschland",
         "WartezeitTage": 195
       },
       {
         "Land": "Deutschland",
+        "WartezeitTage": 206
+      },
+      {
+        "Land": "Deutschland",
         "WartezeitTage": 191
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 173
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 181
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 196
       }
     ],
     "CountryScoped": true,
@@ -62477,13 +62477,13 @@
     "ActualDate": null,
     "ActualWaitDays": null,
     "DeviationDays": null,
-    "PredictedDate": 1804414984880.4111,
-    "PredictedRangeLowDate": 1802682236762.6304,
-    "PredictedRangeHighDate": 1806834184880.4111,
-    "PredictedP10Date": 1797848584880.4111,
-    "PredictedP90Date": 1808389384880.4111,
-    "PredictedP2_5Date": 1795655221517.567,
-    "PredictedP97_5Date": 1810775572393.8052,
+    "PredictedDate": 1804413475800.8872,
+    "PredictedRangeLowDate": 1802680727683.1064,
+    "PredictedRangeHighDate": 1806832675800.8872,
+    "PredictedP10Date": 1797847075800.8872,
+    "PredictedP90Date": 1808387875800.8872,
+    "PredictedP2_5Date": 1795653712438.0427,
+    "PredictedP97_5Date": 1810774063314.2812,
     "PredictedMedianDays": 193,
     "PredictedRangeLowDays": 173,
     "PredictedRangeHighDays": 221,
@@ -63085,24 +63085,24 @@
     "DeviationDays": null,
     "CommunityEstimateDays": 125,
     "CommunityEstimateDeviationDays": null,
-    "PredictedDate": 1791307182744.453,
-    "PredictedRangeLowDate": 1790237719229.1516,
-    "PredictedRangeHighDate": 1797225196131.279,
-    "PredictedP10Date": 1789457691977.7473,
-    "PredictedP90Date": 1799903596131.279,
-    "PredictedP2_5Date": 1787846328067.986,
-    "PredictedP97_5Date": 1804581365131.877,
-    "PredictedMedianDays": 99,
-    "PredictedRangeLowDays": 86,
-    "PredictedRangeHighDays": 167,
-    "PredictedP10Days": 77,
-    "PredictedP90Days": 198,
-    "PredictedP2_5Days": 59,
-    "PredictedP97_5Days": 252,
-    "ReferenceCount": 71,
+    "PredictedDate": 1792891496580.2153,
+    "PredictedRangeLowDate": 1790882214725.1855,
+    "PredictedRangeHighDate": 1795162007376.1128,
+    "PredictedP10Date": 1790006402902.6455,
+    "PredictedP90Date": 1800232913975.257,
+    "PredictedP2_5Date": 1788507686210.2795,
+    "PredictedP97_5Date": 1804657883913.1545,
+    "PredictedMedianDays": 117,
+    "PredictedRangeLowDays": 94,
+    "PredictedRangeHighDays": 143,
+    "PredictedP10Days": 84,
+    "PredictedP90Days": 202,
+    "PredictedP2_5Days": 66,
+    "PredictedP97_5Days": 253,
+    "ReferenceCount": 74,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
       {
         "Land": "Deutschland",
@@ -63110,7 +63110,15 @@
       },
       {
         "Land": "Deutschland",
+        "WartezeitTage": 134
+      },
+      {
+        "Land": "Deutschland",
         "WartezeitTage": 80
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 119
       },
       {
         "Land": "Deutschland",
@@ -63143,14 +63151,6 @@
       {
         "Land": "Deutschland",
         "WartezeitTage": 128
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 179
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 191
       }
     ],
     "CountryScoped": true,
@@ -123403,24 +123403,24 @@
     "DeviationDays": null,
     "CommunityEstimateDays": 201,
     "CommunityEstimateDeviationDays": null,
-    "PredictedDate": 1788523414835.3967,
-    "PredictedRangeLowDate": 1785016879615.2617,
-    "PredictedRangeHighDate": 1791530363634.3403,
-    "PredictedP10Date": 1784467463987.631,
-    "PredictedP90Date": 1793261787192.1545,
-    "PredictedP2_5Date": 1783698863311.5908,
-    "PredictedP97_5Date": 1795524963963.9773,
-    "PredictedMedianDays": 134,
-    "PredictedRangeLowDays": 93,
-    "PredictedRangeHighDays": 168,
-    "PredictedP10Days": 87,
-    "PredictedP90Days": 188,
-    "PredictedP2_5Days": 78,
-    "PredictedP97_5Days": 215,
-    "ReferenceCount": 72,
+    "PredictedDate": 1788233712320.195,
+    "PredictedRangeLowDate": 1786132399628.692,
+    "PredictedRangeHighDate": 1789107967201.1304,
+    "PredictedP10Date": 1783922246654.6902,
+    "PredictedP90Date": 1792306637361.6553,
+    "PredictedP2_5Date": 1783160010107.2935,
+    "PredictedP97_5Date": 1794632879817.1,
+    "PredictedMedianDays": 130,
+    "PredictedRangeLowDays": 106,
+    "PredictedRangeHighDays": 140,
+    "PredictedP10Days": 80,
+    "PredictedP90Days": 177,
+    "PredictedP2_5Days": 71,
+    "PredictedP97_5Days": 204,
+    "ReferenceCount": 75,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
       {
         "Land": "Deutschland",
@@ -123428,7 +123428,15 @@
       },
       {
         "Land": "Deutschland",
+        "WartezeitTage": 135
+      },
+      {
+        "Land": "Deutschland",
         "WartezeitTage": 82
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 119
       },
       {
         "Land": "Deutschland",
@@ -123441,6 +123449,10 @@
       {
         "Land": "Deutschland",
         "WartezeitTage": 103
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 134
       },
       {
         "Land": "Deutschland",
@@ -123457,18 +123469,6 @@
       {
         "Land": "Deutschland",
         "WartezeitTage": 93
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 209
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 182
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 164
       }
     ],
     "CountryScoped": true,
@@ -123693,17 +123693,17 @@
     "DeviationDays": null,
     "CommunityEstimateDays": 260,
     "CommunityEstimateDeviationDays": null,
-    "PredictedDate": 1802248457887.4954,
-    "PredictedRangeLowDate": 1800293741477.0942,
-    "PredictedRangeHighDate": 1804149257887.4954,
-    "PredictedP10Date": 1798106359056.3792,
-    "PredictedP90Date": 1807122872597.2363,
-    "PredictedP2_5Date": 1795357428436.3328,
-    "PredictedP97_5Date": 1808583259090.3445,
-    "PredictedMedianDays": 180,
+    "PredictedDate": 1802281133434.562,
+    "PredictedRangeLowDate": 1800326417024.1611,
+    "PredictedRangeHighDate": 1804181933434.562,
+    "PredictedP10Date": 1798139034603.4458,
+    "PredictedP90Date": 1807155548144.303,
+    "PredictedP2_5Date": 1795390103983.3994,
+    "PredictedP97_5Date": 1808615934637.4111,
+    "PredictedMedianDays": 181,
     "PredictedRangeLowDays": 158,
-    "PredictedRangeHighDays": 202,
-    "PredictedP10Days": 132,
+    "PredictedRangeHighDays": 203,
+    "PredictedP10Days": 133,
     "PredictedP90Days": 237,
     "PredictedP2_5Days": 101,
     "PredictedP97_5Days": 254,
@@ -123846,24 +123846,24 @@
     "DeviationDays": null,
     "CommunityEstimateDays": 131,
     "CommunityEstimateDeviationDays": null,
-    "PredictedDate": 1792082923757.2234,
-    "PredictedRangeLowDate": 1789892085133.042,
-    "PredictedRangeHighDate": 1796035986712.991,
-    "PredictedP10Date": 1789501253316.9856,
-    "PredictedP90Date": 1798802813713.8027,
-    "PredictedP2_5Date": 1787877186063.8984,
-    "PredictedP97_5Date": 1803383083512.2275,
-    "PredictedMedianDays": 115,
-    "PredictedRangeLowDays": 89,
-    "PredictedRangeHighDays": 160,
-    "PredictedP10Days": 85,
+    "PredictedDate": 1793721180374.327,
+    "PredictedRangeLowDate": 1790921430023.8025,
+    "PredictedRangeHighDate": 1795174021679.4763,
+    "PredictedP10Date": 1790166598645.4429,
+    "PredictedP90Date": 1798776083389.3848,
+    "PredictedP2_5Date": 1788893802273.4028,
+    "PredictedP97_5Date": 1801855815077.1484,
+    "PredictedMedianDays": 134,
+    "PredictedRangeLowDays": 101,
+    "PredictedRangeHighDays": 150,
+    "PredictedP10Days": 93,
     "PredictedP90Days": 192,
-    "PredictedP2_5Days": 66,
-    "PredictedP97_5Days": 245,
-    "ReferenceCount": 71,
+    "PredictedP2_5Days": 78,
+    "PredictedP97_5Days": 228,
+    "ReferenceCount": 74,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
       {
         "Land": "Deutschland",
@@ -123871,7 +123871,15 @@
       },
       {
         "Land": "Deutschland",
+        "WartezeitTage": 119
+      },
+      {
+        "Land": "Deutschland",
         "WartezeitTage": 82
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 135
       },
       {
         "Land": "Deutschland",
@@ -123904,14 +123912,6 @@
       {
         "Land": "Deutschland",
         "WartezeitTage": 103
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 109
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 164
       }
     ],
     "CountryScoped": true,
@@ -124305,28 +124305,36 @@
     "DeviationDays": null,
     "CommunityEstimateDays": 122,
     "CommunityEstimateDeviationDays": null,
-    "PredictedDate": 1790367516621.896,
-    "PredictedRangeLowDate": 1788800471721.7693,
-    "PredictedRangeHighDate": 1795745420561.7317,
-    "PredictedP10Date": 1787940399639.9285,
-    "PredictedP90Date": 1798337420561.7317,
-    "PredictedP2_5Date": 1786884793276.664,
-    "PredictedP97_5Date": 1802117226791.7725,
-    "PredictedMedianDays": 108,
-    "PredictedRangeLowDays": 90,
-    "PredictedRangeHighDays": 170,
-    "PredictedP10Days": 80,
-    "PredictedP90Days": 200,
-    "PredictedP2_5Days": 68,
-    "PredictedP97_5Days": 244,
-    "ReferenceCount": 73,
+    "PredictedDate": 1791328947700.236,
+    "PredictedRangeLowDate": 1789573546444.8918,
+    "PredictedRangeHighDate": 1793784306530.2112,
+    "PredictedP10Date": 1788463357624.2712,
+    "PredictedP90Date": 1798661347192.5925,
+    "PredictedP2_5Date": 1787639968262.7048,
+    "PredictedP97_5Date": 1801557578621.429,
+    "PredictedMedianDays": 119,
+    "PredictedRangeLowDays": 99,
+    "PredictedRangeHighDays": 147,
+    "PredictedP10Days": 86,
+    "PredictedP90Days": 204,
+    "PredictedP2_5Days": 76,
+    "PredictedP97_5Days": 237,
+    "ReferenceCount": 76,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
       {
         "Land": "Deutschland",
         "WartezeitTage": 93
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 134
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 119
       },
       {
         "Land": "Deutschland",
@@ -124363,14 +124371,6 @@
       {
         "Land": "Deutschland",
         "WartezeitTage": 128
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 179
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 191
       }
     ],
     "CountryScoped": true,
@@ -124611,28 +124611,36 @@
     "DeviationDays": null,
     "CommunityEstimateDays": 177,
     "CommunityEstimateDeviationDays": null,
-    "PredictedDate": 1792033066035.591,
-    "PredictedRangeLowDate": 1790639730978.0593,
-    "PredictedRangeHighDate": 1797314011055.006,
-    "PredictedP10Date": 1789587397565.8171,
-    "PredictedP90Date": 1799895466035.591,
-    "PredictedP2_5Date": 1789020756454.3513,
-    "PredictedP97_5Date": 1801749363142.0808,
-    "PredictedMedianDays": 108,
-    "PredictedRangeLowDays": 92,
-    "PredictedRangeHighDays": 169,
-    "PredictedP10Days": 80,
-    "PredictedP90Days": 199,
-    "PredictedP2_5Days": 73,
-    "PredictedP97_5Days": 221,
-    "ReferenceCount": 73,
+    "PredictedDate": 1793295295493.2463,
+    "PredictedRangeLowDate": 1791562935649.2993,
+    "PredictedRangeHighDate": 1795666411454.4785,
+    "PredictedP10Date": 1790425044599.944,
+    "PredictedP90Date": 1800050004201.8193,
+    "PredictedP2_5Date": 1789594662587.1562,
+    "PredictedP97_5Date": 1801706467468.7646,
+    "PredictedMedianDays": 123,
+    "PredictedRangeLowDays": 103,
+    "PredictedRangeHighDays": 150,
+    "PredictedP10Days": 90,
+    "PredictedP90Days": 201,
+    "PredictedP2_5Days": 80,
+    "PredictedP97_5Days": 220,
+    "ReferenceCount": 76,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
       {
         "Land": "Deutschland",
         "WartezeitTage": 93
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 134
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 119
       },
       {
         "Land": "Deutschland",
@@ -124669,14 +124677,6 @@
       {
         "Land": "Deutschland",
         "WartezeitTage": 179
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 53
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 133
       }
     ],
     "CountryScoped": true,
@@ -124917,13 +124917,13 @@
     "DeviationDays": null,
     "CommunityEstimateDays": 329,
     "CommunityEstimateDeviationDays": null,
-    "PredictedDate": 1803112039729.0198,
-    "PredictedRangeLowDate": 1800606439729.0198,
-    "PredictedRangeHighDate": 1805272039729.0198,
-    "PredictedP10Date": 1796113639729.0198,
-    "PredictedP90Date": 1807086439729.0198,
-    "PredictedP2_5Date": 1794350663682.7698,
-    "PredictedP97_5Date": 1810140894303.534,
+    "PredictedDate": 1803109942043.9058,
+    "PredictedRangeLowDate": 1800604342043.9058,
+    "PredictedRangeHighDate": 1805269942043.9058,
+    "PredictedP10Date": 1796111542043.9058,
+    "PredictedP90Date": 1807084342043.9058,
+    "PredictedP2_5Date": 1794348565997.6555,
+    "PredictedP97_5Date": 1810138796618.4197,
     "PredictedMedianDays": 193,
     "PredictedRangeLowDays": 164,
     "PredictedRangeHighDays": 218,
@@ -125070,13 +125070,13 @@
     "DeviationDays": null,
     "CommunityEstimateDays": null,
     "CommunityEstimateDeviationDays": null,
-    "PredictedDate": 1802925534844.3276,
-    "PredictedRangeLowDate": 1801299737030.7986,
-    "PredictedRangeHighDate": 1804828622325.3682,
-    "PredictedP10Date": 1796620622325.3682,
-    "PredictedP90Date": 1806988622325.3682,
-    "PredictedP2_5Date": 1794287299799.3994,
-    "PredictedP97_5Date": 1808715395739.6663,
+    "PredictedDate": 1802923409360.4023,
+    "PredictedRangeLowDate": 1801297611546.8733,
+    "PredictedRangeHighDate": 1804826496841.4429,
+    "PredictedP10Date": 1796618496841.4429,
+    "PredictedP90Date": 1806986496841.4429,
+    "PredictedP2_5Date": 1794285174315.474,
+    "PredictedP97_5Date": 1808713270255.741,
     "PredictedMedianDays": 192,
     "PredictedRangeLowDays": 173,
     "PredictedRangeHighDays": 214,
@@ -125376,13 +125376,13 @@
     "DeviationDays": null,
     "CommunityEstimateDays": 287,
     "CommunityEstimateDeviationDays": null,
-    "PredictedDate": 1804938410043.003,
-    "PredictedRangeLowDate": 1803205661925.2222,
-    "PredictedRangeHighDate": 1807357610043.003,
-    "PredictedP10Date": 1798372010043.003,
-    "PredictedP90Date": 1808912810043.003,
-    "PredictedP2_5Date": 1796178646680.1587,
-    "PredictedP97_5Date": 1811298997556.3972,
+    "PredictedDate": 1804937760318.4248,
+    "PredictedRangeLowDate": 1803205012200.644,
+    "PredictedRangeHighDate": 1807356960318.4248,
+    "PredictedP10Date": 1798371360318.4248,
+    "PredictedP90Date": 1808912160318.4248,
+    "PredictedP2_5Date": 1796177996955.5803,
+    "PredictedP97_5Date": 1811298347831.8188,
     "PredictedMedianDays": 193,
     "PredictedRangeLowDays": 173,
     "PredictedRangeHighDays": 221,
@@ -125529,13 +125529,13 @@
     "DeviationDays": null,
     "CommunityEstimateDays": 262,
     "CommunityEstimateDeviationDays": null,
-    "PredictedDate": 1800823203176.466,
-    "PredictedRangeLowDate": 1798795472027.5864,
-    "PredictedRangeHighDate": 1803042974909.6926,
-    "PredictedP10Date": 1794075577182.9475,
-    "PredictedP90Date": 1804651281637.907,
-    "PredictedP2_5Date": 1791724574909.6926,
-    "PredictedP97_5Date": 1808340089303.5393,
+    "PredictedDate": 1800820685426.9185,
+    "PredictedRangeLowDate": 1798792954278.0386,
+    "PredictedRangeHighDate": 1803040457160.145,
+    "PredictedP10Date": 1794073059433.4,
+    "PredictedP90Date": 1804648763888.3591,
+    "PredictedP2_5Date": 1791722057160.145,
+    "PredictedP97_5Date": 1808337571553.9917,
     "PredictedMedianDays": 196,
     "PredictedRangeLowDays": 172,
     "PredictedRangeHighDays": 222,
@@ -125988,28 +125988,36 @@
     "DeviationDays": null,
     "CommunityEstimateDays": 249,
     "CommunityEstimateDeviationDays": null,
-    "PredictedDate": 1800559574449.7754,
-    "PredictedRangeLowDate": 1797326355474.9675,
-    "PredictedRangeHighDate": 1803570150910.775,
-    "PredictedP10Date": 1796444568702.9517,
-    "PredictedP90Date": 1805292630432.5015,
-    "PredictedP2_5Date": 1795587572273.341,
-    "PredictedP97_5Date": 1807543627560.8792,
-    "PredictedMedianDays": 137,
-    "PredictedRangeLowDays": 99,
-    "PredictedRangeHighDays": 172,
-    "PredictedP10Days": 89,
-    "PredictedP90Days": 192,
-    "PredictedP2_5Days": 79,
-    "PredictedP97_5Days": 218,
-    "ReferenceCount": 70,
+    "PredictedDate": 1801330598001.0823,
+    "PredictedRangeLowDate": 1799230291300.2188,
+    "PredictedRangeHighDate": 1802339339872.358,
+    "PredictedP10Date": 1796968183990.6184,
+    "PredictedP90Date": 1805069873701.643,
+    "PredictedP2_5Date": 1796369489715.5876,
+    "PredictedP97_5Date": 1807957076788.3684,
+    "PredictedMedianDays": 146,
+    "PredictedRangeLowDays": 121,
+    "PredictedRangeHighDays": 157,
+    "PredictedP10Days": 95,
+    "PredictedP90Days": 189,
+    "PredictedP2_5Days": 88,
+    "PredictedP97_5Days": 222,
+    "ReferenceCount": 73,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1736467200000,
-    "ReferenceEraTo": 1778544000000,
+    "ReferenceEraTo": 1778803200000,
     "References": [
       {
         "Land": "Deutschland",
+        "WartezeitTage": 135
+      },
+      {
+        "Land": "Deutschland",
         "WartezeitTage": 133
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 119
       },
       {
         "Land": "Deutschland",
@@ -126018,6 +126026,10 @@
       {
         "Land": "Deutschland",
         "WartezeitTage": 108
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 134
       },
       {
         "Land": "Deutschland",
@@ -126042,18 +126054,6 @@
       {
         "Land": "Deutschland",
         "WartezeitTage": 166
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 53
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 166
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 160
       }
     ],
     "CountryScoped": true,
@@ -126276,6 +126276,312 @@
       {
         "Land": "Deutschland",
         "WartezeitTage": 219
+      }
+    ],
+    "OriginalCountryScoped": false
+  },
+  "e852e21cc5317795": {
+    "ID": "e852e21cc5317795",
+    "Modell": "Skoda Elroq 85 Sportline",
+    "Modellgruppe": "Elroq 85",
+    "Bestelldatum": "3. Juli 2026",
+    "BestelldatumTS": 1783036800000,
+    "Status": "offen",
+    "LoggedAt": 1789206275106,
+    "ResolvedAt": null,
+    "ActualDate": null,
+    "ActualWaitDays": null,
+    "DeviationDays": null,
+    "CommunityEstimateDays": null,
+    "CommunityEstimateDeviationDays": null,
+    "PredictedDate": 1800123471192.418,
+    "PredictedRangeLowDate": 1798002881511.022,
+    "PredictedRangeHighDate": 1801350868913.1418,
+    "PredictedP10Date": 1793167996984.6277,
+    "PredictedP90Date": 1803800228012.0188,
+    "PredictedP2_5Date": 1790705871192.418,
+    "PredictedP97_5Date": 1807747804699.8162,
+    "PredictedMedianDays": 198,
+    "PredictedRangeLowDays": 173,
+    "PredictedRangeHighDays": 212,
+    "PredictedP10Days": 117,
+    "PredictedP90Days": 240,
+    "PredictedP2_5Days": 89,
+    "PredictedP97_5Days": 286,
+    "ReferenceCount": 390,
+    "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
+    "ReferenceEraFrom": 1728000000000,
+    "ReferenceEraTo": 1774396800000,
+    "References": [
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 166
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 176
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 178
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 134
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 146
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 143
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 187
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 192
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 190
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 167
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 219
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 176
+      }
+    ],
+    "CountryScoped": true,
+    "OriginalPredictedDate": 1800123471192.418,
+    "OriginalPredictedRangeLowDate": 1798002881511.022,
+    "OriginalPredictedRangeHighDate": 1801350868913.1418,
+    "OriginalPredictedP10Date": 1793167996984.6277,
+    "OriginalPredictedP90Date": 1803800228012.0188,
+    "OriginalPredictedP2_5Date": 1790705871192.418,
+    "OriginalPredictedP97_5Date": 1807747804699.8162,
+    "OriginalPredictedMedianDays": 198,
+    "OriginalPredictedRangeLowDays": 173,
+    "OriginalPredictedRangeHighDays": 212,
+    "OriginalPredictedP10Days": 117,
+    "OriginalPredictedP90Days": 240,
+    "OriginalPredictedP2_5Days": 89,
+    "OriginalPredictedP97_5Days": 286,
+    "OriginalReferenceCount": 390,
+    "OriginalReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
+    "OriginalReferenceEraFrom": 1728000000000,
+    "OriginalReferenceEraTo": 1774396800000,
+    "OriginalReferences": [
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 166
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 176
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 178
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 134
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 146
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 143
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 187
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 192
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 190
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 167
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 219
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 176
+      }
+    ],
+    "OriginalCountryScoped": true
+  },
+  "eee2bf588da3a70d": {
+    "ID": "eee2bf588da3a70d",
+    "Modell": "Skoda Elroq RS",
+    "Modellgruppe": "Elroq RS",
+    "Bestelldatum": "3. Juli 2026",
+    "BestelldatumTS": 1783036800000,
+    "Status": "offen",
+    "LoggedAt": 1789206275106,
+    "ResolvedAt": null,
+    "ActualDate": null,
+    "ActualWaitDays": null,
+    "DeviationDays": null,
+    "CommunityEstimateDays": null,
+    "CommunityEstimateDeviationDays": null,
+    "PredictedDate": 1798720967948.3533,
+    "PredictedRangeLowDate": 1796400979349.7102,
+    "PredictedRangeHighDate": 1800795858837.0771,
+    "PredictedP10Date": 1792858157089.4355,
+    "PredictedP90Date": 1803302375420.5974,
+    "PredictedP2_5Date": 1789905821055.6218,
+    "PredictedP97_5Date": 1805440216278.575,
+    "PredictedMedianDays": 182,
+    "PredictedRangeLowDays": 155,
+    "PredictedRangeHighDays": 206,
+    "PredictedP10Days": 114,
+    "PredictedP90Days": 235,
+    "PredictedP2_5Days": 80,
+    "PredictedP97_5Days": 259,
+    "ReferenceCount": 110,
+    "ReferenceQualityLabel": "viele gewichtete Referenzen",
+    "ReferenceEraFrom": 1745020800000,
+    "ReferenceEraTo": 1778544000000,
+    "References": [
+      {
+        "Land": "Schweiz",
+        "WartezeitTage": 100
+      },
+      {
+        "Land": "Schweiz",
+        "WartezeitTage": 145
+      },
+      {
+        "Land": "Schweiz",
+        "WartezeitTage": 92
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 101
+      },
+      {
+        "Land": "Österreich",
+        "WartezeitTage": 145
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 180
+      },
+      {
+        "Land": "Österreich",
+        "WartezeitTage": 74
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 191
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 126
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 180
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 171
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 153
+      }
+    ],
+    "CountryScoped": false,
+    "OriginalPredictedDate": 1798720967948.3533,
+    "OriginalPredictedRangeLowDate": 1796400979349.7102,
+    "OriginalPredictedRangeHighDate": 1800795858837.0771,
+    "OriginalPredictedP10Date": 1792858157089.4355,
+    "OriginalPredictedP90Date": 1803302375420.5974,
+    "OriginalPredictedP2_5Date": 1789905821055.6218,
+    "OriginalPredictedP97_5Date": 1805440216278.575,
+    "OriginalPredictedMedianDays": 182,
+    "OriginalPredictedRangeLowDays": 155,
+    "OriginalPredictedRangeHighDays": 206,
+    "OriginalPredictedP10Days": 114,
+    "OriginalPredictedP90Days": 235,
+    "OriginalPredictedP2_5Days": 80,
+    "OriginalPredictedP97_5Days": 259,
+    "OriginalReferenceCount": 110,
+    "OriginalReferenceQualityLabel": "viele gewichtete Referenzen",
+    "OriginalReferenceEraFrom": 1745020800000,
+    "OriginalReferenceEraTo": 1778544000000,
+    "OriginalReferences": [
+      {
+        "Land": "Schweiz",
+        "WartezeitTage": 100
+      },
+      {
+        "Land": "Schweiz",
+        "WartezeitTage": 145
+      },
+      {
+        "Land": "Schweiz",
+        "WartezeitTage": 92
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 101
+      },
+      {
+        "Land": "Österreich",
+        "WartezeitTage": 145
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 180
+      },
+      {
+        "Land": "Österreich",
+        "WartezeitTage": 74
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 191
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 126
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 180
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 171
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 153
       }
     ],
     "OriginalCountryScoped": false
