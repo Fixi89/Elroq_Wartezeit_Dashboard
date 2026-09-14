@@ -845,7 +845,7 @@
   .resolved-table td.mono{ font-family:'JetBrains Mono',monospace; white-space:nowrap; }
   .resolved-table td.good{ color:var(--accent); }
   .resolved-table td.bad{ color:var(--danger); }
-  .resolved-table td.resolved-muted{ color:var(--text-dim); }
+  .resolved-table .resolved-muted{ color:var(--text-dim); }
   .resolved-arrow{ font-size:9px; margin-right:3px; }
   .resolved-meta{ display:block; font-size:10.5px; color:var(--text-dim); margin-top:2px; }
   .resolved-meta.good{ color:var(--accent); }
@@ -861,6 +861,26 @@
   .resolved-table th[data-sort-key]{ cursor:pointer; user-select:none; }
   .resolved-table th[data-sort-key]:hover{ color:var(--accent); }
   .resolved-sort-arrow{ margin-left:3px; color:var(--accent); font-size:10px; }
+
+  /* Kompakte Standardansicht der Einzelfall-Liste: reduziert auf die vier
+     wichtigsten Spalten, die restlichen drei (Bestelldatum, Forums-
+     Schätzung, Ausgeliefert am) blendet ein Umschalter bei Bedarf ein. */
+  .resolved-table.compact .resolved-col-extra{ display:none; }
+  .resolved-view-toggle{
+    display:inline-block; margin:0 0 12px; padding:5px 12px; border-radius:999px;
+    font-size:11.5px; font-family:'Inter',sans-serif; cursor:pointer;
+    background:transparent; border:1px solid var(--border); color:var(--text-muted);
+  }
+  .resolved-view-toggle:hover{ border-color:var(--accent); color:var(--accent); }
+
+  /* Lange Konfigurationstexte ("Elroq 85 · Race-Blau Metallic · Suite ·
+     Regulus") auf eine Zeile kuerzen -- der volle Text steht im
+     title-Tooltip und beim Hover/Fokus weiterhin zur Verfuegung. */
+  .resolved-table td.resolved-cfg{
+    max-width:220px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+  }
+  .resolved-table td.resolved-cfg .resolved-meta{ white-space:normal; }
+
 
   .methodik-intro{ font-size:13px; color:var(--text-muted); line-height:1.6; margin:0 0 14px; }
   .methodik-intro-sub{ font-size:12px; color:var(--text-dim); margin:2px 0 16px; }
@@ -1386,7 +1406,7 @@
 </script>
 
 <script id="methodology-data" type="application/json">
-{"backtest": {"generated_at": 1789366135254, "n_tested": 1243, "new": {"n": 777, "mae": 206.5, "median_ae": 158, "bias": 116.5, "within14": 0.042}, "old": {"n": 1243, "mae": 219.5, "median_ae": 204, "bias": 109.9, "within14": 0.045}, "segments": {"Modellgruppe": [{"key": "Enyaq 80", "n": 280, "new_mae": 302.0, "new_bias": 269.8, "old_mae": 290.7, "old_bias": 252.5}, {"key": "Enyaq 85", "n": 167, "new_mae": 92.8, "new_bias": -6.3, "old_mae": 108.5, "old_bias": -27.9}, {"key": "Enyaq 60", "n": 102, "new_mae": 313.2, "new_bias": 256.3, "old_mae": 332.6, "old_bias": 232.7}, {"key": "Enyaq RS", "n": 88, "new_mae": 77.8, "new_bias": 18.4, "old_mae": 84.8, "old_bias": -37.3}, {"key": "Enyaq Coupe RS", "n": 47, "new_mae": 103.0, "new_bias": -82.3, "old_mae": 193.1, "old_bias": 97.5}, {"key": "Enyaq 85x", "n": 36, "new_mae": 114.8, "new_bias": -86.1, "old_mae": 150.2, "old_bias": -21.9}, {"key": "Enyaq 80x", "n": 29, "new_mae": 196.6, "new_bias": 50.7, "old_mae": 356.6, "old_bias": 327.6}, {"key": "Enyaq 50", "n": 14, "new_mae": 439.5, "new_bias": -406.5, "old_mae": 332.5, "old_bias": -231.6}], "Land": [{"key": "Deutschland", "n": 707, "new_mae": 213.0, "new_bias": 129.3, "old_mae": 222.8, "old_bias": 121.2}, {"key": "Österreich", "n": 36, "new_mae": 158.5, "new_bias": 33.5, "old_mae": 230.8, "old_bias": 35.5}, {"key": "Schweiz", "n": 23, "new_mae": 114.1, "new_bias": -38.1, "old_mae": 160.0, "old_bias": 10.3}]}}, "data_quality": {"storniert_count": 0, "entfernt_count": 0, "eingetroffen_count": 11, "storniert_rate": 0.0, "entfernt_rate": 0.0}, "censoring_correction": {"decision": "aus", "reason": "verbessert die mittlere Abweichung nicht", "off": {"n": 375, "mae": 91.1, "bias": -23.5, "within14": 0.069}, "on": {"n": 375, "mae": 107.1, "bias": -79.5, "within14": 0.064}}, "band_calibration": {"factors": {"50": 1.0, "80": 1.0, "95": 1.0}, "report": {"50": {"target": 0.5, "scale": 1.0, "enabled": false, "n_fit": 428, "n_val": 349, "coverage_before": 0.43, "coverage_after": 0.43}, "80": {"target": 0.8, "scale": 1.0, "enabled": false, "n_fit": 428, "n_val": 349, "coverage_before": 0.828, "coverage_after": 0.828}, "95": {"target": 0.95, "scale": 1.0, "enabled": false, "n_fit": 428, "n_val": 349, "coverage_before": 0.926, "coverage_after": 0.926}}}}
+{"backtest": {"generated_at": 1789367270806, "n_tested": 1243, "new": {"n": 777, "mae": 206.5, "median_ae": 158, "bias": 116.5, "within14": 0.042}, "old": {"n": 1243, "mae": 219.5, "median_ae": 204, "bias": 109.9, "within14": 0.045}, "segments": {"Modellgruppe": [{"key": "Enyaq 80", "n": 280, "new_mae": 302.0, "new_bias": 269.8, "old_mae": 290.7, "old_bias": 252.5}, {"key": "Enyaq 85", "n": 167, "new_mae": 92.8, "new_bias": -6.3, "old_mae": 108.5, "old_bias": -27.9}, {"key": "Enyaq 60", "n": 102, "new_mae": 313.2, "new_bias": 256.3, "old_mae": 332.6, "old_bias": 232.7}, {"key": "Enyaq RS", "n": 88, "new_mae": 77.8, "new_bias": 18.4, "old_mae": 84.8, "old_bias": -37.3}, {"key": "Enyaq Coupe RS", "n": 47, "new_mae": 103.0, "new_bias": -82.3, "old_mae": 193.1, "old_bias": 97.5}, {"key": "Enyaq 85x", "n": 36, "new_mae": 114.8, "new_bias": -86.1, "old_mae": 150.2, "old_bias": -21.9}, {"key": "Enyaq 80x", "n": 29, "new_mae": 196.6, "new_bias": 50.7, "old_mae": 356.6, "old_bias": 327.6}, {"key": "Enyaq 50", "n": 14, "new_mae": 439.5, "new_bias": -406.5, "old_mae": 332.5, "old_bias": -231.6}], "Land": [{"key": "Deutschland", "n": 707, "new_mae": 213.0, "new_bias": 129.3, "old_mae": 222.8, "old_bias": 121.2}, {"key": "Österreich", "n": 36, "new_mae": 158.5, "new_bias": 33.5, "old_mae": 230.8, "old_bias": 35.5}, {"key": "Schweiz", "n": 23, "new_mae": 114.1, "new_bias": -38.1, "old_mae": 160.0, "old_bias": 10.3}]}}, "data_quality": {"storniert_count": 0, "entfernt_count": 0, "eingetroffen_count": 11, "storniert_rate": 0.0, "entfernt_rate": 0.0}, "censoring_correction": {"decision": "aus", "reason": "verbessert die mittlere Abweichung nicht", "off": {"n": 375, "mae": 91.1, "bias": -23.5, "within14": 0.069}, "on": {"n": 375, "mae": 107.1, "bias": -79.5, "within14": 0.064}}, "band_calibration": {"factors": {"50": 1.0, "80": 1.0, "95": 1.0}, "report": {"50": {"target": 0.5, "scale": 1.0, "enabled": false, "n_fit": 428, "n_val": 349, "coverage_before": 0.43, "coverage_after": 0.43}, "80": {"target": 0.8, "scale": 1.0, "enabled": false, "n_fit": 428, "n_val": 349, "coverage_before": 0.828, "coverage_after": 0.828}, "95": {"target": 0.95, "scale": 1.0, "enabled": false, "n_fit": 428, "n_val": 349, "coverage_before": 0.926, "coverage_after": 0.926}}}}
 </script>
 
 <script>
@@ -4776,29 +4796,37 @@
         }
         const winnerBadge = `<span class="resolved-winner" title="Lag näher an der tatsächlichen Wartezeit">näher dran</span>`;
 
-        let forumCell = '<td class="mono resolved-muted">–</td>';
+        let forumInner = '<span class="resolved-muted">–</span>';
         if (r.CommunityEstimateDays != null){
           if (cdev != null){
             const cCls = Math.abs(cdev) <= 14 ? 'good' : (Math.abs(cdev) <= 30 ? '' : 'bad');
             const cArrow = cdev > 0 ? '▲' : (cdev < 0 ? '▼' : '');
-            forumCell = `<td class="mono">${r.CommunityEstimateDays} Tage
-              <span class="resolved-meta ${cCls}"><span class="resolved-arrow" aria-hidden="true">${cArrow}</span>${cdev > 0 ? '+' : (cdev < 0 ? '−' : '±')}${Math.abs(Math.round(cdev))} Tage Abw.${forumWon ? winnerBadge : ''}</span></td>`;
+            forumInner = `${r.CommunityEstimateDays} Tage
+              <span class="resolved-meta ${cCls}"><span class="resolved-arrow" aria-hidden="true">${cArrow}</span>${cdev > 0 ? '+' : (cdev < 0 ? '−' : '±')}${Math.abs(Math.round(cdev))} Tage Abw.${forumWon ? winnerBadge : ''}</span>`;
           } else {
-            forumCell = `<td class="mono">${r.CommunityEstimateDays} Tage</td>`;
+            forumInner = `${r.CommunityEstimateDays} Tage`;
           }
         }
 
         return `<tr>
-          <td>${escapeHtml(cfgParts.join(' · '))}<span class="resolved-meta">${escapeHtml(r.Land || '')}</span></td>
-          <td class="mono">${escapeHtml(r.Bestelldatum || '–')}</td>
+          <td class="resolved-cfg" title="${escapeHtml(cfgParts.join(' · '))}">${escapeHtml(cfgParts.join(' · '))}<span class="resolved-meta">${escapeHtml(r.Land || '')}</span></td>
+          <td class="mono resolved-col-extra">${escapeHtml(r.Bestelldatum || '–')}</td>
           <td class="mono">${r.PredictedMedianDays != null ? r.PredictedMedianDays + ' Tage' : '–'}</td>
-          ${forumCell}
-          <td class="mono">${escapeHtml(r.ActualDate || '–')}</td>
+          <td class="mono resolved-col-extra">${forumInner}</td>
+          <td class="mono resolved-col-extra">${escapeHtml(r.ActualDate || '–')}</td>
           <td class="mono">${r.ActualWaitDays != null ? r.ActualWaitDays + ' Tage' : '–'}</td>
           <td class="mono ${cls}"><span class="resolved-arrow" aria-hidden="true">${arrow}</span>${dev > 0 ? '+' : (dev < 0 ? '−' : '±')}${Math.abs(Math.round(dev))} Tage${ourWon ? winnerBadge : ''}</td>
         </tr>`;
       }).join('');
     }
+
+    if (!window._resolvedViewMode){
+      // Standardmaessig die kompakte Ansicht: sieben Spalten auf einen Schlag
+      // sind gerade fuer den ersten Blick zu viel. Bestelldatum, Forums-
+      // Schaetzung und Ausgeliefert-am lassen sich bei Bedarf einblenden.
+      window._resolvedViewMode = 'compact';
+    }
+    const isCompact = window._resolvedViewMode === 'compact';
 
     const rows = buildResolvedRows(sortResolved(resolved, sortState.key, sortState.dir));
 
@@ -4811,14 +4839,17 @@
             Spaltenköpfe anklicken zum Sortieren. <strong>▲</strong> = hat länger gedauert als vorhergesagt/angegeben,
             <strong>▼</strong> = ging schneller. Die Markierung <span class="resolved-winner" style="margin-left:0;">näher dran</span>
             zeigt, welche der beiden Schätzungen näher an der tatsächlichen Wartezeit lag (nur wenn beide vorliegen).</p>
+          <button type="button" class="resolved-view-toggle" id="resolvedViewToggle">
+            ${isCompact ? 'Alle Spalten anzeigen (Bestelldatum, Forums-Schätzung, Lieferdatum)' : 'Weniger anzeigen'}
+          </button>
           <div class="resolved-wrap">
-            <table class="resolved-table" id="resolvedTable">
+            <table class="resolved-table${isCompact ? ' compact' : ''}" id="resolvedTable">
               <thead><tr>
                 <th>Konfiguration</th>
-                <th data-sort-key="bestelldatum">Bestelldatum${sortIndicator('bestelldatum')}</th>
+                <th data-sort-key="bestelldatum" class="resolved-col-extra">Bestelldatum${sortIndicator('bestelldatum')}</th>
                 <th data-sort-key="prognose">Prognose${sortIndicator('prognose')}</th>
-                <th data-sort-key="forum">Forums-Schätzung${sortIndicator('forum')}</th>
-                <th data-sort-key="ausgeliefert">Ausgeliefert am${sortIndicator('ausgeliefert')}</th>
+                <th data-sort-key="forum" class="resolved-col-extra">Forums-Schätzung${sortIndicator('forum')}</th>
+                <th data-sort-key="ausgeliefert" class="resolved-col-extra">Ausgeliefert am${sortIndicator('ausgeliefert')}</th>
                 <th data-sort-key="tatsaechlich">Tatsächlich${sortIndicator('tatsaechlich')}</th>
                 <th data-sort-key="abweichung">Abweichung${sortIndicator('abweichung')}</th>
               </tr></thead>
@@ -4849,6 +4880,14 @@
     // angehefteter Listener dabei verloren ginge.
     if (!el.dataset.sortWired){
       el.addEventListener('click', (e) => {
+        const toggleBtn = e.target.closest('#resolvedViewToggle');
+        if (toggleBtn){
+          window._resolvedViewMode = window._resolvedViewMode === 'compact' ? 'full' : 'compact';
+          renderAccuracyPanel();
+          const details = el.querySelector('.resolved-details');
+          if (details) details.open = true;
+          return;
+        }
         const th = e.target.closest('th[data-sort-key]');
         if (!th) return;
         const key = th.dataset.sortKey;
