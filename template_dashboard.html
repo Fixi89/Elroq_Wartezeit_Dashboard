@@ -845,7 +845,7 @@
   .resolved-table td.mono{ font-family:'JetBrains Mono',monospace; white-space:nowrap; }
   .resolved-table td.good{ color:var(--accent); }
   .resolved-table td.bad{ color:var(--danger); }
-  .resolved-table td.resolved-muted{ color:var(--text-dim); }
+  .resolved-table .resolved-muted{ color:var(--text-dim); }
   .resolved-arrow{ font-size:9px; margin-right:3px; }
   .resolved-meta{ display:block; font-size:10.5px; color:var(--text-dim); margin-top:2px; }
   .resolved-meta.good{ color:var(--accent); }
@@ -861,6 +861,26 @@
   .resolved-table th[data-sort-key]{ cursor:pointer; user-select:none; }
   .resolved-table th[data-sort-key]:hover{ color:var(--accent); }
   .resolved-sort-arrow{ margin-left:3px; color:var(--accent); font-size:10px; }
+
+  /* Kompakte Standardansicht der Einzelfall-Liste: reduziert auf die vier
+     wichtigsten Spalten, die restlichen drei (Bestelldatum, Forums-
+     Schätzung, Ausgeliefert am) blendet ein Umschalter bei Bedarf ein. */
+  .resolved-table.compact .resolved-col-extra{ display:none; }
+  .resolved-view-toggle{
+    display:inline-block; margin:0 0 12px; padding:5px 12px; border-radius:999px;
+    font-size:11.5px; font-family:'Inter',sans-serif; cursor:pointer;
+    background:transparent; border:1px solid var(--border); color:var(--text-muted);
+  }
+  .resolved-view-toggle:hover{ border-color:var(--accent); color:var(--accent); }
+
+  /* Lange Konfigurationstexte ("Elroq 85 · Race-Blau Metallic · Suite ·
+     Regulus") auf eine Zeile kuerzen -- der volle Text steht im
+     title-Tooltip und beim Hover/Fokus weiterhin zur Verfuegung. */
+  .resolved-table td.resolved-cfg{
+    max-width:220px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+  }
+  .resolved-table td.resolved-cfg .resolved-meta{ white-space:normal; }
+
 
   .methodik-intro{ font-size:13px; color:var(--text-muted); line-height:1.6; margin:0 0 14px; }
   .methodik-intro-sub{ font-size:12px; color:var(--text-dim); margin:2px 0 16px; }

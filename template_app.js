@@ -3384,29 +3384,37 @@
         }
         const winnerBadge = `<span class="resolved-winner" title="Lag näher an der tatsächlichen Wartezeit">näher dran</span>`;
 
-        let forumCell = '<td class="mono resolved-muted">–</td>';
+        let forumInner = '<span class="resolved-muted">–</span>';
         if (r.CommunityEstimateDays != null){
           if (cdev != null){
             const cCls = Math.abs(cdev) <= 14 ? 'good' : (Math.abs(cdev) <= 30 ? '' : 'bad');
             const cArrow = cdev > 0 ? '▲' : (cdev < 0 ? '▼' : '');
-            forumCell = `<td class="mono">${r.CommunityEstimateDays} Tage
-              <span class="resolved-meta ${cCls}"><span class="resolved-arrow" aria-hidden="true">${cArrow}</span>${cdev > 0 ? '+' : (cdev < 0 ? '−' : '±')}${Math.abs(Math.round(cdev))} Tage Abw.${forumWon ? winnerBadge : ''}</span></td>`;
+            forumInner = `${r.CommunityEstimateDays} Tage
+              <span class="resolved-meta ${cCls}"><span class="resolved-arrow" aria-hidden="true">${cArrow}</span>${cdev > 0 ? '+' : (cdev < 0 ? '−' : '±')}${Math.abs(Math.round(cdev))} Tage Abw.${forumWon ? winnerBadge : ''}</span>`;
           } else {
-            forumCell = `<td class="mono">${r.CommunityEstimateDays} Tage</td>`;
+            forumInner = `${r.CommunityEstimateDays} Tage`;
           }
         }
 
         return `<tr>
-          <td>${escapeHtml(cfgParts.join(' · '))}<span class="resolved-meta">${escapeHtml(r.Land || '')}</span></td>
-          <td class="mono">${escapeHtml(r.Bestelldatum || '–')}</td>
+          <td class="resolved-cfg" title="${escapeHtml(cfgParts.join(' · '))}">${escapeHtml(cfgParts.join(' · '))}<span class="resolved-meta">${escapeHtml(r.Land || '')}</span></td>
+          <td class="mono resolved-col-extra">${escapeHtml(r.Bestelldatum || '–')}</td>
           <td class="mono">${r.PredictedMedianDays != null ? r.PredictedMedianDays + ' Tage' : '–'}</td>
-          ${forumCell}
-          <td class="mono">${escapeHtml(r.ActualDate || '–')}</td>
+          <td class="mono resolved-col-extra">${forumInner}</td>
+          <td class="mono resolved-col-extra">${escapeHtml(r.ActualDate || '–')}</td>
           <td class="mono">${r.ActualWaitDays != null ? r.ActualWaitDays + ' Tage' : '–'}</td>
           <td class="mono ${cls}"><span class="resolved-arrow" aria-hidden="true">${arrow}</span>${dev > 0 ? '+' : (dev < 0 ? '−' : '±')}${Math.abs(Math.round(dev))} Tage${ourWon ? winnerBadge : ''}</td>
         </tr>`;
       }).join('');
     }
+
+    if (!window._resolvedViewMode){
+      // Standardmaessig die kompakte Ansicht: sieben Spalten auf einen Schlag
+      // sind gerade fuer den ersten Blick zu viel. Bestelldatum, Forums-
+      // Schaetzung und Ausgeliefert-am lassen sich bei Bedarf einblenden.
+      window._resolvedViewMode = 'compact';
+    }
+    const isCompact = window._resolvedViewMode === 'compact';
 
     const rows = buildResolvedRows(sortResolved(resolved, sortState.key, sortState.dir));
 
@@ -3419,14 +3427,17 @@
             Spaltenköpfe anklicken zum Sortieren. <strong>▲</strong> = hat länger gedauert als vorhergesagt/angegeben,
             <strong>▼</strong> = ging schneller. Die Markierung <span class="resolved-winner" style="margin-left:0;">näher dran</span>
             zeigt, welche der beiden Schätzungen näher an der tatsächlichen Wartezeit lag (nur wenn beide vorliegen).</p>
+          <button type="button" class="resolved-view-toggle" id="resolvedViewToggle">
+            ${isCompact ? 'Alle Spalten anzeigen (Bestelldatum, Forums-Schätzung, Lieferdatum)' : 'Weniger anzeigen'}
+          </button>
           <div class="resolved-wrap">
-            <table class="resolved-table" id="resolvedTable">
+            <table class="resolved-table${isCompact ? ' compact' : ''}" id="resolvedTable">
               <thead><tr>
                 <th>Konfiguration</th>
-                <th data-sort-key="bestelldatum">Bestelldatum${sortIndicator('bestelldatum')}</th>
+                <th data-sort-key="bestelldatum" class="resolved-col-extra">Bestelldatum${sortIndicator('bestelldatum')}</th>
                 <th data-sort-key="prognose">Prognose${sortIndicator('prognose')}</th>
-                <th data-sort-key="forum">Forums-Schätzung${sortIndicator('forum')}</th>
-                <th data-sort-key="ausgeliefert">Ausgeliefert am${sortIndicator('ausgeliefert')}</th>
+                <th data-sort-key="forum" class="resolved-col-extra">Forums-Schätzung${sortIndicator('forum')}</th>
+                <th data-sort-key="ausgeliefert" class="resolved-col-extra">Ausgeliefert am${sortIndicator('ausgeliefert')}</th>
                 <th data-sort-key="tatsaechlich">Tatsächlich${sortIndicator('tatsaechlich')}</th>
                 <th data-sort-key="abweichung">Abweichung${sortIndicator('abweichung')}</th>
               </tr></thead>
@@ -3457,6 +3468,14 @@
     // angehefteter Listener dabei verloren ginge.
     if (!el.dataset.sortWired){
       el.addEventListener('click', (e) => {
+        const toggleBtn = e.target.closest('#resolvedViewToggle');
+        if (toggleBtn){
+          window._resolvedViewMode = window._resolvedViewMode === 'compact' ? 'full' : 'compact';
+          renderAccuracyPanel();
+          const details = el.querySelector('.resolved-details');
+          if (details) details.open = true;
+          return;
+        }
         const th = e.target.closest('th[data-sort-key]');
         if (!th) return;
         const key = th.dataset.sortKey;
