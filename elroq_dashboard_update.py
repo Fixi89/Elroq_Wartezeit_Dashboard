@@ -1310,6 +1310,43 @@ def main():
                 print(f"    ID {lid}")
         print("  Tipp: mit --keep-outliers testen, ob sich das Bild dadurch aendert.")
 
+    # Zusatz-Diagnose: Verdacht auf ID-Instabilitaet. Falls "Neu aufgeloest"
+    # ueber mehrere Laeufe bei 0 haengen bleibt, obwohl es im Forum sichtbar
+    # Auslieferungen gibt, ist der Hauptverdaechtige eine Forums-ID, die sich
+    # beim Statuswechsel einer Bestellung selbst aendert (z.B. weil sie
+    # technisch die ID des letzten Aenderungsprotokoll-Eintrags ist statt
+    # eine stabile, unveraenderliche Bestell-ID). In dem Fall wuerde eine
+    # Bestellung unter ID X als "offen" geloggt, aber bei Auslieferung unter
+    # einer NEUEN ID X' auftauchen -- die strikte ID-basierte Zuordnung oben
+    # findet das nie, weil sie das gar nicht erst als Kandidat sieht.
+    # Als Gegenprobe: alle noch "offenen" Log-Eintraege ueber Bestelldatum +
+    # Modell (statt ueber die ID) gegen die aktuell ausgelieferten
+    # Bestellungen abgleichen. Ein Treffer hier, der oben nicht ueber die ID
+    # gefunden wurde, ist ein starkes (wenn auch nicht hundertprozentig
+    # eindeutiges -- zwei Leute koennten zufaellig am selben Tag dasselbe
+    # Modell bestellt haben) Indiz fuer genau dieses Problem.
+    still_open = [(lid, e) for lid, e in log.items() if e.get("Status") in ("offen", "entfernt")]
+    delivered_fingerprints = {}
+    for r in delivered:
+        fp = (r.get("Bestelldatum"), r.get("Modell"))
+        delivered_fingerprints.setdefault(fp, []).append(r)
+
+    id_instability_hits = []
+    for lid, e in still_open:
+        fp = (e.get("Bestelldatum"), e.get("Modell"))
+        matches = delivered_fingerprints.get(fp)
+        if matches:
+            id_instability_hits.append((lid, e, matches[0]))
+
+    if id_instability_hits:
+        print(f"\n🔎 VERDACHT ID-Instabilität: {len(id_instability_hits)} als 'offen'/'entfernt' geloggte "
+              f"Bestellung(en) passen nach Bestelldatum+Modell zu einer AKTUELL ausgelieferten Bestellung, "
+              f"wurden aber NICHT über die ID aufgelöst. Das deutet stark darauf hin, dass sich die Forums-ID "
+              f"derselben Bestellung im Laufe ihres Lebenszyklus ändert:")
+        for lid, e, match in id_instability_hits[:10]:
+            print(f"    Log-ID {lid} (offen seit {e.get('Bestelldatum')}, {e.get('Modell')}) "
+                  f"<-> aktuell ausgeliefert (WartezeitTage={match.get('WartezeitTage')}, aktuelle ID={match.get('ID')})")
+
     resolved_all = [e for e in log.values() if e.get("Status") == "eingetroffen"
                     and e.get("DeviationDays") is not None]
     print(f"\nPrognose-Log ({LOG_PATH.name}):")

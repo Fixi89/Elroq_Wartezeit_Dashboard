@@ -3328,6 +3328,7 @@
       bestelldatum: { label: 'Bestelldatum', get: r => r.BestelldatumTS },
       prognose: { label: 'Prognose', get: r => r.PredictedMedianDays },
       forum: { label: 'Forums-Schätzung', get: r => r.CommunityEstimateDays },
+      ausgeliefert: { label: 'Ausgeliefert am', get: r => (r.BestelldatumTS != null && r.ActualWaitDays != null) ? r.BestelldatumTS + r.ActualWaitDays * 86400000 : null },
       tatsaechlich: { label: 'Tatsächlich', get: r => r.ActualWaitDays },
       abweichung: { label: 'Abweichung', get: r => Math.abs(r.DeviationDays) },
     };
@@ -3400,6 +3401,7 @@
           <td class="mono">${escapeHtml(r.Bestelldatum || '–')}</td>
           <td class="mono">${r.PredictedMedianDays != null ? r.PredictedMedianDays + ' Tage' : '–'}</td>
           ${forumCell}
+          <td class="mono">${escapeHtml(r.ActualDate || '–')}</td>
           <td class="mono">${r.ActualWaitDays != null ? r.ActualWaitDays + ' Tage' : '–'}</td>
           <td class="mono ${cls}"><span class="resolved-arrow" aria-hidden="true">${arrow}</span>${dev > 0 ? '+' : (dev < 0 ? '−' : '±')}${Math.abs(Math.round(dev))} Tage${ourWon ? winnerBadge : ''}</td>
         </tr>`;
@@ -3424,6 +3426,7 @@
                 <th data-sort-key="bestelldatum">Bestelldatum${sortIndicator('bestelldatum')}</th>
                 <th data-sort-key="prognose">Prognose${sortIndicator('prognose')}</th>
                 <th data-sort-key="forum">Forums-Schätzung${sortIndicator('forum')}</th>
+                <th data-sort-key="ausgeliefert">Ausgeliefert am${sortIndicator('ausgeliefert')}</th>
                 <th data-sort-key="tatsaechlich">Tatsächlich${sortIndicator('tatsaechlich')}</th>
                 <th data-sort-key="abweichung">Abweichung${sortIndicator('abweichung')}</th>
               </tr></thead>
