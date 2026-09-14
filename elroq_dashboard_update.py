@@ -147,6 +147,44 @@ def hash_id(raw_id):
     return hashlib.sha256(f"{_ID_SALT}:{raw_id}".encode("utf-8")).hexdigest()[:16]
 
 
+# --------------------------------------------------------------------------
+# Stabiler Bestell-Fingerprint (ersetzt die Forums-ID als Log-Schluessel)
+# --------------------------------------------------------------------------
+# Diagnose vom Sept. 2026 hat gezeigt: die Forums-eigene data-object-id ist
+# NICHT stabil -- sie aendert sich anscheinend, sobald eine Bestellung im
+# Forum bearbeitet wird (der Link jeder Zeile fuehrt zu einem
+# "Aenderungsprotokoll", die ID gehoert vermutlich zum letzten Aenderungs-
+# Eintrag, nicht zur Bestellung selbst). Folge: das bisherige, ID-basierte
+# Log verlor bei jeder Bearbeitung einer Bestellung deren Historie -- ueber
+# 190 betroffene Faelle bei der ersten Messung, dazu passend die seit langem
+# beobachtete, riesige "aus unbekanntem Grund verschwunden"-Quote.
+#
+# Ersatz: ein Fingerprint aus Feldern, die sich nach Aufgabe einer Bestellung
+# praktisch nie mehr aendern (Bestelldatum, Modell, Farbe, Land). Bewusst
+# NICHT die freie Ausstattungs-Textspalte mit einbezogen, obwohl die noch
+# distinktiver waere -- die wird von Nutzern erfahrungsgemaess am ehesten
+# nachtraeglich bearbeitet (Status-Updates, neue Liefertermine) und waere
+# damit selbst wieder instabil. Und bewusst NICHT der Benutzername (siehe
+# Kommentar in parse_rows: wird aus Datenschutzgruenden gar nicht erfasst).
+#
+# Zwei Faelle:
+#   fingerprint()      -- der volle Schluessel (inkl. Farbe+Land), ab jetzt
+#                          der primaere Log-Schluessel fuer alle NEUEN
+#                          Zuordnungen.
+#   weak_fingerprint()  -- nur Bestelldatum+Modell, WENIGER eindeutig, aber
+#                          das Einzige, was aus alten (vor diesem Update
+#                          geloggten) Eintraegen rekonstruierbar ist, da dort
+#                          Farbe/Land nie gespeichert wurden. Nur fuer die
+#                          einmalige Migration bereits bestehender Eintraege
+#                          gebraucht (siehe _migrate_to_fingerprint_keys).
+def fingerprint(bestelldatum, modell, farbe, land):
+    return hash_id(f"{bestelldatum}|{modell}|{farbe}|{land}")
+
+
+def weak_fingerprint(bestelldatum, modell):
+    return hash_id(f"{bestelldatum}|{modell}")
+
+
 def parse_rows(soup):
     """
     Liest die Bestellzeilen einer Seite.
@@ -867,26 +905,34 @@ def update_prediction_log(log, delivered, open_orders, cancelled, now_ts):
         _migrate_add_original_snapshot unten
     Gibt (neu_geloggt, neu_aufgeloest, neu_berechnet, original_migriert) zurueck.
     """
-    delivered_by_id = {r["ID"]: r for r in delivered}
-    open_by_id = {r["ID"]: r for r in open_orders}
-    cancelled_by_id = {r["ID"]: r for r in cancelled}
+    delivered_by_fp = {r["Fingerprint"]: r for r in delivered}
+    open_by_fp = {r["Fingerprint"]: r for r in open_orders}
+    cancelled_by_fp = {r["Fingerprint"]: r for r in cancelled}
 
     new_logged = resolved_now = 0
 
-    # Einmalige Migrationen: rohe IDs auf den gehashten Schluessel umziehen
-    # (siehe hash_id()), danach alten Eintraegen die "Original*"-Felder
-    # nachtragen.
+    # Einmalige Migrationen, in dieser Reihenfolge:
+    #   1. rohe IDs auf den gehashten Schluessel umziehen (Alt-Migration von
+    #      vor der Salt-Einfuehrung, siehe hash_id())
+    #   2. alten Eintraegen die "Original*"-Felder nachtragen
+    #   3. auf den stabilen Fingerprint-Schluessel umziehen (loest die
+    #      ID-Instabilitaet, siehe Kommentar bei fingerprint() oben) --
+    #      MUSS vor der Aufloesungs-Pruefung unten laufen, sonst wuerden
+    #      gerade erst zusammengefuehrte Eintraege in diesem Lauf noch nicht
+    #      von ihr profitieren
+    #   4. Community-Schaetzung fuer noch offene Alt-Bestellungen nachtragen
     ids_migrated = _migrate_hash_ids(log)
     original_migrated = _migrate_add_original_snapshot(log)
-    community_migrated = _migrate_add_community_estimate(log, open_by_id)
+    fp_migrated, fp_merged = _migrate_to_fingerprint_keys(log, delivered, open_orders, cancelled)
+    community_migrated = _migrate_add_community_estimate(log, open_by_fp)
 
     # Bereits offene Log-Eintraege pruefen: ausgeliefert, storniert oder
     # anderweitig verschwunden?
     for lid, entry in log.items():
         if entry.get("Status") != "offen":
             continue
-        if lid in delivered_by_id:
-            d = delivered_by_id[lid]
+        if lid in delivered_by_fp:
+            d = delivered_by_fp[lid]
             entry["Status"] = "eingetroffen"
             entry["ResolvedAt"] = now_ts
             entry["ActualDate"] = d.get("Lieferdatum", "")
@@ -898,10 +944,10 @@ def update_prediction_log(log, delivered, open_orders, cancelled, now_ts):
             if community_days is not None:
                 entry["CommunityEstimateDeviationDays"] = d["WartezeitTage"] - community_days
             resolved_now += 1
-        elif lid in cancelled_by_id:
+        elif lid in cancelled_by_fp:
             entry["Status"] = "storniert"
             entry["ResolvedAt"] = now_ts
-        elif lid not in open_by_id:
+        elif lid not in open_by_fp:
             entry["Status"] = "entfernt"
             entry["ResolvedAt"] = now_ts
 
@@ -910,8 +956,8 @@ def update_prediction_log(log, delivered, open_orders, cancelled, now_ts):
     # praeziser wird die Schaetzung. Neue Bestellungen bekommen zusaetzlich
     # eine eingefrorene "Original*"-Kopie ihrer allerersten Prognose.
     recalculated = 0
-    for oid, order in open_by_id.items():
-        is_new = oid not in log
+    for fp, order in open_by_fp.items():
+        is_new = fp not in log
         if is_new:
             # The forum's own "voraussichtliches Lieferdatum" field (shown in
             # the UI as "Eigene Angabe im Forum") is only populated while an
@@ -929,8 +975,9 @@ def update_prediction_log(log, delivered, open_orders, cancelled, now_ts):
                 voraus_ts_ms = int(datetime(voraus_ts.year, voraus_ts.month,
                                             voraus_ts.day).timestamp() * 1000)
                 community_days = round((voraus_ts_ms - order["BestelldatumTS"]) / DAY_MS)
-            log[oid] = {
-                "ID": oid,
+            log[fp] = {
+                "ID": order.get("ID", ""),
+                "Fingerprint": fp,
                 "Modell": order.get("Modell", ""),
                 "Modellgruppe": order.get("Modellgruppe", ""),
                 "Bestelldatum": order.get("Bestelldatum", ""),
@@ -945,7 +992,11 @@ def update_prediction_log(log, delivered, open_orders, cancelled, now_ts):
                 "CommunityEstimateDeviationDays": None,
             }
             new_logged += 1
-        entry = log[oid]
+        entry = log[fp]
+        # Die aktuelle (moeglicherweise gerade erst durch die ID-Instabilitaet
+        # gewechselte) rohe Forums-ID hier immer nachfuehren -- rein
+        # informativ, nicht Teil des Schluessels.
+        entry["ID"] = order.get("ID", entry.get("ID", ""))
 
         p = predict_delivery(order, delivered, open_orders, now_ts)
         _apply_prediction(entry, p, prefix="")
@@ -956,7 +1007,8 @@ def update_prediction_log(log, delivered, open_orders, cancelled, now_ts):
 
     personal_data_stripped = _migrate_strip_personal_data(log)
     return (new_logged, resolved_now, recalculated, original_migrated,
-            personal_data_stripped, ids_migrated, community_migrated)
+            personal_data_stripped, ids_migrated, community_migrated,
+            fp_migrated, fp_merged)
 
 
 def _migrate_add_original_snapshot(log):
@@ -1033,7 +1085,109 @@ def _migrate_hash_ids(log):
     return migrated
 
 
-def _migrate_add_community_estimate(log, open_by_id):
+_STATUS_PRIORITY = {"eingetroffen": 3, "storniert": 2, "offen": 1, "entfernt": 0}
+_FINAL_STATUSES = ("eingetroffen", "storniert")
+
+
+def _merge_duplicate_entries(candidates):
+    """
+    Waehlt aus mehreren Log-Eintraegen, die sich als dieselbe Bestellung
+    herausgestellt haben, den ueberlebenden Eintrag.
+
+    Ein bereits ECHT abgeschlossener Status (eingetroffen/storniert) gewinnt
+    immer -- der kann nur durch Zufall trotz der ID-Instabilitaet korrekt
+    zustande gekommen sein und wird nicht angetastet.
+
+    Andernfalls stecken ALLE Duplikate in einem durch die ID-Instabilitaet
+    verursachten Fehlzustand ("offen" oder faelschlich "entfernt", weil der
+    alte Schluessel in einem frueheren Lauf zu nichts mehr passte). Hier
+    gewinnt der Eintrag mit dem FRUEHESTEN LoggedAt -- der traegt die
+    korrekte, urspruengliche Original-Prognose. Sein Status wird dabei
+    bewusst auf "offen" zurueckgesetzt (auch wenn er zuvor "entfernt" war),
+    damit die anschliessende Aufloesungs-Pruefung im selben Lauf -- jetzt
+    unter dem korrekten Fingerprint-Schluessel -- eine faire, neue Chance
+    bekommt, den tatsaechlichen aktuellen Status zu ermitteln.
+    """
+    finals = [e for e in candidates if e.get("Status") in _FINAL_STATUSES]
+    if finals:
+        finals.sort(key=lambda e: -_STATUS_PRIORITY.get(e.get("Status"), 0))
+        return finals[0]
+    candidates = sorted(candidates, key=lambda e: e.get("LoggedAt") or 0)
+    winner = candidates[0]
+    winner["Status"] = "offen"
+    winner["ResolvedAt"] = None
+    return winner
+
+
+def _migrate_to_fingerprint_keys(log, delivered, open_orders, cancelled):
+    """
+    Einmalige, aber bei Bedarf wiederholt laufende Migration: loest die
+    bisherige, instabile ID-basierte Log-Indizierung ab (siehe Kommentar bei
+    fingerprint()/weak_fingerprint() weiter oben).
+
+    Vorgehen:
+      1. Fuer jeden Log-Eintrag OHNE "Fingerprint"-Feld (= noch nicht
+         migriert) den WEAK-Fingerprint aus den im Eintrag bereits
+         vorhandenen Feldern (Bestelldatum, Modell) berechnen -- Farbe/Land
+         wurden in alten Eintraegen nie gespeichert und stehen daher nicht
+         zur Verfuegung.
+      2. Ueber den aktuellen Scrape (delivered+open_orders+cancelled) eine
+         Zuordnung weak_fingerprint -> voller Fingerprint aufbauen. Kommt ein
+         weak_fingerprint dort mehrfach vor (zwei Bestellungen, gleiches
+         Modell am gleichen Tag -- selten, aber laut Stichprobe von der
+         echten Forumsseite bereits vorgekommen), gewinnt die zuerst
+         gefundene; ohne Farbe/Land in den alten Eintraegen ist das nicht
+         entscheidbar, und ein gelegentlicher Fehlgriff hier ist weit
+         weniger schaedlich als der Status quo.
+      3. Alte Eintraege mit demselben weak_fingerprint werden zu EINEM
+         Eintrag unter dem vollen Fingerprint zusammengefuehrt -- das sind
+         genau die durch die ID-Instabilitaet entstandenen Duplikate (siehe
+         Diagnose "VERDACHT ID-Instabilitaet" weiter unten):
+           - der Eintrag mit dem am weitesten fortgeschrittenen Status
+             gewinnt (eingetroffen > storniert > offen > entfernt)
+           - bei Gleichstand gewinnt der mit dem FRUEHESTEN LoggedAt -- das
+             ist die einzig faire Basis fuer die eingefrorene
+             Original-Prognose
+      4. Alte Eintraege, deren weak_fingerprint in KEINEM aktuellen Scrape
+         auftaucht, bleiben unveraendert unter ihrem alten Schluessel liegen
+         und bekommen bei einem spaeteren Lauf eine neue Chance -- anders als
+         beim alten "entfernt"-Status, der endgueltig war, wird hier NICHT
+         nach Status gefiltert: auch ein bereits faelschlich "entfernt"
+         markierter Alt-Eintrag wird bei jedem Lauf erneut geprueft.
+
+    Gibt (migrierte_alteintraege, davon_als_duplikat_zusammengefuehrt) zurueck.
+    """
+    weak_to_full = {}
+    for r in list(delivered) + list(open_orders) + list(cancelled):
+        weak = weak_fingerprint(r["Bestelldatum"], r["Modell"])
+        weak_to_full.setdefault(weak, r["Fingerprint"])
+
+    old_keys = [k for k, e in log.items() if "Fingerprint" not in e]
+    groups = {}
+    for old_key in old_keys:
+        entry = log[old_key]
+        weak = weak_fingerprint(entry.get("Bestelldatum", ""), entry.get("Modell", ""))
+        full = weak_to_full.get(weak)
+        if full:
+            groups.setdefault(full, []).append(old_key)
+
+    migrated = merged_duplicates = 0
+    for full, keys in groups.items():
+        candidates = [log[k] for k in keys]
+        if full in log:
+            candidates.append(log[full])
+        winner = _merge_duplicate_entries(candidates)
+        winner["Fingerprint"] = full
+        for k in keys:
+            del log[k]
+        log[full] = winner
+        migrated += len(keys)
+        if len(candidates) > 1:
+            merged_duplicates += len(candidates) - 1
+    return migrated, merged_duplicates
+
+
+def _migrate_add_community_estimate(log, open_by_fp):
     """
     Einmalige Nachtrag-Migration: Log-Eintraege von VOR der Einfuehrung der
     Community-Schaetzung (CommunityEstimateDays) haben dieses Feld gar nicht
@@ -1049,10 +1203,10 @@ def _migrate_add_community_estimate(log, open_by_id):
     unwiederbringlich verloren.
     """
     migrated = 0
-    for oid, entry in log.items():
+    for fp, entry in log.items():
         if entry.get("Status") != "offen" or "CommunityEstimateDays" in entry:
             continue
-        order = open_by_id.get(oid)
+        order = open_by_fp.get(fp)
         if not order:
             continue
         voraus_ts = parse_de_date(order.get("VorausLieferdatum", ""))
@@ -1081,7 +1235,7 @@ def merge_log_into_records(log, delivered, open_orders):
     muss, woher der Wert kommt.
     """
     for r in open_orders:
-        entry = log.get(r["ID"])
+        entry = log.get(r["Fingerprint"])
         if not entry:
             continue
         for k in _PREDICTION_FIELD_KEYS:
@@ -1093,7 +1247,7 @@ def merge_log_into_records(log, delivered, open_orders):
     resolved_extra = ("DeviationDays", "ResolvedAt", "ActualDate", "ActualWaitDays",
                       "CommunityEstimateDays", "CommunityEstimateDeviationDays")
     for r in delivered:
-        entry = log.get(r["ID"])
+        entry = log.get(r["Fingerprint"])
         if not entry or entry.get("Status") != "eingetroffen":
             continue
         for k in _PREDICTION_FIELD_KEYS:
@@ -1216,6 +1370,7 @@ def main():
 
         rec = {
             "ID": r["ID"],
+            "Fingerprint": fingerprint(r["Bestelldatum"], r["Modell"], r["Farbe"], r["Land"]),
             "Ausgeliefert": r["Ausgeliefert"],
             "Bestelldatum": r["Bestelldatum"],
             "BestelldatumTS": int(datetime(order_date.year, order_date.month,
@@ -1258,7 +1413,7 @@ def main():
     # Ausreisser betreffen nur die statistische Basis (ausgelieferte Fahrzeuge).
     # Wird unten gebraucht, um zu erkennen, ob eine bereits aufgeloeste
     # Prognose durch den Ausreisser-Filter aus der Anzeige faellt.
-    pre_outlier_by_id = {r["ID"]: r for r in delivered}
+    pre_outlier_by_fp = {r["Fingerprint"]: r for r in delivered}
     low = high = None
     if args.keep_outliers:
         print("Ausreisser bleiben enthalten (--keep-outliers).")
@@ -1273,7 +1428,8 @@ def main():
     # inzwischen ausgelieferte werden mit dem tatsaechlichen Ergebnis aufgeloest.
     now_ts = int(datetime.now().timestamp() * 1000)
     log = load_log()
-    new_logged, resolved_now, recalculated, original_migrated, personal_data_stripped, ids_migrated, community_migrated = update_prediction_log(
+    (new_logged, resolved_now, recalculated, original_migrated, personal_data_stripped,
+     ids_migrated, community_migrated, fp_migrated, fp_merged) = update_prediction_log(
         log, delivered, open_orders, cancelled, now_ts)
     save_log(log)
     merge_log_into_records(log, delivered, open_orders)
@@ -1286,45 +1442,35 @@ def main():
     #      gueltigen Bereichs (der sich mit wachsenden Wartezeiten verschiebt)
     #   2. Bestellung wurde in diesem Lauf gar nicht mehr gescraped (z.B.
     #      Forums-Seitenstruktur geaendert, Eintrag von der Ergebnisseite
-    #      verschwunden) -- oder ein ID-Mismatch, z.B. durch eine ID-Hashing-
-    #      Migration wie in _migrate_hash_ids()
-    resolved_ids = {lid for lid, e in log.items() if e.get("Status") == "eingetroffen"}
-    merged_ids = {r["ID"] for r in delivered if r.get("DeviationDays") is not None}
-    missing_ids = resolved_ids - merged_ids
-    if missing_ids:
-        outlier_filtered = [lid for lid in missing_ids if lid in pre_outlier_by_id]
-        not_rescraped = [lid for lid in missing_ids if lid not in pre_outlier_by_id]
-        print(f"\n⚠️  {len(missing_ids)} bereits aufgeloeste Prognose(n) fehlen im Dashboard:")
+    #      verschwunden)
+    resolved_fps = {lid for lid, e in log.items() if e.get("Status") == "eingetroffen"}
+    merged_fps = {r["Fingerprint"] for r in delivered if r.get("DeviationDays") is not None}
+    missing_fps = resolved_fps - merged_fps
+    if missing_fps:
+        outlier_filtered = [lid for lid in missing_fps if lid in pre_outlier_by_fp]
+        not_rescraped = [lid for lid in missing_fps if lid not in pre_outlier_by_fp]
+        print(f"\n⚠️  {len(missing_fps)} bereits aufgeloeste Prognose(n) fehlen im Dashboard:")
         if outlier_filtered:
             bounds_txt = f"{low:.0f}–{high:.0f} Tage" if low is not None else "unbekannt, da --keep-outliers aktiv"
             print(f"  {len(outlier_filtered)} durch den Ausreisser-Filter entfernt "
                   f"(gueltiger Bereich: {bounds_txt}):")
             for lid in outlier_filtered[:10]:
-                d = pre_outlier_by_id[lid]
-                print(f"    ID {lid}: {d.get('WartezeitTage')} Tage "
+                d = pre_outlier_by_fp[lid]
+                print(f"    {lid}: {d.get('WartezeitTage')} Tage "
                       f"({d.get('Modell', '?')}, bestellt {d.get('Bestelldatum', '?')})")
         if not_rescraped:
             print(f"  {len(not_rescraped)} in diesem Lauf nicht mehr im Forum gefunden "
-                  f"(evtl. Seitenlimit --max-pages, geaenderte Forumsstruktur, oder ID-Mismatch):")
+                  f"(evtl. Seitenlimit --max-pages oder geaenderte Forumsstruktur):")
             for lid in not_rescraped[:10]:
-                print(f"    ID {lid}")
+                print(f"    {lid}")
         print("  Tipp: mit --keep-outliers testen, ob sich das Bild dadurch aendert.")
 
-    # Zusatz-Diagnose: Verdacht auf ID-Instabilitaet. Falls "Neu aufgeloest"
-    # ueber mehrere Laeufe bei 0 haengen bleibt, obwohl es im Forum sichtbar
-    # Auslieferungen gibt, ist der Hauptverdaechtige eine Forums-ID, die sich
-    # beim Statuswechsel einer Bestellung selbst aendert (z.B. weil sie
-    # technisch die ID des letzten Aenderungsprotokoll-Eintrags ist statt
-    # eine stabile, unveraenderliche Bestell-ID). In dem Fall wuerde eine
-    # Bestellung unter ID X als "offen" geloggt, aber bei Auslieferung unter
-    # einer NEUEN ID X' auftauchen -- die strikte ID-basierte Zuordnung oben
-    # findet das nie, weil sie das gar nicht erst als Kandidat sieht.
-    # Als Gegenprobe: alle noch "offenen" Log-Eintraege ueber Bestelldatum +
-    # Modell (statt ueber die ID) gegen die aktuell ausgelieferten
-    # Bestellungen abgleichen. Ein Treffer hier, der oben nicht ueber die ID
-    # gefunden wurde, ist ein starkes (wenn auch nicht hundertprozentig
-    # eindeutiges -- zwei Leute koennten zufaellig am selben Tag dasselbe
-    # Modell bestellt haben) Indiz fuer genau dieses Problem.
+    # Gesundheits-Check (sollte nach der Umstellung auf Fingerprint-Schluessel
+    # ~0 Treffer zeigen -- ist es das nicht, gibt es noch einen weiteren,
+    # bisher unbekannten Zuordnungsfehler). Vor der Umstellung war das hier
+    # DIE Hauptdiagnose und lag bei 190 Treffern; jetzt ist sie nur noch eine
+    # Kontrolle, weil die Fingerprint-Zuordnung dasselbe bereits automatisch
+    # in update_prediction_log() erledigt.
     still_open = [(lid, e) for lid, e in log.items() if e.get("Status") in ("offen", "entfernt")]
     delivered_fingerprints = {}
     for r in delivered:
@@ -1339,13 +1485,13 @@ def main():
             id_instability_hits.append((lid, e, matches[0]))
 
     if id_instability_hits:
-        print(f"\n🔎 VERDACHT ID-Instabilität: {len(id_instability_hits)} als 'offen'/'entfernt' geloggte "
+        print(f"\n🔎 Restliche Zuordnungsluecken: {len(id_instability_hits)} als 'offen'/'entfernt' geloggte "
               f"Bestellung(en) passen nach Bestelldatum+Modell zu einer AKTUELL ausgelieferten Bestellung, "
-              f"wurden aber NICHT über die ID aufgelöst. Das deutet stark darauf hin, dass sich die Forums-ID "
-              f"derselben Bestellung im Laufe ihres Lebenszyklus ändert:")
+              f"wurden aber NICHT automatisch aufgelöst. Falls das nicht auf 0 sinkt, gibt es noch eine weitere "
+              f"Ursache:")
         for lid, e, match in id_instability_hits[:10]:
-            print(f"    Log-ID {lid} (offen seit {e.get('Bestelldatum')}, {e.get('Modell')}) "
-                  f"<-> aktuell ausgeliefert (WartezeitTage={match.get('WartezeitTage')}, aktuelle ID={match.get('ID')})")
+            print(f"    {lid} (offen seit {e.get('Bestelldatum')}, {e.get('Modell')}) "
+                  f"<-> aktuell ausgeliefert (WartezeitTage={match.get('WartezeitTage')})")
 
     resolved_all = [e for e in log.values() if e.get("Status") == "eingetroffen"
                     and e.get("DeviationDays") is not None]
@@ -1359,6 +1505,9 @@ def main():
         print(f"  Einmalig bereinigt (Benutzername/Profil-Link entfernt, DSGVO): {personal_data_stripped}")
     if ids_migrated:
         print(f"  Einmalig migriert (rohe ID durch Hash ersetzt, Datenschutz): {ids_migrated}")
+    if fp_migrated:
+        print(f"  Einmalig migriert (instabile ID durch stabilen Fingerprint ersetzt): {fp_migrated}"
+              + (f", davon {fp_merged} als Duplikat derselben Bestellung zusammengeführt" if fp_merged else ""))
     if community_migrated:
         print(f"  Einmalig nachgetragen (Forums-Schätzung für noch offene Alt-Bestellungen): {community_migrated}")
     if resolved_all:
