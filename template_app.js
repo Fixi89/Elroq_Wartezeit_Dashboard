@@ -3399,9 +3399,9 @@
         return `<tr>
           <td class="resolved-cfg" title="${escapeHtml(cfgParts.join(' · '))}">${escapeHtml(cfgParts.join(' · '))}<span class="resolved-meta">${escapeHtml(r.Land || '')}</span></td>
           <td class="mono resolved-col-extra">${escapeHtml(r.Bestelldatum || '–')}</td>
+          <td class="mono resolved-col-extra">${escapeHtml(r.ActualDate || '–')}</td>
           <td class="mono">${r.PredictedMedianDays != null ? r.PredictedMedianDays + ' Tage' : '–'}</td>
           <td class="mono resolved-col-extra">${forumInner}</td>
-          <td class="mono resolved-col-extra">${escapeHtml(r.ActualDate || '–')}</td>
           <td class="mono">${r.ActualWaitDays != null ? r.ActualWaitDays + ' Tage' : '–'}</td>
           <td class="mono ${cls}"><span class="resolved-arrow" aria-hidden="true">${arrow}</span>${dev > 0 ? '+' : (dev < 0 ? '−' : '±')}${Math.abs(Math.round(dev))} Tage${ourWon ? winnerBadge : ''}</td>
         </tr>`;
@@ -3435,9 +3435,9 @@
               <thead><tr>
                 <th>Konfiguration</th>
                 <th data-sort-key="bestelldatum" class="resolved-col-extra">Bestelldatum${sortIndicator('bestelldatum')}</th>
+                <th data-sort-key="ausgeliefert" class="resolved-col-extra">Ausgeliefert am${sortIndicator('ausgeliefert')}</th>
                 <th data-sort-key="prognose">Prognose${sortIndicator('prognose')}</th>
                 <th data-sort-key="forum" class="resolved-col-extra">Forums-Schätzung${sortIndicator('forum')}</th>
-                <th data-sort-key="ausgeliefert" class="resolved-col-extra">Ausgeliefert am${sortIndicator('ausgeliefert')}</th>
                 <th data-sort-key="tatsaechlich">Tatsächlich${sortIndicator('tatsaechlich')}</th>
                 <th data-sort-key="abweichung">Abweichung${sortIndicator('abweichung')}</th>
               </tr></thead>
