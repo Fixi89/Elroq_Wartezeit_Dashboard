@@ -63725,56 +63725,52 @@
     "DeviationDays": null,
     "CommunityEstimateDays": 230,
     "CommunityEstimateDeviationDays": null,
-    "PredictedDate": 1802184811032.0093,
-    "PredictedRangeLowDate": 1800662400000.0,
-    "PredictedRangeHighDate": 1803804648786.647,
-    "PredictedP10Date": 1796358649811.8066,
-    "PredictedP90Date": 1807142400000.0,
-    "PredictedP2_5Date": 1795219200000.0,
-    "PredictedP97_5Date": 1815091200000.0,
-    "PredictedMedianDays": 166,
-    "PredictedRangeLowDays": 148,
-    "PredictedRangeHighDays": 184,
-    "PredictedP10Days": 98,
-    "PredictedP90Days": 223,
-    "PredictedP2_5Days": 85,
-    "PredictedP97_5Days": 315,
-    "ReferenceCount": 268,
+    "PredictedDate": 1802496600356.1177,
+    "PredictedRangeLowDate": 1800735374241.685,
+    "PredictedRangeHighDate": 1804118400000.0,
+    "PredictedP10Date": 1797016251275.4814,
+    "PredictedP90Date": 1806992122423.815,
+    "PredictedP2_5Date": 1795305600000.0,
+    "PredictedP97_5Date": 1813881600000.0,
+    "PredictedMedianDays": 169,
+    "PredictedRangeLowDays": 149,
+    "PredictedRangeHighDays": 188,
+    "PredictedP10Days": 106,
+    "PredictedP90Days": 221,
+    "PredictedP2_5Days": 86,
+    "PredictedP97_5Days": 301,
+    "ReferenceCount": 265,
     "ReferenceQualityLabel": "viele gewichtete Referenzen",
     "ReferenceEraFrom": 1658448000000,
     "ReferenceEraTo": 1771372800000,
     "References": [
       {
         "Land": "Deutschland",
-        "WartezeitTage": 154
+        "WartezeitTage": 169
       },
       {
         "Land": "Deutschland",
-        "WartezeitTage": 166
+        "WartezeitTage": 219
       },
       {
         "Land": "Deutschland",
-        "WartezeitTage": 149
+        "WartezeitTage": 180
       },
       {
         "Land": "Deutschland",
-        "WartezeitTage": 170
-      },
-      {
-        "Land": "Österreich",
-        "WartezeitTage": 166
+        "WartezeitTage": 188
       },
       {
         "Land": "Deutschland",
-        "WartezeitTage": 153
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 161
+        "WartezeitTage": 197
       },
       {
         "Land": "Deutschland",
         "WartezeitTage": 191
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 188
       },
       {
         "Land": "Österreich",
@@ -63786,11 +63782,15 @@
       },
       {
         "Land": "Deutschland",
+        "WartezeitTage": 166
+      },
+      {
+        "Land": "Deutschland",
         "WartezeitTage": 180
       },
       {
         "Land": "Deutschland",
-        "WartezeitTage": 207
+        "WartezeitTage": 149
       }
     ],
     "CountryScoped": false,
@@ -64031,20 +64031,20 @@
     "DeviationDays": null,
     "CommunityEstimateDays": 240,
     "CommunityEstimateDeviationDays": null,
-    "PredictedDate": 1791450059788.553,
-    "PredictedRangeLowDate": 1789603200000.0,
-    "PredictedRangeHighDate": 1793100637760.798,
-    "PredictedP10Date": 1785160626123.0986,
-    "PredictedP90Date": 1795974571965.2505,
+    "PredictedDate": 1791137155740.8013,
+    "PredictedRangeLowDate": 1789608386090.919,
+    "PredictedRangeHighDate": 1792939113221.3518,
+    "PredictedP10Date": 1785248735302.7507,
+    "PredictedP90Date": 1796727062495.2786,
     "PredictedP2_5Date": 1784160000000.0,
-    "PredictedP97_5Date": 1803861661620.7048,
-    "PredictedMedianDays": 169,
+    "PredictedP97_5Date": 1804118400000.0,
+    "PredictedMedianDays": 166,
     "PredictedRangeLowDays": 148,
-    "PredictedRangeHighDays": 188,
-    "PredictedP10Days": 97,
-    "PredictedP90Days": 222,
+    "PredictedRangeHighDays": 187,
+    "PredictedP10Days": 98,
+    "PredictedP90Days": 230,
     "PredictedP2_5Days": 85,
-    "PredictedP97_5Days": 313,
+    "PredictedP97_5Days": 316,
     "ReferenceCount": 269,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1658448000000,
@@ -64052,11 +64052,15 @@
     "References": [
       {
         "Land": "Deutschland",
+        "WartezeitTage": 154
+      },
+      {
+        "Land": "Deutschland",
         "WartezeitTage": 166
       },
       {
         "Land": "Deutschland",
-        "WartezeitTage": 191
+        "WartezeitTage": 149
       },
       {
         "Land": "Deutschland",
@@ -64064,27 +64068,15 @@
       },
       {
         "Land": "Deutschland",
-        "WartezeitTage": 180
+        "WartezeitTage": 153
       },
       {
         "Land": "Deutschland",
-        "WartezeitTage": 169
+        "WartezeitTage": 161
       },
       {
         "Land": "Deutschland",
-        "WartezeitTage": 219
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 180
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 188
-      },
-      {
-        "Land": "Deutschland",
-        "WartezeitTage": 207
+        "WartezeitTage": 191
       },
       {
         "Land": "Deutschland",
@@ -64092,11 +64084,19 @@
       },
       {
         "Land": "Deutschland",
-        "WartezeitTage": 174
+        "WartezeitTage": 180
       },
       {
         "Land": "Deutschland",
-        "WartezeitTage": 149
+        "WartezeitTage": 207
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 175
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 167
       }
     ],
     "CountryScoped": true,
