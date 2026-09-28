@@ -32034,11 +32034,11 @@
     "CountryScoped": true,
     "PredictionUpdatedAt": 1786950640837,
     "PredictedP10Date": 1713727271037.3755,
-    "PredictedP90Date": 1737217642034.5112,
+    "PredictedP90Date": 1737113076566.7334,
     "PredictedP2_5Date": 1705813119030.7957,
     "PredictedP97_5Date": 1742955994069.3252,
     "PredictedP10Days": 173,
-    "PredictedP90Days": 445,
+    "PredictedP90Days": 443,
     "PredictedP2_5Days": 81,
     "PredictedP97_5Days": 511,
     "OriginalPredictedDate": 1723590000000,
@@ -39729,10 +39729,10 @@
     "DeviationDays": null,
     "PredictedDate": 1707475390506.7788,
     "PredictedRangeLowDate": 1701929209177.69,
-    "PredictedRangeHighDate": 1710968854555.5388,
+    "PredictedRangeHighDate": 1710823767519.0652,
     "PredictedMedianDays": 406,
     "PredictedRangeLowDays": 342,
-    "PredictedRangeHighDays": 447,
+    "PredictedRangeHighDays": 445,
     "ReferenceCount": 128,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1643846400000,
@@ -39881,10 +39881,10 @@
     "DeviationDays": null,
     "PredictedDate": 1707177600000.0,
     "PredictedRangeLowDate": 1701687814132.7866,
-    "PredictedRangeHighDate": 1710804809075.1562,
+    "PredictedRangeHighDate": 1710679995454.4795,
     "PredictedMedianDays": 405,
     "PredictedRangeLowDays": 341,
-    "PredictedRangeHighDays": 447,
+    "PredictedRangeHighDays": 446,
     "ReferenceCount": 128,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1643846400000,
@@ -40581,10 +40581,10 @@
     "DeviationDays": null,
     "PredictedDate": 1706400000000.0,
     "PredictedRangeLowDate": 1700955260822.8538,
-    "PredictedRangeHighDate": 1710118562043.3105,
+    "PredictedRangeHighDate": 1709996789829.3542,
     "PredictedMedianDays": 405,
     "PredictedRangeLowDays": 342,
-    "PredictedRangeHighDays": 448,
+    "PredictedRangeHighDays": 447,
     "ReferenceCount": 128,
     "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
     "ReferenceEraFrom": 1643846400000,
@@ -41333,7 +41333,7 @@
     "DeviationDays": null,
     "PredictedDate": 1704207952623.432,
     "PredictedRangeLowDate": 1698430561480.2427,
-    "PredictedRangeHighDate": 1707609600000.0,
+    "PredictedRangeHighDate": 1707567931131.434,
     "PredictedMedianDays": 410,
     "PredictedRangeLowDays": 343,
     "PredictedRangeHighDays": 449,
@@ -49096,7 +49096,7 @@
       },
       {
         "Land": "Deutschland",
-        "WartezeitTage": 449
+        "WartezeitTage": 441
       },
       {
         "Land": "Deutschland",
@@ -49696,7 +49696,7 @@
       },
       {
         "Land": "Deutschland",
-        "WartezeitTage": 449
+        "WartezeitTage": 441
       },
       {
         "Land": "Deutschland",
@@ -50300,7 +50300,7 @@
       },
       {
         "Land": "Deutschland",
-        "WartezeitTage": 449
+        "WartezeitTage": 441
       },
       {
         "Land": "Deutschland",
@@ -50612,7 +50612,7 @@
       },
       {
         "Land": "Deutschland",
-        "WartezeitTage": 449
+        "WartezeitTage": 441
       },
       {
         "Land": "Deutschland",
