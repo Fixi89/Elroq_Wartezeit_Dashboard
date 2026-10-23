@@ -69677,5 +69677,158 @@
       }
     ],
     "OriginalCountryScoped": true
+  },
+  "ba611f057080545c": {
+    "ID": "ba611f057080545c",
+    "Modell": "Skoda Enyaq Coupe iV 60 Sportline",
+    "Modellgruppe": "Enyaq Coupe 60",
+    "Bestelldatum": "21. Oktober 2026",
+    "BestelldatumTS": 1792540800000,
+    "Status": "offen",
+    "LoggedAt": 1792752078512,
+    "ResolvedAt": null,
+    "ActualDate": null,
+    "ActualWaitDays": null,
+    "DeviationDays": null,
+    "CommunityEstimateDays": 223,
+    "CommunityEstimateDeviationDays": null,
+    "PredictedDate": 1803577036382.6614,
+    "PredictedRangeLowDate": 1803049030402.6174,
+    "PredictedRangeHighDate": 1803998701937.2866,
+    "PredictedP10Date": 1802720928150.3047,
+    "PredictedP90Date": 1804251701270.0618,
+    "PredictedP2_5Date": 1799654535964.7764,
+    "PredictedP97_5Date": 1805482110780.9348,
+    "PredictedMedianDays": 128,
+    "PredictedRangeLowDays": 122,
+    "PredictedRangeHighDays": 133,
+    "PredictedP10Days": 118,
+    "PredictedP90Days": 136,
+    "PredictedP2_5Days": 82,
+    "PredictedP97_5Days": 150,
+    "ReferenceCount": 16,
+    "ReferenceQualityLabel": "wenige gewichtete Referenzen",
+    "ReferenceEraFrom": 1623196800000,
+    "ReferenceEraTo": 1763424000000,
+    "References": [
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 127
+      },
+      {
+        "Land": "Österreich",
+        "WartezeitTage": 136
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 76
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 86
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 80
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 104
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 86
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 324
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 97
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 95
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 75
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 154
+      }
+    ],
+    "CountryScoped": false,
+    "OriginalPredictedDate": 1803577036382.6614,
+    "OriginalPredictedRangeLowDate": 1803049030402.6174,
+    "OriginalPredictedRangeHighDate": 1803998701937.2866,
+    "OriginalPredictedP10Date": 1802720928150.3047,
+    "OriginalPredictedP90Date": 1804251701270.0618,
+    "OriginalPredictedP2_5Date": 1799654535964.7764,
+    "OriginalPredictedP97_5Date": 1805482110780.9348,
+    "OriginalPredictedMedianDays": 128,
+    "OriginalPredictedRangeLowDays": 122,
+    "OriginalPredictedRangeHighDays": 133,
+    "OriginalPredictedP10Days": 118,
+    "OriginalPredictedP90Days": 136,
+    "OriginalPredictedP2_5Days": 82,
+    "OriginalPredictedP97_5Days": 150,
+    "OriginalReferenceCount": 16,
+    "OriginalReferenceQualityLabel": "wenige gewichtete Referenzen",
+    "OriginalReferenceEraFrom": 1623196800000,
+    "OriginalReferenceEraTo": 1763424000000,
+    "OriginalReferences": [
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 127
+      },
+      {
+        "Land": "Österreich",
+        "WartezeitTage": 136
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 76
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 86
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 80
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 104
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 86
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 324
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 97
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 95
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 75
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 154
+      }
+    ],
+    "OriginalCountryScoped": false
   }
 }
