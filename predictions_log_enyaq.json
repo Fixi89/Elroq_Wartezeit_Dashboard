@@ -71207,5 +71207,311 @@
       }
     ],
     "OriginalCountryScoped": false
+  },
+  "42ce8ab5fd8c6462": {
+    "ID": "42ce8ab5fd8c6462",
+    "Modell": "Skoda Enyaq RS iV",
+    "Modellgruppe": "Enyaq RS",
+    "Bestelldatum": "26. Oktober 2026",
+    "BestelldatumTS": 1792972800000,
+    "Status": "offen",
+    "LoggedAt": 1794140663720,
+    "ResolvedAt": null,
+    "ActualDate": null,
+    "ActualWaitDays": null,
+    "DeviationDays": null,
+    "CommunityEstimateDays": 354,
+    "CommunityEstimateDeviationDays": null,
+    "PredictedDate": 1809216190332.515,
+    "PredictedRangeLowDate": 1806006719108.2131,
+    "PredictedRangeHighDate": 1812281177221.809,
+    "PredictedP10Date": 1804892965558.7322,
+    "PredictedP90Date": 1814354777221.809,
+    "PredictedP2_5Date": 1801553616436.0444,
+    "PredictedP97_5Date": 1818171751226.1887,
+    "PredictedMedianDays": 188,
+    "PredictedRangeLowDays": 151,
+    "PredictedRangeHighDays": 223,
+    "PredictedP10Days": 138,
+    "PredictedP90Days": 247,
+    "PredictedP2_5Days": 99,
+    "PredictedP97_5Days": 292,
+    "ReferenceCount": 129,
+    "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
+    "ReferenceEraFrom": 1673308800000,
+    "ReferenceEraTo": 1774828800000,
+    "References": [
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 144
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 218
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 185
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 218
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 168
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 231
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 196
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 145
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 258
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 242
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 218
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 167
+      }
+    ],
+    "CountryScoped": true,
+    "OriginalPredictedDate": 1809216190332.515,
+    "OriginalPredictedRangeLowDate": 1806006719108.2131,
+    "OriginalPredictedRangeHighDate": 1812281177221.809,
+    "OriginalPredictedP10Date": 1804892965558.7322,
+    "OriginalPredictedP90Date": 1814354777221.809,
+    "OriginalPredictedP2_5Date": 1801553616436.0444,
+    "OriginalPredictedP97_5Date": 1818171751226.1887,
+    "OriginalPredictedMedianDays": 188,
+    "OriginalPredictedRangeLowDays": 151,
+    "OriginalPredictedRangeHighDays": 223,
+    "OriginalPredictedP10Days": 138,
+    "OriginalPredictedP90Days": 247,
+    "OriginalPredictedP2_5Days": 99,
+    "OriginalPredictedP97_5Days": 292,
+    "OriginalReferenceCount": 129,
+    "OriginalReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
+    "OriginalReferenceEraFrom": 1673308800000,
+    "OriginalReferenceEraTo": 1774828800000,
+    "OriginalReferences": [
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 144
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 218
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 185
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 218
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 168
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 231
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 196
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 145
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 258
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 242
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 218
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 167
+      }
+    ],
+    "OriginalCountryScoped": true
+  },
+  "f113952439c2aa59": {
+    "ID": "f113952439c2aa59",
+    "Modell": "Skoda Enyaq Coupe iV RS",
+    "Modellgruppe": "Enyaq Coupe RS",
+    "Bestelldatum": "24. Juli 2026",
+    "BestelldatumTS": 1784851200000,
+    "Status": "offen",
+    "LoggedAt": 1794140663720,
+    "ResolvedAt": null,
+    "ActualDate": null,
+    "ActualWaitDays": null,
+    "DeviationDays": null,
+    "CommunityEstimateDays": 150,
+    "CommunityEstimateDeviationDays": null,
+    "PredictedDate": 1797379200000.0,
+    "PredictedRangeLowDate": 1793318400000.0,
+    "PredictedRangeHighDate": 1798620368742.2756,
+    "PredictedP10Date": 1792500598601.7322,
+    "PredictedP90Date": 1802621753854.2039,
+    "PredictedP2_5Date": 1791687427339.9092,
+    "PredictedP97_5Date": 1805277598448.614,
+    "PredictedMedianDays": 145,
+    "PredictedRangeLowDays": 98,
+    "PredictedRangeHighDays": 159,
+    "PredictedP10Days": 89,
+    "PredictedP90Days": 206,
+    "PredictedP2_5Days": 79,
+    "PredictedP97_5Days": 236,
+    "ReferenceCount": 132,
+    "ReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
+    "ReferenceEraFrom": 1643846400000,
+    "ReferenceEraTo": 1779408000000,
+    "References": [
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 145
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 171
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 154
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 84
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 98
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 135
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 90
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 219
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 160
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 147
+      },
+      {
+        "Land": "Österreich",
+        "WartezeitTage": 145
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 150
+      }
+    ],
+    "CountryScoped": true,
+    "OriginalPredictedDate": 1797379200000.0,
+    "OriginalPredictedRangeLowDate": 1793318400000.0,
+    "OriginalPredictedRangeHighDate": 1798620368742.2756,
+    "OriginalPredictedP10Date": 1792500598601.7322,
+    "OriginalPredictedP90Date": 1802621753854.2039,
+    "OriginalPredictedP2_5Date": 1791687427339.9092,
+    "OriginalPredictedP97_5Date": 1805277598448.614,
+    "OriginalPredictedMedianDays": 145,
+    "OriginalPredictedRangeLowDays": 98,
+    "OriginalPredictedRangeHighDays": 159,
+    "OriginalPredictedP10Days": 89,
+    "OriginalPredictedP90Days": 206,
+    "OriginalPredictedP2_5Days": 79,
+    "OriginalPredictedP97_5Days": 236,
+    "OriginalReferenceCount": 132,
+    "OriginalReferenceQualityLabel": "gewichtete Referenzen (Land stark einbezogen)",
+    "OriginalReferenceEraFrom": 1643846400000,
+    "OriginalReferenceEraTo": 1779408000000,
+    "OriginalReferences": [
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 145
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 171
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 154
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 84
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 98
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 135
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 90
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 219
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 160
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 147
+      },
+      {
+        "Land": "Österreich",
+        "WartezeitTage": 145
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 150
+      }
+    ],
+    "OriginalCountryScoped": true
   }
 }
