@@ -71972,5 +71972,158 @@
       }
     ],
     "OriginalCountryScoped": true
+  },
+  "6794fa13f4b9bd83": {
+    "ID": "6794fa13f4b9bd83",
+    "Modell": "Skoda Enyaq Coupe iV RS",
+    "Modellgruppe": "Enyaq Coupe RS",
+    "Bestelldatum": "8. Juni 2026",
+    "BestelldatumTS": 1780876800000,
+    "Status": "offen",
+    "LoggedAt": 1794576977689,
+    "ResolvedAt": null,
+    "ActualDate": null,
+    "ActualWaitDays": null,
+    "DeviationDays": null,
+    "CommunityEstimateDays": 193,
+    "CommunityEstimateDeviationDays": null,
+    "PredictedDate": 1793404800000.0,
+    "PredictedRangeLowDate": 1789344000000.0,
+    "PredictedRangeHighDate": 1794408298690.432,
+    "PredictedP10Date": 1788567626028.9478,
+    "PredictedP90Date": 1797701693371.8594,
+    "PredictedP2_5Date": 1787727192484.2917,
+    "PredictedP97_5Date": 1801330136335.024,
+    "PredictedMedianDays": 145,
+    "PredictedRangeLowDays": 98,
+    "PredictedRangeHighDays": 157,
+    "PredictedP10Days": 89,
+    "PredictedP90Days": 195,
+    "PredictedP2_5Days": 79,
+    "PredictedP97_5Days": 237,
+    "ReferenceCount": 132,
+    "ReferenceQualityLabel": "einige gewichtete Referenzen",
+    "ReferenceEraFrom": 1643846400000,
+    "ReferenceEraTo": 1779408000000,
+    "References": [
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 154
+      },
+      {
+        "Land": "Österreich",
+        "WartezeitTage": 145
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 145
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 84
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 98
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 171
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 135
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 90
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 160
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 147
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 219
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 150
+      }
+    ],
+    "CountryScoped": false,
+    "OriginalPredictedDate": 1793404800000.0,
+    "OriginalPredictedRangeLowDate": 1789344000000.0,
+    "OriginalPredictedRangeHighDate": 1794408298690.432,
+    "OriginalPredictedP10Date": 1788567626028.9478,
+    "OriginalPredictedP90Date": 1797701693371.8594,
+    "OriginalPredictedP2_5Date": 1787727192484.2917,
+    "OriginalPredictedP97_5Date": 1801330136335.024,
+    "OriginalPredictedMedianDays": 145,
+    "OriginalPredictedRangeLowDays": 98,
+    "OriginalPredictedRangeHighDays": 157,
+    "OriginalPredictedP10Days": 89,
+    "OriginalPredictedP90Days": 195,
+    "OriginalPredictedP2_5Days": 79,
+    "OriginalPredictedP97_5Days": 237,
+    "OriginalReferenceCount": 132,
+    "OriginalReferenceQualityLabel": "einige gewichtete Referenzen",
+    "OriginalReferenceEraFrom": 1643846400000,
+    "OriginalReferenceEraTo": 1779408000000,
+    "OriginalReferences": [
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 154
+      },
+      {
+        "Land": "Österreich",
+        "WartezeitTage": 145
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 145
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 84
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 98
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 171
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 135
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 90
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 160
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 147
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 219
+      },
+      {
+        "Land": "Deutschland",
+        "WartezeitTage": 150
+      }
+    ],
+    "OriginalCountryScoped": false
   }
 }
